@@ -30,7 +30,7 @@ First of all NautilusSvn uses the pysvn library for doing Subversion 'stuff', he
 {{{
 import pysvn
 client = pysvn.Client()
-state = c.status(path)
+state = client.status(path)
 }}}
 
 ==== The workflow ====
