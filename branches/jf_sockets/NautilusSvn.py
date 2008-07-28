@@ -49,8 +49,9 @@ import time
 import socket
 import select
 import pickle
+import glob
 
-path = os.path.expanduser(r"~/.nautilus/python-extensions/nautilussvn/")
+path = os.path.expanduser(r"~/.nautilus/python-extensions/NautilusSvn/")
 if os.path.exists(path):
     sys.path.append(path)
 else:
@@ -67,7 +68,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         "deleted": 'svnremoved',
         "modified": 'svnmodified',
         "conflicted": 'svnconflict',
-        "normal": 'svncontrolled', 
+        "normal": "svncontrolled",
     }
 
     #-------------------------------------------------------------------------- 
@@ -86,6 +87,19 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         self.scan_in_progress = False
 
         self._socket = None
+
+        # Start up the scanner if it isn't currently running
+        files = glob.glob("/proc/*/cmdline")
+        found = False
+        for f in files:
+            if "scanner.py" in file(f).read():
+                found = True
+                print "Scanner process found"
+                break
+
+        if not found:
+            print "No scanner process found - starting it."
+            os.spawnl( os.P_NOWAIT, "/usr/bin/python", "python", GetPath("scanner.py") )
 
     #--------------------------------------------------------------------------
     def OnIdle(self):
