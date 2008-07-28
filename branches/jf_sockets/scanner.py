@@ -6,9 +6,11 @@ import pickle
 import os
 import time
 
-class Handler( SocketServer.StreamRequestHandler ):
-
+class MyServer( SocketServer.TCPServer ):
     allow_reuse_address = True
+    
+
+class Handler( SocketServer.StreamRequestHandler ):
 
     def handle( self ):
         path = self.rfile.readline().strip()
@@ -42,7 +44,7 @@ class Handler( SocketServer.StreamRequestHandler ):
 
             # Check if this folder had been added
             for x in st:
-                if x.path == path and x.text_status == pysvn.wc_status_kind.added:
+                if x["is_versioned"] and x.path == path and x.text_status == pysvn.wc_status_kind.added:
                     results["status"] = "added"
                     return
 
@@ -55,12 +57,29 @@ class Handler( SocketServer.StreamRequestHandler ):
             if len( t & statuses ):
                 results["status"] = "modified"
             else:
-                results["status"] = "normal"
+                if x["is_versioned"]:
+                    results["status"] = "normal"
+                else:
+                    results["status"] = None
         else:
-            results["status"] = "normal"
+            # We're a file
+            st = c.status(path, recurse=0)[0]
+            results = {
+                    "file" : path,
+                    "revision" : rev,
+                    "author" : author
+                }
+
+            statuses = { pysvn.wc_status_kind.modified : "modified",
+                         pysvn.wc_status_kind.added: "added",
+                         pysvn.wc_status_kind.conflicted: "conflicted",
+                         pysvn.wc_status_kind.unversioned: None,
+                         pysvn.wc_status_kind.normal: "normal" }
+
+            results[ "status" ] = statuses[ st.text_status ]
 
         self.wfile.write( pickle.dumps( results ) )
 
-server = SocketServer.TCPServer( ("", 33333), Handler )
+server = MyServer( ("", 33333), Handler )
 server.serve_forever()
 
