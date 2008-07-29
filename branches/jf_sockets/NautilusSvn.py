@@ -58,6 +58,23 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 # collisions with other modules on the path.
 from helper import *
 
+def CheckForScanner():
+    """ Checks whether our scanner process exists. If not, it launches it. """
+
+    # Check if the scanner process exists
+    files = glob.glob("/proc/*/cmdline")
+    found = False
+    for f in files:
+        if "scanner.py" in file(f).read():
+            found = True
+            print "Scanner process found"
+            break
+
+    # Start up the scanner since it isn't currently running
+    if not found:
+        print "No scanner process found - starting it."
+        os.spawnl( os.P_NOWAIT, "/usr/bin/python", "python", GetPath("scanner.py") )
+
 #============================================================================== 
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
@@ -88,18 +105,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
         self._socket = None
 
-        # Start up the scanner if it isn't currently running
-        files = glob.glob("/proc/*/cmdline")
-        found = False
-        for f in files:
-            if "scanner.py" in file(f).read():
-                found = True
-                print "Scanner process found"
-                break
-
-        if not found:
-            print "No scanner process found - starting it."
-            os.spawnl( os.P_NOWAIT, "/usr/bin/python", "python", GetPath("scanner.py") )
+        CheckForScanner()
 
     #--------------------------------------------------------------------------
     def OnIdle(self):
@@ -109,9 +115,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
 
         if not self._socket:
-            self._socket = socket.socket()
-            self._socket.connect( ( "", 33333 ) )
-            self._socket.setblocking( 0 )
+            try:
+                self._socket = socket.socket()
+                self._socket.connect( ( "", 33333 ) )
+                self._socket.setblocking( 0 )
+            except socket.error:
+                self._socket = None
+                CheckForScanner()
+                return True
     
             target = self.scanStack.pop()
             path = gnomevfs.get_local_path_from_uri( target.get_uri() )
