@@ -6,10 +6,11 @@ import pickle
 import os
 import time
 
+#============================================================================== 
 class MyServer( SocketServer.TCPServer ):
     allow_reuse_address = True
     
-
+#============================================================================== 
 class Handler( SocketServer.StreamRequestHandler ):
 
     def handle( self ):
@@ -74,12 +75,14 @@ class Handler( SocketServer.StreamRequestHandler ):
                          pysvn.wc_status_kind.added: "added",
                          pysvn.wc_status_kind.conflicted: "conflicted",
                          pysvn.wc_status_kind.unversioned: None,
+                         pysvn.wc_status_kind.ignored: None,
                          pysvn.wc_status_kind.normal: "normal" }
 
             results[ "status" ] = statuses[ st.text_status ]
 
         self.wfile.write( pickle.dumps( results ) )
 
+#============================================================================== 
 server = MyServer( ("", 33333), Handler )
 server.serve_forever()
 

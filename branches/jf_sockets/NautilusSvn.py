@@ -69,13 +69,13 @@ def CheckForScanner():
     for f in files:
         if "scanner.py" in file(f).read():
             found = True
-            print "Scanner process found"
             break
 
     # Start up the scanner since it isn't currently running
     if not found:
-        print "No scanner process found - starting it."
-        os.spawnl( os.P_NOWAIT, "/usr/bin/python", "python", GetPath("scanner.py") )
+        return os.spawnl( os.P_NOWAIT, "/usr/bin/python", "python", GetPath("scanner.py") )
+    else:
+        return True
 
 #============================================================================== 
 
@@ -123,8 +123,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 self._socket.setblocking( 0 )
             except socket.error:
                 self._socket = None
-                CheckForScanner()
-                return True
+                return CheckForScanner()
     
             target = self.scanStack.pop()
             path = gnomevfs.get_local_path_from_uri( target.get_uri() )
@@ -138,7 +137,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             except socket.error:
                 return True
 
-            data = pickle.loads( data )
+            try:
+                data = pickle.loads( data )
+            except EOFError:
+                return len( self.scanStack ) > 0
 
             if data["status"]:
 
@@ -146,8 +148,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
                 # Now we need to update the file with the generated data
                 if ENABLE_ATTRIBUTES:
-                    file.add_string_attribute('revision', str( data["revision"] ))
-                    file.add_string_attribute('user', data["author"])
+                    if data["revision"]:
+                        file.add_string_attribute('revision', str( data["revision"] ))
+                    if data["author"]:
+                        file.add_string_attribute('user', data["author"])
 
                 # Update the display emblems if we're supposed to
                 if ENABLE_EMBLEMS:
@@ -155,10 +159,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
             self._socket = None
 
-            if len( self.scanStack ):
-                return True
-            else:
-                return False
+            # Get more callbacks if we have more items to scan
+            return len( self.scanStack ) > 0
 
     #-------------------------------------------------------------------------- 
     def get_columns(self):
