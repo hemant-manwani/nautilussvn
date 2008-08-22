@@ -115,16 +115,27 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             status scan on them. We do this so that we don't hog the processor
             each time a folder is opened.
         """
-
+    
+        # Check the socket connection to our scanner process
         if not self._socket:
+            # There is no point carrying on with idle callbacks if there are no
+            # items to scan
+            if not len( self.scanStack ):
+                return False
+
+            # No connection, so see if we can connect
             try:
                 self._socket = socket.socket()
                 self._socket.connect( ( "", 33333 ) )
                 self._socket.setblocking( 0 )
             except socket.error:
+                # Can't connect to the socket - see if we need to start up the
+                # scanner.
                 self._socket = None
                 return CheckForScanner()
-    
+
+            # The socket should be OK by now. We can grab an item from it and
+            # send it to be processed.
             target = self.scanStack.pop()
             path = gnomevfs.get_local_path_from_uri( target.get_uri() )
             self._file_in_progress = target
@@ -132,16 +143,20 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             self._socket.send( path + "\n" )
             return True
         else:
+            # We already have a connection, so we must be waiting for the
+            # results of a scan. Check to see if it's available
             try:
                 data = self._socket.recv( 8096 )
             except socket.error:
                 return True
 
+            # The data is available, so we can try to unpickle it
             try:
                 data = pickle.loads( data )
             except EOFError:
                 return len( self.scanStack ) > 0
 
+            # Check if we need to act based on our data
             if data["status"]:
 
                 file = self._file_in_progress
@@ -157,6 +172,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 if ENABLE_EMBLEMS:
                     file.add_emblem( self.EMBLEMS[ data["status"] ] )
 
+            # We're done with the socket
             self._socket = None
 
             # Get more callbacks if we have more items to scan
