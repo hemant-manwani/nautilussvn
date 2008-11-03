@@ -2,7 +2,7 @@
 #labels Phase-Design
 
 = Introduction =
-!NautilusSvn is supposed to be clone of !TortoiseSVN, so here are some screenshots of !TortoiseSVN that should serve as guidance.
+!NautilusSvn is supposed to be clone of TortoiseSVN, so here are some screenshots of TortoiseSVN that should serve as guidance.
 
 = Screenshots =
 
