@@ -1,0 +1,29 @@
+#summary This page contains some helpful pointers on developing NautilusSvn
+#labels Featured,Phase-Implementation
+
+= Introduction =
+!NautilusSvn is pretty much like any other typical Python program, except it's a Nautilus extension. This has been known in the past to cause some problems, for example with threading.
+
+== Tips ==
+When modifying !NautilusSvn you'll have to restart Nautilus quite often, some !NautilusSvn developers are known to have the following alias in their ~/.bash_aliases file to make this a little easier:
+
+{{{
+nautilus-testing () {
+        mkdir /tmp/nautilus-testing; 
+        TMPDIR=/tmp/nautilus-testing nautilus --no-desktop "$1"
+}
+}}}
+
+This allows you to run two Nautilus instances next to each other, one for development and the other for normal use. Note that the two instances share the same !NautilusSvn extension, but as long as you don't restart any changes aren't loaded.
+
+You can start a Nautilus extension using this alias by:
+{{{
+$ nautilus-testing <directory to start in>
+}}}
+
+== Patches ==
+
+Patches can either be attached to a [http://code.google.com/p/nautilussvn/issues/list relevant issue] or submitted to [http://groups.google.com/group/nautilussvn the mailing list].
+
+= More information =
+  * [http://code.google.com/p/nautilussvn/wiki/HowNautilusSvnWorks How NautilusSvn Works] for a more detailed explination of !NautilusSvn's internals
