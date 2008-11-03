@@ -9,7 +9,7 @@
 [http://nautilussvn.googlecode.com/svn/wiki/screenshots/commit_dialog.png]
 
 === Meld Integration ===
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/meld_integration.png
+[http://nautilussvn.googlecode.com/svn/wiki/screenshots/meld_integration.png]
 
 === Log Viewer ===
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/svn_log.png
+[http://nautilussvn.googlecode.com/svn/wiki/screenshots/svn_log.png]
