@@ -1,5 +1,5 @@
 #summary Describe the installation procedure for NautilusSvn
-#labels Featured
+#labels Featured,Phase-Deploy
 
 At the moment it's recommend to grab !NautilusSvn from the repository. We're currently working on automatically generating packages for the most popular distributions, e.g. Debian/Ubuntu, Fedora and Gentoo.
 
