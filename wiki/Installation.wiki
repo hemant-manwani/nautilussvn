@@ -1,0 +1,52 @@
+#summary Describe the installation procedure for NautilusSvn
+
+At the moment it's recommend to grab !NautilusSvn from the repository. We're currently working on automatically generating packages for the most popular distributions, e.g. Debian/Ubuntu, Fedora and Gentoo.
+
+= Requirements =
+This software requires the following packages to be installed:
+
+  * python-nautilus
+  * python-wxgtk2.6
+  * python-svn
+  * meld (Optional - see 'Options' below.)
+
+== Ubuntu ==
+{{{
+sudo apt-get install python-nautilus python-wxgtk2.6 python-svn meld
+}}}
+
+== Fedora ==
+Might require some manual work, see [http://groups.google.com/group/nautilussvn/msg/d63f7323ebba5bb2 this reply] in the discussion [http://groups.google.com/group/nautilussvn/browse_thread/thread/ce30cd54e11c259/17c3d773b4f9416b "Getting this to work on Fedora 8?"]
+
+== Gentoo ==
+Consult Rion's overlay containing !NautilusSvn at http://rion-overlay.googlecode.com/svn/
+
+= Installation =
+
+== Manual installation ==
+
+{{{
+#!/usr/bin/env bash
+
+# Nautilus extensions live in ~/.nautilus/python-extensions - make sure that this directory exists.
+mkdir -p ~/.nautilus/python-extensions/
+
+# Next checkout NautilusSvn into ~/.nautilus/python-extensions/NautilusSvn
+cd ~/.nautilus/python-extensions/
+svn checkout http://nautilussvn.googlecode.com/svn/trunk/ NautilusSvn
+
+# Setup the emblems
+mkdir -p ~/.icons/hicolor/scalable
+ln -s ~/.nautilus/python-extensions/NautilusSvn/icons ~/.icons/hicolor/scalable/emblems # The current emblems folder
+ln -s ~/.nautilus/python-extensions/NautilusSvn/icons ~/.icons/hicolor/scalable/icons # The old emblems folder
+
+# Finally we need to set up a symlink so that Nautilus finds the correct startup script. 
+ln -s NautilusSvn/NautilusSvn.py NautilusSvn.py
+
+# Now just restart Nautilus, and you should see the new Subversion menu items.
+# 1) nautilus -q && nautilus
+# 2) killall nautilus
+# 3) log out and back in again
+
+nautilus -q && nautilus
+}}}
