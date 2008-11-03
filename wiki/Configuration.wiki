@@ -10,5 +10,5 @@ There are several user-definable switches in the file [http://code.google.com/p/
 *DIFF_TOOL* - Specifes which executable to use for diff operations. I've tried it with gvidiff, but I mostly use Meld since it's ace.
 
 *RECURSIVE_STATUS* - If enabled, the file status check when drawing emblems will use recursive checks. This is a bit experimental, as it might cause high CPU loads on large working copies.
-	
+
 *SWAP* - Set to True to swap the order of old and new versions of files in diff tool. Default is False, new version at left and old one at right.
