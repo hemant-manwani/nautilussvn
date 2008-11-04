@@ -1,7 +1,17 @@
 #summary This page describes the context menu entries and the conditions for them to appear.
 #labels Phase-Design
 
+= Table of contents =
+<wiki:toc max_depth="1" />
+
 = Menu structure =
+== Topmenu ==
+|| *Menu entry*             || *Condition* ||
+|| Update                   || `1..*` versioned file(s) ||
+|| Commit                   || `1..*` (versioned file(s) OR added file(s)) ||
+|| NautilusSvn              || always ||
+
+== Submenu NautilusSvn ==
 || *Menu entry*             || *Condition* ||
 || Diff                     || 2 files OR modified file ||
 || Show log                 || 1 versioned file ||
