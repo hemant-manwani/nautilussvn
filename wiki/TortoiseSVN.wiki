@@ -36,3 +36,6 @@
 
 === Context menu for a modified file ===
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/context_menu_modified_file.png]
+
+=== Context menu with multiple files selected ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/context_menu_multiple_files.png]
