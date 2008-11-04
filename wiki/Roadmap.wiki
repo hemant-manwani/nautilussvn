@@ -12,5 +12,6 @@ Most important features:
   * Submenu support (Issue #6), see [http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure ContextMenuStructure]
 
 = Future =
-   * Issue #4 (Inadequate (sub-par) performance) will eventually be resolved
-   * Implementation of a property page (Issue #10)
+  * Issue #4 (Inadequate (sub-par) performance) will eventually be resolved
+  * Implementation of a property page (Issue #10)
+  * Emblem support will be improved (no issue yet?), remove the need for "Refresh status"
