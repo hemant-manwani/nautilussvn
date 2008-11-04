@@ -5,6 +5,8 @@
 <wiki:toc max_depth="1" />
 
 = Menu structure =
+Entirely based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's menus].
+
 == Topmenu ==
 || *Menu entry*             || *Condition* ||
 || Update                   || `1..*` versioned file(s) ||
