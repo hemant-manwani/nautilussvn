@@ -1,0 +1,16 @@
+#summary The development roadmap
+#labels Phase-Requirements,Featured
+
+= NautilusSvn 0.12 =
+All issues (bugs or feature requests) with [http://code.google.com/p/nautilussvn/issues/list?q=label:Milestone-Release0.12 label:Milestone-0.12] will be resolved
+
+Most important bug fixes:
+  * SSL authentication (Issue #1, Issue #2)
+  * Unicode support (Issue #8)
+
+Most important features:
+  * Submenu support (Issue #6)
+
+= Future =
+   * Issue #4 (Inadequate (sub-par) performance) will eventually be resolved
+   * Implementation of a property page (Issue #10)
