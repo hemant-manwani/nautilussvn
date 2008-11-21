@@ -12,8 +12,10 @@ The main concerns are:
 
 Here's a possible directory structure to keep the files organized:
 
+{{{
 ui/interface.glade
 ui/checkout.py # user interface logic
 ui/add.py # same
 
 lib/nautilussvn.py # versioning logic
+}}}
