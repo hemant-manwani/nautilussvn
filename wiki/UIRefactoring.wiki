@@ -1,0 +1,19 @@
+#summary Design considerations for the new UI implementation.
+#labels Phase-Design
+
+= Introduction =
+The main concerns are:
+
+  * Separation of actual version control logic and UI logic
+    * Eventually we'll want to be able to support multiple version control systems, but at the moment we'll just focus on Subversion
+  * Minimizing repetition (repeating statements, logic etc.)
+
+= Directory structure =
+
+Here's a possible directory structure to keep the files organized:
+
+ui/interface.glade
+ui/checkout.py # user interface logic
+ui/add.py # same
+
+lib/nautilussvn.py # versioning logic
