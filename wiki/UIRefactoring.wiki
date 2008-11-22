@@ -6,6 +6,7 @@ The main concerns are:
 
   * Separation of actual version control logic and UI logic
     * Eventually we'll want to be able to support multiple version control systems, but at the moment we'll just focus on Subversion
+  * Separation from the actual implementation (e.g. Nautilus, Thunar, Dolphin, PCManFM etc.)
   * Minimizing repetition (repeating statements, logic etc.)
 
 = Directory structure =
