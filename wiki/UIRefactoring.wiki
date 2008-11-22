@@ -20,3 +20,6 @@ ui/add.py # same
 
 lib/nautilussvn.py # versioning logic
 }}}
+
+= Modularity =
+  _How will we achieve the separation (loose coupling) we want?_
