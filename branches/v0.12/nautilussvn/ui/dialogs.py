@@ -96,3 +96,35 @@ class FileChooser:
             returner = self.dialog.get_uri()
         self.dialog.destroy()
         return returner
+        
+class Certificate:
+    def __init__(self, realm="", host="", issuer="", valid="", fingerprint=""):
+        self.wTree = gtk.glade.XML("glade/interface.glade", "Certificate")
+        self.wTree.signal_autoconnect(self)
+        
+        self.wTree.get_widget("cert_realm").set_label(realm)
+        self.wTree.get_widget("cert_host").set_label(host)
+        self.wTree.get_widget("cert_issuer").set_label(issuer)
+        self.wTree.get_widget("cert_valid").set_label(valid)
+        self.wTree.get_widget("cert_fingerprint").set_label(fingerprint)
+        
+    def run(self):
+        self.dialog = self.wTree.get_widget("Certificate")
+        result = self.dialog.run()
+        self.dialog.destroy()
+        
+        if result == -1:
+            self.deny()
+        elif result == 1:
+            self.accept_once()
+        elif result == 2:
+            self.accept_forever()
+
+    def deny(self):
+        print "Deny"
+   
+    def accept_once(self):
+        print "Accept Once"
+    
+    def accept_forever(self):
+        print "Accept Forever"
