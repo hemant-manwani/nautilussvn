@@ -5,19 +5,21 @@
 <wiki:toc max_depth="1" />
 
 = Menu structure =
-Entirely based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's menus].
+Entirely based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's menus]. 
+
+At the time of writing some of the conditions aren't correct. For example:
 
 == Topmenu ==
 || *Menu entry*             || *Condition*                                 || *Callback* || 
 || Checkout                 || not inside a working copy                   || ||
-|| Update                   || `1..*` versioned file(s)                    || || 
-|| Commit                   || `1..*` (versioned file(s) OR added file(s)) || || 
+|| Update                   || `1..*` versioned file(s) AND NOT added      || || 
+|| Commit                   || `1..*` (versioned file(s)                   || || 
 || NautilusSvn              || always                                      || || 
 
 == Submenu NautilusSvn ==
 || *Menu entry*             || *Condition*                                 || *Callback* || 
 || Diff                     || 2 files OR modified file                    || || 
-|| Show log                 || 1 versioned file                            || || 
+|| Show log                 || 1 versioned file AND NOT added              || || 
 || Repo-browser             ||                                             || || 
 || Check for modifications  ||                                             || || 
 || Revision graph           ||                                             || || 
