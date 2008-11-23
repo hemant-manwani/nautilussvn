@@ -9,6 +9,7 @@ There are a couple of pages in the wiki relevant for developers:
 
   * [http://code.google.com/p/nautilussvn/wiki/Future Future] is used for discussion and decisions related mostly to the architecture of NautilusSvn. Also see pages labeled [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Design Phase-Design].
   * [http://code.google.com/p/nautilussvn/wiki/Packaging Packaging] describes how NautilusSvn should be packages for a number of distros.
+  * [http://code.google.com/p/nautilussvn/wiki/HowNautilusSvnWorks How NautilusSvn Works] for a more detailed explination of !NautilusSvn's internals. Also see pages labeled [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Implementation Phase-Implementation].
 
 = Tips =
 When modifying !NautilusSvn you'll have to restart Nautilus quite often, some !NautilusSvn developers are known to have the following alias in their ~/.bash_aliases file to make this a little easier:
@@ -30,6 +31,3 @@ $ nautilus-testing <directory to start in>
 = Patches =
 
 Patches can either be attached to a [http://code.google.com/p/nautilussvn/issues/list relevant issue] or submitted to [http://groups.google.com/group/nautilussvn the mailing list].
-
-= More information =
-  * [http://code.google.com/p/nautilussvn/wiki/HowNautilusSvnWorks How NautilusSvn Works] for a more detailed explination of !NautilusSvn's internals
