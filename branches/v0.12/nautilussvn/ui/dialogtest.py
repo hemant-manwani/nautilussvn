@@ -21,6 +21,18 @@ class CertificateTest:
         result = dialog.run()
         return
 
+class AuthorizationTest:
+    def __init__(self):
+        dialog = dialogs.Authorization(location="this location", realm="this realm")
+        result = dialog.run()
+        return
+
+class PropertyTest:
+    def __init__(self):
+        dialog = dialogs.Property(name="prop name", value="")
+        result = dialog.run()
+        return
+        
 if __name__ == "__main__":
-    window = CertificateTest()
+    window = PropertyTest()
     gtk.main()
