@@ -1,4 +1,4 @@
-#summary Brainstorming for all designs related to NautilusSvn (mostly architectural stuff)
+#summary Brainstorming for all decisions related to NautilusSvn (mostly architectural stuff)
 #labels Phase-Design
 
 = Introduction =
