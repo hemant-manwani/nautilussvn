@@ -1,4 +1,5 @@
 #summary This page, as the title implies, describes how NautilusSvn works.
+#labels Phase-Implementation
 
 = Introduction =
 In this page we'll look at what exactly a Nautilus extension is (the interface etc.) and dive into the NautilusSvn specifics.
