@@ -1,4 +1,4 @@
-#summary Design considerations for the new UI implementation.
+#summary Brainstorming for all designs related to NautilusSvn (mostly architectural stuff)
 #labels Phase-Design
 
 = Introduction =
