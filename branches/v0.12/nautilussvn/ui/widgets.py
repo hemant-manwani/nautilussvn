@@ -70,3 +70,16 @@ class ComboBox:
 
     def append(self, item):
         self.model.append([item])
+        
+class TextView:
+    def __init__(self, widget=None, value=""):
+        if widget is None:
+            self.view = gtk.TextView()
+        else:
+            self.view = widget
+        self.buffer = gtk.TextBuffer()
+        self.view.set_buffer(self.buffer)
+        self.buffer.set_text(value)
+        
+    def get_text(self):
+        return self.buffer(self.buffer.get_start_iter(), self.buffer.get_end_iter())

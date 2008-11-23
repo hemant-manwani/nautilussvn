@@ -111,7 +111,6 @@ class Certificate:
     def run(self):
         self.dialog = self.wTree.get_widget("Certificate")
         result = self.dialog.run()
-        self.dialog.destroy()
         
         if result == -1:
             self.deny()
@@ -119,6 +118,9 @@ class Certificate:
             self.accept_once()
         elif result == 2:
             self.accept_forever()
+        
+        self.dialog.destroy()
+        return
 
     def deny(self):
         print "Deny"
@@ -128,3 +130,51 @@ class Certificate:
     
     def accept_forever(self):
         print "Accept Forever"
+        
+class Authorization:
+    def __init__(self, location="", realm=""):
+        self.wTree = gtk.glade.XML("glade/interface.glade", "Authorization")
+        self.wTree.signal_autoconnect(self)
+        
+        self.wTree.get_widget("auth_location").set_label(location)
+        self.wTree.get_widget("auth_realm").set_label(realm)
+        
+    def run(self):
+        self.dialog = self.wTree.get_widget("Authorization")
+        result = self.dialog.run()
+        
+        if result == 1:
+            self.send_details()
+            
+        self.dialog.destroy()
+        return
+        
+    def send_details(self):
+        self.login = self.wTree.get_widget("auth_login").get_text()
+        self.password = self.wTree.get_widget("auth_password").get_text()
+
+        print "Sending %s:%s" % (self.login, self.password)
+        
+        
+class Property:
+    def __init__(self, name, value=""):
+        self.wTree = gtk.glade.XML("glade/interface.glade", "Property")
+        self.wTree.signal_autoconnect(self)
+        
+        self.name = self.wTree.get_widget("property_name")
+        self.name.set_text(name)
+        self.value = widgets.TextView(self.wTree.get_widget("property_value"), value)
+        
+    def run(self):
+        self.dialog = self.wTree.get_widget("Property")
+        result = self.dialog.run()
+        
+        if result == 1:
+            self.save()
+        
+        self.dialog.destroy()
+        return
+    
+    def save(self):
+        print "Save %s:%s" % (self.name.get_text(), self.value.get_text())
+        
