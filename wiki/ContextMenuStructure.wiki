@@ -8,40 +8,40 @@
 Entirely based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's menus].
 
 == Topmenu ==
-|| *Menu entry*             || *Condition*                                 || *Callback*
-|| Update                   || `1..*` versioned file(s)                    || 
-|| Commit                   || `1..*` (versioned file(s) OR added file(s)) || 
-|| NautilusSvn              || always                                      || 
+|| *Menu entry*             || *Condition*                                 || *Callback* || 
+|| Update                   || `1..*` versioned file(s)                    || || 
+|| Commit                   || `1..*` (versioned file(s) OR added file(s)) || || 
+|| NautilusSvn              || always                                      || || 
 
 == Submenu NautilusSvn ==
-|| *Menu entry*             || *Condition*                                 || 
-|| Diff                     || 2 files OR modified file                    || 
-|| Show log                 || 1 versioned file                            || 
-|| Repo-browser             ||                                             || 
-|| Check for modifications  ||                                             || 
-|| Revision graph           ||                                             || 
-|| ---------------------    ||                                             || 
-|| Add                      || `1..*` unversioned file(s)                  || 
-|| Add to ignore list       || `1..*` unversioned file(s)                  || 
-|| ---------------------    ||                                             || 
-|| Update to revision       ||                                             || 
-|| Rename                   || 1 versioned file                            || 
-|| Delete                   || `1..*` versioned file(s)                    || 
-|| Revert                   || `1..*` (added OR modified file(s))          || 
-|| Get lock                 ||                                             || 
-|| ---------------------    ||                                             || 
-|| Branch/tag               ||                                             || 
-|| Switch                   ||                                             || 
-|| Merge                    ||                                             || 
-|| ---------------------    ||                                             || 
-|| Blame                    || 1 versioned file                            || 
-|| ---------------------    ||                                             || 
-|| Create patch             ||                                             || 
-|| Properties               || `1..*` (versioned or added file(s))         || 
-|| ---------------------    ||                                             || 
-|| Help                     || always                                      || 
-|| Settings                 || always                                      || 
-|| About                    || always                                      || 
+|| *Menu entry*             || *Condition*                                 || *Callback* || 
+|| Diff                     || 2 files OR modified file                    || || 
+|| Show log                 || 1 versioned file                            || || 
+|| Repo-browser             ||                                             || || 
+|| Check for modifications  ||                                             || || 
+|| Revision graph           ||                                             || || 
+|| ---------------------    ||                                             || || 
+|| Add                      || `1..*` unversioned file(s)                  || || 
+|| Add to ignore list       || `1..*` unversioned file(s)                  || || 
+|| ---------------------    ||                                             || || 
+|| Update to revision       ||                                             || || 
+|| Rename                   || 1 versioned file                            || || 
+|| Delete                   || `1..*` versioned file(s)                    || || 
+|| Revert                   || `1..*` (added OR modified file(s))          || || 
+|| Get lock                 ||                                             || || 
+|| ---------------------    ||                                             || || 
+|| Branch/tag               ||                                             || || 
+|| Switch                   ||                                             || || 
+|| Merge                    ||                                             || || 
+|| ---------------------    ||                                             || || 
+|| Blame                    || 1 versioned file                            || || 
+|| ---------------------    ||                                             || || 
+|| Create patch             ||                                             || || 
+|| Properties               || `1..*` (versioned or added file(s))         || || 
+|| ---------------------    ||                                             || || 
+|| Help                     || always                                      || || 
+|| Settings                 || always                                      || || 
+|| About                    || always                                      || || 
 
 = Mockup =
 The icons used in the mockup are from the default GNOME iconset or the Tango iconset. Rename was based on Gedit's logo. The lock was based on the screenlock icon from GNOME. The logo is a combination of Nautilus's logo (a nautilus shell) and Tango's file manager icon.
