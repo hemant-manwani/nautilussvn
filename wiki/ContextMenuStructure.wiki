@@ -9,6 +9,7 @@ Entirely based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN Tortois
 
 == Topmenu ==
 || *Menu entry*             || *Condition*                                 || *Callback* || 
+|| Checkout                 || not inside a working copy                   || ||
 || Update                   || `1..*` versioned file(s)                    || || 
 || Commit                   || `1..*` (versioned file(s) OR added file(s)) || || 
 || NautilusSvn              || always                                      || || 
