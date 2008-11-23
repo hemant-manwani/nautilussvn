@@ -22,7 +22,9 @@ nautilus-testing () {
 }
 }}}
 
-This allows you to run two Nautilus instances next to each other, one for development and the other for normal use. Note that the two instances share the same !NautilusSvn extension, but as long as you don't restart any changes aren't loaded.
+~~This allows you to run two Nautilus instances next to each other, one for development and the other for normal use. Note that the two instances share the same !NautilusSvn extension, but as long as you don't restart any changes aren't loaded.~~
+
+It seems that starting with 2.24.1 you have to quit nautilus (nautilus -q) for this to work. 
 
 You can start a Nautilus extension using this alias by:
 {{{
