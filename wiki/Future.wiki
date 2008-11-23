@@ -11,15 +11,30 @@ The main concerns are:
 
 = Directory structure =
 
+A list of projects to borrow ideas from: [http://dev.deluge-torrent.org/browser/trunk Deluge], [http://www.exaile.org/downloads Exaile], [http://musicbrainz.org/doc/PicardDownload MusicBrainz Picard] and [http://svn.gnome.org/viewvc/gnome-games/trunk/gnome-sudoku/ GNOME Sudoku] (also [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus Actions] and [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus])
+
 Here's a possible directory structure to keep the files organized:
 
 {{{
-ui/interface.glade
-ui/checkout.py # user interface logic
-ui/add.py # same
-
-lib/nautilussvn.py # versioning logic
+|-- COPYING
+|-- README
+|-- nautilussvn
+|   |-- data
+|   |   `-- icons
+|   |-- docs
+|   |-- lib
+|   |   |-- extensions
+|   |   |   `-- nautilus
+|   |   `-- vcs
+|   |       `-- svn.py
+|   |-- po
+|   |-- tests
+|   `-- ui
+|       `-- glade
+|-- packages
 }}}
+
+_`__init__.py files left out for clarity`_
 
 = Modularity =
   _How will we achieve the separation (loose coupling) we want?_
