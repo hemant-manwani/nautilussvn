@@ -157,12 +157,19 @@ class Authorization:
         
         
 class Property:
-    def __init__(self, name, value=""):
+
+    PROPS = ['', 'svn:executable','svn:mime','svn:ignore','svn:keywords','svn:eol','svn:externals','svn:special']
+
+    def __init__(self, path, name="svn:ignore", value=""):
         self.wTree = gtk.glade.XML("glade/interface.glade", "Property")
         self.wTree.signal_autoconnect(self)
         
-        self.name = self.wTree.get_widget("property_name")
-        self.name.set_text(name)
+        self.path = path
+        self.save_name = name
+        self.save_value = value
+        
+        self.names = widgets.ComboBox(self.wTree.get_widget("property_names"), self.PROPS)
+        self.names.set_active_from_value(name)
         self.value = widgets.TextView(self.wTree.get_widget("property_value"), value)
         
     def run(self):
@@ -173,8 +180,9 @@ class Property:
             self.save()
         
         self.dialog.destroy()
-        return
+        return (self.save_name, self.save_value)
     
     def save(self):
-        print "Save %s:%s" % (self.name.get_text(), self.value.get_text())
+        self.save_name = self.name.get_text()
+        self.save_value = self.value.get_text()
         

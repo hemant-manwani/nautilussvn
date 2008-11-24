@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 import sys
+
 import pygtk
 import gobject
 import gtk
 import gtk.glade
+
 import widgets
 
 class Add:
