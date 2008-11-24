@@ -1,25 +1,22 @@
 #!/usr/bin/env python
 
-import sys
-
 import pygtk
 import gobject
 import gtk
-import gtk.glade
 
 import widgets
 import dialogs
+import views
 
 class Properties:
 
     SELECTED_ROW = None
 
     def __init__(self):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Properties")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Properties")
         
         self.table = widgets.Table(
-            self.wTree.get_widget("props_table"),
+            self.view.get_widget("props_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Name", "Value"]
         )        
@@ -71,12 +68,12 @@ class Properties:
             treeview.grab_focus()
             treeview.set_cursor(path, col, 0)
             self.SELECTED_ROW = path
-            self.wTree.get_widget("props_edit").set_sensitive(True)
-            self.wTree.get_widget("props_delete").set_sensitive(True)
+            self.view.get_widget("props_edit").set_sensitive(True)
+            self.view.get_widget("props_delete").set_sensitive(True)
         else:
             self.SELECTED_ROW = None
-            self.wTree.get_widget("props_edit").set_sensitive(False)
-            self.wTree.get_widget("props_delete").set_sensitive(False)
+            self.view.get_widget("props_edit").set_sensitive(False)
+            self.view.get_widget("props_delete").set_sensitive(False)
 
 if __name__ == "__main__":
     window = Properties()

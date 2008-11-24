@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-import sys
 import pygtk
-import gtk
 import gobject
-import gtk.glade
+import gtk
+
+import views
     
 TOGGLE_BUTTON = 'TOGGLE_BUTTON'
 
@@ -105,3 +105,6 @@ class TextView:
         
     def get_text(self):
         return self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter())
+        
+    def set_text(self, text):
+        self.buffer.set_text(text)

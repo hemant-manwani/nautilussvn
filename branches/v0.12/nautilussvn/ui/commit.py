@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
-import sys
-
 import pygtk
 import gobject
 import gtk
-import gtk.glade
 
 import widgets
 import dialogs
+import views
 
 class Commit:
 
@@ -16,11 +14,10 @@ class Commit:
     SHOW_UNVERSIONED = True
 
     def __init__(self):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Commit")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Commit")
 
         self.files_table = widgets.Table(
-            self.wTree.get_widget("commit_files_table"),
+            self.view.get_widget("commit_files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [widgets.TOGGLE_BUTTON, "Path", "Extension", "Text Status", "Property Status"],
         )
@@ -31,9 +28,7 @@ class Commit:
         ]
         self.populate_files_from_original()
         
-        self.message = self.wTree.get_widget("commit_message")
-        self.buffer = gtk.TextBuffer()
-        self.message.set_buffer(self.buffer)
+        self.message = widgets.TextView(self.view.get_widget("commit_message"))
     
     def on_commit_destroy(self, widget):
         gtk.main_quit()
@@ -133,7 +128,7 @@ class Commit:
         dialog = dialogs.PreviousMessages()
         message = dialog.run()
         if message is not None:
-            self.buffer.set_text(message)
+            self.message.set_text(message)
         
 if __name__ == "__main__":
     window = Commit()
