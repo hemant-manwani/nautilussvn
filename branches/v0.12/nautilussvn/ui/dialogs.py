@@ -98,13 +98,13 @@ class FileChooser:
         return returner
         
 class Certificate:
-    def __init__(self, realm="", host="", issuer="", valid="", fingerprint=""):
+    def __init__(self, realm="", host="", issuer_from="", issuer_to="" valid="", fingerprint=""):
         self.wTree = gtk.glade.XML("glade/interface.glade", "Certificate")
         self.wTree.signal_autoconnect(self)
         
         self.wTree.get_widget("cert_realm").set_label(realm)
         self.wTree.get_widget("cert_host").set_label(host)
-        self.wTree.get_widget("cert_issuer").set_label(issuer)
+        self.wTree.get_widget("cert_issuer").set_label("%s to %s" % (issuer_from,issuer_to))
         self.wTree.get_widget("cert_valid").set_label(valid)
         self.wTree.get_widget("cert_fingerprint").set_label(fingerprint)
         

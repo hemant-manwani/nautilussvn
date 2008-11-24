@@ -17,7 +17,7 @@ class ProgressTest:
         
 class CertificateTest:
     def __init__(self):
-        dialog = dialogs.Certificate(realm="this realm", host="this host", issuer="this issuer", valid="valid from xxx to xxx", fingerprint="this fingerprint")
+        dialog = dialogs.Certificate(realm="this realm", host="this host", issuer_from="2008-10-20", issuer_to="2008-12-12", valid="valid from xxx to xxx", fingerprint="this fingerprint")
         result = dialog.run()
         return
 
