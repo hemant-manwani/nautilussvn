@@ -71,40 +71,32 @@ class Commit:
             fileinfo = treeview_model[path]
             
             if event.button == 3:
-                contextMenu = gtk.Menu()
-                
-                openItem = gtk.MenuItem("Open")
-                openItem.connect('activate', self.on_context_open_activated, fileinfo)
-                contextMenu.add(openItem)
-                
-                browseItem = gtk.MenuItem("Browse to")
-                browseItem.connect('activate', self.on_context_browse_activated, fileinfo)
-                contextMenu.add(browseItem)
-                
-                delItem = gtk.MenuItem("Delete")
-                delItem.connect('activate', self.on_context_delete_activated, fileinfo)
-                contextMenu.add(delItem)
-
-                addItem = gtk.MenuItem("Add")
-                addItem.connect('activate', self.on_context_add_activated, fileinfo)
-                contextMenu.add(addItem)
-                
-                ignoreSubMenu = gtk.Menu()
-                
-                ignoreByFileName = gtk.MenuItem(fileinfo[1])
-                ignoreByFileName.connect('activate', self.on_subcontext_ignore_by_filename_activated, fileinfo)
-                ignoreSubMenu.add(ignoreByFileName)
-                
-                ignoreByFileExt = gtk.MenuItem("*.%s"%fileinfo[2])
-                ignoreByFileExt.connect('activate', self.on_subcontext_ignore_by_fileext_activated, fileinfo)
-                ignoreSubMenu.add(ignoreByFileExt)
-                
-                ignoreItem = gtk.MenuItem("Add to ignore list")
-                ignoreItem.set_submenu(ignoreSubMenu)
-                contextMenu.add(ignoreItem)
-                
-                contextMenu.show_all()
-                contextMenu.popup(None, None, None, event.button, event.time)
+                context_menu = widget.ContextMenu([{
+                        'label': 'Open',
+                        'signals': {'activate': {'callback':self.on_context_open_activated, 'args':fileinfo}}
+                    },{
+                        'label': 'Browse',
+                        'signals': {'activate': {'callback':self.on_context_browse_activated, 'args':fileinfo}}
+                    },{
+                        'label': 'Delete',
+                        'signals': {'activate': {'callback':self.on_context_delete_activated, 'args':fileinfo}}
+                    },{
+                        'label': 'Add',
+                        'signals': {'activate': {'callback':self.on_context_add_activated, 'args':fileinfo}}
+                    },{
+                        'label': 'Add to ignore list',
+                        'submenu': [{
+                                'label': fileinfo[1],
+                                'signals': {'activate': {'callback':self.on_subcontext_ignore_by_filename_activated, 'args':fileinfo}}
+                            },
+                            {
+                                'label': "*.%s"%fileinfo[2],
+                                'signals': {'activate': {'callback':self.on_subcontext_ignore_by_fileext_activated, 'args':fileinfo}}
+                            }
+                        ]
+                    }
+                ])
+                context_menu.show(event)
 
     def on_context_add_activated(self, widget, data=None):
         print "Add Item"

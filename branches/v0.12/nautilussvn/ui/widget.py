@@ -106,3 +106,28 @@ class TextView:
         
     def set_text(self, text):
         self.buffer.set_text(text)
+        
+class ContextMenu:
+    def __init__(self, menu):
+        if menu is None:
+            return
+        
+        self.view = gtk.Menu()
+        for item in menu:
+            menuitem = gtk.MenuItem(item['label'])
+            if 'signals' in item:
+                for signal, info in item['signals'].items():
+                    menuitem.connect(signal, info['callback'], info['args'])
+            
+            if 'submenu' in item:
+                submenu = ContextMenu(item['submenu'])
+                menuitem.set_submenu(submenu.get_widget())
+            
+            self.view.add(menuitem)
+        
+    def show(self, event):        
+        self.view.show_all()
+        self.view.popup(None, None, None, event.button, event.time)
+        
+    def get_widget(self):
+        return self.view
