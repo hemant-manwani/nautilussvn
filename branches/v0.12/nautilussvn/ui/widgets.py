@@ -55,21 +55,32 @@ class Table:
 
 class ComboBox:
     def __init__(self, cb, items):
+    
+        self.cb = cb
+    
         self.model = gtk.ListStore(str)
         for i in items:
             self.model.append([i])
 
-        cb.set_model(self.model)
+        self.cb.set_model(self.model)
 
-        if type(cb) == gtk.ComboBoxEntry:
-            cb.set_text_column(0)
-        elif type(cb) == gtk.ComboBox:
+        if type(self.cb) == gtk.ComboBoxEntry:
+            self.cb.set_text_column(0)
+        elif type(self.cb) == gtk.ComboBox:
             cell = gtk.CellRendererText()
-            cb.pack_start(cell, True)
-            cb.add_attribute(cell, 'text', 0)
+            self.cb.pack_start(cell, True)
+            self.cb.add_attribute(cell, 'text', 0)
 
     def append(self, item):
         self.model.append([item])
+        
+    def set_active_from_value(self, value):
+        index = 0
+        for entry in self.model:
+            if entry[0] == value:
+                self.cb.set_active(index)
+                return
+            index += 1                
         
 class TextView:
     def __init__(self, widget=None, value=""):
