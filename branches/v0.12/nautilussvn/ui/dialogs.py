@@ -1,25 +1,24 @@
 #!/usr/bin/env python
 
 import sys
+
 import pygtk
-import gtk
 import gobject
-import gtk.glade
+import gtk
+
 import widgets
 import helper
+import views
 
 class PreviousMessages:
     def __init__(self):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "PreviousMessages")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "PreviousMessages")
         
     def run(self):
-        self.message = self.wTree.get_widget("prevmes_message")
-        self.buffer = gtk.TextBuffer()
-        self.message.set_buffer(self.buffer)
+        self.message = widgets.TextView(self.view.get_widget("prevmes_message"))
 
         self.message_table = widgets.Table(
-            self.wTree.get_widget("prevmes_table"),
+            self.view.get_widget("prevmes_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Date", "Message"]
         )
@@ -29,10 +28,10 @@ class PreviousMessages:
             self.message_table.append(entry)
         
         returner = None
-        self.dialog = self.wTree.get_widget("PreviousMessages")
+        self.dialog = self.view.get_widget("PreviousMessages")
         result = self.dialog.run()
         if result == 1:
-            returner = self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter())
+            returner = self.message.get_text()
         self.dialog.destroy()
 
         return returner
@@ -44,7 +43,7 @@ class PreviousMessages:
             treeview.grab_focus()
             treeview.set_cursor(path, col, 0)
             
-            self.buffer.set_text(treeview.get_model()[path][1])
+            self.message.set_text(treeview.get_model()[path][1])
             
 
 class Progress:
@@ -52,14 +51,13 @@ class Progress:
     OK_BUTTON_ENABLED = False
 
     def __init__(self):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Progress")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Progress")
         
     def run(self):
-        self.ok_button = self.wTree.get_widget("progress_ok")
+        self.ok_button = self.view.get_widget("progress_ok")
     
         self.messages_table = widgets.Table(
-            self.wTree.get_widget("progress_messages_table"),
+            self.view.get_widget("progress_messages_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
         )
@@ -71,7 +69,7 @@ class Progress:
         for row in self.entries:
             self.append_to_table(row)
         
-        self.dialog = self.wTree.get_widget("Progress")
+        self.dialog = self.view.get_widget("Progress")
         result = self.dialog.run()
         self.dialog.destroy()
         
@@ -98,18 +96,17 @@ class FileChooser:
         return returner
         
 class Certificate:
-    def __init__(self, realm="", host="", issuer_from="", issuer_to="" valid="", fingerprint=""):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Certificate")
-        self.wTree.signal_autoconnect(self)
+    def __init__(self, realm="", host="", issuer_from="", issuer_to="", valid="", fingerprint=""):
+        self.view = views.InterfaceView(self, "Certificate")
         
-        self.wTree.get_widget("cert_realm").set_label(realm)
-        self.wTree.get_widget("cert_host").set_label(host)
-        self.wTree.get_widget("cert_issuer").set_label("%s to %s" % (issuer_from,issuer_to))
-        self.wTree.get_widget("cert_valid").set_label(valid)
-        self.wTree.get_widget("cert_fingerprint").set_label(fingerprint)
+        self.view.get_widget("cert_realm").set_label(realm)
+        self.view.get_widget("cert_host").set_label(host)
+        self.view.get_widget("cert_issuer").set_label("%s to %s" % (issuer_from,issuer_to))
+        self.view.get_widget("cert_valid").set_label(valid)
+        self.view.get_widget("cert_fingerprint").set_label(fingerprint)
         
     def run(self):
-        self.dialog = self.wTree.get_widget("Certificate")
+        self.dialog = self.view.get_widget("Certificate")
         result = self.dialog.run()
         
         if result == -1:
@@ -133,14 +130,13 @@ class Certificate:
         
 class Authorization:
     def __init__(self, location="", realm=""):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Authorization")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Authorization")
         
-        self.wTree.get_widget("auth_location").set_label(location)
-        self.wTree.get_widget("auth_realm").set_label(realm)
+        self.view.get_widget("auth_location").set_label(location)
+        self.view.get_widget("auth_realm").set_label(realm)
         
     def run(self):
-        self.dialog = self.wTree.get_widget("Authorization")
+        self.dialog = self.view.get_widget("Authorization")
         result = self.dialog.run()
         
         if result == 1:
@@ -150,8 +146,8 @@ class Authorization:
         return
         
     def send_details(self):
-        self.login = self.wTree.get_widget("auth_login").get_text()
-        self.password = self.wTree.get_widget("auth_password").get_text()
+        self.login = self.view.get_widget("auth_login").get_text()
+        self.password = self.view.get_widget("auth_password").get_text()
 
         print "Sending %s:%s" % (self.login, self.password)
         
@@ -161,18 +157,17 @@ class Property:
     PROPS = ['', 'svn:executable','svn:mime','svn:ignore','svn:keywords','svn:eol','svn:externals','svn:special']
 
     def __init__(self, name="", value=""):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Property")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Property")
         
         self.save_name = name
         self.save_value = value
         
-        self.names = widgets.ComboBox(self.wTree.get_widget("property_names"), self.PROPS)
+        self.names = widgets.ComboBox(self.view.get_widget("property_names"), self.PROPS)
         self.names.set_active_from_value(name)
-        self.value = widgets.TextView(self.wTree.get_widget("property_value"), value)
+        self.value = widgets.TextView(self.view.get_widget("property_value"), value)
         
     def run(self):
-        self.dialog = self.wTree.get_widget("Property")
+        self.dialog = self.view.get_widget("Property")
         result = self.dialog.run()
         
         if result == 1:

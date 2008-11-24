@@ -1,25 +1,21 @@
 #!/usr/bin/env python
 
-import sys
-
 import pygtk
 import gobject
 import gtk
-import gtk.glade
 
 import widgets
+import views
 
 class Log:
     def __init__(self):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Log")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Log")
 
         self.revisions_table = widgets.Table(
-            self.wTree.get_widget("log_revisions_table"),
+            self.view.get_widget("log_revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Revision", "Author", "Date", "Message"]
         )
-
         self.revisions = [
             ["100", "Adam Plumb", "2008-10-20 22:12:23", "This is a message"],
             ["98", "Adam Plumb", "2008-10-12 22:12:23", "This is another message"]
@@ -28,7 +24,7 @@ class Log:
             self.revisions_table.append(row)
 
         self.paths_table = widgets.Table(
-            self.wTree.get_widget("log_paths_table"),
+            self.view.get_widget("log_paths_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
         )
@@ -39,11 +35,9 @@ class Log:
         for row in self.paths:
             self.paths_table.append(row)
 
-        self.message = self.wTree.get_widget("log_message")
-        self.buffer = gtk.TextBuffer()
-        self.message.set_buffer(self.buffer)
+        self.message = widgets.TextView(self.view.get_widget("log_message"))
 
-        self.progress_bar = self.wTree.get_widget("log_progress_bar")
+        self.progress_bar = self.view.get_widget("log_progress_bar")
         self.progress_bar.set_fraction(.3)
 
     def on_log_destroy(self, widget, data=None):
@@ -61,7 +55,7 @@ class Log:
             path, col, cellx, celly = pathinfo
             treeview.grab_focus()
             treeview.set_cursor(path, col, 0)
-            self.buffer.set_text(treeview.get_model()[path][3])
+            self.message.set_text(treeview.get_model()[path][3])
 
 if __name__ == "__main__":
     window = Log()

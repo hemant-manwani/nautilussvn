@@ -1,24 +1,21 @@
 #!/usr/bin/env python
 
-import sys
-
 import pygtk
 import gobject
 import gtk
-import gtk.glade
 
 import widgets
+import views
 
 class Add:
 
     TOGGLE_ALL = True
 
     def __init__(self):
-        self.wTree = gtk.glade.XML("glade/interface.glade", "Add")
-        self.wTree.signal_autoconnect(self)
+        self.view = views.InterfaceView(self, "Add")
 
         self.add_files_table = widgets.Table(
-            self.wTree.get_widget("add_files_table"), 
+            self.view.get_widget("add_files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [widgets.TOGGLE_BUTTON, "Path", "Extension"]
         )
