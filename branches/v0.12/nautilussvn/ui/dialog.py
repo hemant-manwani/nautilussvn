@@ -6,18 +6,18 @@ import pygtk
 import gobject
 import gtk
 
-import widgets
+import widget
 import helper
-import views
+import view
 
 class PreviousMessages:
     def __init__(self):
-        self.view = views.InterfaceView(self, "PreviousMessages")
+        self.view = view.InterfaceView(self, "PreviousMessages")
         
     def run(self):
-        self.message = widgets.TextView(self.view.get_widget("prevmes_message"))
+        self.message = widget.TextView(self.view.get_widget("prevmes_message"))
 
-        self.message_table = widgets.Table(
+        self.message_table = widget.Table(
             self.view.get_widget("prevmes_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Date", "Message"]
@@ -51,12 +51,12 @@ class Progress:
     OK_BUTTON_ENABLED = False
 
     def __init__(self):
-        self.view = views.InterfaceView(self, "Progress")
+        self.view = view.InterfaceView(self, "Progress")
         
     def run(self):
         self.ok_button = self.view.get_widget("progress_ok")
     
-        self.messages_table = widgets.Table(
+        self.messages_table = widget.Table(
             self.view.get_widget("progress_messages_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
@@ -97,7 +97,7 @@ class FileChooser:
         
 class Certificate:
     def __init__(self, realm="", host="", issuer_from="", issuer_to="", valid="", fingerprint=""):
-        self.view = views.InterfaceView(self, "Certificate")
+        self.view = view.InterfaceView(self, "Certificate")
         
         self.view.get_widget("cert_realm").set_label(realm)
         self.view.get_widget("cert_host").set_label(host)
@@ -130,7 +130,7 @@ class Certificate:
         
 class Authorization:
     def __init__(self, location="", realm=""):
-        self.view = views.InterfaceView(self, "Authorization")
+        self.view = view.InterfaceView(self, "Authorization")
         
         self.view.get_widget("auth_location").set_label(location)
         self.view.get_widget("auth_realm").set_label(realm)
@@ -157,14 +157,14 @@ class Property:
     PROPS = ['', 'svn:executable','svn:mime','svn:ignore','svn:keywords','svn:eol','svn:externals','svn:special']
 
     def __init__(self, name="", value=""):
-        self.view = views.InterfaceView(self, "Property")
+        self.view = view.InterfaceView(self, "Property")
         
         self.save_name = name
         self.save_value = value
         
-        self.names = widgets.ComboBox(self.view.get_widget("property_names"), self.PROPS)
+        self.names = widget.ComboBox(self.view.get_widget("property_names"), self.PROPS)
         self.names.set_active_from_value(name)
-        self.value = widgets.TextView(self.view.get_widget("property_value"), value)
+        self.value = widget.TextView(self.view.get_widget("property_value"), value)
         
     def run(self):
         self.dialog = self.view.get_widget("Property")

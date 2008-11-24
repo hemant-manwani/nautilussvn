@@ -4,9 +4,9 @@ import pygtk
 import gobject
 import gtk
 
-import widgets
-import dialogs
-import views
+import widget
+import dialog
+import view
 
 class Commit:
 
@@ -14,12 +14,12 @@ class Commit:
     SHOW_UNVERSIONED = True
 
     def __init__(self):
-        self.view = views.InterfaceView(self, "Commit")
+        self.view = view.InterfaceView(self, "Commit")
 
-        self.files_table = widgets.Table(
+        self.files_table = widget.Table(
             self.view.get_widget("commit_files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [widgets.TOGGLE_BUTTON, "Path", "Extension", "Text Status", "Property Status"],
+            [widget.TOGGLE_BUTTON, "Path", "Extension", "Text Status", "Property Status"],
         )
         
         self.files = [
@@ -28,7 +28,7 @@ class Commit:
         ]
         self.populate_files_from_original()
         
-        self.message = widgets.TextView(self.view.get_widget("commit_message"))
+        self.message = widget.TextView(self.view.get_widget("commit_message"))
     
     def on_commit_destroy(self, widget):
         gtk.main_quit()
@@ -125,7 +125,7 @@ class Commit:
         print "Ignore by file extension"
         
     def on_commit_previous_messages_clicked(self, widget, data=None):
-        dialog = dialogs.PreviousMessages()
+        dialog = dialog.PreviousMessages()
         message = dialog.run()
         if message is not None:
             self.message.set_text(message)

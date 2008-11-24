@@ -4,18 +4,18 @@ import pygtk
 import gobject
 import gtk
 
-import widgets
-import dialogs
-import views
+import widget
+import dialog
+import view
 
 class Properties:
 
     SELECTED_ROW = None
 
     def __init__(self):
-        self.view = views.InterfaceView(self, "Properties")
+        self.view = view.InterfaceView(self, "Properties")
         
-        self.table = widgets.Table(
+        self.table = widget.Table(
             self.view.get_widget("props_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Name", "Value"]
@@ -37,14 +37,14 @@ class Properties:
         print "OK"
         
     def on_props_new_clicked(self, widget):
-        dialog = dialogs.Property()
+        dialog = dialog.Property()
         name,value = dialog.run()
         if name is not None:
             self.entries.append([name,value])
     
     def on_props_edit_clicked(self, widget):
         (name,value) = self.get_selected_name_value()
-        dialog = dialogs.Property(name, value)
+        dialog = dialog.Property(name, value)
         name,value = dialog.run()
         if name is not None:
             self.set_selected_name_value(name, value)
