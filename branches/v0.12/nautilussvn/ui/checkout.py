@@ -4,16 +4,16 @@ import pygtk
 import gobject
 import gtk
 
-import widgets
+import widget
 import helper
-import dialogs
-import views
+import dialog
+import view
 
 class Checkout:
     def __init__(self):
-        self.view = views.InterfaceView(self, "Checkout")
+        self.view = view.InterfaceView(self, "Checkout")
 
-        self.repositories = widgets.ComboBox(self.view.get_widget("co_repositories"), helper.GetRepositoryPaths())                
+        self.repositories = widget.ComboBox(self.view.get_widget("co_repositories"), helper.GetRepositoryPaths())                
 
     def on_co_destroy(self, widget):
         gtk.main_quit()
@@ -28,7 +28,7 @@ class Checkout:
         self.view.get_widget("co_revision_number_opt").set_active(True)
 
     def on_co_file_chooser_clicked(self, widget, data=None):
-        chooser = dialogs.FileChooser()
+        chooser = dialog.FileChooser()
         path = chooser.run()
         if path is not None:
             self.view.get_widget("co_destination").set_text(path)

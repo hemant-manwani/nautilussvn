@@ -4,14 +4,14 @@ import pygtk
 import gobject
 import gtk
 
-import widgets
-import views
+import widget
+import view
 
 class Log:
     def __init__(self):
-        self.view = views.InterfaceView(self, "Log")
+        self.view = view.InterfaceView(self, "Log")
 
-        self.revisions_table = widgets.Table(
+        self.revisions_table = widget.Table(
             self.view.get_widget("log_revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Revision", "Author", "Date", "Message"]
@@ -23,7 +23,7 @@ class Log:
         for row in self.revisions:
             self.revisions_table.append(row)
 
-        self.paths_table = widgets.Table(
+        self.paths_table = widget.Table(
             self.view.get_widget("log_paths_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
@@ -35,7 +35,7 @@ class Log:
         for row in self.paths:
             self.paths_table.append(row)
 
-        self.message = widgets.TextView(self.view.get_widget("log_message"))
+        self.message = widget.TextView(self.view.get_widget("log_message"))
 
         self.progress_bar = self.view.get_widget("log_progress_bar")
         self.progress_bar.set_fraction(.3)

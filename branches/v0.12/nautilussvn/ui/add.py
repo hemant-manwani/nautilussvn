@@ -4,20 +4,20 @@ import pygtk
 import gobject
 import gtk
 
-import widgets
-import views
+import widget
+import view
 
 class Add:
 
     TOGGLE_ALL = True
 
     def __init__(self):
-        self.view = views.InterfaceView(self, "Add")
+        self.view = view.InterfaceView(self, "Add")
 
-        self.add_files_table = widgets.Table(
+        self.add_files_table = widget.Table(
             self.view.get_widget("add_files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [widgets.TOGGLE_BUTTON, "Path", "Extension"]
+            [widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
         self.files = [

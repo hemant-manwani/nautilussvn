@@ -3,8 +3,6 @@
 import pygtk
 import gobject
 import gtk
-
-import views
     
 TOGGLE_BUTTON = 'TOGGLE_BUTTON'
 
