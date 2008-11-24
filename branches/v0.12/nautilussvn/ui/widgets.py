@@ -52,6 +52,14 @@ class Table:
 
     def clear(self):
         self.treeview.get_model().clear()
+        
+    def get_row(self, index):
+        model = self.treeview.get_model()
+        return model[index]
+    
+    def set_row(self, index, row):
+        model = self.treeview.get_model()
+        model[index] = row
 
 class ComboBox:
     def __init__(self, cb, items):
@@ -80,7 +88,10 @@ class ComboBox:
             if entry[0] == value:
                 self.cb.set_active(index)
                 return
-            index += 1                
+            index += 1
+    
+    def get_active_text(self):
+        return self.cb.get_active_text()            
         
 class TextView:
     def __init__(self, widget=None, value=""):
@@ -93,4 +104,4 @@ class TextView:
         self.buffer.set_text(value)
         
     def get_text(self):
-        return self.buffer(self.buffer.get_start_iter(), self.buffer.get_end_iter())
+        return self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter())

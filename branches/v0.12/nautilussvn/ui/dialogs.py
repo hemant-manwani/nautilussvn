@@ -160,11 +160,10 @@ class Property:
 
     PROPS = ['', 'svn:executable','svn:mime','svn:ignore','svn:keywords','svn:eol','svn:externals','svn:special']
 
-    def __init__(self, path, name="svn:ignore", value=""):
+    def __init__(self, name="", value=""):
         self.wTree = gtk.glade.XML("glade/interface.glade", "Property")
         self.wTree.signal_autoconnect(self)
         
-        self.path = path
         self.save_name = name
         self.save_value = value
         
@@ -183,6 +182,6 @@ class Property:
         return (self.save_name, self.save_value)
     
     def save(self):
-        self.save_name = self.name.get_text()
+        self.save_name = self.names.get_active_text()
         self.save_value = self.value.get_text()
         
