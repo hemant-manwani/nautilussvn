@@ -38,3 +38,12 @@ _`__init__.py files left out for clarity`_
 
 = Modularity =
   _How will we achieve the separation (loose coupling) we want?_
+
+== Abstracting the specific VCS (version control) implementation ==
+I think we'll be able to abstract the VCS implementation by implementing the factory pattern. Then in the extension itself we'll be working against an interface. Here are some UML diagrams that model the factory pattern: 
+
+  * `http://www.vico.org/pages/PatronsDisseny/Pattern%20Abstract%20Factory/AbstractFactory.jpg`
+  * `http://best-practice-software-engineering.ifs.tuwien.ac.at/patterns/images/FactoryMethod.jpg` 
+  * `http://www.dotnetheaven.com/Uploadfile/rajeshvs/AbstractFactoryPatternsinCS02012006041329AM/Images/AbstractFactPat.gif`.
+
+There's also a page with [http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/ simple examples of several patterns from the GoF book in Python] (including the factory pattern).
