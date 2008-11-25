@@ -14,7 +14,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 
 == Topmenu ==
 || *Menu entry*             || *Condition*                                 || *Recursive* || 
-|| Checkout                 || not inside a working copy                   || no ||
+|| Checkout                 || not a working copy AND directory selected   || no ||
 || Update                   || `1..*` versioned file(s) AND NOT added      || no || 
 || Commit                   || `1..*` modified versioned file(s)           || yes || 
 || NautilusSvn              || always                                      ||  || 
