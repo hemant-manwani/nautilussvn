@@ -19,6 +19,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+from os.path import isdir, isfile
+
 import gnomevfs
 import nautilus
 import pysvn
@@ -91,7 +93,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         pass
         
-class NautilusMainContextMenu():
+class MainContextMenu():
     """
     
     
@@ -103,8 +105,13 @@ class NautilusMainContextMenu():
             "label": "",
             "tooltip": "",
             "icon": "",
-            "callback": None, # A function
-            "condition": None, # A function
+            "signals": {
+                "activate": {
+                    "callback": None,
+                    "args": None
+                }
+            }, 
+            "condition": None,
             "submenus": [
                 # etc.
             ]
@@ -115,12 +122,84 @@ class NautilusMainContextMenu():
     
     def __init__(self):
         pass
-    
+        
     def construct_menu(self):
         """
-        
         
         """
         
         pass
+    
+    def condition_checkout(self):
+        if (len(self.files) == 1 and 
+                isdir(self.files[0]) and 
+                not is_working_copy(self.files[0])):
+            return True
+        return False
         
+    def condition_update(self):
+        for file in self.files:
+            if (is_versioned(file) and 
+                    not is_added(file)):
+                return True
+        return False
+        
+    def condition_commit(self):
+        for file in self.files:
+            if (is_modified(file)):
+                return True
+        return False
+        
+    def condition_diff(self):
+        for file in self.files:
+            if (not isfile(file)):
+                return False
+        
+        if (len(self.files)) == 2):
+            return True
+            
+        if (len(self.files) == 1 and
+                is_modified(self.files[0]):
+            return True
+        
+        return False
+        
+    def condition_show_log(self):
+        if (len(self.files) == 1 and 
+                not is_added(self.files[0]):
+            return True
+        return False
+        
+    def condition_add(self):
+        for file in self.files:
+            if is_unversioned(file):
+                return True
+        return False
+        
+    def condition_add_to_ignore_list(self):
+        pass
+        
+    def condition_rename(self):
+        if (len(self.files) == 1 and 
+                is_versioned(self.file[0])
+            return True
+        return False
+        
+    def condition_delete(self):
+        for file in self.files:
+            if (is_versioned(file)):
+                return True
+        return False
+        
+    def condition_revert(self):
+        for file in self.files:
+            if (is_modified(file) or
+                    is_added(file)):
+                return True
+        return False
+        
+    def condition_blame(self):
+        pass
+        
+    def condition_properties(self):
+        pass
