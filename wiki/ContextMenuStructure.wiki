@@ -21,7 +21,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 
 == Submenu NautilusSvn ==
 || *Menu entry*             || *Condition*                                 || *Recursive* || 
-|| Diff                     || 2 files OR modified file                    || no[1] || 
+|| Diff                     || 2 files OR modified file                    || no`[1]` || 
 || Show log                 || 1 versioned file AND NOT added              || no || 
 || Repo-browser             ||                                             || || 
 || Check for modifications  ||                                             || || 
@@ -49,7 +49,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || Settings                 || always                                      || || 
 || About                    || always                                      || || 
 
-[1] It's possible to do directory diffs, so maybe in a later version.
+`[1]` It's possible to do directory diffs, so maybe in a later version.
 
 = Mockup =
 The icons used in the mockup are from the default GNOME iconset or the Tango iconset. Rename was based on Gedit's logo. The lock was based on the screenlock icon from GNOME. The logo is a combination of Nautilus's logo (a nautilus shell) and Tango's file manager icon.
