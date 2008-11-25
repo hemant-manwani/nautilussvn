@@ -172,7 +172,7 @@ class MainContextMenu():
         
     def condition_add(self):
         for file in self.files:
-            if is_unversioned(file):
+            if not is_versioned(file):
                 return True
         return False
         
@@ -199,7 +199,13 @@ class MainContextMenu():
         return False
         
     def condition_blame(self):
-        pass
+        if (len(self.files) == 1 and
+                is_versioned(self.files[0])):
+            return True
+        return False
         
     def condition_properties(self):
-        pass
+        for file in self.files:
+            if is_versioned(file):
+                return True
+        return False
