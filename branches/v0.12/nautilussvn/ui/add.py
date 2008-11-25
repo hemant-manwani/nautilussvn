@@ -54,22 +54,47 @@ class Add:
                 
                 context_menu = widget.ContextMenu([{
                         'label': 'Open',
-                        'signals': {'activate': {'callback':self.on_context_open_activated, 'args':fileinfo}}
+                        'signals': {
+                            'activate': {
+                                'callback':self.on_context_open_activated, 
+                                'args':fileinfo
+                            }
+                        }
                     },{
                         'label': 'Browse',
-                        'signals': {'activate': {'callback':self.on_context_browse_activated, 'args':fileinfo}}
+                        'signals': {
+                            'activate': {
+                                'callback':self.on_context_browse_activated, 
+                                'args':fileinfo
+                            }
+                        }
                     },{
                         'label': 'Delete',
-                        'signals': {'activate': {'callback':self.on_context_delete_activated, 'args':fileinfo}}
+                        'signals': {
+                            'activate': {
+                                'callback':self.on_context_delete_activated, 
+                                'args':fileinfo
+                            }
+                        }
                     },{
                         'label': 'Add to ignore list',
                         'submenu': [{
                                 'label': fileinfo[1],
-                                'signals': {'activate': {'callback':self.on_subcontext_ignore_by_filename_activated, 'args':fileinfo}}
+                                'signals': {
+                                    'activate': {
+                                        'callback':self.on_subcontext_ignore_by_filename_activated, 
+                                        'args':fileinfo
+                                     }
+                                 }
                             },
                             {
                                 'label': "*.%s"%fileinfo[2],
-                                'signals': {'activate': {'callback':self.on_subcontext_ignore_by_fileext_activated, 'args':fileinfo}}
+                                'signals': {
+                                    'activate': {
+                                        'callback':self.on_subcontext_ignore_by_fileext_activated, 
+                                        'args':fileinfo
+                                    }
+                                }
                             }
                         ]
                     }

@@ -45,7 +45,11 @@ class PreviousMessages:
         
 class FileChooser:
     def __init__(self):
-        self.dialog = gtk.FileChooserDialog("Select a Folder", None, gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+        self.dialog = gtk.FileChooserDialog("Select a Folder", 
+            None, 
+            gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, 
+            (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+                gtk.STOCK_OPEN,gtk.RESPONSE_OK))
         self.dialog.set_default_response(gtk.RESPONSE_OK)
 
     def run(self):
@@ -57,7 +61,9 @@ class FileChooser:
         return returner
         
 class Certificate:
-    def __init__(self, realm="", host="", issuer_from="", issuer_to="", valid="", fingerprint=""):
+    def __init__(self, realm="", host="", 
+            issuer_from="", issuer_to="", valid="", fingerprint=""):
+            
         self.view = view.InterfaceView(self, "Certificate")
         
         self.view.get_widget("cert_realm").set_label(realm)
@@ -115,7 +121,9 @@ class Authorization:
         
 class Property:
 
-    PROPS = ['', 'svn:executable','svn:mime','svn:ignore','svn:keywords','svn:eol','svn:externals','svn:special']
+    PROPS = ['', 'svn:executable','svn:mime',
+        'svn:ignore','svn:keywords','svn:eol',
+        'svn:externals','svn:special']
 
     def __init__(self, name="", value=""):
         self.view = view.InterfaceView(self, "Property")

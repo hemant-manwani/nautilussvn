@@ -13,8 +13,10 @@ class Log:
 
         self.revisions_table = widget.Table(
             self.view.get_widget("log_revisions_table"),
-            [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Revision", "Author", "Date", "Message"]
+            [gobject.TYPE_STRING, gobject.TYPE_STRING, 
+                gobject.TYPE_STRING, gobject.TYPE_STRING], 
+            ["Revision", "Author", 
+                "Date", "Message"]
         )
         self.revisions = [
             ["100", "Adam Plumb", "2008-10-20 22:12:23", "This is a message"],

@@ -13,7 +13,10 @@ class Checkout:
     def __init__(self):
         self.view = view.InterfaceView(self, "Checkout")
 
-        self.repositories = widget.ComboBox(self.view.get_widget("co_repositories"), helper.GetRepositoryPaths())                
+        self.repositories = widget.ComboBox(
+            self.view.get_widget("co_repositories"), 
+            helper.GetRepositoryPaths()
+        )                
 
     def on_co_destroy(self, widget):
         gtk.main_quit()
