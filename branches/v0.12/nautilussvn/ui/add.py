@@ -7,6 +7,8 @@ import gtk
 import component.widget
 import component.view
 
+import notification
+
 class Add:
 
     TOGGLE_ALL = True
@@ -34,7 +36,8 @@ class Add:
         gtk.main_quit()
 
     def on_add_ok_clicked(self, widget):
-        print "OK"
+        self.view.hide()
+        self.notification = notification.Notification()
 
     def on_add_toggle_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL

@@ -8,6 +8,8 @@ import component.widget
 import component.dialog
 import component.view
 
+import notification
+
 class Commit:
 
     TOGGLE_ALL = True
@@ -41,7 +43,8 @@ class Commit:
         gtk.main_quit()
         
     def on_commit_ok_clicked(self, widget, data=None):
-        print "OK"
+        self.view.hide()
+        self.notification = notification.Notification()
     
     def on_commit_toggle_show_all_toggled(self, widget, data=None):
         self.TOGGLE_ALL = not self.TOGGLE_ALL

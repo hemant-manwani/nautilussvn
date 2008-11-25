@@ -9,6 +9,8 @@ import component.helper
 import component.dialog
 import component.view
 
+import notification
+
 class Checkout:
     def __init__(self):
         self.view = component.view.InterfaceView(self, "Checkout")
@@ -25,7 +27,8 @@ class Checkout:
         gtk.main_quit()
 
     def on_co_ok_clicked(self, widget):
-        print "OK"
+        self.view.hide()
+        self.notification = notification.Notification()
 
     def on_co_revision_number_focused(self, widget, data=None):
         self.view.get_widget("co_revision_number_opt").set_active(True)

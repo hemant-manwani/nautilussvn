@@ -12,3 +12,9 @@ class InterfaceView:
         
     def get_widget(self, id):
         return self.tree.get_widget(id)
+        
+    def hide(self):
+        self.tree.get_widget(self.id).set_property('visible', False)
+        
+    def show(self):
+        self.tree.get_widget(self.id).set_property('visible', True)
