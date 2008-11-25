@@ -102,7 +102,10 @@ class TextView:
         self.buffer.set_text(value)
         
     def get_text(self):
-        return self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter())
+        return self.buffer.get_text(
+            self.buffer.get_start_iter(), 
+            self.buffer.get_end_iter()
+        )
         
     def set_text(self, text):
         self.buffer.set_text(text)
