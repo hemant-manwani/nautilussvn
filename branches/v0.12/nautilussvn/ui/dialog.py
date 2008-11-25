@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import sys
-
 import pygtk
 import gobject
 import gtk
@@ -44,43 +42,6 @@ class PreviousMessages:
             treeview.set_cursor(path, col, 0)
             
             self.message.set_text(treeview.get_model()[path][1])
-            
-
-class Progress:
-    
-    OK_BUTTON_ENABLED = False
-
-    def __init__(self):
-        self.view = view.InterfaceView(self, "Progress")
-        
-    def run(self):
-        self.ok_button = self.view.get_widget("progress_ok")
-    
-        self.messages_table = widget.Table(
-            self.view.get_widget("progress_messages_table"),
-            [gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Action", "Path"]
-        )
-        
-        self.entries = [
-            ['Added', '/home/adam/Development/test.html'],
-            ['Commited', '/home/adam/Development/blah.txt']
-        ]
-        for row in self.entries:
-            self.append_to_table(row)
-        
-        self.dialog = self.view.get_widget("Progress")
-        result = self.dialog.run()
-        self.dialog.destroy()
-        
-        return result
-        
-    def toggle_ok_button(self):
-        self.OK_BUTTON_ENABLED = not self.OK_BUTTON_ENABLED
-        self.ok_button.set_sensitive(self.OK_BUTTON_ENABLED)
-            
-    def append_to_table(self, entry):
-        self.messages_table.append(entry)
         
 class FileChooser:
     def __init__(self):
