@@ -8,6 +8,7 @@
 
   * The term "file" is used loosely to indicate both files and directories.
   * When a directory is selected sometimes a condition needs to be checked recursively.
+  * Added files count as "under version control" (versioned) too.
 
 = Menu structure =
 Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's menus]. 
@@ -43,7 +44,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || Blame                    || 1 versioned file                            || no || 
 || ---------------------    ||                                             || || 
 || Create patch             ||                                             || || 
-|| Properties               || `1..*` (versioned or added file(s))         || no || 
+|| Properties               || `1..*` (versioned file(s))                  || no || 
 || ---------------------    ||                                             || || 
 || Help                     || always                                      || || 
 || Settings                 || always                                      || || 
