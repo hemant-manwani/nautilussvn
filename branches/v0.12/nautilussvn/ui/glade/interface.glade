@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Nov 25 09:57:13 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Nov 25 12:56:46 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Add">
     <property name="visible">True</property>
@@ -65,53 +65,33 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox1">
+          <widget class="GtkHButtonBox" id="hbuttonbox2">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
             <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkLabel" id="label1">
+              <widget class="GtkButton" id="add_cancel">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_add_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox2">
+              <widget class="GtkButton" id="add_ok">
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkButton" id="add_cancel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_add_cancel_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="padding">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="add_ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-ok</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_add_ok_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="padding">2</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_add_ok_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -312,48 +292,33 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox5">
+          <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkLabel" id="label6">
+              <widget class="GtkButton" id="co_cancel">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_co_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox1">
+              <widget class="GtkButton" id="co_ok">
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkButton" id="co_cancel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_co_cancel_clicked"/>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="co_ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-ok</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_co_ok_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_co_ok_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -582,50 +547,35 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox7">
+          <widget class="GtkHButtonBox" id="hbuttonbox3">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkLabel" id="label10">
+              <widget class="GtkButton" id="commit_cancel">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_commit_cancel_clicked"/>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox3">
+              <widget class="GtkButton" id="commit_ok">
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkButton" id="commit_cancel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_commit_cancel_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="commit_ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-ok</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_commit_ok_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_commit_ok_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -1030,48 +980,33 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox8">
+          <widget class="GtkHButtonBox" id="hbuttonbox5">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkLabel" id="label16">
+              <widget class="GtkButton" id="copy_cancel">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_copy_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox5">
+              <widget class="GtkButton" id="copy_ok">
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkButton" id="copy_cancel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_copy_cancel_clicked"/>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="copy_ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-ok</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_copy_ok_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_copy_ok_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -1189,48 +1124,33 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox12">
+          <widget class="GtkHButtonBox" id="hbuttonbox7">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkLabel" id="label23">
+              <widget class="GtkButton" id="log_cancel">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_log_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox7">
+              <widget class="GtkButton" id="log_ok">
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkButton" id="log_cancel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_log_cancel_clicked"/>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="log_ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-ok</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_log_ok_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_log_ok_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -1911,48 +1831,33 @@
           </widget>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox14">
+          <widget class="GtkHButtonBox" id="hbuttonbox8">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkLabel" id="label39">
+              <widget class="GtkButton" id="props_cancel">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_props_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox8">
+              <widget class="GtkButton" id="props_ok">
                 <property name="visible">True</property>
-                <child>
-                  <widget class="GtkButton" id="props_cancel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-cancel</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_props_cancel_clicked"/>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="props_ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="border_width">3</property>
-                    <property name="label" translatable="yes">gtk-ok</property>
-                    <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="clicked" handler="on_props_ok_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_props_ok_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -1994,14 +1899,14 @@
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox10">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
               <widget class="GtkButton" id="notification_cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="border_width">3</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
@@ -2014,7 +1919,6 @@
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="border_width">3</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">1</property>
