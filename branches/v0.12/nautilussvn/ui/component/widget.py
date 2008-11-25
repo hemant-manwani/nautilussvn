@@ -60,13 +60,14 @@ class Table:
         model[index] = row
 
 class ComboBox:
-    def __init__(self, cb, items):
+    def __init__(self, cb, items=None):
     
         self.cb = cb
     
         self.model = gtk.ListStore(str)
-        for i in items:
-            self.model.append([i])
+        if items is not None:
+            for i in items:
+                self.append(i)
 
         self.cb.set_model(self.model)
 
@@ -89,7 +90,10 @@ class ComboBox:
             index += 1
     
     def get_active_text(self):
-        return self.cb.get_active_text()            
+        return self.cb.get_active_text()     
+    
+    def set_active(self, index):
+        self.cb.set_active(index)       
         
 class TextView:
     def __init__(self, widget=None, value=""):

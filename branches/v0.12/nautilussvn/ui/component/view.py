@@ -9,6 +9,7 @@ class InterfaceView:
     def __init__(self, callback_obj, id):
         self.tree = gtk.glade.XML("glade/interface.glade", id)
         self.tree.signal_autoconnect(callback_obj)
+        self.id = id
         
     def get_widget(self, id):
         return self.tree.get_widget(id)
