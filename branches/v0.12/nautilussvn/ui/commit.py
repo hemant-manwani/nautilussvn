@@ -76,6 +76,14 @@ class Commit:
             
             if event.button == 3:
                 context_menu = component.widget.ContextMenu([{
+                        'label': 'View Diff',
+                        'signals': {
+                            'activate': {
+                                'callback':self.on_context_diff_activated, 
+                                'args':fileinfo
+                            }
+                        }
+                    },{
                         'label': 'Open',
                         'signals': {
                             'activate': {
@@ -132,8 +140,19 @@ class Commit:
                 ])
                 context_menu.show(event)
 
+    def on_commit_files_table_row_doubleclicked(self, treeview, event, col):
+        treeview.grab_focus()
+        treeview.set_cursor(event[0], col, 0)
+        treeview_model = treeview.get_model()
+        fileinfo = treeview_model[event[0]]
+        
+        print "Row Double-clicked"
+
     def on_context_add_activated(self, widget, data=None):
         print "Add Item"
+
+    def on_context_diff_activated(self, widget, Data=None):
+        print "Diff Item"
 
     def on_context_open_activated(self, widget, data=None):
         print "Open Item"
