@@ -18,7 +18,7 @@ class Checkout:
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("co_repositories"), 
             component.helper.GetRepositoryPaths()
-        )                
+        )
 
     def on_co_destroy(self, widget):
         gtk.main_quit()
