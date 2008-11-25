@@ -41,7 +41,7 @@ class Add:
         for row in self.add_files_table.get_items():
             row[0] = self.TOGGLE_ALL
 
-    def on_add_files_table_button_pressed(self, treeview, event):
+    def on_add_files_table_button_pressed(self, treeview, event=None, user_data=None):
         if event.button == 3:
             pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
             if pathinfo is not None:
@@ -53,6 +53,14 @@ class Add:
                 fileinfo = treeview_model[path]
                 
                 context_menu = component.widget.ContextMenu([{
+                        'label': 'View Diff',
+                        'signals': {
+                            'activate': {
+                                'callback':self.on_context_diff_activated, 
+                                'args':fileinfo
+                            }
+                        }
+                    },{
                         'label': 'Open',
                         'signals': {
                             'activate': {
@@ -101,8 +109,19 @@ class Add:
                 ])
                 context_menu.show(event)
                 
+    def on_add_files_table_row_doubleclicked(self, treeview, event, col):
+        treeview.grab_focus()
+        treeview.set_cursor(event[0], col, 0)
+        treeview_model = treeview.get_model()
+        fileinfo = treeview_model[event[0]]
+        
+        print "Row Double-clicked"
+                
     def on_context_open_activated(self, widget, Data=None):
         print "Open Item"
+
+    def on_context_diff_activated(self, widget, Data=None):
+        print "Diff Item"
         
     def on_context_browse_activated(self, widget, Data=None):
         print "Browse Item"

@@ -13,6 +13,10 @@ class Revert(add.Add):
         self.window = self.view.get_widget("Add")
         self.window.set_title("Revert")
         
+        self.view.get_widget("add_frame_label").set_label(
+            "Files to remove (double-click to view diff) "
+        )
+        
 if __name__ == "__main__":
     window = Revert()
     gtk.main()
