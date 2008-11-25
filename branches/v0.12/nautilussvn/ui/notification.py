@@ -4,17 +4,17 @@ import pygtk
 import gobject
 import gtk
 
-import widget
-import view
+import component.widget
+import component.view
 
 class Notification:
     
     OK_ENABLED = False
 
     def __init__(self):
-        self.view = view.InterfaceView(self, "Notification")
+        self.view = component.view.InterfaceView(self, "Notification")
     
-        self.table = widget.Table(
+        self.table = component.widget.Table(
             self.view.get_widget("notification_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]

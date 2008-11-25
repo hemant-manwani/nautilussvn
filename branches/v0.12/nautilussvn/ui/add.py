@@ -4,20 +4,20 @@ import pygtk
 import gobject
 import gtk
 
-import widget
-import view
+import component.widget
+import component.view
 
 class Add:
 
     TOGGLE_ALL = True
 
     def __init__(self):
-        self.view = view.InterfaceView(self, "Add")
+        self.view = component.view.InterfaceView(self, "Add")
 
-        self.add_files_table = widget.Table(
+        self.add_files_table = component.widget.Table(
             self.view.get_widget("add_files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [widget.TOGGLE_BUTTON, "Path", "Extension"]
+            [component.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
         self.files = [
@@ -52,7 +52,7 @@ class Add:
                 treeview_model = treeview.get_model()
                 fileinfo = treeview_model[path]
                 
-                context_menu = widget.ContextMenu([{
+                context_menu = component.widget.ContextMenu([{
                         'label': 'Open',
                         'signals': {
                             'activate': {
