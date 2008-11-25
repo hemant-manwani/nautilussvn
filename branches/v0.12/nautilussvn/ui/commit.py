@@ -4,9 +4,9 @@ import pygtk
 import gobject
 import gtk
 
-import widget
-import dialog
-import view
+import component.widget
+import component.dialog
+import component.view
 
 class Commit:
 
@@ -14,13 +14,13 @@ class Commit:
     SHOW_UNVERSIONED = True
 
     def __init__(self):
-        self.view = view.InterfaceView(self, "Commit")
+        self.view = component.view.InterfaceView(self, "Commit")
 
-        self.files_table = widget.Table(
+        self.files_table = component.widget.Table(
             self.view.get_widget("commit_files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [widget.TOGGLE_BUTTON, "Path", "Extension", 
+            [component.widget.TOGGLE_BUTTON, "Path", "Extension", 
                 "Text Status", "Property Status"],
         )
         
@@ -30,7 +30,9 @@ class Commit:
         ]
         self.populate_files_from_original()
         
-        self.message = widget.TextView(self.view.get_widget("commit_message"))
+        self.message = component.widget.TextView(
+            self.view.get_widget("commit_message")
+        )
     
     def on_commit_destroy(self, widget):
         gtk.main_quit()
@@ -73,7 +75,7 @@ class Commit:
             fileinfo = treeview_model[path]
             
             if event.button == 3:
-                context_menu = widget.ContextMenu([{
+                context_menu = component.widget.ContextMenu([{
                         'label': 'Open',
                         'signals': {
                             'activate': {
@@ -149,7 +151,7 @@ class Commit:
         print "Ignore by file extension"
         
     def on_commit_previous_messages_clicked(self, widget, data=None):
-        dialog = dialog.PreviousMessages()
+        dialog = component.dialog.PreviousMessages()
         message = dialog.run()
         if message is not None:
             self.message.set_text(message)

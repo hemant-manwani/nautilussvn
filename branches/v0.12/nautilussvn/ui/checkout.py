@@ -4,18 +4,18 @@ import pygtk
 import gobject
 import gtk
 
-import widget
-import helper
-import dialog
-import view
+import component.widget
+import component.helper
+import component.dialog
+import component.view
 
 class Checkout:
     def __init__(self):
-        self.view = view.InterfaceView(self, "Checkout")
+        self.view = component.view.InterfaceView(self, "Checkout")
 
-        self.repositories = widget.ComboBox(
+        self.repositories = component.widget.ComboBox(
             self.view.get_widget("co_repositories"), 
-            helper.GetRepositoryPaths()
+            component.helper.GetRepositoryPaths()
         )                
 
     def on_co_destroy(self, widget):
@@ -31,7 +31,7 @@ class Checkout:
         self.view.get_widget("co_revision_number_opt").set_active(True)
 
     def on_co_file_chooser_clicked(self, widget, data=None):
-        chooser = dialog.FileChooser()
+        chooser = component.dialog.FileChooser()
         path = chooser.run()
         if path is not None:
             self.view.get_widget("co_destination").set_text(path)
