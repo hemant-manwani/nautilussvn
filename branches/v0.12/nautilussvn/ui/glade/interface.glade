@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Nov 25 14:17:25 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Nov 25 19:32:31 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Add">
     <property name="visible">True</property>
@@ -1230,88 +1230,29 @@
                     <property name="column_spacing">5</property>
                     <property name="row_spacing">5</property>
                     <child>
-                      <widget class="GtkLabel" id="label34">
+                      <widget class="GtkLabel" id="label25">
                         <property name="width_request">90</property>
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
                         <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Valid:</property>
+                        <property name="label" translatable="yes">Realm:</property>
                       </widget>
                       <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
                         <property name="x_options"></property>
+                        <property name="x_padding">10</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="cert_fingerprint">
+                      <widget class="GtkLabel" id="label26">
+                        <property name="width_request">90</property>
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
+                        <property name="xalign">1</property>
+                        <property name="xpad">5</property>
+                        <property name="label" translatable="yes">Host:</property>
                       </widget>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">4</property>
-                        <property name="bottom_attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="cert_issuer">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="cert_realm">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="cert_host">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="cert_valid">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label28">
-                        <property name="width_request">90</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Fingerprint:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">4</property>
-                        <property name="bottom_attach">5</property>
                         <property name="x_options"></property>
                       </packing>
                     </child>
@@ -1330,30 +1271,89 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label26">
+                      <widget class="GtkLabel" id="label28">
                         <property name="width_request">90</property>
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
                         <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Host:</property>
+                        <property name="label" translatable="yes">Fingerprint:</property>
                       </widget>
                       <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">4</property>
+                        <property name="bottom_attach">5</property>
                         <property name="x_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label25">
+                      <widget class="GtkLabel" id="cert_valid">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="cert_host">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="cert_realm">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="cert_issuer">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="cert_fingerprint">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">4</property>
+                        <property name="bottom_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label34">
                         <property name="width_request">90</property>
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
                         <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Realm:</property>
+                        <property name="label" translatable="yes">Valid:</property>
                       </widget>
                       <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="x_options"></property>
-                        <property name="x_padding">10</property>
                       </packing>
                     </child>
                   </widget>
@@ -1448,80 +1448,13 @@
                     <property name="column_spacing">5</property>
                     <property name="row_spacing">5</property>
                     <child>
-                      <widget class="GtkEntry" id="auth_password">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="visibility">False</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkEntry" id="auth_login">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="auth_realm">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="auth_location">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label33">
+                      <widget class="GtkLabel" id="label30">
                         <property name="width_request">90</property>
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Password:</property>
+                        <property name="label" translatable="yes">Location:</property>
                       </widget>
                       <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options"></property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label32">
-                        <property name="width_request">90</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Login:</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
                         <property name="x_options"></property>
                         <property name="y_options"></property>
                       </packing>
@@ -1541,14 +1474,81 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label30">
+                      <widget class="GtkLabel" id="label32">
                         <property name="width_request">90</property>
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">Location:</property>
+                        <property name="label" translatable="yes">Login:</property>
                       </widget>
                       <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="x_options"></property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label33">
+                        <property name="width_request">90</property>
+                        <property name="visible">True</property>
+                        <property name="xalign">1</property>
+                        <property name="label" translatable="yes">Password:</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="auth_location">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="auth_realm">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="auth_login">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkEntry" id="auth_password">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="visibility">False</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -1635,33 +1635,13 @@
                     <property name="column_spacing">5</property>
                     <property name="row_spacing">5</property>
                     <child>
-                      <widget class="GtkLabel" id="label36">
-                        <property name="width_request">90</property>
+                      <widget class="GtkComboBox" id="property_names">
                         <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Property</property>
-                        <property name="justify">GTK_JUSTIFY_FILL</property>
                       </widget>
                       <packing>
-                        <property name="x_options"></property>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
                         <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label37">
-                        <property name="width_request">90</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="yalign">0</property>
-                        <property name="xpad">5</property>
-                        <property name="ypad">2</property>
-                        <property name="label" translatable="yes">Value</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -1686,12 +1666,32 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBox" id="property_names">
+                      <widget class="GtkLabel" id="label37">
+                        <property name="width_request">90</property>
                         <property name="visible">True</property>
+                        <property name="xalign">1</property>
+                        <property name="yalign">0</property>
+                        <property name="xpad">5</property>
+                        <property name="ypad">2</property>
+                        <property name="label" translatable="yes">Value</property>
                       </widget>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label36">
+                        <property name="width_request">90</property>
+                        <property name="visible">True</property>
+                        <property name="xalign">1</property>
+                        <property name="xpad">5</property>
+                        <property name="label" translatable="yes">Property</property>
+                        <property name="justify">GTK_JUSTIFY_FILL</property>
+                      </widget>
+                      <packing>
+                        <property name="x_options"></property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
@@ -2154,6 +2154,162 @@
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
                 <signal name="clicked" handler="on_import_ok_clicked"/>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkWindow" id="Switch">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Switch to Branch / Tag</property>
+    <child>
+      <widget class="GtkVBox" id="vbox19">
+        <property name="visible">True</property>
+        <child>
+          <widget class="GtkFrame" id="frame18">
+            <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">GTK_SHADOW_NONE</property>
+            <child>
+              <widget class="GtkHBox" id="hbox1">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkLabel" id="label23">
+                    <property name="width_request">90</property>
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="xpad">5</property>
+                    <property name="label" translatable="yes">Switch:</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label40">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">label</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label11">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;frame18&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="type">label_item</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHBox" id="hbox5">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkLabel" id="label12">
+                <property name="width_request">90</property>
+                <property name="visible">True</property>
+                <property name="xalign">1</property>
+                <property name="xpad">5</property>
+                <property name="label" translatable="yes">To URL:</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkEntry" id="">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkFrame" id="frame19">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <widget class="GtkAlignment" id="alignment17">
+                <property name="visible">True</property>
+                <property name="border_width">5</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label39">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Revision</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="type">label_item</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHButtonBox" id="hbuttonbox13">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <child>
+              <widget class="GtkButton" id="switch_cancel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkButton" id="switch_ok">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
               </widget>
               <packing>
                 <property name="position">1</property>
