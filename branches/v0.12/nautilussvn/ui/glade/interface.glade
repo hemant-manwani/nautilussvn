@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Dec  2 08:39:08 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Dec  2 08:53:20 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Add">
     <property name="visible">True</property>
@@ -2426,6 +2426,7 @@
     <property name="height_request">600</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Export To Folder</property>
+    <signal name="destroy" handler="on_export_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox22">
         <property name="visible">True</property>
@@ -2518,6 +2519,84 @@
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
                 <signal name="clicked" handler="on_export_ok_clicked"/>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkWindow" id="Cleanup">
+    <property name="width_request">400</property>
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Cleaning Up...</property>
+    <signal name="destroy" handler="on_cleanup_destroy"/>
+    <child>
+      <widget class="GtkVBox" id="vbox24">
+        <property name="visible">True</property>
+        <child>
+          <widget class="GtkImage" id="cleanup_icon">
+            <property name="visible">True</property>
+            <property name="xalign">0.10000000149011612</property>
+            <property name="ypad">5</property>
+            <property name="stock">gtk-directory</property>
+            <property name="icon_size">6</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="cleanup_label">
+            <property name="visible">True</property>
+            <property name="xalign">0.10000000149011612</property>
+            <property name="ypad">5</property>
+            <property name="label" translatable="yes">Cleaning up.
+Please wait...</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHButtonBox" id="hbuttonbox15">
+            <property name="visible">True</property>
+            <property name="border_width">2</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <child>
+              <widget class="GtkButton" id="cleanup_cancel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="border_width">3</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_cleanup_cancel_clicked"/>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkButton" id="cleanup_ok">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="border_width">3</property>
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_cleanup_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
