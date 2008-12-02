@@ -9,9 +9,8 @@ import notification
 class Update:
     """
     This class provides an interface to generate an "update".
-    Pass it a local path and it will start the update,
-    and it will run the notification dialog.  There is no glade view for this
-    class.
+    Pass it a path and it will start an update, running the notification dialog.  
+    There is no glade view.
     
     """
 
