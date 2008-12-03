@@ -25,6 +25,9 @@ class MergeType:
         MergeRange()
 
 class MergeRange:
+    """
+    Provides an interface for the Merge Wizard Step 2a (Range of Revisions)
+    """
     def __init__(self):
         self.view = component.view.InterfaceView(self, "MergeRange")
 
@@ -46,14 +49,23 @@ class MergeRange:
         self.view.hide()
         
     def on_mergerange_show_log1_clicked(self, widget):
-        LogForMerge()
-        
+        LogForMerge(ok_callback=self.on_log1_closed)
+    
+    def on_log1_closed(self, data):
+        self.view.get_widget("mergerange_revisions").set_text(data)
+    
     def on_mergerange_show_log2_clicked(self, widget):
         LogForMerge()
 
 class LogForMerge(log.Log):
-    def __init__(self):
+    def __init__(self, ok_callback=None):
+        """
+        Override the normal Log class so that we can hide the window as we need.
+        Also, provide a callback for when the OK button is clicked so that we
+        can get some desired data.
+        """
         log.Log.__init__(self)
+        self.ok_callback = ok_callback
         
     def on_log_destroy(self, widget):
         self.view.hide()
@@ -63,6 +75,9 @@ class LogForMerge(log.Log):
     
     def on_log_ok_clicked(self, widget, data=None):
         self.view.hide()
+        if self.ok_callback is not None:
+            self.ok_callback(self.get_selected_revision_numbers())
+        
 
 if __name__ == "__main__":
     window = MergeType()
