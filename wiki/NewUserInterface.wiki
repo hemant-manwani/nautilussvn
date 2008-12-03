@@ -48,5 +48,7 @@ If/When we implement Help buttons, they will go on the bottom left of the window
 
   Cancel | Back | Forward
 
+Regarding spacing, the bottom of each window should have a horizontal button box with 5px border width and 5px spacing.  Each button will have 0px border width and 0px spacing.  Layout style should be "End".
+
 === Frames ===
 Groups of widgets with a similar purpose or functionality should generally be enclosed by frame with an ETCHED_IN shadow.  There should be a 5px TOTAL border width inside the frame.  However, if you have a vertical box inside the frame, then the vertical box should have a 3px border width, and each item inside the vertical box should have a 2px border width; this totals to 5px.
