@@ -1,0 +1,33 @@
+#summary Documentation on the new user interface being developed for v0.12.
+#labels Phase-Design,Phase-Implementation
+
+= Introduction =
+
+I'm constructing a new user interface for NautilusSvn based on pyGTK and glade files.  My plan is to have a window or dialog for every piece of functionality that TortoiseSVN has.  I'm also attempting to create the UI elements in a standard way which will be documented here.
+
+== Windows ==
+  * Add
+  * Checkout
+  * Commit
+  * Copy
+  * Log
+  * Properties
+  * Notification (shows callback messages from the vcs)
+  * Import
+  * Switch
+  * Export
+  * Cleanup
+  * Update To Revision
+  * Relocate
+  * Merge Wizard (3 Steps)
+    # Merge Type (Step 1) 
+      # Merge a range of revisions (Step 2a)
+      # Reintegrate a branch (Step 2b)
+      # Merge two different trees (Step 2c)
+   # Merge Options (Step 3)
+
+== Dialogs ==
+  * Previous Messages
+  * SSL Certificate
+  * HTTP/HTTPS Authorization
+  * Property
