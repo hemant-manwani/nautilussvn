@@ -57,10 +57,21 @@ class Log:
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
         if pathinfo is not None:
             path, col, cellx, celly = pathinfo
-            treeview.grab_focus()
-            treeview.set_cursor(path, col, 0)
-            self.message.set_text(treeview.get_model()[path][3])
 
+            #treeview.grab_focus()
+            #treeview.set_cursor(path, col, 0)
+            
+            selection = treeview.get_selection()
+            rows = selection.get_selected_rows()
+            
+            if path not in rows[1]:
+                selection.unselect_all()
+                selection.select_path(path)
+            
+            if selection.count_selected_rows() == 1:
+                self.message.set_text(treeview.get_model()[path][3])
+        return True
+        
 if __name__ == "__main__":
     window = Log()
     gtk.main()
