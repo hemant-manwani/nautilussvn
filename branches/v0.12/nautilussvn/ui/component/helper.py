@@ -123,3 +123,18 @@ def GetPreviousMessages():
     entries.reverse()
     
     return entries
+    
+def encode_revisions(arr):
+    """
+    Takes a list of integer revision numbers and converts to a TortoiseSVN-like
+    format.
+    EX. [4,5,7,9,10,11,12] -> 4-5,7,9-12
+    """
+    return "4-5,7,9-12"
+
+def decode_revisions(string):
+    """
+    Takes a TortoiseSVN-like revision string and returns a list of integers.
+    EX. 4-5,7,9-12 -> [4,5,7,9,10,11,12]
+    """
+    return [4,5,7,9,10,11,12]

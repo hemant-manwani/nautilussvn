@@ -58,6 +58,9 @@ class Table:
     def set_row(self, index, row):
         model = self.treeview.get_model()
         model[index] = row
+        
+    def allow_multiple(self):
+        self.treeview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
 
 class ComboBox:
     def __init__(self, cb, items=None):
