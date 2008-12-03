@@ -5,7 +5,7 @@
 
 I'm constructing a new user interface for NautilusSvn based on pyGTK and glade files.  My plan is to have a window or dialog for every piece of functionality that TortoiseSVN has.  I'm also attempting to create the UI elements in a standard way which will be documented here.
 
-== Windows ==
+= Windows =
   * Add
   * Checkout
   * Commit
@@ -26,13 +26,13 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
       # Merge two different trees (Step 2c)
    * Merge Options (Step 3)
 
-== Dialogs ==
+= Dialogs =
   * Previous Messages
   * SSL Certificate
   * HTTP/HTTPS Authorization
   * Property
 
-== Interface Standards ==
+= Interface Standards =
 I'd like to follow the [http://library.gnome.org/devel/hig-book/stable/ Gnome HIG] as much as possible.
 
 === Buttons ===
