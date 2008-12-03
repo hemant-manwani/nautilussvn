@@ -20,14 +20,27 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
   * Update To Revision
   * Relocate
   * Merge Wizard (3 Steps)
-    # Merge Type (Step 1) 
+    * Merge Type (Step 1) 
       # Merge a range of revisions (Step 2a)
       # Reintegrate a branch (Step 2b)
       # Merge two different trees (Step 2c)
-   # Merge Options (Step 3)
+   * Merge Options (Step 3)
 
 == Dialogs ==
   * Previous Messages
   * SSL Certificate
   * HTTP/HTTPS Authorization
   * Property
+
+== Interface Standards ==
+I'd like to follow the [http://library.gnome.org/devel/hig-book/stable/ Gnome HIG] as much as possible.
+
+=== Buttons ===
+Use stock buttons where possible.  Most windows/dialogs will have OK and Cancel buttons on the bottom right like so:
+
+  Cancel | OK
+
+If/When we implement Help buttons, they will go on the bottom left of the window.  For wizards like the merge wizard, we will have Forward, Back, and Cancel buttons for each step.  The Back button should be disabled on the first step, and the Forward button should be replaced by a Finish button on the last step.  They should appear like so:
+
+  Cancel | Back | Forward
+  Cancel | Back | Finish
