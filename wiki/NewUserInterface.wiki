@@ -42,5 +42,5 @@ Use stock buttons where possible.  Most windows/dialogs will have OK and Cancel 
 
 If/When we implement Help buttons, they will go on the bottom left of the window.  For wizards like the merge wizard, we will have Forward, Back, and Cancel buttons for each step.  The Back button should be disabled on the first step, and the Forward button should be replaced by a Finish button on the last step.  They should appear like so:
 
-  Cancel | Back | Forward
+  Cancel | Back | Forward \\
   Cancel | Back | Finish
