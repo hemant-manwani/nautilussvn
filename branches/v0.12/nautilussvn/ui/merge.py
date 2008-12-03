@@ -56,6 +56,36 @@ class MergeRange:
     
     def on_mergerange_show_log2_clicked(self, widget):
         LogForMerge()
+        
+class MergeBranch:
+    """
+    Provides an interface for the Merge Wizard Step 2b (Reintegrate Branch)
+    """
+    def __init__(self):
+        self.view = component.view.InterfaceView(self, "MergeBranch")
+
+        self.repositories = component.widget.ComboBox(
+            self.view.get_widget("mergebranch_from_urls"), 
+            component.helper.GetRepositoryPaths()
+        )
+
+    def on_mergebranch_destroy(self, widget):
+        gtk.main_quit()
+
+    def on_mergebranch_cancel_clicked(self, widget):
+        gtk.main_quit()
+
+    def on_mergebranch_back_clicked(self, widget):
+        self.view.hide()
+
+    def on_mergebranch_forward_clicked(self, widget):
+        self.view.hide()
+        
+    def on_mergebranch_show_log1_clicked(self, widget):
+        LogForMerge()
+
+    def on_mergebranch_show_log2_clicked(self, widget):
+        LogForMerge()
 
 class LogForMerge(log.Log):
     def __init__(self, ok_callback=None):
@@ -80,5 +110,5 @@ class LogForMerge(log.Log):
         
 
 if __name__ == "__main__":
-    window = MergeType()
+    window = MergeBranch()
     gtk.main()

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Dec  3 16:18:58 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Dec  3 17:35:28 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Add">
     <property name="visible">True</property>
@@ -2995,6 +2995,7 @@ Please wait...</property>
   </widget>
   <widget class="GtkWindow" id="MergeType">
     <property name="width_request">550</property>
+    <property name="height_request">425</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Merge Type (Step 1 of 3)</property>
     <property name="resizable">False</property>
@@ -3200,6 +3201,7 @@ Please wait...</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -3208,6 +3210,7 @@ Please wait...</property>
   </widget>
   <widget class="GtkWindow" id="MergeRange">
     <property name="width_request">550</property>
+    <property name="height_request">425</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Merge Range (Step 2 of 3)</property>
     <signal name="destroy" handler="on_mergerange_destroy"/>
@@ -3449,7 +3452,208 @@ To merge all revisions, leave the box empty.
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkWindow" id="MergeBranch">
+    <property name="width_request">550</property>
+    <property name="height_request">425</property>
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Merge Branch (Step 2 of 3)</property>
+    <signal name="destroy" handler="on_mergebranch_destroy"/>
+    <child>
+      <widget class="GtkVBox" id="vbox35">
+        <property name="visible">True</property>
+        <child>
+          <widget class="GtkFrame" id="frame28">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <widget class="GtkVBox" id="vbox36">
+                <property name="visible">True</property>
+                <property name="border_width">3</property>
+                <child>
+                  <widget class="GtkAlignment" id="alignment1">
+                    <property name="visible">True</property>
+                    <property name="border_width">2</property>
+                    <child>
+                      <widget class="GtkComboBoxEntry" id="mergebranch_from_urls">
+                        <property name="visible">True</property>
+                        <child internal-child="entry">
+                          <widget class="GtkEntry" id="comboboxentry-entry8">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkHButtonBox" id="hbuttonbox21">
+                    <property name="visible">True</property>
+                    <property name="border_width">3</property>
+                    <property name="spacing">5</property>
+                    <property name="layout_style">GTK_BUTTONBOX_END</property>
+                    <child>
+                      <widget class="GtkButton" id="mergebranch_show_log1">
+                        <property name="width_request">100</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="label" translatable="yes">Show log</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_mergebranch_show_log1_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label57">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">From URL:</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="type">label_item</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkFrame" id="frame29">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <widget class="GtkHBox" id="hbox20">
+                <property name="visible">True</property>
+                <property name="border_width">5</property>
+                <child>
+                  <widget class="GtkLabel" id="mergebranch_working_copy">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="xpad">5</property>
+                    <property name="label" translatable="yes">file:///home/devel/test/www</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkHButtonBox" id="hbuttonbox22">
+                    <property name="visible">True</property>
+                    <property name="layout_style">GTK_BUTTONBOX_END</property>
+                    <child>
+                      <widget class="GtkButton" id="mergebranch_show_log2">
+                        <property name="width_request">100</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="label" translatable="yes">Show log</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_mergebranch_show_log2_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="pack_type">GTK_PACK_END</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label58">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Working Copy</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="type">label_item</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkHButtonBox" id="hbuttonbox20">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="spacing">5</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <child>
+              <widget class="GtkButton" id="mergebranch_cancel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_mergebranch_cancel_clicked"/>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkButton" id="mergebranch_back">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-go-back</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_mergebranch_back_clicked"/>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="mergebranch_forward">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-go-forward</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_mergebranch_forward_clicked"/>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </widget>
