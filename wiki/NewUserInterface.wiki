@@ -32,8 +32,12 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
   * HTTP/HTTPS Authorization
   * Property
 
+
 = Interface Standards =
 I'd like to follow the [http://library.gnome.org/devel/hig-book/stable/ Gnome HIG] as much as possible.
+
+=== Windows ===
+Each window will be sized differently, but each major item (in the main vbox or hbox) should have a 5px border width.
 
 === Buttons ===
 Use stock buttons where possible.  Most windows/dialogs will have OK and Cancel buttons on the bottom right like so:
@@ -43,3 +47,6 @@ Use stock buttons where possible.  Most windows/dialogs will have OK and Cancel 
 If/When we implement Help buttons, they will go on the bottom left of the window.  For wizards like the merge wizard, we will have Forward, Back, and Cancel buttons for each step.  The Back button should be disabled on the first step, and the Forward button should be replaced by a Finish button on the last step.  They should appear on the bottom right like so:
 
   Cancel | Back | Forward
+
+=== Frames ===
+Groups of widgets with a similar purpose or functionality should generally be enclosed by frame with an ETCHED_IN shadow.  There should be a 5px TOTAL border width inside the frame.  However, if you have a vertical box inside the frame, then the vertical box should have a 3px border width, and each item inside the vertical box should have a 2px border width; this totals to 5px.
