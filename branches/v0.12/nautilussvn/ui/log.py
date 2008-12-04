@@ -76,11 +76,10 @@ class Log:
                 self.message.set_text("")
                 
     def get_selected_revision_numbers(self):
-        returner = []
-
         if len(self.selected_rows) == 0:
             return ""
 
+        returner = []
         for row in self.selected_rows[0]:
             returner.append(int(row[0]))
         
