@@ -9,6 +9,10 @@ import component.view
 import component.helper
 
 class Log:
+
+    selected_rows = []
+    selected_row = []
+
     def __init__(self):
         self.view = component.view.InterfaceView(self, "Log")
 
@@ -64,20 +68,27 @@ class Log:
         if path is not None:
             selection = treeview.get_selection()
             self.selected_rows = selection.get_selected_rows()
+            self.selected_row = self.selected_rows[0][path[0]]
 
             if selection.count_selected_rows() == 1:
-                self.message.set_text(self.selected_rows[0][path[0]][3])
+                self.message.set_text(self.selected_row[3])
             else:
                 self.message.set_text("")
                 
     def get_selected_revision_numbers(self):
         returner = []
+
+        if len(self.selected_rows) == 0:
+            return ""
+
         for row in self.selected_rows[0]:
             returner.append(int(row[0]))
         
         returner.sort()
         return component.helper.encode_revisions(returner)
-            
+
+    def get_selected_revision_number(self):
+        return self.selected_row[0]
         
       
 if __name__ == "__main__":
