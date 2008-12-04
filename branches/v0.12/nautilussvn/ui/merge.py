@@ -139,6 +139,44 @@ class MergeTree:
     def on_mergetree_to_revision_number_focused(self, widget, data):
         self.view.get_widget("mergetree_to_revision_number_opt").set_active(True)
 
+class MergeOptions:
+    """
+    Provides an interface for the Merge Wizard Step 3 (Options)
+    """
+
+    DEPTHS = {
+        'a': 'Working Copy',
+        'b': 'Fully recursive',
+        'c': 'Immediate children, including folders',
+        'd': 'Only file children',
+        'e': 'Only this item'
+    }
+
+    def __init__(self):
+        self.view = component.view.InterfaceView(self, "MergeOptions")
+
+        self.depth = component.widget.ComboBox(
+            self.view.get_widget("mergeoptions_depth")
+        )
+        for i in self.DEPTHS.values():
+            self.depth.append(i)
+        self.depth.set_active(0)
+        
+    def on_mergeoptions_destroy(self, widget):
+        gtk.main_quit()
+
+    def on_mergeoptions_cancel_clicked(self, widget):
+        gtk.main_quit()
+
+    def on_mergeoptions_back_clicked(self, widget):
+        self.view.hide()
+
+    def on_mergeoptions_apply_clicked(self, widget):
+        self.view.hide()
+        
+    def on_mergeoptions_test_merge_clicked(self, widget):
+        self.view.hide()
+
 class LogForMerge(log.Log):
     def __init__(self, ok_callback=None, multiple=False):
         """
@@ -166,5 +204,5 @@ class LogForMerge(log.Log):
         
 
 if __name__ == "__main__":
-    window = MergeTree()
+    window = MergeOptions()
     gtk.main()
