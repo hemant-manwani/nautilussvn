@@ -7,7 +7,7 @@
     <property name="visible">True</property>
     <property name="title" translatable="yes">Checkout</property>
     <property name="default_width">450</property>
-    <signal name="destroy" handler="on_co_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox2">
         <property name="visible">True</property>
@@ -39,7 +39,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBoxEntry" id="co_repositories">
+                      <widget class="GtkComboBoxEntry" id="repositories">
                         <property name="visible">True</property>
                         <child internal-child="entry">
                           <widget class="GtkEntry" id="comboboxentry-entry6">
@@ -73,7 +73,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="co_destination">
+                      <widget class="GtkEntry" id="destination">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </widget>
@@ -82,12 +82,12 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="co_file_chooser">
+                      <widget class="GtkButton" id="file_chooser">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_co_file_chooser_clicked"/>
+                        <signal name="clicked" handler="on_file_chooser_clicked"/>
                         <child>
                           <widget class="GtkImage" id="image1">
                             <property name="visible">True</property>
@@ -131,7 +131,7 @@
                 <property name="visible">True</property>
                 <property name="border_width">3</property>
                 <child>
-                  <widget class="GtkComboBox" id="co_depth">
+                  <widget class="GtkComboBox" id="depth">
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
                   </widget>
@@ -141,7 +141,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="co_omit_externals">
+                  <widget class="GtkCheckButton" id="omit_externals">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="border_width">2</property>
@@ -186,7 +186,7 @@
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
                     <child>
-                      <widget class="GtkRadioButton" id="co_revision_head_opt">
+                      <widget class="GtkRadioButton" id="revision_head_opt">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label" translatable="yes">HEAD</property>
@@ -203,14 +203,14 @@
                     <property name="border_width">2</property>
                     <property name="spacing">5</property>
                     <child>
-                      <widget class="GtkRadioButton" id="co_revision_number_opt">
+                      <widget class="GtkRadioButton" id="revision_number_opt">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label" translatable="yes">Revision #:</property>
                         <property name="xalign">1</property>
                         <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">co_revision_head_opt</property>
+                        <property name="group">revision_head_opt</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -218,10 +218,10 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="co_revision_number">
+                      <widget class="GtkEntry" id="revision_number">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <signal name="focus_in_event" handler="on_co_revision_number_focused"/>
+                        <signal name="focus_in_event" handler="on_revision_number_focused"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -232,14 +232,14 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="co_show_log">
+                      <widget class="GtkButton" id="show_log">
                         <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="label" translatable="yes">Show Log</property>
                         <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_co_show_log_clicked"/>
+                        <signal name="clicked" handler="on_show_log_clicked"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -278,25 +278,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="co_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_co_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="co_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_co_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
