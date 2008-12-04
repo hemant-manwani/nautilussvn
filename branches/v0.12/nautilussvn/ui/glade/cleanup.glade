@@ -6,12 +6,12 @@
     <property name="width_request">400</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Cleaning Up...</property>
-    <signal name="destroy" handler="on_cleanup_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox24">
         <property name="visible">True</property>
         <child>
-          <widget class="GtkImage" id="cleanup_icon">
+          <widget class="GtkImage" id="icon">
             <property name="visible">True</property>
             <property name="xalign">0.10000000149011612</property>
             <property name="ypad">5</property>
@@ -24,7 +24,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkLabel" id="cleanup_label">
+          <widget class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="xalign">0.10000000149011612</property>
             <property name="ypad">5</property>
@@ -44,14 +44,14 @@ Please wait...</property>
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="cleanup_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_cleanup_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -59,7 +59,7 @@ Please wait...</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="cleanup_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -67,7 +67,7 @@ Please wait...</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_cleanup_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
