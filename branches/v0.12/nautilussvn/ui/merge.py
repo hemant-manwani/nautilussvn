@@ -49,7 +49,7 @@ class MergeRange:
         self.view.hide()
         
     def on_mergerange_show_log1_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_log1_closed)
+        LogForMerge(ok_callback=self.on_log1_closed, multiple=True)
     
     def on_log1_closed(self, data):
         self.view.get_widget("mergerange_revisions").set_text(data)
@@ -87,8 +87,60 @@ class MergeBranch:
     def on_mergebranch_show_log2_clicked(self, widget):
         LogForMerge()
 
+class MergeTree:
+    """
+    Provides an interface for the Merge Wizard Step 2c (Merge two trees)
+    """
+    def __init__(self):
+        self.view = component.view.InterfaceView(self, "MergeTree")
+
+        previous_urls = component.helper.GetRepositoryPaths()
+        self.from_urls = component.widget.ComboBox(
+            self.view.get_widget("mergetree_from_urls"), 
+            previous_urls
+        )
+        self.to_urls = component.widget.ComboBox(
+            self.view.get_widget("mergetree_to_urls"), 
+            previous_urls
+        )
+
+    def on_mergetree_destroy(self, widget):
+        gtk.main_quit()
+
+    def on_mergetree_cancel_clicked(self, widget):
+        gtk.main_quit()
+
+    def on_mergetree_back_clicked(self, widget):
+        self.view.hide()
+
+    def on_mergetree_forward_clicked(self, widget):
+        self.view.hide()
+        
+    def on_mergetree_from_show_log_clicked(self, widget):
+        LogForMerge(ok_callback=self.on_from_log_closed, multiple=False)
+
+    def on_from_log_closed(self, data):
+        self.view.get_widget("mergetree_from_revision_number").set_text(data)
+        self.view.get_widget("mergetree_from_revision_number_opt").set_active(True)
+
+    def on_mergetree_to_show_log_clicked(self, widget):
+        LogForMerge(ok_callback=self.on_to_log_closed, multiple=False)
+
+    def on_to_log_closed(self, data):
+        self.view.get_widget("mergetree_to_revision_number").set_text(data)
+        self.view.get_widget("mergetree_to_revision_number_opt").set_active(True)
+
+    def on_mergetree_working_copy_show_log_clicked(self, widget):
+        LogForMerge()
+        
+    def on_mergetree_from_revision_number_focused(self, widget, data):
+        self.view.get_widget("mergetree_from_revision_number_opt").set_active(True)
+
+    def on_mergetree_to_revision_number_focused(self, widget, data):
+        self.view.get_widget("mergetree_to_revision_number_opt").set_active(True)
+
 class LogForMerge(log.Log):
-    def __init__(self, ok_callback=None):
+    def __init__(self, ok_callback=None, multiple=False):
         """
         Override the normal Log class so that we can hide the window as we need.
         Also, provide a callback for when the OK button is clicked so that we
@@ -96,6 +148,7 @@ class LogForMerge(log.Log):
         """
         log.Log.__init__(self)
         self.ok_callback = ok_callback
+        self.multiple = multiple
         
     def on_log_destroy(self, widget):
         self.view.hide()
@@ -106,9 +159,12 @@ class LogForMerge(log.Log):
     def on_log_ok_clicked(self, widget, data=None):
         self.view.hide()
         if self.ok_callback is not None:
-            self.ok_callback(self.get_selected_revision_numbers())
+            if self.multiple == True:
+                self.ok_callback(self.get_selected_revision_numbers())
+            else:
+                self.ok_callback(self.get_selected_revision_number())
         
 
 if __name__ == "__main__":
-    window = MergeBranch()
+    window = MergeTree()
     gtk.main()
