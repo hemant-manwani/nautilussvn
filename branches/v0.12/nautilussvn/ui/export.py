@@ -13,7 +13,7 @@ import notification
 
 class Export:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Export")
+        self.view = component.view.InterfaceView(self, "export", "Export")
 
     def on_export_destroy(self, widget):
         gtk.main_quit()

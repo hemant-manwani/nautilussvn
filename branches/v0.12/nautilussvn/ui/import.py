@@ -13,7 +13,7 @@ import notification
 
 class Import:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Import")
+        self.view = component.view.InterfaceView(self, "import", "Import")
 
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("import_repositories"), 

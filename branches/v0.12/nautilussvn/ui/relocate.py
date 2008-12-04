@@ -16,7 +16,7 @@ class Relocate:
     """
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Relocate")
+        self.view = component.view.InterfaceView(self, "relocate", "Relocate")
 
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("relocate_to_urls"), 

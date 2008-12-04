@@ -16,7 +16,7 @@ class Commit:
     SHOW_UNVERSIONED = True
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Commit")
+        self.view = component.view.InterfaceView(self, "commit", "Commit")
 
         self.files_table = component.widget.Table(
             self.view.get_widget("commit_files_table"),

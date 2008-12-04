@@ -14,7 +14,7 @@ import log
 
 class Switch:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Switch")
+        self.view = component.view.InterfaceView(self, "switch", "Switch")
 
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("switch_repositories"), 

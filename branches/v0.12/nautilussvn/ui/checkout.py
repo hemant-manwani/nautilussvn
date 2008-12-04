@@ -22,7 +22,7 @@ class Checkout:
     ]
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Checkout")
+        self.view = component.view.InterfaceView(self, "checkout", "Checkout")
 
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("co_repositories"), 
