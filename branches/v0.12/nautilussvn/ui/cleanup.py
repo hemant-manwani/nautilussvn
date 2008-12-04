@@ -18,13 +18,13 @@ class Cleanup:
     def __init__(self):
         self.view = component.view.InterfaceView(self, "cleanup", "Cleanup")
 
-    def on_cleanup_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
 
-    def on_cleanup_cancel_clicked(self, widget):
+    def on_cancel_clicked(self, widget):
         gtk.main_quit()
 
-    def on_cleanup_ok_clicked(self, widget):
+    def on_ok_clicked(self, widget):
         gtk.main_quit()
         
 if __name__ == "__main__":
