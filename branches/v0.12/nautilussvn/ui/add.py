@@ -16,8 +16,8 @@ class Add:
     def __init__(self):
         self.view = component.view.InterfaceView(self, "add", "Add")
 
-        self.add_files_table = component.widget.Table(
-            self.view.get_widget("add_files_table"), 
+        self.files_table = component.widget.Table(
+            self.view.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [component.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
@@ -27,24 +27,24 @@ class Add:
             [True, "ADDEDLATER2.jpg", "jpg"]
         ]
         for row in self.files:
-            self.add_files_table.append(row)
+            self.files_table.append(row)
 
-    def on_add_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
 
-    def on_add_cancel_clicked(self, widget):
+    def on_cancel_clicked(self, widget):
         gtk.main_quit()
 
-    def on_add_ok_clicked(self, widget):
+    def on_ok_clicked(self, widget):
         self.view.hide()
         self.notification = notification.Notification()
 
-    def on_add_toggle_toggled(self, widget):
+    def on_select_all_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
-        for row in self.add_files_table.get_items():
+        for row in self.files_table.get_items():
             row[0] = self.TOGGLE_ALL
 
-    def on_add_files_table_button_pressed(self, treeview, event=None, user_data=None):
+    def on_files_table_button_pressed(self, treeview, event=None, user_data=None):
         if event.button == 3:
             pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
             if pathinfo is not None:
@@ -112,7 +112,7 @@ class Add:
                 ])
                 context_menu.show(event)
                 
-    def on_add_files_table_row_doubleclicked(self, treeview, event, col):
+    def on_files_table_row_doubleclicked(self, treeview, event, col):
         treeview.grab_focus()
         treeview.set_cursor(event[0], col, 0)
         treeview_model = treeview.get_model()
