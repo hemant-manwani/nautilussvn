@@ -14,7 +14,7 @@ class Log:
     selected_row = []
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Log")
+        self.view = component.view.InterfaceView(self, "log", "Log")
 
         self.revisions_table = component.widget.Table(
             self.view.get_widget("log_revisions_table"),

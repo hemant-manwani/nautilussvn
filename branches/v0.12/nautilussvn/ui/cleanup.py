@@ -16,7 +16,7 @@ class Cleanup:
     """
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Cleanup")
+        self.view = component.view.InterfaceView(self, "cleanup", "Cleanup")
 
     def on_cleanup_destroy(self, widget):
         gtk.main_quit()

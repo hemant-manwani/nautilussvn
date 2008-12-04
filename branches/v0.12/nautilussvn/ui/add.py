@@ -14,7 +14,7 @@ class Add:
     TOGGLE_ALL = True
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Add")
+        self.view = component.view.InterfaceView(self, "add", "Add")
 
         self.add_files_table = component.widget.Table(
             self.view.get_widget("add_files_table"), 

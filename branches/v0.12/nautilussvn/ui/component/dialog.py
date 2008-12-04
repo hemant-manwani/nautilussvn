@@ -8,9 +8,11 @@ import widget
 import helper
 import view
 
+GLADE = 'dialogs'
+
 class PreviousMessages:
     def __init__(self):
-        self.view = view.InterfaceView(self, "PreviousMessages")
+        self.view = view.InterfaceView(self, GLADE, "PreviousMessages")
         
     def run(self):
         self.message = widget.TextView(self.view.get_widget("prevmes_message"))
@@ -64,7 +66,7 @@ class Certificate:
     def __init__(self, realm="", host="", 
             issuer_from="", issuer_to="", valid="", fingerprint=""):
             
-        self.view = view.InterfaceView(self, "Certificate")
+        self.view = view.InterfaceView(self, GLADE, "Certificate")
         
         self.view.get_widget("cert_realm").set_label(realm)
         self.view.get_widget("cert_host").set_label(host)
@@ -97,7 +99,7 @@ class Certificate:
         
 class Authorization:
     def __init__(self, location="", realm=""):
-        self.view = view.InterfaceView(self, "Authorization")
+        self.view = view.InterfaceView(self, GLADE, "Authorization")
         
         self.view.get_widget("auth_location").set_label(location)
         self.view.get_widget("auth_realm").set_label(realm)
@@ -126,7 +128,7 @@ class Property:
         'svn:externals','svn:special']
 
     def __init__(self, name="", value=""):
-        self.view = view.InterfaceView(self, "Property")
+        self.view = view.InterfaceView(self, GLADE, "Property")
         
         self.save_name = name
         self.save_value = value

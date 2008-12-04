@@ -37,7 +37,7 @@ class UpdateToRevision:
     }
     
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Update")
+        self.view = component.view.InterfaceView(self, "update", "Update")
         
         self.depth = component.widget.ComboBox(
             self.view.get_widget("update_depth")

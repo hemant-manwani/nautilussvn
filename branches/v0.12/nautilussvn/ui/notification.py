@@ -12,7 +12,7 @@ class Notification:
     OK_ENABLED = False
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Notification")
+        self.view = component.view.InterfaceView(self, "notification", "Notification")
     
         self.table = component.widget.Table(
             self.view.get_widget("notification_table"),

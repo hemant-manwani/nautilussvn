@@ -12,7 +12,7 @@ import notification
 
 class MergeType:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "MergeType")
+        self.view = component.view.InterfaceView(self, "merge", "MergeType")
 
     def on_mergetype_destroy(self, widget):
         gtk.main_quit()
@@ -29,7 +29,7 @@ class MergeRange:
     Provides an interface for the Merge Wizard Step 2a (Range of Revisions)
     """
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "MergeRange")
+        self.view = component.view.InterfaceView(self, "merge", "MergeRange")
 
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("mergerange_from_urls"), 
@@ -62,7 +62,7 @@ class MergeBranch:
     Provides an interface for the Merge Wizard Step 2b (Reintegrate Branch)
     """
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "MergeBranch")
+        self.view = component.view.InterfaceView(self, "merge", "MergeBranch")
 
         self.repositories = component.widget.ComboBox(
             self.view.get_widget("mergebranch_from_urls"), 
@@ -92,7 +92,7 @@ class MergeTree:
     Provides an interface for the Merge Wizard Step 2c (Merge two trees)
     """
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "MergeTree")
+        self.view = component.view.InterfaceView(self, "merge", "MergeTree")
 
         previous_urls = component.helper.GetRepositoryPaths()
         self.from_urls = component.widget.ComboBox(
@@ -153,7 +153,7 @@ class MergeOptions:
     }
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "MergeOptions")
+        self.view = component.view.InterfaceView(self, "merge", "MergeOptions")
 
         self.depth = component.widget.ComboBox(
             self.view.get_widget("mergeoptions_depth")

@@ -13,7 +13,7 @@ class Properties:
     SELECTED_ROW = None
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Properties")
+        self.view = component.view.InterfaceView(self, "properties", "Properties")
         
         self.table = component.widget.Table(
             self.view.get_widget("props_table"),

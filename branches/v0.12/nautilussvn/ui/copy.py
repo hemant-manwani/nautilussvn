@@ -12,7 +12,7 @@ import notification
 
 class Copy:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "Copy")
+        self.view = component.view.InterfaceView(self, "copy", "Copy")
         self.message = component.widget.TextView(
             self.view.get_widget("copy_message")
         )
