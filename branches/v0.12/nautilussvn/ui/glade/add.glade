@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec  4 18:46:33 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Add">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Add</property>
     <property name="default_width">400</property>
     <property name="default_height">300</property>
-    <signal name="destroy" handler="on_add_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -26,11 +26,11 @@
                 <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                 <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
                 <child>
-                  <widget class="GtkTreeView" id="add_files_table">
+                  <widget class="GtkTreeView" id="files_table">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <signal name="button_press_event" handler="on_add_files_table_button_pressed"/>
-                    <signal name="row_activated" handler="on_add_files_table_row_doubleclicked"/>
+                    <signal name="button_press_event" handler="on_files_table_button_pressed"/>
+                    <signal name="row_activated" handler="on_files_table_row_doubleclicked"/>
                   </widget>
                 </child>
               </widget>
@@ -48,7 +48,7 @@
           </widget>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="add_toggle">
+          <widget class="GtkCheckButton" id="select_all">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="border_width">5</property>
@@ -56,7 +56,7 @@
             <property name="response_id">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="on_add_toggle_toggled"/>
+            <signal name="toggled" handler="on_select_all_toggled"/>
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -71,25 +71,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="add_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_add_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="add_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_add_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
