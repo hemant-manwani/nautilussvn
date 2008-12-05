@@ -19,7 +19,7 @@ class Commit:
         self.view = component.view.InterfaceView(self, "commit", "Commit")
 
         self.files_table = component.widget.Table(
-            self.view.get_widget("commit_files_table"),
+            self.view.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [component.widget.TOGGLE_BUTTON, "Path", "Extension", 
@@ -33,25 +33,25 @@ class Commit:
         self.populate_files_from_original()
         
         self.message = component.widget.TextView(
-            self.view.get_widget("commit_message")
+            self.view.get_widget("message")
         )
     
-    def on_commit_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
         
-    def on_commit_cancel_clicked(self, widget, data=None):
+    def on_cancel_clicked(self, widget, data=None):
         gtk.main_quit()
         
-    def on_commit_ok_clicked(self, widget, data=None):
+    def on_ok_clicked(self, widget, data=None):
         self.view.hide()
         self.notification = notification.Notification()
     
-    def on_commit_toggle_show_all_toggled(self, widget, data=None):
+    def on_toggle_show_all_toggled(self, widget, data=None):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
         for row in self.files_table.get_items():
             row[0] = self.TOGGLE_ALL
             
-    def on_commit_toggle_show_unversioned_toggled(self, widget, data=None):
+    def on_toggle_show_unversioned_toggled(self, widget, data=None):
         self.SHOW_UNVERSIONED = not self.SHOW_UNVERSIONED
 
         if self.SHOW_UNVERSIONED:
@@ -68,7 +68,7 @@ class Commit:
         for row in self.files:
             self.files_table.append(row)
         
-    def on_commit_files_table_button_pressed(self, treeview, event):
+    def on_files_table_button_pressed(self, treeview, event):
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
         if pathinfo is not None:
             path, col, cellx, celly = pathinfo
@@ -143,7 +143,7 @@ class Commit:
                 ])
                 context_menu.show(event)
 
-    def on_commit_files_table_row_doubleclicked(self, treeview, event, col):
+    def on_files_table_row_doubleclicked(self, treeview, event, col):
         treeview.grab_focus()
         treeview.set_cursor(event[0], col, 0)
         treeview_model = treeview.get_model()
@@ -172,7 +172,7 @@ class Commit:
     def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
         print "Ignore by file extension"
         
-    def on_commit_previous_messages_clicked(self, widget, data=None):
+    def on_previous_messages_clicked(self, widget, data=None):
         dialog = component.dialog.PreviousMessages()
         message = dialog.run()
         if message is not None:
