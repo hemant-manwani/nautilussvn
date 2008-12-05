@@ -99,27 +99,6 @@ class MainContextMenu():
     
     """
     
-    menu = [
-        {
-            "identifier": "NautilusSvn::",
-            "label": "",
-            "tooltip": "",
-            "icon": "",
-            "signals": {
-                "activate": {
-                    "callback": None,
-                    "args": None
-                }
-            }, 
-            "condition": None,
-            "submenus": [
-                # etc.
-            ]
-        },
-        # etc.
-    ]
-    """ This is the definition for the menu. """
-    
     def __init__(self):
         pass
         
@@ -128,7 +107,221 @@ class MainContextMenu():
         
         """
         
-        pass
+        # The following dictionary defines the complete contextmenu, you can
+        # refer to any future local variables using the syntax $var and ${var}.
+        menu_template = [
+            {
+                "identifier": "NautilusSvn::Checkout",
+                "label": "Checkout",
+                "tooltip": "Checkout code from an SVN repository",
+                "icon": "icon-checkout",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }, 
+                "condition": (lambda: True),
+                "submenus": [
+                    
+                ]
+            },
+            {
+                "identifier": "NautilusSvn::Update",
+                "label": "Update",
+                "tooltip": "",
+                "icon": "icon-update",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }, 
+                "condition": (lambda: True),
+                "submenus": [
+                    
+                ]
+            },
+            {
+                "identifier": "NautilusSvn::Commit",
+                "label": "Commit",
+                "tooltip": "",
+                "icon": "icon-commit",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }, 
+                "condition": (lambda: True),
+                "submenus": [
+                    
+                ]
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
+                "label": "NautilusSvn",
+                "tooltip": "",
+                "icon": "nautilussvn",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }, 
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Diff",
+                        "label": "Diff",
+                        "tooltip": "",
+                        "icon": "icon-diff",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Show_Log",
+                        "label": "Show Log",
+                        "tooltip": "",
+                        "icon": "icon-show_log",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Rename",
+                        "label": "Rename",
+                        "tooltip": "",
+                        "icon": "icon-rename",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Delete",
+                        "label": "Delete",
+                        "tooltip": "",
+                        "icon": "icon-delete",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Revert",
+                        "label": "Revert",
+                        "tooltip": "",
+                        "icon": "icon-revert",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Properties",
+                        "label": "Properties",
+                        "tooltip": "",
+                        "icon": "icon-properties",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Help",
+                        "label": "Help",
+                        "tooltip": "",
+                        "icon": "icon-help",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Settings",
+                        "label": "Settings",
+                        "tooltip": "",
+                        "icon": "icon-settings",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::About",
+                        "label": "About",
+                        "tooltip": "",
+                        "icon": "icon-about",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    }
+                ]
+            },
+        ]
+    
+    #
+    # Conditions
+    #
     
     def condition_checkout(self):
         if (len(self.files) == 1 and 
@@ -155,18 +348,18 @@ class MainContextMenu():
             if (not isfile(file)):
                 return False
         
-        if (len(self.files)) == 2):
+        if (len(self.files) == 2):
             return True
             
         if (len(self.files) == 1 and
-                is_modified(self.files[0]):
+                is_modified(self.files[0])):
             return True
         
         return False
         
     def condition_show_log(self):
         if (len(self.files) == 1 and 
-                not is_added(self.files[0]):
+                not is_added(self.files[0])):
             return True
         return False
         
@@ -181,7 +374,7 @@ class MainContextMenu():
         
     def condition_rename(self):
         if (len(self.files) == 1 and 
-                is_versioned(self.file[0])
+                is_versioned(self.file[0])):
             return True
         return False
         
