@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec  4 19:00:51 2008 -->
 <glade-interface>
-
   <widget class="GtkWindow" id="Commit">
     <property name="width_request">640</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Commit</property>
-    <signal name="destroy" handler="on_commit_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox4">
         <property name="visible">True</property>
@@ -28,7 +27,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="commit_to">
+              <widget class="GtkLabel" id="to">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="xpad">4</property>
@@ -61,13 +60,13 @@
                         <property name="border_width">5</property>
                         <property name="layout_style">GTK_BUTTONBOX_START</property>
                         <child>
-                          <widget class="GtkButton" id="commit_previous_messages">
+                          <widget class="GtkButton" id="previous_messages">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">Previous Messages</property>
                             <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_commit_previous_messages_clicked"/>
+                            <signal name="clicked" handler="on_previous_messages_clicked"/>
                           </widget>
                         </child>
                       </widget>
@@ -85,11 +84,12 @@
                         <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                         <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
                         <child>
-                          <widget class="GtkTextView" id="commit_message">
+                          <widget class="GtkTextView" id="message">
                             <property name="height_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="pixels_below_lines">7</property>
+                            <property name="wrap_mode">GTK_WRAP_WORD</property>
                           </widget>
                         </child>
                       </widget>
@@ -134,11 +134,11 @@
                     <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
                     <child>
-                      <widget class="GtkTreeView" id="commit_files_table">
+                      <widget class="GtkTreeView" id="files_table">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <signal name="button_press_event" handler="on_commit_files_table_button_pressed"/>
-                        <signal name="row_activated" handler="on_commit_files_table_row_doubleclicked"/>
+                        <signal name="button_press_event" handler="on_files_table_button_pressed"/>
+                        <signal name="row_activated" handler="on_files_table_row_doubleclicked"/>
                       </widget>
                     </child>
                   </widget>
@@ -165,14 +165,14 @@
             <property name="visible">True</property>
             <property name="border_width">5</property>
             <child>
-              <widget class="GtkCheckButton" id="commit_toggle_show_unversioned">
+              <widget class="GtkCheckButton" id="toggle_show_unversioned">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="label" translatable="yes">Show unversioned files</property>
                 <property name="response_id">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_commit_toggle_show_unversioned_toggled"/>
+                <signal name="toggled" handler="on_toggle_show_unversioned_toggled"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -180,14 +180,14 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkCheckButton" id="commit_toggle_show_all">
+              <widget class="GtkCheckButton" id="toggle_show_all">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="label" translatable="yes">Select / Deselect All</property>
                 <property name="response_id">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_commit_toggle_show_all_toggled"/>
+                <signal name="toggled" handler="on_toggle_show_all_toggled"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -209,14 +209,14 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="commit_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_commit_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -224,14 +224,14 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="commit_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_commit_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
