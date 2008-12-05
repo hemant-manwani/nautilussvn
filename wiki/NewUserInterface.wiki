@@ -9,7 +9,7 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
   * Add
   * Checkout
   * Commit
-  * Copy
+  * Branch
   * Log
   * Properties
   * Notification (shows callback messages from the vcs)
@@ -25,6 +25,8 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
       # Reintegrate a branch (Step 2b)
       # Merge two different trees (Step 2c)
    * Merge Options (Step 3)
+   * Lock / Unlock
+   * Rename
 
 = Dialogs =
   * Previous Messages
