@@ -9,27 +9,28 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.ui.notification
 
-class Commit:
+class Lock:
 
     TOGGLE_ALL = False
-    SHOW_UNVERSIONED = True
 
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "commit", "Commit")
+        self.view = nautilussvn.ui.InterfaceView(self, "lock", "Lock")
 
         self.files_table = nautilussvn.ui.widget.Table(
             self.view.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension", 
-                "Text Status", "Property Status"],
+                "Lock", "Needs lock"],
         )
         
         self.files = [
-            [True, "test.php", ".php", "modified", ""],
-            [False, "added.php", ".php", "unversioned", ""]
+            [True, "init/test.php", ".php", "", ""],
+            [False, "added.php", ".php", "", ""]
         ]
-        self.populate_files_from_original()
+        self.files_table.clear()
+        for row in self.files:
+            self.files_table.append(row)
         
         self.message = nautilussvn.ui.widget.TextView(
             self.view.get_widget("message")
@@ -45,28 +46,11 @@ class Commit:
         self.view.hide()
         self.notification = nautilussvn.ui.notification.Notification()
     
-    def on_toggle_show_all_toggled(self, widget, data=None):
+    def on_select_all_toggled(self, widget, data=None):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
         for row in self.files_table.get_items():
             row[0] = self.TOGGLE_ALL
-            
-    def on_toggle_show_unversioned_toggled(self, widget, data=None):
-        self.SHOW_UNVERSIONED = not self.SHOW_UNVERSIONED
 
-        if self.SHOW_UNVERSIONED:
-            self.populate_files_from_original()
-        else:
-            index = 0
-            for row in self.files_table.get_items():
-                if row[3] == "unversioned":
-                    self.files_table.remove(index)
-                index += 1
-
-    def populate_files_from_original(self):
-        self.files_table.clear()
-        for row in self.files:
-            self.files_table.append(row)
-        
     def on_files_table_button_pressed(self, treeview, event):
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
         if pathinfo is not None:
@@ -78,10 +62,18 @@ class Commit:
             
             if event.button == 3:
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        'label': 'View Diff',
+                        'label': 'Compare with base',
                         'signals': {
                             'activate': {
                                 'callback':self.on_context_diff_activated, 
+                                'args':fileinfo
+                            }
+                        }
+                    },{
+                        'label': 'Show log',
+                        'signals': {
+                            'activate': {
+                                'callback':self.on_context_show_log_activated, 
                                 'args':fileinfo
                             }
                         }
@@ -110,34 +102,13 @@ class Commit:
                             }
                         }
                     },{
-                        'label': 'Add',
+                        'label': 'Properties',
                         'signals': {
                             'activate': {
-                                'callback':self.on_context_add_activated, 
+                                'callback':self.on_context_properties_activated, 
                                 'args':fileinfo
                             }
                         }
-                    },{
-                        'label': 'Add to ignore list',
-                        'submenu': [{
-                                'label': fileinfo[1],
-                                'signals': {
-                                    'activate': {
-                                        'callback':self.on_subcontext_ignore_by_filename_activated, 
-                                        'args':fileinfo
-                                     }
-                                 }
-                            },
-                            {
-                                'label': "*.%s"%fileinfo[2],
-                                'signals': {
-                                    'activate': {
-                                        'callback':self.on_subcontext_ignore_by_fileext_activated, 
-                                        'args':fileinfo
-                                    }
-                                }
-                            }
-                        ]
                     }
                 ])
                 context_menu.show(event)
@@ -150,8 +121,8 @@ class Commit:
         
         print "Row Double-clicked"
 
-    def on_context_add_activated(self, widget, data=None):
-        print "Add Item"
+    def on_context_show_log_activated(self, widget, data=None):
+        print "Show log Item"
 
     def on_context_diff_activated(self, widget, Data=None):
         print "Diff Item"
@@ -165,11 +136,8 @@ class Commit:
     def on_context_delete_activated(self, widget, data=None):
         print "Delete Item"
         
-    def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
-        print "Ignore by file name"
-        
-    def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
-        print "Ignore by file extension"
+    def on_context_properties_activated(self, widget, data=None):
+        print "Properties Item"
         
     def on_previous_messages_clicked(self, widget, data=None):
         dialog = nautilussvn.ui.dialog.PreviousMessages()
@@ -178,5 +146,5 @@ class Commit:
             self.message.set_text(message)
         
 if __name__ == "__main__":
-    window = Commit()
+    window = Lock()
     gtk.main()
