@@ -36,7 +36,7 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkLabel" id="add_frame_label">
+              <widget class="GtkLabel" id="frame_label">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Files to add (double-click to view diff) </property>
                 <property name="use_markup">True</property>
