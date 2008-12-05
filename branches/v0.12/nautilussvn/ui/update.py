@@ -4,10 +4,10 @@ import pygtk
 import gobject
 import gtk
 
-import component.widget
-
-import log
-import notification
+import nautilussvn.ui
+import nautilussvn.ui.widget
+import nautilussvn.ui.log
+import nautilussvn.ui.notification
 
 class Update:
     """
@@ -18,7 +18,7 @@ class Update:
     """
 
     def __init__(self):
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
 
 class UpdateToRevision:
@@ -37,9 +37,9 @@ class UpdateToRevision:
     }
     
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "update", "Update")
+        self.view = nautilussvn.ui.InterfaceView(self, "update", "Update")
         
-        self.depth = component.widget.ComboBox(
+        self.depth = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("depth")
         )
         for i in self.DEPTHS.values():
@@ -54,7 +54,7 @@ class UpdateToRevision:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_revision_number_focused(self, widget, data=None):
         self.view.get_widget("revision_number_opt").set_active(True)
@@ -67,9 +67,9 @@ class UpdateToRevision:
             self.view.get_widget("revision_number_opt").set_active(True)
             self.view.get_widget("revision_number").set_text(data)
 
-class LogForUpdate(log.Log):
+class LogForUpdate(nautilussvn.ui.log.Log):
     def __init__(self, ok_clicked=None):
-        log.Log.__init__(self)
+        nautilussvn.ui.log.Log.__init__(self)
         self.ok_clicked = ok_clicked
         
     def on_destroy(self, widget):

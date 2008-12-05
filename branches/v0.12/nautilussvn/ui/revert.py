@@ -4,11 +4,11 @@ import pygtk
 import gobject
 import gtk
 
-import add
+import nautilussvn.ui.add
 
-class Revert(add.Add):
+class Revert(nautilussvn.ui.add.Add):
     def __init__(self):
-        add.Add.__init__(self)
+        nautilussvn.ui.add.Add.__init__(self)
         
         self.window = self.view.get_widget("Add")
         self.window.set_title("Revert")

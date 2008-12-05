@@ -4,17 +4,17 @@ import pygtk
 import gobject
 import gtk
 
-import component.widget
-import component.view
+import nautilussvn.ui
+import nautilussvn.ui.widget
 
 class Notification:
     
     OK_ENABLED = False
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "notification", "Notification")
+        self.view = nautilussvn.ui.InterfaceView(self, "notification", "Notification")
     
-        self.table = component.widget.Table(
+        self.table = nautilussvn.ui.widget.Table(
             self.view.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
