@@ -24,9 +24,9 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
       # Merge a range of revisions (Step 2a)
       # Reintegrate a branch (Step 2b)
       # Merge two different trees (Step 2c)
-   * Merge Options (Step 3)
-   * Lock / Unlock
-   * Rename
+  * Merge Options (Step 3)
+  * Lock / Unlock
+  * Rename
 
 = Dialogs =
   * Previous Messages
