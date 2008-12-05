@@ -19,17 +19,17 @@ class Relocate:
         self.view = component.view.InterfaceView(self, "relocate", "Relocate")
 
         self.repositories = component.widget.ComboBox(
-            self.view.get_widget("relocate_to_urls"), 
+            self.view.get_widget("to_urls"), 
             component.helper.GetRepositoryPaths()
         )
 
-    def on_relocate_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
 
-    def on_relocate_cancel_clicked(self, widget):
+    def on_cancel_clicked(self, widget):
         gtk.main_quit()
 
-    def on_relocate_ok_clicked(self, widget):
+    def on_ok_clicked(self, widget):
         self.view.hide()
         self.notification = notification.Notification()
 
