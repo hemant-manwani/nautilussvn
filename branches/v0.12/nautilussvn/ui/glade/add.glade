@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 18:46:33 2008 -->
+<!--Generated with glade3 3.4.5 on Fri Dec  5 14:31:48 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Add">
     <property name="visible">True</property>
@@ -13,37 +13,20 @@
         <property name="visible">True</property>
         <property name="spacing">3</property>
         <child>
-          <widget class="GtkFrame" id="frame14">
+          <widget class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
+            <property name="can_focus">True</property>
             <property name="border_width">5</property>
-            <property name="label_xalign">0</property>
+            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
             <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow1">
+              <widget class="GtkTreeView" id="files_table">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="border_width">5</property>
-                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-                <child>
-                  <widget class="GtkTreeView" id="files_table">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <signal name="button_press_event" handler="on_files_table_button_pressed"/>
-                    <signal name="row_activated" handler="on_files_table_row_doubleclicked"/>
-                  </widget>
-                </child>
+                <signal name="button_press_event" handler="on_files_table_button_pressed"/>
+                <signal name="row_activated" handler="on_files_table_row_doubleclicked"/>
               </widget>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="frame_label">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Files to add (double-click to view diff) </property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="type">label_item</property>
-              </packing>
             </child>
           </widget>
         </child>
@@ -54,7 +37,6 @@
             <property name="border_width">5</property>
             <property name="label" translatable="yes">Select / Deselect All</property>
             <property name="response_id">0</property>
-            <property name="active">True</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_select_all_toggled"/>
           </widget>
