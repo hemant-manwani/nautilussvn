@@ -15,13 +15,13 @@ class Export:
     def __init__(self):
         self.view = component.view.InterfaceView(self, "export", "Export")
 
-    def on_export_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
 
-    def on_export_cancel_clicked(self, widget):
+    def on_cancel_clicked(self, widget):
         gtk.main_quit()
 
-    def on_export_ok_clicked(self, widget):
+    def on_ok_clicked(self, widget):
         self.view.hide()
         self.notification = notification.Notification()
         
