@@ -11,6 +11,11 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
   * Never mix tabs and spaces. Spaces only.
   * Limit all lines to a maximum of 79 characters.
   * Imports should usually be on separate lines
+  * Imports should be grouped in the following order (you should put a blank line between each group of imports): 
+    ** 1. standard library imports
+    ** 2. related third party imports
+    ** 3. local application/library specific imports
+
 
 = Style Guide =
 
