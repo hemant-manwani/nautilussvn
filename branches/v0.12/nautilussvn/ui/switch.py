@@ -4,21 +4,20 @@ import pygtk
 import gobject
 import gtk
 
-import component.widget
-import component.helper
-import component.dialog
-import component.view
+import nautilussvn.ui
+import nautilussvn.ui.widget
+import nautilussvn.ui.notification
+import nautilussvn.ui.log
 
-import notification
-import log
+import nautilussvn.lib.helper
 
 class Switch:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "switch", "Switch")
+        self.view = nautilussvn.ui.InterfaceView(self, "switch", "Switch")
 
-        self.repositories = component.widget.ComboBox(
+        self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("repositories"), 
-            component.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.GetRepositoryPaths()
         )
 
     def on_destroy(self, widget):
@@ -29,7 +28,7 @@ class Switch:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_revision_number_focused(self, widget, data=None):
         self.view.get_widget("revision_number_opt").set_active(True)
@@ -42,9 +41,9 @@ class Switch:
             self.view.get_widget("revision_number_opt").set_active(True)
             self.view.get_widget("revision_number").set_text(data)
 
-class LogForSwitch(log.Log):
+class LogForSwitch(nautilussvn.ui.log.Log):
     def __init__(self, ok_clicked=None):
-        log.Log.__init__(self)
+        nautilussvn.ui.log.Log.__init__(self)
         self.ok_clicked = ok_clicked
         
     def on_destroy(self, widget):

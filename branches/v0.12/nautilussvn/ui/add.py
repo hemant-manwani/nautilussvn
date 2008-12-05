@@ -4,22 +4,21 @@ import pygtk
 import gobject
 import gtk
 
-import component.widget
-import component.view
-
-import notification
+import nautilussvn.ui
+import nautilussvn.ui.widget
+import nautilussvn.ui.notification
 
 class Add:
 
     TOGGLE_ALL = True
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "add", "Add")
+        self.view = nautilussvn.ui.InterfaceView(self, "add", "Add")
 
-        self.files_table = component.widget.Table(
+        self.files_table = nautilussvn.ui.widget.Table(
             self.view.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [component.widget.TOGGLE_BUTTON, "Path", "Extension"]
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
         self.files = [
@@ -37,7 +36,7 @@ class Add:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_select_all_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
@@ -55,7 +54,7 @@ class Add:
                 treeview_model = treeview.get_model()
                 fileinfo = treeview_model[path]
                 
-                context_menu = component.widget.ContextMenu([{
+                context_menu = nautilussvn.ui.widget.ContextMenu([{
                         'label': 'View Diff',
                         'signals': {
                             'activate': {

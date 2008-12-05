@@ -4,26 +4,29 @@ import pygtk
 import gobject
 import gtk
 
-import widget
-import helper
-import view
+import nautilussvn.ui
+import nautilussvn.ui.widget
+
+import nautilussvn.lib.helper
 
 GLADE = 'dialogs'
 
 class PreviousMessages:
     def __init__(self):
-        self.view = view.InterfaceView(self, GLADE, "PreviousMessages")
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "PreviousMessages")
         
     def run(self):
-        self.message = widget.TextView(self.view.get_widget("prevmes_message"))
+        self.message = nautilussvn.ui.widget.TextView(
+            self.view.get_widget("prevmes_message")
+        )
 
-        self.message_table = widget.Table(
+        self.message_table = nautilussvn.ui.widget.Table(
             self.view.get_widget("prevmes_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Date", "Message"]
         )
         
-        self.entries = helper.GetPreviousMessages()
+        self.entries = nautilussvn.lib.helper.GetPreviousMessages()
         for entry in self.entries:
             self.message_table.append(entry)
         
@@ -66,7 +69,7 @@ class Certificate:
     def __init__(self, realm="", host="", 
             issuer_from="", issuer_to="", valid="", fingerprint=""):
             
-        self.view = view.InterfaceView(self, GLADE, "Certificate")
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Certificate")
         
         self.view.get_widget("cert_realm").set_label(realm)
         self.view.get_widget("cert_host").set_label(host)
@@ -99,7 +102,7 @@ class Certificate:
         
 class Authorization:
     def __init__(self, location="", realm=""):
-        self.view = view.InterfaceView(self, GLADE, "Authorization")
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Authorization")
         
         self.view.get_widget("auth_location").set_label(location)
         self.view.get_widget("auth_realm").set_label(realm)
@@ -128,14 +131,20 @@ class Property:
         'svn:externals','svn:special']
 
     def __init__(self, name="", value=""):
-        self.view = view.InterfaceView(self, GLADE, "Property")
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Property")
         
         self.save_name = name
         self.save_value = value
         
-        self.names = widget.ComboBox(self.view.get_widget("property_names"), self.PROPS)
+        self.names = nautilussvn.ui.widget.ComboBox(
+            self.view.get_widget("property_names"), 
+            self.PROPS
+        )
         self.names.set_active_from_value(name)
-        self.value = widget.TextView(self.view.get_widget("property_value"), value)
+        self.value = nautilussvn.ui.widget.TextView(
+            self.view.get_widget("property_value"), 
+            value
+        )
         
     def run(self):
         self.dialog = self.view.get_widget("Property")

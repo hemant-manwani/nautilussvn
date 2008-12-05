@@ -4,9 +4,10 @@ import pygtk
 import gobject
 import gtk
 
-import component.widget
-import component.view
-import component.helper
+import nautilussvn.ui
+import nautilussvn.ui.widget
+
+import nautilussvn.lib.helper
 
 class Log:
 
@@ -14,9 +15,9 @@ class Log:
     selected_row = []
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "log", "Log")
+        self.view = nautilussvn.ui.InterfaceView(self, "log", "Log")
 
-        self.revisions_table = component.widget.Table(
+        self.revisions_table = nautilussvn.ui.widget.Table(
             self.view.get_widget("revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
@@ -34,7 +35,7 @@ class Log:
         for row in self.revisions:
             self.revisions_table.append(row)
 
-        self.paths_table = component.widget.Table(
+        self.paths_table = nautilussvn.ui.widget.Table(
             self.view.get_widget("paths_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
@@ -46,7 +47,7 @@ class Log:
         for row in self.paths:
             self.paths_table.append(row)
 
-        self.message = component.widget.TextView(
+        self.message = nautilussvn.ui.widget.TextView(
             self.view.get_widget("message")
         )
 
@@ -84,7 +85,7 @@ class Log:
             returner.append(int(row[0]))
         
         returner.sort()
-        return component.helper.encode_revisions(returner)
+        return nautilussvn.lib.helper.encode_revisions(returner)
 
     def get_selected_revision_number(self):
         return self.selected_row[0]

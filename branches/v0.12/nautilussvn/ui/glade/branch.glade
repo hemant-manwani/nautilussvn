@@ -2,7 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
 <!--Generated with glade3 3.4.5 on Thu Dec  4 19:52:48 2008 -->
 <glade-interface>
-  <widget class="GtkWindow" id="Copy">
+  <widget class="GtkWindow" id="Branch">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Copy / Branch</property>
     <signal name="destroy" handler="on_destroy"/>

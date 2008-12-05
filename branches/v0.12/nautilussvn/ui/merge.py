@@ -4,15 +4,14 @@ import pygtk
 import gobject
 import gtk
 
-import component.view
-import component.helper
+import nautilussvn.ui.log
+import nautilussvn.ui.notification
 
-import log
-import notification
+import nautilussvn.lib.helper
 
 class MergeType:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "merge", "MergeType")
+        self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeType")
 
     def on_mergetype_destroy(self, widget):
         gtk.main_quit()
@@ -29,11 +28,11 @@ class MergeRange:
     Provides an interface for the Merge Wizard Step 2a (Range of Revisions)
     """
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "merge", "MergeRange")
+        self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeRange")
 
-        self.repositories = component.widget.ComboBox(
+        self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergerange_from_urls"), 
-            component.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.GetRepositoryPaths()
         )
 
     def on_mergerange_destroy(self, widget):
@@ -62,11 +61,11 @@ class MergeBranch:
     Provides an interface for the Merge Wizard Step 2b (Reintegrate Branch)
     """
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "merge", "MergeBranch")
+        self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeBranch")
 
-        self.repositories = component.widget.ComboBox(
+        self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergebranch_from_urls"), 
-            component.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.GetRepositoryPaths()
         )
 
     def on_mergebranch_destroy(self, widget):
@@ -92,14 +91,14 @@ class MergeTree:
     Provides an interface for the Merge Wizard Step 2c (Merge two trees)
     """
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "merge", "MergeTree")
+        self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeTree")
 
-        previous_urls = component.helper.GetRepositoryPaths()
-        self.from_urls = component.widget.ComboBox(
+        previous_urls = nautilussvn.lib.helper.GetRepositoryPaths()
+        self.from_urls = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergetree_from_urls"), 
             previous_urls
         )
-        self.to_urls = component.widget.ComboBox(
+        self.to_urls = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergetree_to_urls"), 
             previous_urls
         )
@@ -153,9 +152,9 @@ class MergeOptions:
     }
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "merge", "MergeOptions")
+        self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeOptions")
 
-        self.depth = component.widget.ComboBox(
+        self.depth = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergeoptions_depth")
         )
         for i in self.DEPTHS.values():
@@ -177,14 +176,14 @@ class MergeOptions:
     def on_mergeoptions_test_merge_clicked(self, widget):
         self.view.hide()
 
-class LogForMerge(log.Log):
+class LogForMerge(nautilussvn.ui.log.Log):
     def __init__(self, ok_callback=None, multiple=False):
         """
         Override the normal Log class so that we can hide the window as we need.
         Also, provide a callback for when the OK button is clicked so that we
         can get some desired data.
         """
-        log.Log.__init__(self)
+        nautilussvn.ui.log.Log.__init__(self)
         self.ok_callback = ok_callback
         self.multiple = multiple
         
@@ -204,5 +203,5 @@ class LogForMerge(log.Log):
         
 
 if __name__ == "__main__":
-    window = MergeOptions()
+    window = MergeBranch()
     gtk.main()

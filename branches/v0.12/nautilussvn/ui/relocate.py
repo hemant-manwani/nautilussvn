@@ -4,10 +4,10 @@ import pygtk
 import gobject
 import gtk
 
-import component.view
-import component.helper
+import nautilussvn.ui
+import nautilussvn.ui.notification
 
-import notification
+import nautilussvn.lib.helper
 
 class Relocate:
     """
@@ -16,11 +16,11 @@ class Relocate:
     """
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "relocate", "Relocate")
+        self.view = nautilussvn.ui.InterfaceView(self, "relocate", "Relocate")
 
-        self.repositories = component.widget.ComboBox(
+        self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("to_urls"), 
-            component.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.GetRepositoryPaths()
         )
 
     def on_destroy(self, widget):
@@ -31,7 +31,7 @@ class Relocate:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
 if __name__ == "__main__":
     window = Relocate()

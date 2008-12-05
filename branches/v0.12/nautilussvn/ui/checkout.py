@@ -4,13 +4,13 @@ import pygtk
 import gobject
 import gtk
 
-import component.widget
-import component.helper
-import component.dialog
-import component.view
+import nautilussvn.ui
+import nautilussvn.ui.widget
+import nautilussvn.ui.notification
+import nautilussvn.ui.log
+import nautilussvn.ui.dialog
 
-import log
-import notification
+import nautilussvn.lib.helper
 
 class Checkout:
 
@@ -22,13 +22,13 @@ class Checkout:
     ]
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "checkout", "Checkout")
+        self.view = nautilussvn.ui.InterfaceView(self, "checkout", "Checkout")
 
-        self.repositories = component.widget.ComboBox(
+        self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("repositories"), 
-            component.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.GetRepositoryPaths()
         )
-        self.depth = component.widget.ComboBox(
+        self.depth = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("depth")
         )
         for i in self.DEPTHS:
@@ -43,13 +43,13 @@ class Checkout:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_revision_number_focused(self, widget, data=None):
         self.view.get_widget("revision_number_opt").set_active(True)
 
     def on_file_chooser_clicked(self, widget, data=None):
-        chooser = component.dialog.FileChooser()
+        chooser = nautilussvn.ui.dialog.FileChooser()
         path = chooser.run()
         if path is not None:
             self.view.get_widget("destination").set_text(path)
@@ -62,9 +62,9 @@ class Checkout:
             self.view.get_widget("revision_number_opt").set_active(True)
             self.view.get_widget("revision_number").set_text(data)
 
-class LogForCheckout(log.Log):
+class LogForCheckout(nautilussvn.ui.log.Log):
     def __init__(self, ok_clicked=None):
-        log.Log.__init__(self)
+        nautilussvn.ui.log.Log.__init__(self)
         self.ok_clicked = ok_clicked
         
     def on_destroy(self, widget):

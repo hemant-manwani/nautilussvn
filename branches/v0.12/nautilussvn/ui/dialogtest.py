@@ -4,11 +4,11 @@ import pygtk
 import gobject
 import gtk
 
-import component.dialog
+import nautilussvn.ui.dialog
 
 class CertificateTest:
     def __init__(self):
-        self.dialog = component.dialog.Certificate(
+        self.dialog = nautilussvn.ui.dialog.Certificate(
             realm="this realm", host="this host", 
             issuer_from="2008-10-20", issuer_to="2008-12-12", 
             valid="valid from xxx to xxx", fingerprint="this fingerprint"
@@ -19,7 +19,7 @@ class CertificateTest:
 
 class AuthorizationTest:
     def __init__(self):
-        self.dialog = component.dialog.Authorization(
+        self.dialog = nautilussvn.ui.dialog.Authorization(
             location="this location", 
             realm="this realm"
         )
@@ -29,10 +29,10 @@ class AuthorizationTest:
 
 class PropertyTest:
     def __init__(self):
-        self.dialog = component.dialog.Property(name="prop name", value="")
+        self.dialog = nautilussvn.ui.dialog.Property(name="prop name", value="")
         result = self.dialog.run()
         return
         
 if __name__ == "__main__":
-    window = PropertyTest()
+    window = CertificateTest()
     gtk.main()
