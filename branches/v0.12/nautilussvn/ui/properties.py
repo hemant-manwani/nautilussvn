@@ -16,7 +16,7 @@ class Properties:
         self.view = component.view.InterfaceView(self, "properties", "Properties")
         
         self.table = component.widget.Table(
-            self.view.get_widget("props_table"),
+            self.view.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Name", "Value"]
         )        
@@ -27,29 +27,29 @@ class Properties:
         for entry in self.entries:
             self.table.append(entry)
 
-    def on_props_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
 
-    def on_props_cancel_clicked(self, widget):
+    def on_cancel_clicked(self, widget):
         gtk.main_quit()
 
-    def on_props_ok_clicked(self, widget):
+    def on_ok_clicked(self, widget):
         print "OK"
         
-    def on_props_new_clicked(self, widget):
+    def on_new_clicked(self, widget):
         dialog = component.dialog.Property()
         name,value = dialog.run()
         if name is not None:
             self.entries.append([name,value])
     
-    def on_props_edit_clicked(self, widget):
+    def on_edit_clicked(self, widget):
         (name,value) = self.get_selected_name_value()
         dialog = component.dialog.Property(name, value)
         name,value = dialog.run()
         if name is not None:
             self.set_selected_name_value(name, value)
     
-    def on_props_delete_clicked(self, widget, data=None):
+    def on_delete_clicked(self, widget, data=None):
         self.table.remove(self.SELECTED_ROW)
     
     def set_selected_name_value(self, name, value):
@@ -61,19 +61,19 @@ class Properties:
             returner = self.table.get_row(self.SELECTED_ROW)
         return returner
     
-    def on_props_table_button_pressed(self, treeview, event=None):
+    def on_table_button_pressed(self, treeview, event=None):
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
         if pathinfo is not None:
             path, col, cellx, celly = pathinfo
             treeview.grab_focus()
             treeview.set_cursor(path, col, 0)
             self.SELECTED_ROW = path
-            self.view.get_widget("props_edit").set_sensitive(True)
-            self.view.get_widget("props_delete").set_sensitive(True)
+            self.view.get_widget("edit").set_sensitive(True)
+            self.view.get_widget("delete").set_sensitive(True)
         else:
             self.SELECTED_ROW = None
-            self.view.get_widget("props_edit").set_sensitive(False)
-            self.view.get_widget("props_delete").set_sensitive(False)
+            self.view.get_widget("edit").set_sensitive(False)
+            self.view.get_widget("delete").set_sensitive(False)
 
 if __name__ == "__main__":
     window = Properties()
