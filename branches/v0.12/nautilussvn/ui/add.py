@@ -10,7 +10,7 @@ import nautilussvn.ui.notification
 
 class Add:
 
-    TOGGLE_ALL = True
+    TOGGLE_ALL = False
 
     def __init__(self):
         self.view = nautilussvn.ui.InterfaceView(self, "add", "Add")

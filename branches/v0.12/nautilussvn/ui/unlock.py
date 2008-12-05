@@ -6,13 +6,13 @@ import gtk
 
 import nautilussvn.ui.add
 
-class Revert(nautilussvn.ui.add.Add):
+class Unlock(nautilussvn.ui.add.Add):
     def __init__(self):
         nautilussvn.ui.add.Add.__init__(self)
         
         self.window = self.view.get_widget("Add")
-        self.window.set_title("Revert")
-        
+        self.window.set_title("Unlock")
+
 if __name__ == "__main__":
-    window = Revert()
+    window = Unlock()
     gtk.main()
