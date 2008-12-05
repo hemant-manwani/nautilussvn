@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 19:03:12 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec  4 19:52:48 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Copy">
     <property name="visible">True</property>
@@ -111,11 +111,12 @@
                                 <child>
                                   <widget class="GtkHBox" id="hbox11">
                                     <property name="visible">True</property>
+                                    <property name="spacing">10</property>
                                     <child>
-                                      <widget class="GtkRadioButton" id="from_rev_opt">
+                                      <widget class="GtkRadioButton" id="from_revision_number_opt">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Copy from specific revision</property>
+                                        <property name="label" translatable="yes">Copy from revision</property>
                                         <property name="response_id">0</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
@@ -123,15 +124,31 @@
                                       </widget>
                                     </child>
                                     <child>
-                                      <widget class="GtkEntry" id="from_rev">
+                                      <widget class="GtkEntry" id="from_revision_number">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <signal name="focus_in_event" handler="on_from_rev_focused"/>
+                                        <signal name="focus_in_event" handler="on_from_revision_number_focused"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">False</property>
                                         <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkButton" id="show_log">
+                                        <property name="width_request">100</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="label" translatable="yes">Show log</property>
+                                        <property name="response_id">0</property>
+                                        <signal name="clicked" handler="on_show_log_clicked"/>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -140,7 +157,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkRadioButton" id="from_working_opt">
+                                  <widget class="GtkRadioButton" id="from_working_copy_opt">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="label" translatable="yes">Copy from working copy</property>
