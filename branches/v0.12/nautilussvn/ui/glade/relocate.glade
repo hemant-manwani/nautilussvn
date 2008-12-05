@@ -6,7 +6,7 @@
     <property name="width_request">640</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Relocate</property>
-    <signal name="destroy" handler="on_relocate_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox28">
         <property name="visible">True</property>
@@ -37,7 +37,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="relocate_from">
+                      <widget class="GtkLabel" id="from">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">http://svn.cobradragon.com/trunk/haresvn</property>
                       </widget>
@@ -71,10 +71,10 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBoxEntry" id="relocate_to_urls">
+                      <widget class="GtkComboBoxEntry" id="to_urls">
                         <property name="visible">True</property>
                         <child internal-child="entry">
-                          <widget class="GtkEntry" id="relocate_to">
+                          <widget class="GtkEntry" id="to">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </widget>
@@ -116,25 +116,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="relocate_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_relocate_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="relocate_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_relocate_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
