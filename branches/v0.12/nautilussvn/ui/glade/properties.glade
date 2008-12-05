@@ -6,7 +6,7 @@
     <property name="width_request">500</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Properties</property>
-    <signal name="destroy" handler="on_props_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox12">
         <property name="visible">True</property>
@@ -23,7 +23,7 @@
                   <widget class="GtkVBox" id="vbox13">
                     <property name="visible">True</property>
                     <child>
-                      <widget class="GtkLabel" id="props_path">
+                      <widget class="GtkLabel" id="path">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="xpad">5</property>
@@ -43,11 +43,11 @@
                         <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                         <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
                         <child>
-                          <widget class="GtkTreeView" id="props_table">
+                          <widget class="GtkTreeView" id="table">
                             <property name="height_request">150</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <signal name="button_press_event" handler="on_props_table_button_pressed"/>
+                            <signal name="button_press_event" handler="on_table_button_pressed"/>
                           </widget>
                         </child>
                       </widget>
@@ -61,38 +61,38 @@
                         <property name="border_width">5</property>
                         <property name="layout_style">GTK_BUTTONBOX_START</property>
                         <child>
-                          <widget class="GtkButton" id="props_new">
+                          <widget class="GtkButton" id="new">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">New...</property>
                             <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_props_new_clicked"/>
+                            <signal name="clicked" handler="on_new_clicked"/>
                           </widget>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="props_edit">
+                          <widget class="GtkButton" id="edit">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">Edit...</property>
                             <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_props_edit_clicked"/>
+                            <signal name="clicked" handler="on_edit_clicked"/>
                           </widget>
                           <packing>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="props_delete">
+                          <widget class="GtkButton" id="delete">
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">Delete</property>
                             <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_props_delete_clicked"/>
+                            <signal name="clicked" handler="on_delete_clicked"/>
                           </widget>
                           <packing>
                             <property name="position">2</property>
@@ -128,25 +128,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="props_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_props_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="props_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_props_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
