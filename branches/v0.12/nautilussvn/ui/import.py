@@ -16,25 +16,25 @@ class Import:
         self.view = component.view.InterfaceView(self, "import", "Import")
 
         self.repositories = component.widget.ComboBox(
-            self.view.get_widget("import_repositories"), 
+            self.view.get_widget("repositories"), 
             component.helper.GetRepositoryPaths()
         )
         
         self.message = component.widget.TextView(
-            self.view.get_widget("import_message")
+            self.view.get_widget("message")
         )
 
-    def on_import_destroy(self, widget):
+    def on_destroy(self, widget):
         gtk.main_quit()
 
-    def on_import_cancel_clicked(self, widget):
+    def on_cancel_clicked(self, widget):
         gtk.main_quit()
 
-    def on_import_ok_clicked(self, widget):
+    def on_ok_clicked(self, widget):
         self.view.hide()
         self.notification = notification.Notification()
 
-    def on_import_previous_messages_clicked(self, widget, data=None):
+    def on_previous_messages_clicked(self, widget, data=None):
         dialog = component.dialog.PreviousMessages()
         message = dialog.run()
         if message is not None:
