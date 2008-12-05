@@ -116,21 +116,21 @@ class MergeTree:
     def on_mergetree_forward_clicked(self, widget):
         self.view.hide()
         
-    def on_mergetree_from_show_log_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_from_log_closed, multiple=False)
+    def on_mergetree_from_show_clicked(self, widget):
+        LogForMerge(ok_callback=self.on_from_closed, multiple=False)
 
-    def on_from_log_closed(self, data):
+    def on_from_closed(self, data):
         self.view.get_widget("mergetree_from_revision_number").set_text(data)
         self.view.get_widget("mergetree_from_revision_number_opt").set_active(True)
 
-    def on_mergetree_to_show_log_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_to_log_closed, multiple=False)
+    def on_mergetree_to_show_clicked(self, widget):
+        LogForMerge(ok_callback=self.on_to_closed, multiple=False)
 
-    def on_to_log_closed(self, data):
+    def on_to_closed(self, data):
         self.view.get_widget("mergetree_to_revision_number").set_text(data)
         self.view.get_widget("mergetree_to_revision_number_opt").set_active(True)
 
-    def on_mergetree_working_copy_show_log_clicked(self, widget):
+    def on_mergetree_working_copy_show_clicked(self, widget):
         LogForMerge()
         
     def on_mergetree_from_revision_number_focused(self, widget, data):
@@ -188,13 +188,13 @@ class LogForMerge(log.Log):
         self.ok_callback = ok_callback
         self.multiple = multiple
         
-    def on_log_destroy(self, widget):
+    def on_destroy(self, widget):
         self.view.hide()
     
-    def on_log_cancel_clicked(self, widget, data=None):
+    def on_cancel_clicked(self, widget, data=None):
         self.view.hide()
     
-    def on_log_ok_clicked(self, widget, data=None):
+    def on_ok_clicked(self, widget, data=None):
         self.view.hide()
         if self.ok_callback is not None:
             if self.multiple == True:

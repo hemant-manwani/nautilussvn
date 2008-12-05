@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec  4 19:26:12 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Switch">
     <property name="width_request">500</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Switch to Branch / Tag</property>
-    <signal name="destroy" handler="on_switch_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox19">
         <property name="visible">True</property>
@@ -37,7 +37,7 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="switch_path">
+                      <widget class="GtkLabel" id="path">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">file:///home/adam/Development/nautilussvn</property>
@@ -66,10 +66,10 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBoxEntry" id="switch_repositories">
+                      <widget class="GtkComboBoxEntry" id="repositories">
                         <property name="visible">True</property>
                         <child internal-child="entry">
-                          <widget class="GtkEntry" id="switch_repository">
+                          <widget class="GtkEntry" id="repository">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                           </widget>
@@ -118,7 +118,7 @@
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
                     <child>
-                      <widget class="GtkRadioButton" id="switch_revision_head_opt">
+                      <widget class="GtkRadioButton" id="revision_head_opt">
                         <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -132,22 +132,6 @@
                         <property name="fill">False</property>
                       </packing>
                     </child>
-                    <child>
-                      <widget class="GtkButton" id="switch_show_log">
-                        <property name="width_request">100</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Show Log</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_switch_show_log_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -158,8 +142,9 @@
                   <widget class="GtkHBox" id="hbox8">
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkRadioButton" id="switch_revision_number_opt">
+                      <widget class="GtkRadioButton" id="revision_number_opt">
                         <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -167,19 +152,15 @@
                         <property name="response_id">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">switch_revision_head_opt</property>
+                        <property name="group">revision_head_opt</property>
                       </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                      </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="switch_revision_number">
+                      <widget class="GtkEntry" id="revision_number">
                         <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <signal name="focus_in_event" handler="on_switch_revision_number_focused"/>
+                        <signal name="focus_in_event" handler="on_revision_number_focused"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -187,10 +168,24 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <widget class="GtkButton" id="show_log">
+                        <property name="width_request">100</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="label" translatable="yes">Show log</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_show_log_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -220,25 +215,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="switch_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_switch_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="switch_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_switch_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>

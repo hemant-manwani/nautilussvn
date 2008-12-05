@@ -59,20 +59,20 @@ class UpdateToRevision:
     def on_update_revision_number_focused(self, widget, data=None):
         self.view.get_widget("update_revision_number_opt").set_active(True)
 
-    def on_update_show_log_clicked(self, widget, data=None):
-        self.logview = LogForUpdate()
+    def on_update_show_clicked(self, widget, data=None):
+        LogForUpdate()
 
 class LogForUpdate(log.Log):
     def __init__(self):
         log.Log.__init__(self)
         
-    def on_log_destroy(self, widget):
+    def on_destroy(self, widget):
         self.view.hide()
     
-    def on_log_cancel_clicked(self, widget, data=None):
+    def on_cancel_clicked(self, widget, data=None):
         self.view.hide()
     
-    def on_log_ok_clicked(self, widget, data=None):
+    def on_ok_clicked(self, widget, data=None):
         self.view.hide()
 
 
