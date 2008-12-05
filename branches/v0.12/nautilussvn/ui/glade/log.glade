@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec  4 19:08:21 2008 -->
 <glade-interface>
-
   <widget class="GtkWindow" id="Log">
     <property name="width_request">640</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Log</property>
-    <signal name="destroy" handler="on_log_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox11">
         <property name="visible">True</property>
@@ -22,11 +21,11 @@
             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
             <child>
-              <widget class="GtkTreeView" id="log_revisions_table">
+              <widget class="GtkTreeView" id="revisions_table">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="rubber_banding">True</property>
-                <signal name="button_release_event" handler="on_log_revisions_table_button_released"/>
+                <signal name="button_release_event" handler="on_revisions_table_button_released"/>
               </widget>
             </child>
           </widget>
@@ -48,9 +47,10 @@
                     <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <child>
-                      <widget class="GtkTextView" id="log_message">
+                      <widget class="GtkTextView" id="message">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="wrap_mode">GTK_WRAP_WORD</property>
                       </widget>
                     </child>
                   </widget>
@@ -81,7 +81,7 @@
             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
             <child>
-              <widget class="GtkTreeView" id="log_paths_table">
+              <widget class="GtkTreeView" id="paths_table">
                 <property name="height_request">150</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -97,7 +97,7 @@
             <property name="visible">True</property>
             <property name="border_width">5</property>
             <child>
-              <widget class="GtkProgressBar" id="log_progress_bar">
+              <widget class="GtkProgressBar" id="progress_bar">
                 <property name="visible">True</property>
                 <property name="text" translatable="yes">Loading...</property>
               </widget>
@@ -114,25 +114,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="log_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_log_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="log_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_log_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>

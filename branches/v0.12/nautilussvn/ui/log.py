@@ -17,7 +17,7 @@ class Log:
         self.view = component.view.InterfaceView(self, "log", "Log")
 
         self.revisions_table = component.widget.Table(
-            self.view.get_widget("log_revisions_table"),
+            self.view.get_widget("revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Revision", "Author", 
@@ -35,7 +35,7 @@ class Log:
             self.revisions_table.append(row)
 
         self.paths_table = component.widget.Table(
-            self.view.get_widget("log_paths_table"),
+            self.view.get_widget("paths_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
         )
@@ -47,22 +47,22 @@ class Log:
             self.paths_table.append(row)
 
         self.message = component.widget.TextView(
-            self.view.get_widget("log_message")
+            self.view.get_widget("message")
         )
 
-        self.progress_bar = self.view.get_widget("log_progress_bar")
+        self.progress_bar = self.view.get_widget("progress_bar")
         self.progress_bar.set_fraction(.3)
 
-    def on_log_destroy(self, widget, data=None):
+    def on_destroy(self, widget, data=None):
         gtk.main_quit()
 
-    def on_log_cancel_clicked(self, widget, data=None):
+    def on_cancel_clicked(self, widget, data=None):
         gtk.main_quit()
         
-    def on_log_ok_clicked(self, widget, data=None):
+    def on_ok_clicked(self, widget, data=None):
         print "OK"
 
-    def on_log_revisions_table_button_released(self, treeview, event):
+    def on_revisions_table_button_released(self, treeview, event):
         path = treeview.get_path_at_pos(int(event.x), int(event.y))
         
         if path is not None:
