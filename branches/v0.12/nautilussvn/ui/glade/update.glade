@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec  4 19:38:23 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Update">
     <property name="width_request">400</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Update</property>
-    <signal name="destroy" handler="on_update_destroy"/>
+    <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox25">
         <property name="visible">True</property>
@@ -24,7 +24,7 @@
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
                     <child>
-                      <widget class="GtkRadioButton" id="update_revision_head_opt">
+                      <widget class="GtkRadioButton" id="revision_head_opt">
                         <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -38,22 +38,6 @@
                         <property name="fill">False</property>
                       </packing>
                     </child>
-                    <child>
-                      <widget class="GtkButton" id="update_show_log">
-                        <property name="width_request">100</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Show log</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_update_show_log_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -64,32 +48,45 @@
                   <widget class="GtkHBox" id="hbox14">
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
+                    <property name="spacing">10</property>
                     <child>
-                      <widget class="GtkRadioButton" id="update_revision_number_opt">
+                      <widget class="GtkRadioButton" id="revision_number_opt">
                         <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label" translatable="yes">Revision</property>
                         <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">update_revision_head_opt</property>
+                        <property name="group">revision_head_opt</property>
                       </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                      </packing>
                     </child>
                     <child>
-                      <widget class="GtkEntry" id="update_revision_number">
+                      <widget class="GtkEntry" id="revision_number">
                         <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <signal name="focus_in_event" handler="on_update_revision_number_focused"/>
+                        <signal name="focus_in_event" handler="on_revision_number_focused"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="show_log">
+                        <property name="width_request">100</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="label" translatable="yes">Show log</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_show_log_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </widget>
@@ -121,7 +118,7 @@
                 <property name="visible">True</property>
                 <property name="border_width">3</property>
                 <child>
-                  <widget class="GtkComboBox" id="update_depth">
+                  <widget class="GtkComboBox" id="depth">
                     <property name="visible">True</property>
                     <property name="border_width">2</property>
                   </widget>
@@ -131,7 +128,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="update_omit_externals">
+                  <widget class="GtkCheckButton" id="omit_externals">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="border_width">2</property>
@@ -167,25 +164,25 @@
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="update_cancel">
+              <widget class="GtkButton" id="cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_update_cancel_clicked"/>
+                <signal name="clicked" handler="on_cancel_clicked"/>
               </widget>
             </child>
             <child>
-              <widget class="GtkButton" id="update_ok">
+              <widget class="GtkButton" id="ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_update_ok_clicked"/>
+                <signal name="clicked" handler="on_ok_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
