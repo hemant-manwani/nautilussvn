@@ -24,9 +24,11 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
       # Merge a range of revisions (Step 2a)
       # Reintegrate a branch (Step 2b)
       # Merge two different trees (Step 2c)
-  * Merge Options (Step 3)
+    * Merge Options (Step 3)
   * Lock / Unlock
   * Rename
+  * Resolve
+  * Settings
 
 = Dialogs =
   * Previous Messages
@@ -54,3 +56,21 @@ Regarding spacing, the bottom of each window should have a horizontal button box
 
 === Frames ===
 Groups of widgets with a similar purpose or functionality should generally be enclosed by frame with an ETCHED_IN shadow.  There should be a 5px TOTAL border width inside the frame.  However, if you have a vertical box inside the frame, then the vertical box should have a 3px border width, and each item inside the vertical box should have a 2px border width; this totals to 5px.
+
+== Settings Manager ==
+The next version of NautilusSvn is going to have a basic settings manager that has a few important features.  The breadth and number of options will be expanded in succeeding releases.  Here is a tentative list of tabs/options I'd like to implement.
+
+  * General
+    * Language
+    * Subversion-specific Options (subversion config file path, global ignore pattern)
+  * External Programs
+    * Compare Different Files (def: meld)
+    * Merge Different Files (def: meld)
+    * View .diff files (def: meld)
+    * Repository Browser (def: firefox)
+  * Saved Data (Consists of buttons to clear each listed option)
+    * URL History
+    * Log messages
+    * Authentication data
+
+In the future I'd like to add support for setting hook scripts, customizing the context menu and dialogs, and editing the icon set.  There are also various subtle options that can be added into each aforementioned tab, but many will have to wait.
