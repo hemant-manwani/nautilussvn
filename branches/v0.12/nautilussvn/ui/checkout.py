@@ -55,9 +55,9 @@ class Checkout:
             self.view.get_widget("destination").set_text(path)
 
     def on_show_log_clicked(self, widget, data=None):
-        LogForCheckout(ok_clicked=self.on_closed)
+        LogForCheckout(ok_clicked=self.on_log_closed)
     
-    def on_closed(self, data):
+    def on_log_closed(self, data):
         if data is not None:
             self.view.get_widget("revision_number_opt").set_active(True)
             self.view.get_widget("revision_number").set_text(data)
