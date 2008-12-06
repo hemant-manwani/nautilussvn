@@ -1,21 +1,22 @@
-#!/usr/bin/env python
-
 import pygtk
 import gobject
 import gtk
 
-import component.dialog
-import component.view
-import component.widget
+import nautilussvn.ui
+import nautilussvn.ui.dialog
+import nautilussvn.ui.widget
+import nautilussvn.ui.notification
+import nautilussvn.ui.log
 
-import notification
-import log
-
-class Copy:
+class Branch:
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "copy", "Copy")
-        self.message = component.widget.TextView(
+        self.view = nautilussvn.ui.InterfaceView(self, "branch", "Branch")
+        self.message = nautilussvn.ui.widget.TextView(
             self.view.get_widget("message")
+        )
+        self.urls = nautilussvn.ui.widget.ComboBox(
+            self.view.get_widget("to_urls"), 
+            nautilussvn.lib.helper.GetRepositoryPaths()
         )
 
     def on_destroy(self, widget):
@@ -26,13 +27,13 @@ class Copy:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = notification.Notification()
+        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_from_revision_number_focused(self, widget, data=None):
         self.view.get_widget("from_revision_number_opt").set_active(True)
 
     def on_previous_messages_clicked(self, widget, data=None):
-        dialog = component.dialog.PreviousMessages()
+        dialog = nautilussvn.ui.dialog.PreviousMessages()
         message = dialog.run()
         if message is not None:
             self.message.set_text(message)
@@ -45,9 +46,9 @@ class Copy:
             self.view.get_widget("from_revision_number_opt").set_active(True)
             self.view.get_widget("from_revision_number").set_text(data)
 
-class LogForCopy(log.Log):
+class LogForCopy(nautilussvn.ui.log.Log):
     def __init__(self, ok_clicked=None):
-        log.Log.__init__(self)
+        nautilussvn.ui.log.Log.__init__(self)
         self.ok_clicked = ok_clicked
         
     def on_destroy(self, widget):
@@ -62,5 +63,5 @@ class LogForCopy(log.Log):
             self.ok_clicked(self.get_selected_revision_number())
 
 if __name__ == "__main__":
-    window = Copy()
+    window = Branch()
     gtk.main()
