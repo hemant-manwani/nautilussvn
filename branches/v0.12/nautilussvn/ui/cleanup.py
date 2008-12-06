@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-
 import pygtk
 import gobject
 import gtk
 
-import component.view
+import nautilussvn.ui
 
 class Cleanup:
     """
@@ -16,7 +14,7 @@ class Cleanup:
     """
 
     def __init__(self):
-        self.view = component.view.InterfaceView(self, "cleanup", "Cleanup")
+        self.view = nautilussvn.ui.InterfaceView(self, "cleanup", "Cleanup")
 
     def on_destroy(self, widget):
         gtk.main_quit()
