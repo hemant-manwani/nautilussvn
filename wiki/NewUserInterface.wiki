@@ -57,11 +57,11 @@ Regarding spacing, the bottom of each window should have a horizontal button box
 === Frames ===
 Groups of widgets with a similar purpose or functionality should generally be enclosed by frame with an ETCHED_IN shadow.  There should be a 5px TOTAL border width inside the frame.  However, if you have a vertical box inside the frame, then the vertical box should have a 3px border width, and each item inside the vertical box should have a 2px border width; this totals to 5px.
 
-== Settings Manager ==
+= Settings Manager =
 The next version of NautilusSvn is going to have a basic settings manager that has a few important features.  The breadth and number of options will be expanded in succeeding releases.  Here is a tentative list of tabs/options I'd like to implement.
 
   * General
-    * Language
+    * NautilusSvn-specific Options (language)
     * Subversion-specific Options (subversion config file path, global ignore pattern)
   * External Programs
     * Compare Different Files (def: meld)
