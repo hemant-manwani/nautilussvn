@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import pygtk
 import gobject
 import gtk

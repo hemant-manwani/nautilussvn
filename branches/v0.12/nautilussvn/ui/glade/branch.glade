@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Dec  5 13:54:30 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Dec  6 11:23:07 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Branch">
+    <property name="width_request">550</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Copy / Branch</property>
     <signal name="destroy" handler="on_destroy"/>
@@ -72,9 +73,14 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkEntry" id="to_url">
+                          <widget class="GtkComboBoxEntry" id="to_urls">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <child internal-child="entry">
+                              <widget class="GtkEntry" id="to_url">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </widget>
+                            </child>
                           </widget>
                           <packing>
                             <property name="position">1</property>
