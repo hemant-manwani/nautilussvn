@@ -1,6 +1,8 @@
 import pygtk
 import gobject
 import gtk
+
+import nautilussvn.lib.helper
     
 TOGGLE_BUTTON = 'TOGGLE_BUTTON'
 

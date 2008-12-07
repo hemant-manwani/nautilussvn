@@ -23,7 +23,6 @@ class PreviousMessages:
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Date", "Message"]
         )
-        
         self.entries = nautilussvn.lib.helper.GetPreviousMessages()
         for entry in self.entries:
             self.message_table.append(entry)
