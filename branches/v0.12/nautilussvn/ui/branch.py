@@ -8,6 +8,8 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.notification
 import nautilussvn.ui.log
 
+import nautilussvn.lib.helper
+
 class Branch:
     def __init__(self):
         self.view = nautilussvn.ui.InterfaceView(self, "branch", "Branch")

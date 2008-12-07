@@ -7,6 +7,8 @@ import nautilussvn.ui.notification
 
 import nautilussvn.lib.helper
 
+STEP2 = None
+
 class MergeType:
     def __init__(self):
         self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeType")
@@ -19,15 +21,24 @@ class MergeType:
 
     def on_mergetype_forward_clicked(self, widget):
         self.view.hide()
-        MergeRange()
+        
+        if self.view.get_widget("mergetype_range_opt").get_active():
+            STEP2 = MergeRange(self)
+        elif self.view.get_widget("mergetype_reintegrate_opt").get_active():
+            STEP2 = MergeBranch(self)
+        elif self.view.get_widget("mergetype_tree_opt").get_active():
+            STEP2 = MergeTree(self)
+            
+        STEP2.view.show()
 
 class MergeRange:
     """
     Provides an interface for the Merge Wizard Step 2a (Range of Revisions)
     """
-    def __init__(self):
+    def __init__(self, parent):
         self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeRange")
-
+        self.parent = parent
+        
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergerange_from_urls"), 
             nautilussvn.lib.helper.GetRepositoryPaths()
@@ -41,9 +52,12 @@ class MergeRange:
 
     def on_mergerange_back_clicked(self, widget):
         self.view.hide()
+        self.parent.view.show()
 
     def on_mergerange_forward_clicked(self, widget):
         self.view.hide()
+        self.options = MergeOptions(self)
+        self.options.view.show()
         
     def on_mergerange_show_log1_clicked(self, widget):
         LogForMerge(ok_callback=self.on_log1_closed, multiple=True)
@@ -58,8 +72,9 @@ class MergeBranch:
     """
     Provides an interface for the Merge Wizard Step 2b (Reintegrate Branch)
     """
-    def __init__(self):
+    def __init__(self, parent):
         self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeBranch")
+        self.parent = parent
 
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergebranch_from_urls"), 
@@ -74,9 +89,12 @@ class MergeBranch:
 
     def on_mergebranch_back_clicked(self, widget):
         self.view.hide()
+        self.parent.view.show()
 
     def on_mergebranch_forward_clicked(self, widget):
         self.view.hide()
+        self.options = MergeOptions(self)
+        self.options.view.show()
         
     def on_mergebranch_show_log1_clicked(self, widget):
         LogForMerge()
@@ -88,8 +106,9 @@ class MergeTree:
     """
     Provides an interface for the Merge Wizard Step 2c (Merge two trees)
     """
-    def __init__(self):
+    def __init__(self, parent):
         self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeTree")
+        self.parent = parent
 
         previous_urls = nautilussvn.lib.helper.GetRepositoryPaths()
         self.from_urls = nautilussvn.ui.widget.ComboBox(
@@ -109,25 +128,28 @@ class MergeTree:
 
     def on_mergetree_back_clicked(self, widget):
         self.view.hide()
+        self.parent.view.show()
 
     def on_mergetree_forward_clicked(self, widget):
         self.view.hide()
+        self.options = MergeOptions(self)
+        self.options.view.show()
         
-    def on_mergetree_from_show_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_from_closed, multiple=False)
+    def on_mergetree_from_show_log_clicked(self, widget):
+        LogForMerge(ok_callback=self.on_from_show_log_closed, multiple=False)
 
-    def on_from_closed(self, data):
+    def on_from_show_log_closed(self, data):
         self.view.get_widget("mergetree_from_revision_number").set_text(data)
         self.view.get_widget("mergetree_from_revision_number_opt").set_active(True)
 
-    def on_mergetree_to_show_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_to_closed, multiple=False)
+    def on_mergetree_to_show_log_clicked(self, widget):
+        LogForMerge(ok_callback=self.on_to_show_log_closed, multiple=False)
 
-    def on_to_closed(self, data):
+    def on_to_show_log_closed(self, data):
         self.view.get_widget("mergetree_to_revision_number").set_text(data)
         self.view.get_widget("mergetree_to_revision_number_opt").set_active(True)
 
-    def on_mergetree_working_copy_show_clicked(self, widget):
+    def on_mergetree_working_copy_show_log_clicked(self, widget):
         LogForMerge()
         
     def on_mergetree_from_revision_number_focused(self, widget, data):
@@ -149,9 +171,10 @@ class MergeOptions:
         'e': 'Only this item'
     }
 
-    def __init__(self):
+    def __init__(self, parent):
         self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeOptions")
-
+        self.parent = parent
+        
         self.depth = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergeoptions_depth")
         )
@@ -167,9 +190,11 @@ class MergeOptions:
 
     def on_mergeoptions_back_clicked(self, widget):
         self.view.hide()
+        STEP2.view.show()
 
     def on_mergeoptions_apply_clicked(self, widget):
         self.view.hide()
+        self.notification = nautilussvn.ui.notification.Notification()
         
     def on_mergeoptions_test_merge_clicked(self, widget):
         self.view.hide()
@@ -201,5 +226,5 @@ class LogForMerge(nautilussvn.ui.log.Log):
         
 
 if __name__ == "__main__":
-    window = MergeBranch()
+    window = MergeType()
     gtk.main()
