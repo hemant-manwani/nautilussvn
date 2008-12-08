@@ -25,7 +25,11 @@ class PreviousMessages:
         )
         self.entries = nautilussvn.lib.helper.GetPreviousMessages()
         for entry in self.entries:
-            self.message_table.append(entry)
+            tmp = entry[1]
+            if len(tmp) > 80:
+                tmp = "%s..." % tmp[0:80]
+        
+            self.message_table.append([entry[0],tmp])
         
         returner = None
         self.dialog = self.view.get_widget("PreviousMessages")
@@ -42,8 +46,7 @@ class PreviousMessages:
             path, col, cellx, celly = pathinfo
             treeview.grab_focus()
             treeview.set_cursor(path, col, 0)
-            
-            self.message.set_text(treeview.get_model()[path][1])
+            self.message.set_text(self.entries[path[0]][1])
         
 class FileChooser:
     def __init__(self):
