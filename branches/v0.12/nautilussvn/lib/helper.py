@@ -128,7 +128,8 @@ def GetPreviousMessages():
 def encode_revisions(revision_array):
     """
     Takes a list of integer revision numbers and converts to a TortoiseSVN-like
-    format.
+    format. This means we have to determine what numbers are consecutives and
+    collapse them into a single (see doctest below for an example).
     
     @type revision_array list of integers
     @param revision_array A list of revision numbers.
@@ -137,42 +138,57 @@ def encode_revisions(revision_array):
     @return A string of revision numbers in TortoiseSVN-like format.
     
     >>> encode_revisions([4,5,7,9,10,11,12])
-    4-5,7,9-12
+    '4-5,7,9-12'
+    
+    >>> encode_revisions([])
+    ''
+    
+    >>> encode_revisions([1])
+    '1'
     """
     
+    # Let's get a couple of cases out of the way
+    if len(revision_array) == 0:
+        return ""
+        
+    if len(revision_array) == 1:
+        return str(revision_array[0])
+    
+    # Instead of repeating a set of statement we'll just define them as an 
+    # inner function.
+    def append(start, last, list):
+        if start == last:
+            result = "%s" % start
+        else: 
+            result = "%s-%s" % (start, last)
+            
+        list.append(result)
+    
+    
+    # We need a couple of variables outside of the loop
     start = revision_array[0]
     last = revision_array[0]
+    current_position = 0
     returner = []
     
-    for i in range(0, len(revision_array)):
-        try:
-            current = revision_array[i]
-            next = revision_array[i + 1]
-            
-            if current + 1 == next:
-                # The next number is a consecutive of the current
-                last = next
-            else:
-                if start == last:
-                    result = "%s" % start
-                else: 
-                    result = "%s-%s" % (start, last)
-                    
-                returner.append(result)
-                start = next
-                last = next
-                
-        except IndexError:
-            if start == last:
-                result = "%s" % start
-            else: 
-                result = "%s-%s" % (start, last)
-                
-            returner.append(result)
+    while True:
+        if current_position + 1 >= len(revision_array):
+            append(start, last, returner)
+            break;
+        
+        current = revision_array[current_position]
+        next = revision_array[current_position + 1]
+        
+        if not current + 1 == next:
+            append(start, last, returner)
             start = next
             last = next
         
-    return ','.join(returner)
+        last = next
+        current_position += 1
+        
+    
+    return ",".join(returner)
 
 def decode_revisions(string, head):
     """
@@ -194,3 +210,4 @@ def decode_revisions(string, head):
             returner.append(int(el))
             
     return returner
+
