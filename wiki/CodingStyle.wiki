@@ -35,7 +35,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 # This is an extension to the Nautilus file manager to allow better 
 # integration with the Subversion source control system.
 # 
-# Copyright (C) 2006 Jason Field
+# Copyright (C) 2008 NautilusSvn Team
 # 
 # NautilusSvn is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,8 +48,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with NautilusSvn; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
 }}}
