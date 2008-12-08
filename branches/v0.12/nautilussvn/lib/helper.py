@@ -131,11 +131,10 @@ def encode_revisions(revision_array):
     format.
     EX. [4,5,7,9,10,11,12] -> 4-5,7,9-12
     """
-    results = []
     
     start = revision_array[0]
     last = revision_array[0]
-    results = []
+    returner = []
     
     for i in range(0, len(revision_array)):
         try:
@@ -146,19 +145,26 @@ def encode_revisions(revision_array):
                 # The next number is a consecutive of the current
                 last = next
             else:
-                raise Exception()
+                if start == last:
+                    result = "%s" % start
+                else: 
+                    result = "%s-%s" % (start, last)
+                    
+                returner.append(result)
+                start = next
+                last = next
                 
-        except (IndexError, Exception):
+        except IndexError:
             if start == last:
                 result = "%s" % start
             else: 
                 result = "%s-%s" % (start, last)
                 
-            results.append(result)
+            returner.append(result)
             start = next
             last = next
         
-    return ','.join(results)
+    return ','.join(returner)
 
 def decode_revisions(string, head):
     """
