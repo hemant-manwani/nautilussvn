@@ -16,6 +16,10 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
     ** 2. related third party imports
     ** 3. local application/library specific imports
 
+= Comments =
+
+  * http://epydoc.sourceforge.net/
+  * http://docs.python.org/library/doctest.html
 
 = Style Guide =
 
