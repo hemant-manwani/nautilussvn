@@ -164,7 +164,6 @@ def encode_revisions(revision_array):
             
         list.append(result)
     
-    
     # We need a couple of variables outside of the loop
     start = revision_array[0]
     last = revision_array[0]
@@ -187,7 +186,6 @@ def encode_revisions(revision_array):
         last = next
         current_position += 1
         
-    
     return ",".join(returner)
 
 def decode_revisions(string, head):
