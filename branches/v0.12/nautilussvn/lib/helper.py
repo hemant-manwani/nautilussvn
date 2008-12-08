@@ -129,7 +129,15 @@ def encode_revisions(revision_array):
     """
     Takes a list of integer revision numbers and converts to a TortoiseSVN-like
     format.
-    EX. [4,5,7,9,10,11,12] -> 4-5,7,9-12
+    
+    @type revision_array list of integers
+    @param revision_array A list of revision numbers.
+    
+    @rtype string
+    @return A string of revision numbers in TortoiseSVN-like format.
+    
+    >>> encode_revisions([4,5,7,9,10,11,12])
+    4-5,7,9-12
     """
     
     start = revision_array[0]
