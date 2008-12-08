@@ -129,7 +129,7 @@ def encode_revisions(revision_array):
     """
     Takes a list of integer revision numbers and converts to a TortoiseSVN-like
     format. This means we have to determine what numbers are consecutives and
-    collapse them into a single (see doctest below for an example).
+    collapse them into a single element (see doctest below for an example).
     
     @type revision_array list of integers
     @param revision_array A list of revision numbers.
@@ -154,7 +154,7 @@ def encode_revisions(revision_array):
     if len(revision_array) == 1:
         return str(revision_array[0])
     
-    # Instead of repeating a set of statement we'll just define them as an 
+    # Instead of repeating a set of statements we'll just define them as an 
     # inner function.
     def append(start, last, list):
         if start == last:
