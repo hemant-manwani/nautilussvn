@@ -123,18 +123,60 @@ def GetPreviousMessages():
     entries.reverse()
     
     return entries
-    
-def encode_revisions(arr):
+
+
+def encode_revisions(revision_array):
     """
     Takes a list of integer revision numbers and converts to a TortoiseSVN-like
     format.
     EX. [4,5,7,9,10,11,12] -> 4-5,7,9-12
     """
-    return "4-5,7,9-12"
+    results = []
+    
+    start = revision_array[0]
+    last = revision_array[0]
+    results = []
+    
+    for i in range(0, len(revision_array)):
+        try:
+            current = revision_array[i]
+            next = revision_array[i + 1]
+            
+            if current + 1 == next:
+                # The next number is a consecutive of the current
+                last = next
+            else:
+                raise Exception()
+                
+        except (IndexError, Exception):
+            if start == last:
+                result = "%s" % start
+            else: 
+                result = "%s-%s" % (start, last)
+                
+            results.append(result)
+            start = next
+            last = next
+        
+    return ','.join(results)
 
-def decode_revisions(string):
+def decode_revisions(string, head):
     """
     Takes a TortoiseSVN-like revision string and returns a list of integers.
     EX. 4-5,7,9-12 -> [4,5,7,9,10,11,12]
+    
+    Note: This function is a first draft.  It may not be production-worthy.
     """
-    return [4,5,7,9,10,11,12]
+    returner = []
+    arr = string.split(",")
+    for el in arr:
+        if el.find("-") != -1:
+            subarr = el.split("-")
+            if subarr[1] == 'HEAD':
+                subarr[1] = head
+            for subel in range(int(subarr[0]), int(subarr[1])+1):
+                returner.append(subel)
+        else:
+            returner.append(int(el))
+            
+    return returner
