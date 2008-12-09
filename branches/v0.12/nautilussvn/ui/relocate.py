@@ -18,7 +18,7 @@ class Relocate:
 
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("to_urls"), 
-            nautilussvn.lib.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.get_repository_paths()
         )
 
     def on_destroy(self, widget):

@@ -41,7 +41,7 @@ class MergeRange:
         
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergerange_from_urls"), 
-            nautilussvn.lib.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.get_repository_paths()
         )
 
     def on_mergerange_destroy(self, widget):
@@ -78,7 +78,7 @@ class MergeBranch:
 
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergebranch_from_urls"), 
-            nautilussvn.lib.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.get_repository_paths()
         )
 
     def on_mergebranch_destroy(self, widget):
@@ -110,7 +110,7 @@ class MergeTree:
         self.view = nautilussvn.ui.InterfaceView(self, "merge", "MergeTree")
         self.parent = parent
 
-        previous_urls = nautilussvn.lib.helper.GetRepositoryPaths()
+        previous_urls = nautilussvn.lib.helper.get_repository_paths()
         self.from_urls = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("mergetree_from_urls"), 
             previous_urls
