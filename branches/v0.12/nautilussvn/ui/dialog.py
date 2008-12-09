@@ -23,7 +23,7 @@ class PreviousMessages:
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Date", "Message"]
         )
-        self.entries = nautilussvn.lib.helper.GetPreviousMessages()
+        self.entries = nautilussvn.lib.helper.get_previous_messages()
         for entry in self.entries:
             tmp = entry[1]
             if len(tmp) > 80:

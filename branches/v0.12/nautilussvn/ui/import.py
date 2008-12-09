@@ -15,7 +15,7 @@ class Import:
 
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("repositories"), 
-            nautilussvn.lib.helper.GetRepositoryPaths()
+            nautilussvn.lib.helper.get_repository_paths()
         )
         
         self.message = nautilussvn.ui.widget.TextView(

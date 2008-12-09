@@ -18,6 +18,85 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+import re
+
+def get_home_folder():
+    """ 
+    Returns the location of the hidden folder we use in the home dir.
+    This is used for storing things like previous commit messages and
+    previously used repositories.
+    
+    @rtype string
+    @return The location of our main user storage folder
+    
+    """
+    
+    returner = os.path.abspath(
+        os.path.expanduser("~/.nautilussvn")
+    )
+    if not os.path.exists(returner):
+        os.mkdir(returner)
+
+    return returner
+    
+
+def get_repository_paths():
+    """
+    Gets all previous repository paths stored in the user's home folder
+    
+    @rtype list
+    @return a list of previously used repository paths
+    
+    """
+    
+    returner = []
+    paths_file = os.path.join(get_home_folder(), "repos_paths")
+    if os.path.exists(paths_file):
+        returner = [x.strip() for x in open(paths_file, "r").readlines()]
+        
+    return returner
+
+def get_previous_messages():
+    """
+    Gets all previous messages stored in the user's home folder
+    
+    @rtype list
+    @return a list of previous used messages
+    
+    """
+    
+    path = os.path.join(get_home_folder(), "previous_log_messages")
+    if not os.path.exists(path):
+        dlg = gtk.Dialog(
+            "NautilusSvn", 
+            "There are no previous messages to view", 
+            [gtk.STOCK_OK, gtk.OK_RESPONSE]
+        )
+        dlg.run()
+        dlg.destroy()
+        return
+        
+    lines = open(path, "r").readlines()
+
+    cur_entry = ""
+    returner = []
+    date = None
+    msg = ""
+    for line in lines:
+        m = re.compile(r"-- ([\d:]+ [\d\.]+) --").match(line)
+        if m:
+            cur_entry = m.groups()[0]
+            if date:
+                returner.append((date, msg.replace("\n", "")))
+                msg = ""
+            date = cur_entry
+        else:
+            msg += line
+
+    returner.reverse()
+    
+    return returner
 
 def encode_revisions(revision_array):
     """
