@@ -25,6 +25,8 @@ import gnomevfs
 import nautilus
 import pysvn
 
+from nautilussvn.lib.vcs import VCSFactory
+
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
     This is the main class that implements all of our awesome features.
@@ -79,7 +81,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
-        return MainContextMenu().construct_menu()
+        return MainContextMenu(files).construct_menu()
         
     def get_background_items(self, window, file):
         """
@@ -100,8 +102,9 @@ class MainContextMenu():
     
     """
     
-    def __init__(self):
-        pass
+    def __init__(self, files):
+        self.files = [gnomevfs.get_local_path_from_uri(file.get_uri()) for file in files]
+        self.vcs = VCSFactory().create_vcs_instance()
         
     def construct_menu(self):
         """
@@ -122,7 +125,7 @@ class MainContextMenu():
                         "args": None
                     }
                 }, 
-                "condition": (lambda: True),
+                "condition": self.condition_checkout,
                 "submenus": [
                     
                 ]
@@ -138,7 +141,7 @@ class MainContextMenu():
                         "args": None
                     }
                 }, 
-                "condition": (lambda: True),
+                "condition": self.condition_update,
                 "submenus": [
                     
                 ]
@@ -154,7 +157,7 @@ class MainContextMenu():
                         "args": None
                     }
                 }, 
-                "condition": (lambda: True),
+                "condition": self.condition_commit,
                 "submenus": [
                     
                 ]
@@ -183,7 +186,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": self.condition_diff,
                         "submenus": [
                             
                         ]
@@ -199,7 +202,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": self.condition_show_log,
                         "submenus": [
                             
                         ]
@@ -215,7 +218,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": self.condition_rename,
                         "submenus": [
                             
                         ]
@@ -231,7 +234,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": self.condition_delete,
                         "submenus": [
                             
                         ]
@@ -247,7 +250,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": self.condition_revert,
                         "submenus": [
                             
                         ]
@@ -263,7 +266,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": self.condition_properties,
                         "submenus": [
                             
                         ]
@@ -369,6 +372,7 @@ class MainContextMenu():
                     menu_item.set_submenu(nautilus_submenu)
                     
                     for submenu_item in submenu:
+                        print submenu_item.get_property("name")
                         nautilus_submenu.append_item(submenu_item)
         
         return menu
@@ -379,20 +383,20 @@ class MainContextMenu():
     def condition_checkout(self):
         if (len(self.files) == 1 and 
                 isdir(self.files[0]) and 
-                not is_working_copy(self.files[0])):
+                not self.vcs.is_working_copy(self.files[0])):
             return True
         return False
         
     def condition_update(self):
         for file in self.files:
-            if (is_versioned(file) and 
-                    not is_added(file)):
+            if (self.vcs.is_versioned(file) and 
+                    not self.vcs.is_added(file)):
                 return True
         return False
         
     def condition_commit(self):
         for file in self.files:
-            if (is_modified(file)):
+            if (self.vcs.is_modified(file)):
                 return True
         return False
         
@@ -405,20 +409,20 @@ class MainContextMenu():
             return True
             
         if (len(self.files) == 1 and
-                is_modified(self.files[0])):
+                self.vcs.is_modified(self.files[0])):
             return True
         
         return False
         
     def condition_show_log(self):
         if (len(self.files) == 1 and 
-                not is_added(self.files[0])):
+                not self.vcs.is_added(self.files[0])):
             return True
         return False
         
     def condition_add(self):
         for file in self.files:
-            if not is_versioned(file):
+            if not self.vcs.is_versioned(file):
                 return True
         return False
         
@@ -427,32 +431,32 @@ class MainContextMenu():
         
     def condition_rename(self):
         if (len(self.files) == 1 and 
-                is_versioned(self.file[0])):
+                self.vcs.is_versioned(self.files[0])):
             return True
         return False
         
     def condition_delete(self):
         for file in self.files:
-            if (is_versioned(file)):
+            if (self.vcs.is_versioned(file)):
                 return True
         return False
         
     def condition_revert(self):
         for file in self.files:
-            if (is_modified(file) or
-                    is_added(file)):
+            if (self.vcs.is_modified(file) or
+                    self.vcs.is_added(file)):
                 return True
         return False
         
     def condition_blame(self):
         if (len(self.files) == 1 and
-                is_versioned(self.files[0])):
+                self.vcs.is_versioned(self.files[0])):
             return True
         return False
         
     def condition_properties(self):
         for file in self.files:
-            if is_versioned(file):
+            if self.vcs.is_versioned(file):
                 return True
         return False
 
