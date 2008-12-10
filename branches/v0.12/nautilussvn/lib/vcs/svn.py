@@ -46,17 +46,27 @@ class SVN:
         return False
 
     def is_added(self, file):
-        if not self.is_working_copy(file): return False
-            
-        file_status = self.client.status(file)[0]
-        if file_status.text_status == pysvn.wc_status_kind.added:
-            return True
-        return False
+        return self.has_status(file, pysvn.wc_status_kind.added)
 
     def is_modified(self, file):
+        return self.has_status(file, pysvn.wc_status_kind.modified)
+        
+    #
+    # Helper methods
+    #
+    
+    def has_status(self, file, status):
         if not self.is_working_copy(file): return False
             
-        file_status = self.client.status(file)[0]
-        if file_status.text_status == pysvn.wc_status_kind.modified:
-            return True
+        file_statuses = self.client.status(file)
+        if isfile(file):
+            file_status = file_statuses[0]
+            if file_status.text_status == status:
+                return True
+                
+        if isdir(file):
+            for file_status in file_statuses:
+                if file_status.text_status == status:
+                    return True
+            
         return False
