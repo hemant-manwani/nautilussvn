@@ -73,12 +73,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         @type   window: NautilusNavigationWindow
         @param  window:
+        
         @type   files: list of NautilusVFSFile
         @param  files:
         
         """
         
-        pass
+        return MainContextMenu().construct_menu()
         
     def get_background_items(self, window, file):
         """
@@ -109,7 +110,7 @@ class MainContextMenu():
         
         # The following dictionary defines the complete contextmenu, you can
         # refer to any future local variables using the syntax $var and ${var}.
-        menu_template = [
+        menu_definition = [
             {
                 "identifier": "NautilusSvn::Checkout",
                 "label": "Checkout",
@@ -318,7 +319,59 @@ class MainContextMenu():
                 ]
             },
         ]
+        
+        return self.create_menu_from_definition(menu_definition)
+                        
     
+    def create_menu_from_definition(self, menu_definition):
+        """
+        
+        A single menu item definition looks like:
+            {
+                "identifier": "NautilusSvn::Identifier",
+                "label": "",
+                "tooltip": "",
+                "icon": "",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }, 
+                "condition": None,
+                "submenus": [
+                    
+                ]
+            }
+        
+        @type   menu_definition  list
+        @param  menu_definition  A list of definition items.
+        
+        """
+        
+        menu = []
+        for definition_item in menu_definition:
+            if definition_item["condition"]():
+                menu_item = nautilus.MenuItem(
+                    definition_item["identifier"],
+                    definition_item["label"],
+                    definition_item["tooltip"],
+                    definition_item["icon"]
+                )
+                menu.append(menu_item)
+                
+                # Since we can't just call set_submenu and run the risk of not
+                # having any submenu items later (which would results in the 
+                # menu item not being displayed) we have to check this first.
+                submenu = self.create_menu_from_definition(definition_item["submenus"])
+                if len(submenu) > 0:
+                    nautilus_submenu = nautilus.Menu()
+                    menu_item.set_submenu(nautilus_submenu)
+                    
+                    for submenu_item in submenu:
+                        nautilus_submenu.append_item(submenu_item)
+        
+        return menu
     #
     # Conditions
     #
@@ -402,3 +455,7 @@ class MainContextMenu():
             if is_versioned(file):
                 return True
         return False
+
+
+    
+    
