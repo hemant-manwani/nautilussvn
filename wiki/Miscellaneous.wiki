@@ -15,7 +15,7 @@ ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/__init__.py ~/.nautilus/
 mkdir -p ~/.icons
 ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
 
-export PYTHONPATH="$PYTHONPATH:/home/nautilussvn/nautilussvn/"
+export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
 mkdir -p /tmp/nautilussvn_nautilus-testing
 export TMPDIR=/tmp/nautilussvn_nautilus-testing
 nautilus --no-desktop .
