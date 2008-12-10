@@ -27,6 +27,5 @@ class VCS:
 class VCSFactory:
     
     def create_vcs_instance(self):
-        # TODO: we should probably look at a configuration setting to determine
-        # which versioning implementation to pick.
+        # TODO: we'll figure this out later by looking at the working copy.
         return SVN()
