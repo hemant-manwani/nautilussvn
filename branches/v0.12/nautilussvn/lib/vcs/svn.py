@@ -18,44 +18,35 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os.path
+from os.path import isdir, isfile
+
+import pysvn
 
 class SVN:
     
+    def __init__(self):
+        self.client = pysvn.Client()
+    
     def is_working_copy(self, file):
+        if isdir(file):
+            if isdir(os.path.join(file, ".svn")):
+                return True
         return False
 
     def is_versioned(self, file):
+        if self.client.info(file):
+            return True
         return False
 
     def is_added(self, file):
+        file_status = self.client.status(file)[0]
+        if file_status.text_status == pysvn.wc_status_kind.added:
+            return True
         return False
 
     def is_modified(self, file):
-        return False
-
-    def is_modified(self, file):
-        return False
-
-    def is_added(self, file):
-        return False
-
-    def is_versioned(self, file):
-        return False
-
-    def is_versioned(self, file):
-        return False
-
-    def is_versioned(self, file):
-        return False
-
-    def is_modified(self, file):
-        return False
-
-    def is_added(self, file):
-        return False
-
-    def is_versioned(self, file):
-        return False
-
-    def is_versioned(self, file):
+        file_status = self.client.status(file)[0]
+        if file_status.text_status == pysvn.wc_status_kind.modified:
+            return True
         return False
