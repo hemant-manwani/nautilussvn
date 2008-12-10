@@ -210,6 +210,22 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Add",
+                        "label": "Add",
+                        "tooltip": "",
+                        "icon": "icon-add",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_add,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::Rename",
                         "label": "Rename",
                         "tooltip": "",
@@ -393,14 +409,16 @@ class MainContextMenu():
         
     def condition_update(self):
         for file in self.files:
-            if (self.vcs.is_versioned(file) and 
+            if (self.vcs.is_working_copy(file) and
+                    self.vcs.is_versioned(file) and 
                     not self.vcs.is_added(file)):
                 return True
         return False
         
     def condition_commit(self):
         for file in self.files:
-            if (self.vcs.is_modified(file)):
+            if (self.vcs.is_working_copy(file) and
+                    self.vcs.is_modified(file)):
                 return True
         return False
         
@@ -413,6 +431,7 @@ class MainContextMenu():
             return True
             
         if (len(self.files) == 1 and
+                self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_modified(self.files[0])):
             return True
         
@@ -420,13 +439,15 @@ class MainContextMenu():
         
     def condition_show_log(self):
         if (len(self.files) == 1 and 
+                self.vcs.is_working_copy(self.files[0]) and
                 not self.vcs.is_added(self.files[0])):
             return True
         return False
         
     def condition_add(self):
         for file in self.files:
-            if not self.vcs.is_versioned(file):
+            if (self.vcs.is_working_copy(file) and
+                not self.vcs.is_versioned(file)):
                 return True
         return False
         
@@ -435,32 +456,37 @@ class MainContextMenu():
         
     def condition_rename(self):
         if (len(self.files) == 1 and 
+                self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_versioned(self.files[0])):
             return True
         return False
         
     def condition_delete(self):
         for file in self.files:
-            if (self.vcs.is_versioned(file)):
+            if (self.vcs.is_working_copy(file) and
+                    self.vcs.is_versioned(file)):
                 return True
         return False
         
     def condition_revert(self):
         for file in self.files:
-            if (self.vcs.is_modified(file) or
-                    self.vcs.is_added(file)):
+            if (self.vcs.is_working_copy(file) and
+                    (self.vcs.is_modified(file) or
+                    self.vcs.is_added(file))):
                 return True
         return False
         
     def condition_blame(self):
         if (len(self.files) == 1 and
+                self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_versioned(self.files[0])):
             return True
         return False
         
     def condition_properties(self):
         for file in self.files:
-            if self.vcs.is_versioned(file):
+            if (self.vcs.is_working_copy(file) and 
+                    self.vcs.is_versioned(file)):
                 return True
         return False
 

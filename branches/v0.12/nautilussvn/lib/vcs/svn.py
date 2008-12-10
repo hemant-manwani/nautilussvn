@@ -29,23 +29,33 @@ class SVN:
         self.client = pysvn.Client()
     
     def is_working_copy(self, file):
+        if isfile(file):
+            file = os.path.dirname(file)
+        
         if isdir(file):
             if isdir(os.path.join(file, ".svn")):
                 return True
+            
         return False
 
     def is_versioned(self, file):
+        if not self.is_working_copy(file): return False
+            
         if self.client.info(file):
             return True
         return False
 
     def is_added(self, file):
+        if not self.is_working_copy(file): return False
+            
         file_status = self.client.status(file)[0]
         if file_status.text_status == pysvn.wc_status_kind.added:
             return True
         return False
 
     def is_modified(self, file):
+        if not self.is_working_copy(file): return False
+            
         file_status = self.client.status(file)[0]
         if file_status.text_status == pysvn.wc_status_kind.modified:
             return True
