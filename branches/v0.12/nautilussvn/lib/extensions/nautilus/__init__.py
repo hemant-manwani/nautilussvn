@@ -364,15 +364,14 @@ class MainContextMenu():
                 menu.append(menu_item)
                 
                 # Since we can't just call set_submenu and run the risk of not
-                # having any submenu items later (which would results in the 
-                # menu item not being displayed) we have to check this first.
+                # having any submenu items later (which would result in the 
+                # menu item not being displayed) we have to check first.
                 submenu = self.create_menu_from_definition(definition_item["submenus"])
                 if len(submenu) > 0:
                     nautilus_submenu = nautilus.Menu()
                     menu_item.set_submenu(nautilus_submenu)
                     
                     for submenu_item in submenu:
-                        print submenu_item.get_property("name")
                         nautilus_submenu.append_item(submenu_item)
         
         return menu
