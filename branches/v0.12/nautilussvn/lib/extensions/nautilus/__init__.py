@@ -342,7 +342,6 @@ class MainContextMenu():
         ]
         
         return self.create_menu_from_definition(menu_definition)
-                        
     
     def create_menu_from_definition(self, menu_definition):
         """
