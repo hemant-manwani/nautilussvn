@@ -103,7 +103,9 @@ class MainContextMenu():
     """
     
     def __init__(self, files):
-        self.files = [gnomevfs.get_local_path_from_uri(file.get_uri()) for file in files]
+        self.files = [
+            gnomevfs.get_local_path_from_uri(file.get_uri()) for file in files
+        ]
         self.vcs = VCSFactory().create_vcs_instance()
         
     def construct_menu(self):
@@ -366,7 +368,10 @@ class MainContextMenu():
                 # Since we can't just call set_submenu and run the risk of not
                 # having any submenu items later (which would result in the 
                 # menu item not being displayed) we have to check first.
-                submenu = self.create_menu_from_definition(definition_item["submenus"])
+                submenu = self.create_menu_from_definition(
+                    definition_item["submenus"]
+                )
+                
                 if len(submenu) > 0:
                     nautilus_submenu = nautilus.Menu()
                     menu_item.set_submenu(nautilus_submenu)
