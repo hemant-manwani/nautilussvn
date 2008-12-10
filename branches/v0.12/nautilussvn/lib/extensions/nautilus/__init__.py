@@ -94,7 +94,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
-        pass
+        return MainContextMenu([file]).construct_menu()
         
 class MainContextMenu():
     """
