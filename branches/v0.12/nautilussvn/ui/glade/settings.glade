@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec 11 09:42:09 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec 11 10:03:49 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Settings">
     <property name="width_request">550</property>
@@ -105,7 +105,7 @@
                             <property name="visible">True</property>
                             <property name="border_width">2</property>
                             <child>
-                              <widget class="GtkCheckButton" id="recursive_enable">
+                              <widget class="GtkCheckButton" id="enable_recursive">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="label" translatable="yes">Enable recursive status checks</property>
@@ -135,57 +135,6 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkFrame" id="frame7">
-                    <property name="visible">True</property>
-                    <property name="border_width">5</property>
-                    <property name="label_xalign">0</property>
-                    <child>
-                      <widget class="GtkVBox" id="vbox5">
-                        <property name="visible">True</property>
-                        <property name="border_width">3</property>
-                        <child>
-                          <widget class="GtkHBox" id="hbox7">
-                            <property name="visible">True</property>
-                            <property name="border_width">2</property>
-                            <child>
-                              <widget class="GtkLabel" id="label12">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="xpad">5</property>
-                                <property name="label" translatable="yes">Global ignore pattern:</property>
-                              </widget>
-                            </child>
-                            <child>
-                              <widget class="GtkEntry" id="svn_global_ignore">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                              </widget>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="label11">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Subversion</property>
-                        <property name="use_markup">True</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
