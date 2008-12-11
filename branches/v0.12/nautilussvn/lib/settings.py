@@ -10,13 +10,13 @@ MAIN_SETTINGS_FILE = "%s/settings.conf" % nautilussvn.lib.helper.get_home_folder
 DEFAULT_SETTINGS = {
     "general": {
         "language": "English",
-        "enable_attributes": True,
-        "enable_emblems": True,
-        "enable_recursive": True
+        "enable_attributes": 1,
+        "enable_emblems": 1,
+        "enable_recursive": 1
     },
     "external": {
         "diff_tool": "/usr/bin/meld",
-        "diff_tool_swap": False,
+        "diff_tool_swap": 0,
         "repo_browser": "firefox"
     },
     "cache": {
@@ -156,7 +156,6 @@ class SettingsManager:
             indent_type="    "
         )
         self.settings.filename = MAIN_SETTINGS_FILE
-        self.write()
     
     def get_default(self, section, keyword):
         """
