@@ -80,7 +80,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  files:
         
         """
-        
+
         return MainContextMenu(files).construct_menu()
         
     def get_background_items(self, window, file):
@@ -371,6 +371,7 @@ class MainContextMenu():
         
         menu = []
         for definition_item in menu_definition:
+            print definition_item["identifier"]
             if definition_item["condition"]():
                 menu_item = nautilus.MenuItem(
                     definition_item["identifier"],
