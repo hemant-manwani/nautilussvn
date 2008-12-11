@@ -12,6 +12,10 @@ import nautilussvn.lib.helper
 
 class Settings:
     def __init__(self):
+        """
+        Provides an interface to the settings library.
+        """
+    
         self.view = nautilussvn.ui.InterfaceView(self, "settings", "Settings")
 
         self.settings = nautilussvn.lib.settings.SettingsManager()
