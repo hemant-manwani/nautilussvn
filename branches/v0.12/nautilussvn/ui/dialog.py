@@ -178,3 +178,25 @@ class FileChooser:
             returner = self.dialog.get_uri()
         self.dialog.destroy()
         return returner
+        
+class Confirmation:
+    def __init__(self, message="Are you sure you want to continue?"):
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Confirmation")
+        self.view.get_widget("confirm_message").set_text(message)
+        
+    def run(self):
+        dialog = self.view.get_widget("Confirmation")
+        result = dialog.run()
+        
+        dialog.destroy()
+        
+        return result
+        
+class MessageBox:
+    def __init__(self, message):
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "MessageBox")
+        self.view.get_widget("messagebox_message").set_text(message)
+
+        dialog = self.view.get_widget("MessageBox")
+        dialog.run()
+        dialog.destroy()
