@@ -39,7 +39,16 @@ def get_home_folder():
         os.mkdir(returner)
 
     return returner
+
+def get_repository_paths_path():
+    """
+    Returns a valid URI for the repository paths file
     
+    @rtype string
+    @return the location of the repository paths file
+    
+    """
+    return os.path.join(get_home_folder(), "repos_paths")
 
 def get_repository_paths():
     """
@@ -51,11 +60,22 @@ def get_repository_paths():
     """
     
     returner = []
-    paths_file = os.path.join(get_home_folder(), "repos_paths")
+    paths_file = get_repository_paths_path()
     if os.path.exists(paths_file):
         returner = [x.strip() for x in open(paths_file, "r").readlines()]
         
     return returner
+
+def get_previous_messages_path():
+    """
+    Returns a valid URI for the previous messages file
+    
+    @rtype string
+    @returner the location of the previous messages file
+    
+    """
+    
+    return os.path.join(get_home_folder(), "previous_log_messages")
 
 def get_previous_messages():
     """
@@ -66,7 +86,7 @@ def get_previous_messages():
     
     """
     
-    path = os.path.join(get_home_folder(), "previous_log_messages")
+    path = get_previous_messages_path()
     if not os.path.exists(path):
         dlg = gtk.Dialog(
             "NautilusSvn", 
