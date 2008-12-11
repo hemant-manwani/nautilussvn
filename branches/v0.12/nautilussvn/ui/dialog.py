@@ -48,7 +48,7 @@ class PreviousMessages:
             treeview.set_cursor(path, col, 0)
             self.message.set_text(self.entries[path[0]][1])
         
-class FileChooser:
+class FolderChooser:
     def __init__(self):
         self.dialog = gtk.FileChooserDialog("Select a Folder", 
             None, 
@@ -159,4 +159,22 @@ class Property:
     def save(self):
         self.save_name = self.names.get_active_text()
         self.save_value = self.value.get_text()
-        
+
+class FileChooser:
+    def __init__(self, title="Select a File", folder=None):
+        self.dialog = gtk.FileChooserDialog(title, 
+            None, 
+            gtk.FILE_CHOOSER_ACTION_OPEN, 
+            (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+                gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+        if folder is not None:
+            self.dialog.set_current_folder(folder)
+        self.dialog.set_default_response(gtk.RESPONSE_OK)
+
+    def run(self):
+        returner = None
+        result = self.dialog.run()
+        if result == gtk.RESPONSE_OK:
+            returner = self.dialog.get_uri()
+        self.dialog.destroy()
+        return returner
