@@ -1,4 +1,4 @@
-import sys
+import os
 
 import pygtk
 import gobject
@@ -80,15 +80,15 @@ class Settings:
 
     def on_cache_clear_repositories_clicked(self, widget):
         path = nautilussvn.lib.helper.get_repository_paths_path()
-        file = sys.open(path, "w")
-        file.write("")
-        file.close()
+        fh = open(path, "w")
+        fh.write("")
+        fh.close()
 
     def on_cache_clear_messages_clicked(self, widget):
         path = nautilussvn.lib.helper.get_previous_messages_path()
-        file = sys.open(path, "w")
-        file.write("")
-        file.close()
+        fh = open(path, "w")
+        fh.write("")
+        fh.close()
 
     def on_cache_clear_authentication_clicked(self, widget):
         pass
