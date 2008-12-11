@@ -1,3 +1,5 @@
+import sys
+
 import pygtk
 import gobject
 import gtk
@@ -6,6 +8,7 @@ import nautilussvn.ui
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.settings
+import nautilussvn.lib.helper
 
 class Settings:
     def __init__(self):
@@ -76,11 +79,17 @@ class Settings:
             self.view.get_widget("repo_browser").set_text(path)
 
     def on_cache_clear_repositories_clicked(self, widget):
-        pass
+        path = nautilussvn.lib.helper.get_repository_paths_path()
+        file = sys.open(path, "w")
+        file.write("")
+        file.close()
 
     def on_cache_clear_messages_clicked(self, widget):
-        pass
-        
+        path = nautilussvn.lib.helper.get_previous_messages_path()
+        file = sys.open(path, "w")
+        file.write("")
+        file.close()
+
     def on_cache_clear_authentication_clicked(self, widget):
         pass
         
