@@ -190,7 +190,7 @@ class MergeOptions:
 
     def on_mergeoptions_back_clicked(self, widget):
         self.view.hide()
-        STEP2.view.show()
+        self.parent.view.show()
 
     def on_mergeoptions_apply_clicked(self, widget):
         self.view.hide()
