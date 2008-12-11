@@ -43,6 +43,7 @@ class SettingsManager:
     
         if not os.path.exists(MAIN_SETTINGS_FILE):
             self.use_default_settings()
+            self.write()
     
         self.settings = configobj.ConfigObj(
             MAIN_SETTINGS_FILE, 
