@@ -9,15 +9,19 @@ MAIN_SETTINGS_FILE = "%s/settings.conf" % nautilussvn.lib.helper.get_home_folder
 
 DEFAULT_SETTINGS = {
     "general": {
-        "language": "English"
+        "language": "English",
+        "enable_attributes": True,
+        "enable_emblems": True,
+        "enable_recursive": True
     },
     "external": {
-        "diff_files_tool": "/usr/bin/meld",
-        "diff_files_swap": False,
-        "diff_props_tool": "/usr/bin/meld",
-        "diff_props_swap": False,
-        "merge_tool": "/usr/bin/meld",
+        "diff_tool": "/usr/bin/meld",
+        "diff_tool_swap": False,
         "repo_browser": "firefox"
+    },
+    "cache": {
+        "number_repositories": 30,
+        "number_messages": 30
     }
 }
 
