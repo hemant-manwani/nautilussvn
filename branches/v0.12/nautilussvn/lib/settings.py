@@ -7,6 +7,20 @@ import nautilussvn.lib.helper
 
 MAIN_SETTINGS_FILE = "%s/settings.conf" % nautilussvn.lib.helper.get_home_folder()
 
+DEFAULT_SETTINGS = {
+    "general": {
+        "language": "English"
+    },
+    "external": {
+        "diff_files_tool": "/usr/bin/meld",
+        "diff_files_swap": False,
+        "diff_props_tool": "/usr/bin/meld",
+        "diff_props_swap": False,
+        "merge_tool": "/usr/bin/meld",
+        "repo_browser": "firefox"
+    }
+}
+
 class SettingsManager:
     """
     This class provides an shallow interface for the rest of the program to use 
@@ -34,7 +48,7 @@ class SettingsManager:
     def get(self, section=None, keyword=None):
         """
         Get the settings for a section and/or keyword
-        If not arguments are given, it just returns all settings
+        If no arguments are given, it just returns all settings
         
         @type section:  string
         @param section: a settings section
@@ -133,19 +147,42 @@ class SettingsManager:
         
         """
         
-        self.settings = configobj.ConfigObj({
-            "general": {
-                "language": "English"
-            },
-            "external": {
-                "diff_tool": "/usr/bin/meld",
-                "diff_swap": False,
-                "merge_tool": "/usr/bin/meld",
-                "repo_browser": "firefox"
-            }
-        },indent_type="    ")
+        self.settings = configobj.ConfigObj(
+            DEFAULT_SETTINGS,
+            indent_type="    "
+        )
         self.settings.filename = MAIN_SETTINGS_FILE
         self.write()
+    
+    def get_default(self, section, keyword):
+        """
+        Get the default settings for a section and/or keyword
+        If no arguments are given, it just returns all settings
+        
+        @type section:  string
+        @param section: a settings section
+        
+        @type keyword:  string
+        @param keyword: a particular setting in a section
+        
+        @rtype dict or string
+        @return either a dict or string with setting(s)
+        
+        """
+        
+        if section is None:
+            return DEFAULT_SETTINGS
+            
+        if keyword is None:
+            return DEFAULT_SETTINGS[section]
+        
+        returner = None
+        try:
+            returner = DEFAULT_SETTINGS[section][keyword]
+        except KeyError:
+            print "Error: section %s:%s doesn't exist" % (section, keyword)
+            
+        return returner
 
 if __name__ == "__main__":
     pass
