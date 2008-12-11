@@ -39,6 +39,18 @@ def get_home_folder():
         os.mkdir(returner)
 
     return returner
+    
+def get_user_path():
+    """
+    Returns the location of the user's home directory.
+    /home/$USER
+    
+    @rtype string
+    @return The location of the user's home directory
+    
+    """
+    
+    return os.path.abspath(os.path.expanduser("~"))
 
 def get_repository_paths_path():
     """
