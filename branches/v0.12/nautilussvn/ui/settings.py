@@ -75,7 +75,15 @@ class Settings:
         if path is not None:
             self.view.get_widget("repo_browser").set_text(path)
 
+    def on_cache_clear_repositories_clicked(self, widget):
+        pass
 
+    def on_cache_clear_messages_clicked(self, widget):
+        pass
+        
+    def on_cache_clear_authentication_clicked(self, widget):
+        pass
+        
 if __name__ == "__main__":
     window = Settings()
     gtk.main()
