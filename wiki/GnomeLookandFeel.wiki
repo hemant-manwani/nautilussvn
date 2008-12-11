@@ -1,7 +1,7 @@
 #summary Capturing the look and feel of GNOME applications
 #labels Phase-Design
 
-We try to follow the [http://library.gnome.org/devel/hig-book/stable/ GNOME HIG] and the look and feel of GNOME applications as much as possible. Here's a couple of example of interface elements from official GNOME projects.
+We try to follow the [http://library.gnome.org/devel/hig-book/stable/ GNOME HIG] and the look and feel of GNOME applications as much as possible. Here's a couple of example of interface elements from official GNOME projects and other popular GNOME/GTK applications.
 
 == Preference dialogs ==
 
@@ -17,10 +17,7 @@ We try to follow the [http://library.gnome.org/devel/hig-book/stable/ GNOME HIG]
 [http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/beagle_preferences.png]
 
 === Gnometris ===
-[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/gnometris_preferences.png]
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/gnometris_preferences.png
 
-
-
-
-
-
+=== Pidgin ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/pidgin_preferences.png
