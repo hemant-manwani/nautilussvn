@@ -55,11 +55,47 @@ class Settings:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
+        self.save()
         gtk.main_quit()
     
     def on_apply_clicked(self, widget):
-        gtk.main_quit()
-    
+        self.save()
+
+    def save(self):
+        self.settings.set(
+            "general", "language", 
+            self.view.get_widget("language").get_active_text()
+        )
+        self.settings.set(
+            "general", "enable_attributes",
+            self.view.get_widget("enable_attributes").get_active()
+        )
+        self.settings.set(
+            "general", "enable_emblems",
+            self.view.get_widget("enable_emblems").get_active()
+        )
+        self.settings.set(
+            "general", "enable_recursive",
+            self.view.get_widget("enable_recursive").get_active()
+        )
+        self.settings.set(
+            "external", "diff_tool",
+            self.view.get_widget("diff_tool").get_text()
+        )
+        self.settings.set(
+            "external", "diff_tool_swap",
+            self.view.get_widget("diff_tool_swap").get_active()
+        )
+        self.settings.set(
+            "cache", "number_repositories",
+            self.view.get_widget("cache_number_repositories").get_text()
+        )
+        self.settings.set(
+            "cache", "number_messages",
+            self.view.get_widget("cache_number_messages").get_text()
+        )
+        self.settings.write()
+
     def on_external_diff_tool_browse_clicked(self, widget):
         chooser = nautilussvn.ui.dialog.FileChooser(
             "Select a program", "/usr/bin"
@@ -79,20 +115,49 @@ class Settings:
             self.view.get_widget("repo_browser").set_text(path)
 
     def on_cache_clear_repositories_clicked(self, widget):
-        path = nautilussvn.lib.helper.get_repository_paths_path()
-        fh = open(path, "w")
-        fh.write("")
-        fh.close()
+        confirmation = nautilussvn.ui.dialog.Confirmation(
+            "Are you sure you want to clear your repository paths?"
+        )
+        if confirmation.run() == 1:
+            path = nautilussvn.lib.helper.get_repository_paths_path()
+            fh = open(path, "w")
+            fh.write("")
+            fh.close()
+            nautilussvn.ui.dialog.MessageBox("Repository paths cleared")
 
     def on_cache_clear_messages_clicked(self, widget):
-        path = nautilussvn.lib.helper.get_previous_messages_path()
-        fh = open(path, "w")
-        fh.write("")
-        fh.close()
+        confirmation = nautilussvn.ui.dialog.Confirmation(
+            "Are you sure you want to clear your previous messages?"
+        )
+        if confirmation.run() == 1:
+            path = nautilussvn.lib.helper.get_previous_messages_path()
+            fh = open(path, "w")
+            fh.write("")
+            fh.close()
+            nautilussvn.ui.dialog.MessageBox("Previous messages cleared")
 
     def on_cache_clear_authentication_clicked(self, widget):
-        pass
-        
+        confirmation = nautilussvn.ui.dialog.Confirmation(
+            "Are you sure you want to clear your authentication information?"
+        )
+        if confirmation.run() == 1:
+            home_dir = nautilussvn.lib.helper.get_user_path()
+            subpaths = [
+                '/.subversion/auth/svn.simple',
+                '/.subversion/auth/svn.ssl.server',
+                '/.subversion/auth/svn.username'
+            ]
+            for subpath in subpaths:
+                path = "%s%s" % (home_dir, subpath)
+                if os.path.exists(path):
+                    files = os.listdir(path)
+                    for filename in files:
+                        filepath = "%s/%s" % (path, filename)
+                        os.remove(filepath)
+
+            nautilussvn.ui.dialog.MessageBox("Authentication cleared")
+                
+
 if __name__ == "__main__":
     window = Settings()
     gtk.main()

@@ -96,6 +96,11 @@ class SettingsManager:
         
         if section not in self.settings:
             self.settings[section] = {}
+            
+        if value == True:
+            value = 1
+        elif value == False:
+            value = 0
         
         self.settings[section][keyword] = value
             
