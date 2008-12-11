@@ -4,6 +4,7 @@ import gtk
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
+import nautilussvn.ui.dialog
 import nautilussvn.lib.settings
 
 class Settings:
@@ -55,6 +56,25 @@ class Settings:
     
     def on_apply_clicked(self, widget):
         gtk.main_quit()
+    
+    def on_external_diff_tool_browse_clicked(self, widget):
+        chooser = nautilussvn.ui.dialog.FileChooser(
+            "Select a program", "/usr/bin"
+        )
+        path = chooser.run()
+        path = path.replace("file://", "")
+        if path is not None:
+            self.view.get_widget("diff_tool").set_text(path)
+
+    def on_external_repo_browser_browse_clicked(self, widget):
+        chooser = nautilussvn.ui.dialog.FileChooser(
+            "Select a program", "/usr/bin"
+        )
+        path = chooser.run()
+        path = path.replace("file://", "")
+        if path is not None:
+            self.view.get_widget("repo_browser").set_text(path)
+
 
 if __name__ == "__main__":
     window = Settings()

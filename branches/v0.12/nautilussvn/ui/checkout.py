@@ -47,7 +47,7 @@ class Checkout:
         self.view.get_widget("revision_number_opt").set_active(True)
 
     def on_file_chooser_clicked(self, widget, data=None):
-        chooser = nautilussvn.ui.dialog.FileChooser()
+        chooser = nautilussvn.ui.dialog.FolderChooser()
         path = chooser.run()
         if path is not None:
             self.view.get_widget("destination").set_text(path)
