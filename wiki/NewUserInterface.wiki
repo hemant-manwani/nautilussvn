@@ -38,7 +38,9 @@ I'm constructing a new user interface for NautilusSvn based on pyGTK and glade f
 
 
 = Interface Standards =
-I'd like to follow the [http://library.gnome.org/devel/hig-book/stable/ Gnome HIG] as much as possible.
+I'd like to follow the [http://library.gnome.org/devel/hig-book/stable/ Gnome HIG] as much as possible. For examples of the look and feel of Gnome applications see GnomeLookandFeel. Here's an example of a preferences dialog from Nautilus:
+
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/nautilus_preferences.png]
 
 === Windows ===
 Each window will be sized differently, but each major item (in the main vbox or hbox) should have a 5px border width.
