@@ -1,7 +1,13 @@
 #summary Scribbles, notes, those kinds of things.
 #labels Phase-Deploy,Phase-Implementation
 
-= Running the NautilusSvn v0.12 branch =
+= NautilusSvn v0.12 branch =
+
+== Dependencies ==
+
+  * python-configobj
+
+== Running ==
 {{{
 xauth +local: # This is required to be able to connect to the X Server after sudoing
 
