@@ -1,3 +1,5 @@
+import os
+
 import pygtk
 import gobject
 import gtk
@@ -5,7 +7,8 @@ import gtk.glade
 
 class InterfaceView:
     def __init__(self, callback_obj, filename, id):
-        path = "glade/%s.glade" % filename        
+        
+        path = "%s/glade/%s.glade" % (os.path.dirname(os.path.realpath(__file__)), filename)
         self.tree = gtk.glade.XML(path, id)
         self.tree.signal_autoconnect(callback_obj)
         self.id = id
