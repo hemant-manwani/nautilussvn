@@ -1,0 +1,26 @@
+#summary Capturing the look and feel of GNOME applications
+#labels Phase-Design
+
+We try to follow the [http://library.gnome.org/devel/hig-book/stable/ GNOME HIG] and the look and feel of GNOME applications as much as possible. Here's a couple of example of interface elements from official GNOME projects.
+
+== Preference dialogs ==
+
+=== Nautilus ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/nautilus_preferences.png]
+
+  * [http://svn.gnome.org/svn/nautilus/branches/gnome-2-24/src/nautilus-file-management-properties.glade Download the Glade file]
+
+=== Totem ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/totem_preferences.png]
+
+=== Beagle ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/beagle_preferences.png]
+
+=== Gnometris ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/gnometris_preferences.png]
+
+
+
+
+
+
