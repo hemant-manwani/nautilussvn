@@ -13,7 +13,6 @@ class CertificateTest:
         )
             
         result = self.dialog.run()
-        return
 
 class AuthorizationTest:
     def __init__(self):
@@ -23,14 +22,26 @@ class AuthorizationTest:
         )
             
         result = self.dialog.run()
-        return
 
 class PropertyTest:
     def __init__(self):
         self.dialog = nautilussvn.ui.dialog.Property(name="prop name", value="")
         result = self.dialog.run()
-        return
+
+class PreviousMessagesTest:
+    def __init__(self):
+        self.dialog = nautilussvn.ui.dialog.PreviousMessages()
+        result = self.dialog.run()
+        
+class ConfirmationTest:
+    def __init__(self):
+        self.dialog = nautilussvn.ui.dialog.Confirmation()
+        result = self.dialog.run()
+        
+class MessageBoxTest:
+    def __init__(self):
+        self.dialog = nautilussvn.ui.dialog.MessageBox("This is a test message")
         
 if __name__ == "__main__":
-    window = CertificateTest()
+    window = AuthorizationTest()
     gtk.main()

@@ -137,7 +137,7 @@ class Property:
         self.save_value = value
         
         self.names = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("property_names"), 
+            self.view.get_widget("property_name"), 
             self.PROPS
         )
         self.names.set_active_from_value(name)
