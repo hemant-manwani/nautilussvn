@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Dec  5 13:55:18 2008 -->
+<!--Generated with glade3 3.4.5 on Fri Dec 12 15:04:41 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Import">
     <property name="width_request">500</property>
@@ -10,23 +10,92 @@
     <child>
       <widget class="GtkVBox" id="vbox16">
         <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
         <child>
-          <widget class="GtkFrame" id="frame16">
+          <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="label_xalign">0</property>
+            <property name="spacing">6</property>
+            <child>
+              <widget class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Repository&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
             <child>
               <widget class="GtkAlignment" id="alignment14">
                 <property name="visible">True</property>
-                <property name="border_width">5</property>
+                <property name="left_padding">12</property>
                 <child>
                   <widget class="GtkVBox" id="vbox17">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkLabel" id="label16">
+                      <widget class="GtkComboBoxEntry" id="repositories">
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">URL of repository:</property>
+                        <child internal-child="entry">
+                          <widget class="GtkEntry" id="comboboxentry-entry2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+        </child>
+        <child>
+          <widget class="GtkVBox" id="vbox2">
+            <property name="visible">True</property>
+            <property name="spacing">6</property>
+            <child>
+              <widget class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Import Message&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <widget class="GtkVBox" id="vbox18">
+                    <property name="visible">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <widget class="GtkHButtonBox" id="hbuttonbox12">
+                        <property name="visible">True</property>
+                        <property name="layout_style">GTK_BUTTONBOX_START</property>
+                        <child>
+                          <widget class="GtkButton" id="previous_messages">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="label" translatable="yes">Previous Messages</property>
+                            <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_previous_messages_clicked"/>
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -34,12 +103,18 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBoxEntry" id="repositories">
+                      <widget class="GtkScrolledWindow" id="scrolledwindow13">
+                        <property name="height_request">150</property>
                         <property name="visible">True</property>
-                        <child internal-child="entry">
-                          <widget class="GtkEntry" id="repository">
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                        <child>
+                          <widget class="GtkTextView" id="message">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="wrap_mode">GTK_WRAP_WORD</property>
                           </widget>
                         </child>
                       </widget>
@@ -50,84 +125,10 @@
                   </widget>
                 </child>
               </widget>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label6">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Repository</property>
-                <property name="use_markup">True</property>
-              </widget>
               <packing>
-                <property name="type">label_item</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkFrame" id="frame17">
-            <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="label_xalign">0</property>
-            <child>
-              <widget class="GtkVBox" id="vbox18">
-                <property name="visible">True</property>
-                <property name="border_width">3</property>
-                <child>
-                  <widget class="GtkHButtonBox" id="hbuttonbox12">
-                    <property name="visible">True</property>
-                    <property name="border_width">2</property>
-                    <property name="layout_style">GTK_BUTTONBOX_START</property>
-                    <child>
-                      <widget class="GtkButton" id="previous_messages">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Previous Messages</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_previous_messages_clicked"/>
-                      </widget>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow13">
-                    <property name="height_request">150</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="border_width">2</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-                    <child>
-                      <widget class="GtkTextView" id="message">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="wrap_mode">GTK_WRAP_WORD</property>
-                      </widget>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label10">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Import Message</property>
-                <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="type">label_item</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
@@ -139,7 +140,6 @@
           <widget class="GtkCheckButton" id="include_ignored">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">5</property>
             <property name="label" translatable="yes">Include ignored files</property>
             <property name="response_id">0</property>
             <property name="draw_indicator">True</property>
@@ -153,7 +153,6 @@
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox11">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
             <property name="spacing">5</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
