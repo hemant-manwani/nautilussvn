@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Dec 13 09:56:48 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Notification">
     <property name="width_request">640</property>
@@ -11,11 +11,12 @@
     <child>
       <widget class="GtkVBox" id="vbox14">
         <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
         <child>
           <widget class="GtkScrolledWindow" id="scrolledwindow10">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">5</property>
             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
             <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
@@ -30,8 +31,7 @@
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox10">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="spacing">5</property>
+            <property name="spacing">6</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
               <widget class="GtkButton" id="cancel">
