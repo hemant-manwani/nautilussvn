@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec  4 15:34:38 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Dec 13 10:07:41 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Relocate">
     <property name="width_request">640</property>
@@ -10,97 +10,107 @@
     <child>
       <widget class="GtkVBox" id="vbox28">
         <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
         <child>
-          <widget class="GtkFrame" id="frame23">
+          <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="label_xalign">0</property>
+            <property name="spacing">6</property>
             <child>
-              <widget class="GtkVBox" id="vbox29">
+              <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="border_width">3</property>
-                <child>
-                  <widget class="GtkHBox" id="hbox15">
-                    <property name="visible">True</property>
-                    <property name="border_width">2</property>
-                    <child>
-                      <widget class="GtkLabel" id="label44">
-                        <property name="width_request">90</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="xpad">5</property>
-                        <property name="label" translatable="yes">From URL:</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkLabel" id="from">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">http://svn.cobradragon.com/trunk/haresvn</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkHBox" id="hbox16">
-                    <property name="visible">True</property>
-                    <property name="border_width">2</property>
-                    <child>
-                      <widget class="GtkLabel" id="label46">
-                        <property name="width_request">90</property>
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="xpad">5</property>
-                        <property name="label" translatable="yes">To URL:</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkComboBoxEntry" id="to_urls">
-                        <property name="visible">True</property>
-                        <child internal-child="entry">
-                          <widget class="GtkEntry" id="to">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                          </widget>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label43">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Details</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Change the repository of your working copy&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </widget>
               <packing>
-                <property name="type">label_item</property>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <widget class="GtkVBox" id="vbox29">
+                    <property name="visible">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <widget class="GtkHBox" id="hbox15">
+                        <property name="visible">True</property>
+                        <child>
+                          <widget class="GtkLabel" id="label44">
+                            <property name="width_request">100</property>
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">From URL:</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="from">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">http://svn.cobradragon.com/trunk/haresvn</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="hbox16">
+                        <property name="visible">True</property>
+                        <child>
+                          <widget class="GtkLabel" id="label46">
+                            <property name="width_request">100</property>
+                            <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">To URL:</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkComboBoxEntry" id="to_urls">
+                            <property name="visible">True</property>
+                            <child internal-child="entry">
+                              <widget class="GtkEntry" id="comboboxentry-entry2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </widget>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
@@ -112,8 +122,7 @@
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox17">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="spacing">5</property>
+            <property name="spacing">6</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
               <widget class="GtkButton" id="cancel">
