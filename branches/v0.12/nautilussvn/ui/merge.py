@@ -211,7 +211,7 @@ class LogForMerge(nautilussvn.ui.log.Log):
         self.multiple = multiple
         
     def on_destroy(self, widget):
-        self.view.hide()
+        pass
     
     def on_cancel_clicked(self, widget, data=None):
         self.view.hide()

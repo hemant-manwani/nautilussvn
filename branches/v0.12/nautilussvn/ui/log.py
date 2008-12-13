@@ -86,8 +86,10 @@ class Log:
         return nautilussvn.lib.helper.encode_revisions(returner)
 
     def get_selected_revision_number(self):
-        return self.selected_row[0]
-        
+        if len(self.selected_row):
+            return self.selected_row[0]
+        else:
+            return ""
       
 if __name__ == "__main__":
     window = Log()

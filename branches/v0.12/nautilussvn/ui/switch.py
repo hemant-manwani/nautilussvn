@@ -45,7 +45,7 @@ class LogForSwitch(nautilussvn.ui.log.Log):
         self.ok_clicked = ok_clicked
         
     def on_destroy(self, widget):
-        self.view.hide()
+        pass
     
     def on_cancel_clicked(self, widget, data=None):
         self.view.hide()
