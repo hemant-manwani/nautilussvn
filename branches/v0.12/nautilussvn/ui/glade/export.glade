@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Dec 12 14:59:10 2008 -->
+<!--Generated with glade3 3.4.5 on Mon Dec 15 08:34:09 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Export">
     <property name="width_request">640</property>
@@ -44,31 +44,40 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="unversioned">
+                      <widget class="GtkVBox" id="vbox3">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Export unversioned files</property>
-                        <property name="response_id">0</property>
-                        <property name="draw_indicator">True</property>
+                        <child>
+                          <widget class="GtkCheckButton" id="unversioned">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Export unversioned files</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkCheckButton" id="omit_externals">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Omit Externals</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckButton" id="omit_externals">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Omit Externals</property>
-                        <property name="response_id">0</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                   </widget>
