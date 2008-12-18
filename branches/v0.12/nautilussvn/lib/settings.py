@@ -23,9 +23,29 @@ import os
 import shutil
 import configobj
 
-import nautilussvn.lib.helper
+def get_home_folder():
+    """ 
+    Returns the location of the hidden folder we use in the home dir.
+    This is used for storing things like previous commit messages and
+    previously used repositories.
+    
+    NOTE: This is a copy of the helper module's function, because I can't
+        have a circular module reference (helper imports Settings right now)
+    
+    @rtype string
+    @return The location of our main user storage folder
+    
+    """
+    
+    returner = os.path.abspath(
+        os.path.expanduser("~/.nautilussvn")
+    )
+    if not os.path.exists(returner):
+        os.mkdir(returner)
 
-MAIN_SETTINGS_FILE = "%s/settings.conf" % nautilussvn.lib.helper.get_home_folder()
+    return returner
+
+SETTINGS_FILE = "%s/settings.conf" % get_home_folder()
 
 DEFAULT_SETTINGS = {
     "general": {
@@ -61,12 +81,12 @@ class SettingsManager:
     
     def __init__(self):
     
-        if not os.path.exists(MAIN_SETTINGS_FILE):
+        if not os.path.exists(SETTINGS_FILE):
             self.use_default_settings()
             self.write()
     
         self.settings = configobj.ConfigObj(
-            MAIN_SETTINGS_FILE, 
+            SETTINGS_FILE, 
             indent_type="    "
         )
 
@@ -168,7 +188,7 @@ class SettingsManager:
         
         """
         self.settings = configobj.ConfigObj(indent_type="    ")
-        self.settings.filename = MAIN_SETTINGS_FILE
+        self.settings.filename = SETTINGS_FILE
 
     def use_default_settings(self):
         """
@@ -181,7 +201,7 @@ class SettingsManager:
             DEFAULT_SETTINGS,
             indent_type="    "
         )
-        self.settings.filename = MAIN_SETTINGS_FILE
+        self.settings.filename = SETTINGS_FILE
     
     def get_default(self, section, keyword):
         """

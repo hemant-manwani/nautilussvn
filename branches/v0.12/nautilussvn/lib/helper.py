@@ -21,6 +21,9 @@
 import os
 import re
 
+import nautilussvn.ui.dialog
+import nautilussvn.lib.settings
+
 def get_home_folder():
     """ 
     Returns the location of the hidden folder we use in the home dir.
@@ -214,3 +217,50 @@ def decode_revisions(string, head):
             
     return returner
 
+def get_diff_tool():
+    """
+    Gets the path to the diff_tool, and whether or not to swap lhs/rhs
+    
+    @rtype dict
+    @return a dictionary with the diff tool path and swap boolean value
+    """
+    
+    sm = nautilussvn.lib.settings.SettingsManager()
+    diff_tool = sm.get("external", "diff_tool")
+    diff_tool_swap = sm.get("external", "diff_tool_swap")
+    
+    return {
+        "path": diff_tool, 
+        "swap": diff_tool_swap
+    }
+    
+def launch_diff_tool(lhs, rhs):
+    """
+    Launches the diff tool of choice
+    
+    @type lhs:  string
+    @param lhs: the left hand side path
+    
+    @type rhs:  string
+    @param lhs: the right hand side path
+    """
+    
+    diff = get_diff_tool()
+    
+    if diff["path"] == "":
+        return
+    
+    if not os.path.exists(diff["path"]):
+        nautilussvn.ui.dialog.MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings.")
+        return
+        
+    if diff["swap"]:
+        (lhs, rhs) = (rhs, lhs)
+    
+    os.spawnl(
+        os.P_NOWAIT,
+        diff["path"],
+        diff["path"],
+        lhs,
+        rhs
+    )

@@ -371,7 +371,6 @@ class MainContextMenu():
         
         menu = []
         for definition_item in menu_definition:
-            print definition_item["identifier"]
             if definition_item["condition"]():
                 menu_item = nautilus.MenuItem(
                     definition_item["identifier"],
@@ -401,28 +400,38 @@ class MainContextMenu():
     #
     
     def condition_checkout(self):
-        if (len(self.files) == 1 and 
-                isdir(self.files[0]) and 
-                not self.vcs.is_working_copy(self.files[0])):
-            return True
-        return False
+        print "checkout condition"
+        if len(self.files) == 0:
+            return False
+ 
+        #if (not self.vcs.is_working_copy(self.files[0])):
+        #    return True
+
+        return True
         
     def condition_update(self):
+        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     self.vcs.is_versioned(file) and 
                     not self.vcs.is_added(file)):
                 return True
+        return True
+        """
         return False
         
     def condition_commit(self):
+        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     self.vcs.is_modified(file)):
                 return True
+        return True
+        """
         return False
         
     def condition_diff(self):
+        """
         for file in self.files:
             if (not isfile(file)):
                 return False
@@ -436,60 +445,82 @@ class MainContextMenu():
             return True
         
         return False
+        """
+        return False
         
     def condition_show_log(self):
+        """
         if (len(self.files) == 1 and 
                 self.vcs.is_working_copy(self.files[0]) and
                 not self.vcs.is_added(self.files[0])):
             return True
         return False
+        """
+        return False
         
     def condition_add(self):
+        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                 not self.vcs.is_versioned(file)):
                 return True
+        return False
+        """
         return False
         
     def condition_add_to_ignore_list(self):
         pass
         
     def condition_rename(self):
+        """
         if (len(self.files) == 1 and 
                 self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_versioned(self.files[0])):
             return True
         return False
+        """
+        return False
         
     def condition_delete(self):
+        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     self.vcs.is_versioned(file)):
                 return True
         return False
+        """
+        return False
         
     def condition_revert(self):
+        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     (self.vcs.is_modified(file) or
                     self.vcs.is_added(file))):
                 return True
         return False
+        """
+        return False
         
     def condition_blame(self):
+        """
         if (len(self.files) == 1 and
                 self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_versioned(self.files[0])):
             return True
         return False
+        """
+        return False
         
     def condition_properties(self):
+        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and 
                     self.vcs.is_versioned(file)):
                 return True
         return False
-
+        """
+        return False
 
     
     
