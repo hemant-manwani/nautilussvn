@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Dec 15 08:34:09 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec 18 09:07:49 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="Export">
     <property name="width_request">640</property>
     <property name="height_request">480</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Export To Folder</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox22">
