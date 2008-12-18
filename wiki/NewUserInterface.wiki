@@ -43,7 +43,7 @@ I'd like to follow the [http://library.gnome.org/devel/hig-book/stable/ Gnome HI
 [http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/nautilus_preferences.png]
 
 === Windows ===
-Each window will be sized differently, but each major item (in the main vbox or hbox) should have a 5px border width.
+Each window will be sized differently, but each window should have a similar look and feel, with identical paddings and borders.  For example, each window has a vertical box as it's primary means of layout.  And each primary vertical box has a 12px border width and 18px spacing between items.
 
 === Buttons ===
 Use stock buttons where possible.  Most windows/dialogs will have OK and Cancel buttons on the bottom right like so:
@@ -54,10 +54,16 @@ If/When we implement Help buttons, they will go on the bottom left of the window
 
   Cancel | Back | Forward
 
-Regarding spacing, the bottom of each window should have a horizontal button box with 5px border width and 5px spacing.  Each button will have 0px border width and 0px spacing.  Layout style should be "End".
+Regarding spacing, the bottom of each window should have a horizontal button box with 6px spacing between buttons and 0px border width.  Each button will have 0px border width and 0px spacing.  Layout style should be "End".
 
-=== Frames ===
-Groups of widgets with a similar purpose or functionality should generally be enclosed by frame with an ETCHED_IN shadow.  There should be a 5px TOTAL border width inside the frame.  However, if you have a vertical box inside the frame, then the vertical box should have a 3px border width, and each item inside the vertical box should have a 2px border width; this totals to 5px.
+=== Groups ===
+Groups of widgets with a similar purpose or functionality should generally be enclosed like so...
+
+Vertical Box (6px spacing)
+  <b>Label Heading</b> (aligned left)
+  Alignment (12px left padding)
+    Vertical Box (6px spacing)  or
+    Horizontal Box (12px spacing)
 
 = Settings Manager =
 The next version of NautilusSvn is going to have a basic settings manager that has a few important features.  The breadth and number of options will be expanded in succeeding releases.  Here is a tentative list of tabs/options I'd like to implement.
