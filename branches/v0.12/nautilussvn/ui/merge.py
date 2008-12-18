@@ -22,7 +22,7 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui.log
+import nautilussvn.ui.dialog
 import nautilussvn.ui.notification
 
 import nautilussvn.lib.helper
@@ -80,13 +80,13 @@ class MergeRange:
         self.options.view.show()
         
     def on_mergerange_show_log1_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_log1_closed, multiple=True)
+        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_log1_closed, multiple=True)
     
     def on_log1_closed(self, data):
         self.view.get_widget("mergerange_revisions").set_text(data)
     
     def on_mergerange_show_log2_clicked(self, widget):
-        LogForMerge()
+        nautilussvn.ui.dialog.LogDialog()
         
 class MergeBranch:
     """
@@ -117,10 +117,10 @@ class MergeBranch:
         self.options.view.show()
         
     def on_mergebranch_show_log1_clicked(self, widget):
-        LogForMerge()
+        nautilussvn.ui.dialog.LogDialog()
 
     def on_mergebranch_show_log2_clicked(self, widget):
-        LogForMerge()
+        nautilussvn.ui.dialog.LogDialog()
 
 class MergeTree:
     """
@@ -156,21 +156,21 @@ class MergeTree:
         self.options.view.show()
         
     def on_mergetree_from_show_log_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_from_show_log_closed, multiple=False)
+        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_from_show_log_closed, multiple=False)
 
     def on_from_show_log_closed(self, data):
         self.view.get_widget("mergetree_from_revision_number").set_text(data)
         self.view.get_widget("mergetree_from_revision_number_opt").set_active(True)
 
     def on_mergetree_to_show_log_clicked(self, widget):
-        LogForMerge(ok_callback=self.on_to_show_log_closed, multiple=False)
+        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_to_show_log_closed, multiple=False)
 
     def on_to_show_log_closed(self, data):
         self.view.get_widget("mergetree_to_revision_number").set_text(data)
         self.view.get_widget("mergetree_to_revision_number_opt").set_active(True)
 
     def on_mergetree_working_copy_show_log_clicked(self, widget):
-        LogForMerge()
+        nautilussvn.ui.dialog.LogDialog()
         
     def on_mergetree_from_revision_number_focused(self, widget, data):
         self.view.get_widget("mergetree_from_revision_number_opt").set_active(True)
@@ -218,32 +218,6 @@ class MergeOptions:
         
     def on_mergeoptions_test_merge_clicked(self, widget):
         self.view.hide()
-
-class LogForMerge(nautilussvn.ui.log.Log):
-    def __init__(self, ok_callback=None, multiple=False):
-        """
-        Override the normal Log class so that we can hide the window as we need.
-        Also, provide a callback for when the OK button is clicked so that we
-        can get some desired data.
-        """
-        nautilussvn.ui.log.Log.__init__(self)
-        self.ok_callback = ok_callback
-        self.multiple = multiple
-        
-    def on_destroy(self, widget):
-        pass
-    
-    def on_cancel_clicked(self, widget, data=None):
-        self.view.hide()
-    
-    def on_ok_clicked(self, widget, data=None):
-        self.view.hide()
-        if self.ok_callback is not None:
-            if self.multiple == True:
-                self.ok_callback(self.get_selected_revision_numbers())
-            else:
-                self.ok_callback(self.get_selected_revision_number())
-        
 
 if __name__ == "__main__":
     window = MergeType()

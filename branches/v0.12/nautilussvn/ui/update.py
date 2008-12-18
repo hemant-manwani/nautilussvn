@@ -24,7 +24,7 @@ import gtk
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
-import nautilussvn.ui.log
+import nautilussvn.ui.dialog
 import nautilussvn.ui.notification
 
 class Update:
@@ -78,29 +78,12 @@ class UpdateToRevision:
         self.view.get_widget("revision_number_opt").set_active(True)
 
     def on_show_log_clicked(self, widget, data=None):
-        LogForUpdate(ok_clicked=self.on_log_closed)
+        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_log_closed)
     
     def on_log_closed(self, data):
         if data is not None:
             self.view.get_widget("revision_number_opt").set_active(True)
             self.view.get_widget("revision_number").set_text(data)
-
-class LogForUpdate(nautilussvn.ui.log.Log):
-    def __init__(self, ok_clicked=None):
-        nautilussvn.ui.log.Log.__init__(self)
-        self.ok_clicked = ok_clicked
-        
-    def on_destroy(self, widget):
-        pass
-    
-    def on_cancel_clicked(self, widget, data=None):
-        self.view.hide()
-    
-    def on_ok_clicked(self, widget, data=None):
-        self.view.hide()
-        if self.ok_clicked is not None:
-            self.ok_clicked(self.get_selected_revision_number())
-
 
 if __name__ == "__main__":
     window = UpdateToRevision()
