@@ -60,7 +60,8 @@ Regarding spacing, the bottom of each window should have a horizontal button box
 Groups of widgets with a similar purpose or functionality should generally be enclosed like so...
 
 Vertical Box (6px spacing)
-  <b>Label Heading</b> (aligned left)
+  Label Heading (bolded, aligned left)
+
   Alignment (12px left padding)
     Vertical Box (6px spacing)  or
     Horizontal Box (12px spacing)
