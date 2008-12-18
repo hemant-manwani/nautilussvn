@@ -24,7 +24,7 @@ import gtk
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
-
+import nautilussvn.ui.log
 import nautilussvn.lib.helper
 
 GLADE = 'dialogs'
@@ -220,3 +220,28 @@ class MessageBox:
         dialog = self.view.get_widget("MessageBox")
         dialog.run()
         dialog.destroy()
+        
+class LogDialog(nautilussvn.ui.log.Log):
+    def __init__(self, ok_callback=None, multiple=False):
+        """
+        Override the normal Log class so that we can hide the window as we need.
+        Also, provide a callback for when the OK button is clicked so that we
+        can get some desired data.
+        """
+        nautilussvn.ui.log.Log.__init__(self)
+        self.ok_callback = ok_callback
+        self.multiple = multiple
+        
+    def on_destroy(self, widget):
+        pass
+    
+    def on_cancel_clicked(self, widget, data=None):
+        self.view.hide()
+    
+    def on_ok_clicked(self, widget, data=None):
+        self.view.hide()
+        if self.ok_callback is not None:
+            if self.multiple == True:
+                self.ok_callback(self.get_selected_revision_numbers())
+            else:
+                self.ok_callback(self.get_selected_revision_number())
