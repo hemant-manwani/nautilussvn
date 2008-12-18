@@ -84,6 +84,8 @@ class Log:
     def on_revisions_table_button_released(self, treeview, event):
         path = treeview.get_path_at_pos(int(event.x), int(event.y))
         
+        self.selected_rows = []
+        self.selected_row = None
         if path is not None:
             selection = treeview.get_selection()
             self.selected_rows = selection.get_selected_rows()
@@ -98,10 +100,14 @@ class Log:
         if len(self.selected_rows) == 0:
             return ""
 
+        rows = []
+        for row in self.selected_rows[1]:
+            rows.append(int(row[0]))
+
         returner = []
-        for row in self.selected_rows[0]:
-            returner.append(int(row[0]))
-        
+        for row in rows:
+            returner.append(int(self.selected_rows[0][row][0]))
+
         returner.sort()
         return nautilussvn.lib.helper.encode_revisions(returner)
 

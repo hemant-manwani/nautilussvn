@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Dec 15 09:11:57 2008 -->
+<!--Generated with glade3 3.4.5 on Thu Dec 18 08:57:55 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="MergeType">
     <property name="width_request">550</property>
@@ -8,6 +8,7 @@
     <property name="visible">True</property>
     <property name="title" translatable="yes">Merge Type (Step 1 of 3)</property>
     <property name="resizable">False</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_mergetype_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox31">
@@ -231,6 +232,7 @@
     <property name="width_request">550</property>
     <property name="height_request">425</property>
     <property name="title" translatable="yes">Merge Range (Step 2 of 3)</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_mergerange_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox33">
@@ -508,6 +510,7 @@ To merge all revisions, leave the box empty.</property>
     <property name="width_request">550</property>
     <property name="height_request">425</property>
     <property name="title" translatable="yes">Merge Branch (Step 2 of 3)</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_mergebranch_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox35">
@@ -732,6 +735,7 @@ To merge all revisions, leave the box empty.</property>
     <property name="width_request">550</property>
     <property name="height_request">425</property>
     <property name="title" translatable="yes">Merge Tree (Step 2 of 3)</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_mergetree_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox37">
@@ -1101,6 +1105,7 @@ To merge all revisions, leave the box empty.</property>
     <property name="width_request">550</property>
     <property name="height_request">425</property>
     <property name="title" translatable="yes">Merge Options (Step 3 of 3)</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <signal name="destroy" handler="on_mergeoptions_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox40">
