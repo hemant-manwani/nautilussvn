@@ -24,7 +24,6 @@ import gtk
 
 import nautilussvn.ui.dialog
 import nautilussvn.ui.notification
-
 import nautilussvn.lib.helper
 
 STEP2 = None
