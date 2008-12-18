@@ -24,7 +24,6 @@ import gtk
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
-
 import nautilussvn.lib.helper
 
 class Log:
