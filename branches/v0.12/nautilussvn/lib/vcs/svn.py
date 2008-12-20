@@ -56,7 +56,16 @@ class SVN:
             return True
         
         return False
+    
+    def is_normal(self, path):
+        all_status = self.client.status(path)
+        status = all_status[len(all_status) - 1]
         
+        if status.data["text_status"] == pysvn.wc_status_kind.normal:
+            return True
+        
+        return False
+    
     def is_added(self, path):
         all_status = self.client.status(path)
         status = all_status[len(all_status) - 1]
@@ -71,6 +80,15 @@ class SVN:
         status = all_status[len(all_status) - 1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.modified:
+            return True
+        
+        return False
+    
+    def is_deleted(self, path):
+        all_status = self.client.status(path)
+        status = all_status[len(all_status) - 1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.deleted:
             return True
         
         return False
@@ -102,6 +120,15 @@ class SVN:
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
+                return True
+        
+        return False
+
+    def has_deleted(self, path):
+        all_status = self.client.status(path)
+        
+        for status in all_status:
+            if status.data["text_status"] == pysvn.wc_status_kind.deleted:
                 return True
         
         return False

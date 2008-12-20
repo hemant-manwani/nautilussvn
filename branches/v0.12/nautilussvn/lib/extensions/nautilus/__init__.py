@@ -56,19 +56,31 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
-        # If we're not a or inside a working copy we don't even have to bother.
+        path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
+        # If we're not a or inside a working copy we don't even have to bother.
+        if not self.vcs.is_in_a_or_a_working_copy(path):
+            return
         
         # If we're a directory we have to do a recursive status check to see if
         # any files below us have modifications (added, modified or deleted).
-        
+        if isdir(path):
+            if (self.vcs.has_modified(path) or
+                    self.vcs.has_added(path)):
+                item.add_emblem("emblem-modified")
+                return
         
         # Verifiying one of following statuses: 
         #   added, missing, deleted
         # is common for both single files and directories.
-        
-        
-        pass
+        if self.vcs.is_added(path):
+            item.add_emblem("emblem-added")
+        elif self.vcs.is_modified(path):
+            item.add_emblem("emblem-modified")
+        elif self.vcs.is_deleted(path):
+            item.add_emblem("emblem-deleted")
+        elif self.vcs.is_normal(path):
+            item.add_emblem("emblem-normal")
         
     def get_file_items(self, window, items):
         """
@@ -424,13 +436,15 @@ class MainContextMenu():
         for path in self.paths:
             if (self.vcs.is_in_a_or_a_working_copy(path) and
                     (self.vcs.is_added(path) or 
-                    self.vcs.is_modified(path))):
+                    self.vcs.is_modified(path) or
+                    self.vcs.is_deleted(path))):
                 return True
             else:
                 if (isdir(path) and
                         self.vcs.is_in_a_or_a_working_copy(path) and
                         (self.vcs.has_added(path) or 
-                        self.vcs.has_modified(path))):
+                        self.vcs.has_modified(path) or
+                        self.vcs.is_deleted(path))):
                     return True
         
         return False
@@ -496,13 +510,15 @@ class MainContextMenu():
         for path in self.paths:
             if (self.vcs.is_in_a_or_a_working_copy(path) and
                     (self.vcs.is_added(path) or
-                    self.vcs.is_modified(path))):
+                    self.vcs.is_modified(path) or
+                    self.vcs.is_deleted(path))):
                 return True
             else:
                 if (isdir(path) and
                         self.vcs.is_in_a_or_a_working_copy(path) and
                         (self.vcs.has_added(path) or
-                        self.vcs.has_modified(path))):
+                        self.vcs.has_modified(path) or
+                        self.vcs.is_deleted(path))):
                     return True
         
         return False
