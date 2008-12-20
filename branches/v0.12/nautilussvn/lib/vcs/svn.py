@@ -33,29 +33,75 @@ class SVN:
     #
     
     def is_working_copy(self, path):
-        pass
+        if (isdir(path) and
+                isdir(os.path.join(path, ".svn"))):
+            return True
+        
+        return False
+        
+    def is_in_a_or_a_working_copy(self, path):
+        # If we're a file we have to check the directory we're in instead
+        if isfile(path):
+            path = os.path.abspath(os.path.join(path, os.path.pardir))
+        
+        if self.is_working_copy(path):
+            return True
+            
+        return False
         
     def is_versioned(self, path):
-        pass
-    
-    def is_unversioned(self, path):
-        pass
+        
+        # info will return nothing for an unversioned file inside a working copy
+        if self.client.info(path):
+            return True
+        
+        return False
         
     def is_added(self, path):
-        pass
+        all_status = self.client.status(path)
+        status = all_status[len(all_status) - 1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.added:
+            return True
+        
+        return False
         
     def is_modified(self, path):
-        pass
+        all_status = self.client.status(path)
+        status = all_status[len(all_status) - 1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.modified:
+            return True
+        
+        return False
         
     #
     # has
     #
     
     def has_unversioned(self, path):
-        pass
+        all_status = self.client.status(path)
+        
+        for status in all_status:
+            if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
+                return True
+                
+        return False
     
     def has_added(self, path):
-        pass
+        all_status = self.client.status(path)
+        
+        for status in all_status:
+            if status.data["text_status"] == pysvn.wc_status_kind.added:
+                return True
+                
+        return False
         
     def has_modified(self, path):
-        pass
+        all_status = self.client.status(path)
+        
+        for status in all_status:
+            if status.data["text_status"] == pysvn.wc_status_kind.modified:
+                return True
+        
+        return False

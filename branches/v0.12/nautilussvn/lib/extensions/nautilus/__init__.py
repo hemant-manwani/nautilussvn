@@ -400,41 +400,127 @@ class MainContextMenu():
         return menu
     #
     # Conditions
+    # See: http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure
     #
     
     def condition_checkout(self):
+        if (len(self.paths) == 1 and
+                isdir(self.paths[0]) and
+                not self.vcs.is_working_copy(self.paths[0])):
+            return True
+            
         return False
         
     def condition_update(self):
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    self.vcs.is_versioned(path) and
+                    not self.vcs.is_added(path)):
+                return True
+                
         return False
         
     def condition_commit(self):
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    (self.vcs.is_added(path) or 
+                    self.vcs.is_modified(path))):
+                return True
+            else:
+                if (isdir(path) and
+                        self.vcs.is_in_a_or_a_working_copy(path) and
+                        (self.vcs.has_added(path) or 
+                        self.vcs.has_modified(path))):
+                    return True
+        
         return False
         
     def condition_diff(self):
+        if len(self.paths) == 2:
+            return True
+        elif (len(self.paths) == 1 and 
+                self.vcs.is_in_a_or_a_working_copy(self.paths[0]) and
+                self.vcs.is_modified(self.paths[0])):
+            return True
+        
         return False
         
     def condition_show_log(self):
+        if (len(self.paths) == 1 and
+                self.vcs.is_in_a_or_a_working_copy(self.paths[0]) and
+                self.vcs.is_versioned(self.paths[0]) and
+                not self.vcs.is_added(self.paths[0])):
+            return True
+        
         return False
         
     def condition_add(self):
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    not self.vcs.is_versioned(path)):
+                return True
+            else:
+                if (isdir(path) and
+                        self.vcs.is_in_a_or_a_working_copy(path) and
+                        self.vcs.has_unversioned(path)):
+                    return True
+            
         return False
         
     def condition_add_to_ignore_list(self):
-        return False
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    self.vcs.is_versioned(path)):
+                return False
+                
+        return True
         
     def condition_rename(self):
+        if (len(self.paths) == 1 and
+                self.vcs.is_in_a_or_a_working_copy(self.paths[0]) and
+                self.vcs.is_versioned(self.paths[0]) and
+                not self.vcs.is_added(self.paths[0])):
+            return True
+        
         return False
         
     def condition_delete(self):
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    self.vcs.is_versioned(path)):
+                return True
+            
         return False
         
     def condition_revert(self):
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    (self.vcs.is_added(path) or
+                    self.vcs.is_modified(path))):
+                return True
+            else:
+                if (isdir(path) and
+                        self.vcs.is_in_a_or_a_working_copy(path) and
+                        (self.vcs.has_added(path) or
+                        self.vcs.has_modified(path))):
+                    return True
+        
         return False
         
     def condition_blame(self):
+        if (len(self.paths) == 1 and
+                self.vcs.is_in_a_or_a_working_copy(path) and
+                self.vcs.is_versioned(self.paths[0]) and
+                not self.vcs.is_added(self.paths[0])):
+            return True
+        
         return False
         
     def condition_properties(self):
+        for path in self.paths:
+            if (self.vcs.is_in_a_or_a_working_copy(path) and
+                    self.vcs.is_versioned(path)):
+                return True
+        
         return False
         
