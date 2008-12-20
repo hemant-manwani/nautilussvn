@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+import os.path
 from os.path import isdir, isfile
 
 import gnomevfs
@@ -34,7 +35,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     """
     
     def __init__(self):
-        pass
+        self.vcs = VCSFactory().create_vcs_instance()
         
     def get_columns(self):
         """
@@ -54,13 +55,23 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  file: 
         
         """
+        if not file.get_uri().startswith("file://"): return
+            
+        path = gnomevfs.get_local_path_from_uri(file.get_uri())
         
         # If we're not a or inside a working copy we don't even have to bother.
-        
+        if not self.vcs.is_working_copy(path): return
         
         # If we're a directory we have to do a recursive status check to see if
         # any files below us have modifications (added, modified or deleted).
-        
+        if not self.vcs.is_versioned(path):
+            pass
+        elif self.vcs.is_modified(path):
+            file.add_emblem("emblem-modified")
+        elif self.vcs.is_added(path, recurse=False):
+            file.add_emblem("emblem-added")
+        else:
+            file.add_emblem("emblem-normal")
         
         # Verifiying one of following statuses: 
         #   added, missing, deleted
@@ -80,7 +91,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  files:
         
         """
-
+        
+        files = [file for file in files if file.get_uri().startswith("file://")]
+            
         return MainContextMenu(files).construct_menu()
         
     def get_background_items(self, window, file):
@@ -93,6 +106,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  file:
         
         """
+        if not file.get_uri().startswith("file://"): return
         
         return MainContextMenu([file]).construct_menu()
         
@@ -400,38 +414,28 @@ class MainContextMenu():
     #
     
     def condition_checkout(self):
-        print "checkout condition"
-        if len(self.files) == 0:
-            return False
- 
-        #if (not self.vcs.is_working_copy(self.files[0])):
-        #    return True
-
-        return True
+        if (len(self.files) == 1 and 
+                isdir(self.files[0]) and 
+                not self.vcs.is_working_copy(self.files[0])):
+            return True
+        return False
         
     def condition_update(self):
-        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     self.vcs.is_versioned(file) and 
                     not self.vcs.is_added(file)):
                 return True
-        return True
-        """
         return False
         
     def condition_commit(self):
-        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     self.vcs.is_modified(file)):
                 return True
-        return True
-        """
         return False
         
     def condition_diff(self):
-        """
         for file in self.files:
             if (not isfile(file)):
                 return False
@@ -445,82 +449,66 @@ class MainContextMenu():
             return True
         
         return False
-        """
-        return False
         
     def condition_show_log(self):
-        """
         if (len(self.files) == 1 and 
                 self.vcs.is_working_copy(self.files[0]) and
                 not self.vcs.is_added(self.files[0])):
             return True
         return False
-        """
-        return False
         
     def condition_add(self):
-        """
         for file in self.files:
-            if (self.vcs.is_working_copy(file) and
-                not self.vcs.is_versioned(file)):
-                return True
-        return False
-        """
+            if isdir(file):
+                parent = os.path.split(file)[0]
+                if (self.vcs.is_working_copy(parent) and
+                    not self.vcs.is_versioned(file)):
+                    return True
+            else:
+                if (self.vcs.is_working_copy(file) and
+                    not self.vcs.is_versioned(file)):
+                    return True
         return False
         
     def condition_add_to_ignore_list(self):
         pass
         
     def condition_rename(self):
-        """
         if (len(self.files) == 1 and 
                 self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_versioned(self.files[0])):
             return True
         return False
-        """
-        return False
         
     def condition_delete(self):
-        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     self.vcs.is_versioned(file)):
                 return True
         return False
-        """
-        return False
         
     def condition_revert(self):
-        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and
                     (self.vcs.is_modified(file) or
                     self.vcs.is_added(file))):
                 return True
         return False
-        """
-        return False
         
     def condition_blame(self):
-        """
         if (len(self.files) == 1 and
                 self.vcs.is_working_copy(self.files[0]) and
                 self.vcs.is_versioned(self.files[0])):
             return True
         return False
-        """
-        return False
         
     def condition_properties(self):
-        """
         for file in self.files:
             if (self.vcs.is_working_copy(file) and 
                     self.vcs.is_versioned(file)):
                 return True
         return False
-        """
-        return False
+
 
     
     
