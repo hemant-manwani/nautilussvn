@@ -28,7 +28,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || Check for modifications  ||                                             || || 
 || Revision graph           ||                                             || || 
 || ---------------------    ||                                             || || 
-|| Add                      || `1..*` unversioned file(s)                  || yes || 
+|| Add                      || `1..*` NOT added file(s)                    || yes || 
 || Add to ignore list       || `1..*` unversioned file(s)                  || no || 
 || ---------------------    ||                                             || || 
 || Update to revision       ||                                             || || 
