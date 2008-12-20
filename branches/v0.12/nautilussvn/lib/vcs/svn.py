@@ -98,7 +98,7 @@ class SVN:
     #
     
     def has_unversioned(self, path):
-        all_status = self.client.status(path)
+        all_status = self.client.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
@@ -107,7 +107,7 @@ class SVN:
         return False
     
     def has_added(self, path):
-        all_status = self.client.status(path)
+        all_status = self.client.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -116,7 +116,7 @@ class SVN:
         return False
         
     def has_modified(self, path):
-        all_status = self.client.status(path)
+        all_status = self.client.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -125,7 +125,7 @@ class SVN:
         return False
 
     def has_deleted(self, path):
-        all_status = self.client.status(path)
+        all_status = self.client.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.deleted:
