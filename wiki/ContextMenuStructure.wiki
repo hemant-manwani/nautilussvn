@@ -17,7 +17,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || *Menu entry*             || *Condition*                                 || *Recursive* || 
 || Checkout                 || not a working copy AND directory selected   || no ||
 || Update                   || `1..*` versioned file(s) AND NOT added      || no || 
-|| Commit                   || `1..*` (added OR modified file(s))          || yes || 
+|| Commit                   || `1..*` (added OR modified OR deleted file(s))          || yes || 
 || NautilusSvn              || always                                      ||  || 
 
 == Submenu NautilusSvn ==
@@ -34,7 +34,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || Update to revision       ||                                             || || 
 || Rename                   || 1 versioned file                            || no || 
 || Delete                   || `1..*` versioned file(s)                    || no || 
-|| Revert                   || `1..*` (added OR modified file(s))          || yes || 
+|| Revert                   || `1..*` (added OR deleted OR modified file(s))          || yes || 
 || Get lock                 ||                                             || || 
 || ---------------------    ||                                             || || 
 || Branch/tag               ||                                             || || 
