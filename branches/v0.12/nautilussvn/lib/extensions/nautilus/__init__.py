@@ -82,7 +82,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
-        paths = gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items
+        paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items]
         
         return MainContextMenu(paths).construct_menu()
         
