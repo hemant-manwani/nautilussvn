@@ -67,7 +67,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # any files below us have modifications (added, modified or deleted).
         if isdir(path):
             if (self.vcs.has_modified(path) or
-                    self.vcs.has_added(path)):
+                    self.vcs.has_added(path) or
+                    self.vcs.has_deleted(path)):
                 item.add_emblem("emblem-modified")
                 return
         
