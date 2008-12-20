@@ -28,54 +28,34 @@ class SVN:
     def __init__(self):
         self.client = pysvn.Client()
     
-    def is_working_copy(self, file):
-        if isfile(file):
-            file = os.path.dirname(file)
-        
-        if isdir(file):
-            if isdir(os.path.join(file, ".svn")):
-                return True
-            
-        return False
-
-    def is_versioned(self, file):
-        if not self.is_working_copy(file): return False
-            
-        if self.client.info(file):
-            return True
-        return False
-
-    def is_added(self, file, recurse=True):
-        return self.has_status(file, pysvn.wc_status_kind.added, recurse)
-
-    def is_modified(self, file):
-        modified = self.has_status(file, pysvn.wc_status_kind.modified)
-        added = self.has_status(file, pysvn.wc_status_kind.added)
-        return (added or modified)
-            
-        
     #
-    # Helper methods
+    # is
     #
     
-    def has_status(self, file, status, recurse=True):
-        if not self.is_working_copy(file): return False
-            
-        file_statuses = self.client.status(file)
-        if isfile(file):
-            file_status = file_statuses[0]
-            if file_status.text_status == status:
-                return True
-                
-        if isdir(file):
-            if recurse:
-                for file_status in file_statuses:
-                    if file_status.text_status == status:
-                        return True
-            else:
-                file_status = file_statuses[len(file_statuses) - 1]
-                if file_status.text_status == status:
-                    return True
-                
-                
-        return False
+    def is_working_copy(self, path):
+        pass
+        
+    def is_versioned(self, path):
+        pass
+    
+    def is_unversioned(self, path):
+        pass
+        
+    def is_added(self, path):
+        pass
+        
+    def is_modified(self, path):
+        pass
+        
+    #
+    # has
+    #
+    
+    def has_unversioned(self, path):
+        pass
+    
+    def has_added(self, path):
+        pass
+        
+    def has_modified(self, path):
+        pass
