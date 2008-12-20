@@ -41,7 +41,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || Switch                   ||                                             || || 
 || Merge                    ||                                             || || 
 || ---------------------    ||                                             || || 
-|| Blame                    || 1 versioned file                            || no || 
+|| Blame                    || 1 versioned file AND NOT added              || no || 
 || ---------------------    ||                                             || || 
 || Create patch             ||                                             || || 
 || Properties               || `1..*` (versioned file(s))                  || no || 
