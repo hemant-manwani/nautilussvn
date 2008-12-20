@@ -45,33 +45,23 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         pass
         
-    def update_file_info(self, file):
+    def update_file_info(self, item):
         """
-        Callback from Nautilus to get the file status. This is where the magic 
-        happens! This function check the current status of *file*, and updates 
+        Callback from Nautilus to get the item status. This is where the magic 
+        happens! This function check the current status of *item*, and updates 
         the display with the relevant emblem.
         
-        @type   file: NautilusVFSFile
-        @param  file: 
+        @type   item: NautilusVFSFile
+        @param  item: 
         
         """
-        if not file.get_uri().startswith("file://"): return
-            
-        path = gnomevfs.get_local_path_from_uri(file.get_uri())
         
         # If we're not a or inside a working copy we don't even have to bother.
-        if not self.vcs.is_working_copy(path): return
+        
         
         # If we're a directory we have to do a recursive status check to see if
         # any files below us have modifications (added, modified or deleted).
-        if not self.vcs.is_versioned(path):
-            pass
-        elif self.vcs.is_modified(path):
-            file.add_emblem("emblem-modified")
-        elif self.vcs.is_added(path, recurse=False):
-            file.add_emblem("emblem-added")
-        else:
-            file.add_emblem("emblem-normal")
+        
         
         # Verifiying one of following statuses: 
         #   added, missing, deleted
@@ -80,35 +70,37 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         pass
         
-    def get_file_items(self, window, files):
+    def get_file_items(self, window, items):
         """
-        Menu activated with files selected.
+        Menu activated with items selected.
         
         @type   window: NautilusNavigationWindow
         @param  window:
         
-        @type   files: list of NautilusVFSFile
-        @param  files:
+        @type   items: list of NautilusVFSFile
+        @param  items:
         
         """
         
-        files = [file for file in files if file.get_uri().startswith("file://")]
-            
-        return MainContextMenu(files).construct_menu()
+        paths = gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items
         
-    def get_background_items(self, window, file):
+        return MainContextMenu(paths).construct_menu()
+        
+    def get_background_items(self, window, item):
         """
         Menu activated on window background.
         
         @type   window: NautilusNavigationWindow
         @param  window:
-        @type   file:   NautilusVFSFile
-        @param  file:
+        
+        @type   item:   NautilusVFSFile
+        @param  item:
         
         """
-        if not file.get_uri().startswith("file://"): return
         
-        return MainContextMenu([file]).construct_menu()
+        path = gnomevfs.get_local_path_from_uri(item.get_uri())
+        
+        return MainContextMenu([path]).construct_menu()
         
 class MainContextMenu():
     """
@@ -116,10 +108,8 @@ class MainContextMenu():
     
     """
     
-    def __init__(self, files):
-        self.files = [
-            gnomevfs.get_local_path_from_uri(file.get_uri()) for file in files
-        ]
+    def __init__(self, paths):
+        self.paths = paths
         self.vcs = VCSFactory().create_vcs_instance()
         
     def construct_menu(self):
@@ -127,13 +117,12 @@ class MainContextMenu():
         
         """
         
-        # The following dictionary defines the complete contextmenu, you can
-        # refer to any future local variables using the syntax $var and ${var}.
+        # The following dictionary defines the complete contextmenu
         menu_definition = [
             {
                 "identifier": "NautilusSvn::Checkout",
                 "label": "Checkout",
-                "tooltip": "Checkout code from an SVN repository",
+                "tooltip": "",
                 "icon": "icon-checkout",
                 "signals": {
                     "activate": {
@@ -414,101 +403,38 @@ class MainContextMenu():
     #
     
     def condition_checkout(self):
-        if (len(self.files) == 1 and 
-                isdir(self.files[0]) and 
-                not self.vcs.is_working_copy(self.files[0])):
-            return True
-        return False
+        pass
         
     def condition_update(self):
-        for file in self.files:
-            if (self.vcs.is_working_copy(file) and
-                    self.vcs.is_versioned(file) and 
-                    not self.vcs.is_added(file)):
-                return True
-        return False
+        pass
         
     def condition_commit(self):
-        for file in self.files:
-            if (self.vcs.is_working_copy(file) and
-                    self.vcs.is_modified(file)):
-                return True
-        return False
+        pass
         
     def condition_diff(self):
-        for file in self.files:
-            if (not isfile(file)):
-                return False
-        
-        if (len(self.files) == 2):
-            return True
-            
-        if (len(self.files) == 1 and
-                self.vcs.is_working_copy(self.files[0]) and
-                self.vcs.is_modified(self.files[0])):
-            return True
-        
-        return False
+        pass
         
     def condition_show_log(self):
-        if (len(self.files) == 1 and 
-                self.vcs.is_working_copy(self.files[0]) and
-                not self.vcs.is_added(self.files[0])):
-            return True
-        return False
+        pass
         
     def condition_add(self):
-        for file in self.files:
-            if isdir(file):
-                parent = os.path.split(file)[0]
-                if (self.vcs.is_working_copy(parent) and
-                    not self.vcs.is_versioned(file)):
-                    return True
-            else:
-                if (self.vcs.is_working_copy(file) and
-                    not self.vcs.is_versioned(file)):
-                    return True
-        return False
+        pass
         
     def condition_add_to_ignore_list(self):
         pass
         
     def condition_rename(self):
-        if (len(self.files) == 1 and 
-                self.vcs.is_working_copy(self.files[0]) and
-                self.vcs.is_versioned(self.files[0])):
-            return True
-        return False
+        pass
         
     def condition_delete(self):
-        for file in self.files:
-            if (self.vcs.is_working_copy(file) and
-                    self.vcs.is_versioned(file)):
-                return True
-        return False
+        pass
         
     def condition_revert(self):
-        for file in self.files:
-            if (self.vcs.is_working_copy(file) and
-                    (self.vcs.is_modified(file) or
-                    self.vcs.is_added(file))):
-                return True
-        return False
+        pass
         
     def condition_blame(self):
-        if (len(self.files) == 1 and
-                self.vcs.is_working_copy(self.files[0]) and
-                self.vcs.is_versioned(self.files[0])):
-            return True
-        return False
+        pass
         
     def condition_properties(self):
-        for file in self.files:
-            if (self.vcs.is_working_copy(file) and 
-                    self.vcs.is_versioned(file)):
-                return True
-        return False
-
-
-    
-    
+        pass
+        
