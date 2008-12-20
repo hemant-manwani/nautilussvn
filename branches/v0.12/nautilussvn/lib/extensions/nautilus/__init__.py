@@ -403,38 +403,38 @@ class MainContextMenu():
     #
     
     def condition_checkout(self):
-        pass
+        return False
         
     def condition_update(self):
-        pass
+        return False
         
     def condition_commit(self):
-        pass
+        return False
         
     def condition_diff(self):
-        pass
+        return False
         
     def condition_show_log(self):
-        pass
+        return False
         
     def condition_add(self):
-        pass
+        return False
         
     def condition_add_to_ignore_list(self):
-        pass
+        return False
         
     def condition_rename(self):
-        pass
+        return False
         
     def condition_delete(self):
-        pass
+        return False
         
     def condition_revert(self):
-        pass
+        return False
         
     def condition_blame(self):
-        pass
+        return False
         
     def condition_properties(self):
-        pass
+        return False
         
