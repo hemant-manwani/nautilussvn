@@ -29,7 +29,7 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 || Revision graph           ||                                             || || 
 || ---------------------    ||                                             || || 
 || Add                      || `1..*` unversioned file(s)                  || yes || 
-|| Add to ignore list       || `1..*` unversioned file(s)                  || no || 
+|| Add to ignore list       || only `1..*` unversioned file(s)             || no || 
 || ---------------------    ||                                             || || 
 || Update to revision       ||                                             || || 
 || Rename                   || 1 versioned file                            || no || 
