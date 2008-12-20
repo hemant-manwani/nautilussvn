@@ -95,12 +95,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
-        paths = []
-        for item in items:
-            if item.get_uri().startswith("file://"): 
-                paths.append(
-                    gnomevfs.get_local_path_from_uri(item.get_uri())
-                )
+        paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items 
+            if item.get_uri().startswith("file://")]
         
         return MainContextMenu(paths).construct_menu()
         
