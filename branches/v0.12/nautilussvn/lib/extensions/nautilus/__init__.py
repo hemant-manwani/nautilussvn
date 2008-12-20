@@ -56,6 +56,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
+        if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # If we're not a or inside a working copy we don't even have to bother.
@@ -94,7 +95,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
-        paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items]
+        paths = []
+        for item in items:
+            if item.get_uri().startswith("file://"): 
+                paths.append(
+                    gnomevfs.get_local_path_from_uri(item.get_uri())
+                )
         
         return MainContextMenu(paths).construct_menu()
         
@@ -110,6 +116,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
+        if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         return MainContextMenu([path]).construct_menu()
