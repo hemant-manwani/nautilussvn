@@ -303,3 +303,14 @@ def browse_to_item(path):
     """
 
     os.system("nautilus --no-desktop --browser %s" % os.path.dirname(path))
+    
+def delete_item(path):
+    """
+    Send an item to the trash
+    
+    @type   path: string
+    @param  path: a file path
+    
+    """
+    
+    os.system("gvfs-trash %s" % path)

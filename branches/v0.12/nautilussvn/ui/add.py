@@ -27,6 +27,7 @@ import gtk
 import nautilussvn.ui
 import nautilussvn.ui.widget
 import nautilussvn.ui.notification
+import nautilussvn.ui.dialog
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -41,6 +42,8 @@ class Add:
 
     def __init__(self, paths):
         self.view = nautilussvn.ui.InterfaceView(self, "add", "Add")
+
+        self.last_row_clicked = None
 
         self.files_table = nautilussvn.ui.widget.Table(
             self.view.get_widget("files_table"), 
@@ -86,6 +89,8 @@ class Add:
                 
                 treeview_model = treeview.get_model()
                 fileinfo = treeview_model[path]
+
+                self.last_row_clicked = path[0]
                 
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
                         'label': 'Open',
@@ -151,7 +156,13 @@ class Add:
         nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_delete_activated(self, widget, data=None):
-        print "Delete Item"
+        confirm = nautilussvn.ui.dialog.Confirmation(
+            "Are you sure you want to send this file to the trash?"
+        )
+        
+        if confirm.run():
+            nautilussvn.lib.helper.delete_item(data[1])
+            self.files_table.remove(self.last_row_clicked)
         
     def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
         print "Ignore by file name"
@@ -160,5 +171,5 @@ class Add:
         print "Ignore by file extension"
         
 if __name__ == "__main__":
-    window = Add(["/home/adam/Development/nautilussvn/branches/v0.12/nautilussvn/ui"])
+    window = Add(["/home/adam/Development/nautilussvn/branches/v0.12/nautilussvn/ui/"])
     gtk.main()
