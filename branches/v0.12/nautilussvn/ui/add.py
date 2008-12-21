@@ -144,19 +144,19 @@ class Add:
         
         print "Row Double-clicked"
                 
-    def on_context_open_activated(self, widget, Data=None):
-        print "Open Item"
+    def on_context_open_activated(self, widget, data=None):
+        nautilussvn.lib.helper.open_item(data[1])
         
-    def on_context_browse_activated(self, widget, Data=None):
+    def on_context_browse_activated(self, widget, data=None):
         print "Browse Item"
 
-    def on_context_delete_activated(self, widget, Data=None):
+    def on_context_delete_activated(self, widget, data=None):
         print "Delete Item"
         
-    def on_subcontext_ignore_by_filename_activated(self, widget, Data=None):
+    def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
         print "Ignore by file name"
         
-    def on_subcontext_ignore_by_fileext_activated(self, widget, Data=None):
+    def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
         print "Ignore by file extension"
         
 if __name__ == "__main__":
