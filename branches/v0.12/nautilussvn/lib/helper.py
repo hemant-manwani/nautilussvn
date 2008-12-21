@@ -278,3 +278,17 @@ def get_file_extension(path):
     """
     
     return os.path.splitext(path)[1]
+    
+def open_item(path):
+    """
+    Use GNOME default opener to handle file opening
+    
+    @type   path: string
+    @param  path: a file path
+    
+    """
+    
+    if path == "" or path is None:
+        return
+    
+    os.system("gnome-open %s" % path)
