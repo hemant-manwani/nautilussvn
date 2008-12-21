@@ -16,35 +16,35 @@ Based on [http://code.google.com/p/nautilussvn/wiki/TortoiseSVN TortoiseSVN's me
 == Topmenu ==
 || *Menu entry*             || *Condition*                                 || *Recursive* || 
 || Checkout                 || not a working copy AND directory selected   || no ||
-|| Update                   || `1..*` versioned file(s) AND NOT added      || no || 
-|| Commit                   || `1..*` (added OR modified OR deleted file(s))          || yes || 
+|| Update                   || `1..*` versioned item(s) AND NOT added      || no || 
+|| Commit                   || `1..*` (added OR modified OR deleted item(s))          || yes || 
 || NautilusSvn              || always                                      ||  || 
 
 == Submenu NautilusSvn ==
 || *Menu entry*             || *Condition*                                 || *Recursive* || 
-|| Diff                     || 2 files OR modified file                    || no`[1]` || 
-|| Show log                 || 1 versioned file AND NOT added              || no || 
+|| Diff                     || 2 items OR modified item                    || no`[1]` || 
+|| Show log                 || 1 versioned item AND NOT added              || no || 
 || Repo-browser             ||                                             || || 
 || Check for modifications  ||                                             || || 
 || Revision graph           ||                                             || || 
 || ---------------------    ||                                             || || 
-|| Add                      || `1..*` unversioned file(s)                  || yes || 
-|| Add to ignore list       || only `1..*` unversioned file(s)             || no || 
+|| Add                      || `1..*` unversioned item(s)                  || yes || 
+|| Add to ignore list       || only `1..*` unversioned item(s)             || no || 
 || ---------------------    ||                                             || || 
 || Update to revision       ||                                             || || 
-|| Rename                   || 1 versioned file                            || no || 
-|| Delete                   || `1..*` versioned file(s)                    || no || 
-|| Revert                   || `1..*` (added OR deleted OR modified file(s))          || yes || 
+|| Rename                   || 1 versioned item                            || no || 
+|| Delete                   || `1..*` versioned item(s)                    || no || 
+|| Revert                   || `1..*` (added OR deleted OR modified item(s))          || yes || 
 || Get lock                 ||                                             || || 
 || ---------------------    ||                                             || || 
 || Branch/tag               ||                                             || || 
 || Switch                   ||                                             || || 
 || Merge                    ||                                             || || 
 || ---------------------    ||                                             || || 
-|| Blame                    || 1 versioned file AND NOT added              || no || 
+|| Blame                    || 1 versioned item AND NOT added              || no || 
 || ---------------------    ||                                             || || 
 || Create patch             ||                                             || || 
-|| Properties               || `1..*` (versioned file(s))                  || no || 
+|| Properties               || `1..*` (versioned item(s))                  || no || 
 || ---------------------    ||                                             || || 
 || Help                     || always                                      || || 
 || Settings                 || always                                      || || 
