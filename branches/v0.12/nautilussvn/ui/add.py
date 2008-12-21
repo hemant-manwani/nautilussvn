@@ -52,7 +52,7 @@ class Add:
         self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
         self.files = self.vcs.get_items(
             paths, 
-            [pysvn.wc_status_kind.unversioned]
+            self.vcs.STATUSES_UNVERSIONED
         )
         
         for item in self.files:

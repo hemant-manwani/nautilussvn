@@ -24,31 +24,35 @@ from os.path import isdir, isfile
 import pysvn
 
 class SVN:
-
-    STATUS_DICT = {
-        pysvn.wc_status_kind.none:          "None",
-        pysvn.wc_status_kind.unversioned:   "Unversioned",
-        pysvn.wc_status_kind.normal:        "Normal",
-        pysvn.wc_status_kind.added:         "Added",
-        pysvn.wc_status_kind.missing:       "Missing",
-        pysvn.wc_status_kind.deleted:       "Deleted",
-        pysvn.wc_status_kind.replaced:      "Replaced",
-        pysvn.wc_status_kind.modified:      "Modified",
-        pysvn.wc_status_kind.merged:        "Merged",
-        pysvn.wc_status_kind.conflicted:    "Conflicted",
-        pysvn.wc_status_kind.ignored:       "Ignored",
-        pysvn.wc_status_kind.obstructed:    "Obstructed",
-        pysvn.wc_status_kind.external:      "External",
-        pysvn.wc_status_kind.incomplete:    "Incomplete"
-    }
     
-    STATUS_CHANGED_DICT = {
-        pysvn.wc_status_kind.unversioned:   "Unversioned",
-        pysvn.wc_status_kind.added:         "Added",
-        pysvn.wc_status_kind.deleted:       "Deleted",
-        pysvn.wc_status_kind.replaced:      "Replaced",
-        pysvn.wc_status_kind.modified:      "Modified",
+    STATUS = {
+        "none"          : pysvn.wc_status_kind.none,
+        "unversioned"   : pysvn.wc_status_kind.unversioned,
+        "normal"        : pysvn.wc_status_kind.normal,
+        "added"         : pysvn.wc_status_kind.added,
+        "missing"       : pysvn.wc_status_kind.missing,
+        "deleted"       : pysvn.wc_status_kind.deleted,
+        "replaced"      : pysvn.wc_status_kind.replaced,
+        "modified"      : pysvn.wc_status_kind.modified,
+        "merged"        : pysvn.wc_status_kind.merged,
+        "conflicted"    : pysvn.wc_status_kind.conflicted,
+        "ignored"       : pysvn.wc_status_kind.ignored,
+        "obstructed"    : pysvn.wc_status_kind.obstructed,
+        "external"      : pysvn.wc_status_kind.external,
+        "incomplete"    : pysvn.wc_status_kind.incomplete
     }
+
+    STATUSES_CHANGED = [
+        STATUS["unversioned"],
+        STATUS["added"],
+        STATUS["deleted"],
+        STATUS["replaced"],
+        STATUS["modified"],
+    ]
+    
+    STATUSES_UNVERSIONED = [
+        STATUS["unversioned"]
+    ]
     
     def __init__(self):
         self.client = pysvn.Client()
