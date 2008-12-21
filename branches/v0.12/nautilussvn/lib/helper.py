@@ -264,3 +264,17 @@ def launch_diff_tool(lhs, rhs):
         lhs,
         rhs
     )
+    
+def get_file_extension(path):
+    """
+    Wrapper that retrieves a file path's extension
+    
+    @type   path: string
+    @param  path: a filename or path
+    
+    @rtype  string
+    @return a file extension
+    
+    """
+    
+    return os.path.splitext(path)[1]
