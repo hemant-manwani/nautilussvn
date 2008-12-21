@@ -184,10 +184,10 @@ class SVN:
 
         if paths is None:
             return []
-        
+ 
         #recursively searches the common path of all "paths" item
         st = self.client.status(
-            os.path.commonprefix(paths)[len(os.getcwd()):]
+            os.path.commonprefix(paths)[len(os.getcwd())+1:]
         )
 
         if st is None:
