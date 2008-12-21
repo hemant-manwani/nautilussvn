@@ -96,7 +96,7 @@ class Add:
                             }
                         }
                     },{
-                        'label': 'Browse',
+                        'label': 'Browse to',
                         'signals': {
                             'activate': {
                                 'callback':self.on_context_browse_activated, 
@@ -114,7 +114,7 @@ class Add:
                     },{
                         'label': 'Add to ignore list',
                         'submenu': [{
-                                'label': fileinfo[1],
+                                'label': os.path.basename(fileinfo[1]),
                                 'signals': {
                                     'activate': {
                                         'callback':self.on_subcontext_ignore_by_filename_activated, 
@@ -123,7 +123,7 @@ class Add:
                                  }
                             },
                             {
-                                'label': "*.%s"%fileinfo[2],
+                                'label': "*%s"%fileinfo[2],
                                 'signals': {
                                     'activate': {
                                         'callback':self.on_subcontext_ignore_by_fileext_activated, 
@@ -160,5 +160,5 @@ class Add:
         print "Ignore by file extension"
         
 if __name__ == "__main__":
-    window = Add([])
+    window = Add(["/home/adam/Development/nautilussvn/branches/v0.12/nautilussvn/ui"])
     gtk.main()
