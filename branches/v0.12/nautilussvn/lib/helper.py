@@ -301,5 +301,5 @@ def browse_to_item(path):
     @param  path: a file path
     
     """
-    
-    return
+
+    os.system("nautilus --no-desktop --browser %s" % os.path.dirname(path))
