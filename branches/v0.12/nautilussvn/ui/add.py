@@ -23,7 +23,6 @@ import os
 import pygtk
 import gobject
 import gtk
-import pysvn
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
