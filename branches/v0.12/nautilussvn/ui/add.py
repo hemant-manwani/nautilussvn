@@ -148,7 +148,7 @@ class Add:
         nautilussvn.lib.helper.open_item(data[1])
         
     def on_context_browse_activated(self, widget, data=None):
-        print "Browse Item"
+        nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_delete_activated(self, widget, data=None):
         print "Delete Item"

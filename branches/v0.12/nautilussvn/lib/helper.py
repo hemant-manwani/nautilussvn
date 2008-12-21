@@ -292,3 +292,14 @@ def open_item(path):
         return
     
     os.system("gnome-open %s" % path)
+    
+def browse_to_item(path):
+    """
+    Browse to the specified path in the file manager
+    
+    @type   path: string
+    @param  path: a file path
+    
+    """
+    
+    return
