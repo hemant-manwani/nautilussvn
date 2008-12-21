@@ -42,7 +42,7 @@ class SVN:
         "incomplete"    : pysvn.wc_status_kind.incomplete
     }
 
-    STATUSES_CHANGED = [
+    STATUSES_FOR_COMMIT = [
         STATUS["unversioned"],
         STATUS["added"],
         STATUS["deleted"],
@@ -50,7 +50,7 @@ class SVN:
         STATUS["modified"],
     ]
     
-    STATUSES_UNVERSIONED = [
+    STATUSES_FOR_ADD = [
         STATUS["unversioned"]
     ]
     

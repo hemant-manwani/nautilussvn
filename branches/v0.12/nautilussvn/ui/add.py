@@ -51,7 +51,7 @@ class Add:
         self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
         self.files = self.vcs.get_items(
             paths, 
-            self.vcs.STATUSES_UNVERSIONED
+            self.vcs.STATUSES_FOR_ADD
         )
         
         for item in self.files:
