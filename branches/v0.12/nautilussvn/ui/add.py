@@ -88,14 +88,6 @@ class Add:
                 fileinfo = treeview_model[path]
                 
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        'label': 'View Diff',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_diff_activated, 
-                                'args':fileinfo
-                            }
-                        }
-                    },{
                         'label': 'Open',
                         'signals': {
                             'activate': {
@@ -154,9 +146,6 @@ class Add:
                 
     def on_context_open_activated(self, widget, Data=None):
         print "Open Item"
-
-    def on_context_diff_activated(self, widget, Data=None):
-        print "Diff Item"
         
     def on_context_browse_activated(self, widget, Data=None):
         print "Browse Item"
