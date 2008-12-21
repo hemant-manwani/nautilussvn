@@ -18,19 +18,29 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+
 import pygtk
 import gobject
 import gtk
+import pysvn
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
 import nautilussvn.ui.notification
+import nautilussvn.lib.helper
+import nautilussvn.lib.vcs
 
 class Add:
+    """
+    Provides an interface for the user to add unversioned files to a
+    repository.  Also, provides a context menu with some extra functionality.
+    
+    """
 
-    TOGGLE_ALL = False
+    TOGGLE_ALL = True
 
-    def __init__(self):
+    def __init__(self, paths):
         self.view = nautilussvn.ui.InterfaceView(self, "add", "Add")
 
         self.files_table = nautilussvn.ui.widget.Table(
@@ -39,13 +49,19 @@ class Add:
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
-        self.files = [
-            [False, "ADDEDLATER.jpg", "jpg"],
-            [True, "ADDEDLATER2.jpg", "jpg"]
-        ]
-        for row in self.files:
-            self.files_table.append(row)
-
+        self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        self.files = self.vcs.get_items(
+            paths, 
+            [pysvn.wc_status_kind.unversioned]
+        )
+        
+        for item in self.files:
+            self.files_table.append([
+                True, 
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path)
+            ])
+                
     def on_destroy(self, widget):
         gtk.main_quit()
 
@@ -156,5 +172,5 @@ class Add:
         print "Ignore by file extension"
         
 if __name__ == "__main__":
-    window = Add()
+    window = Add([])
     gtk.main()
