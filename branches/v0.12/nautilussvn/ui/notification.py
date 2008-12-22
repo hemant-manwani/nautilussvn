@@ -37,12 +37,6 @@ class Notification:
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
         )
-        self.entries = [
-            ['Added', '/home/adam/Development/test.html'],
-            ['Commited', '/home/adam/Development/blah.txt']
-        ]
-        for row in self.entries:
-            self.append_to_table(row)
             
     def on_destroy(self, widget):
         gtk.main_quit()
@@ -57,7 +51,7 @@ class Notification:
         self.OK_ENABLED = not self.OK_ENABLED
         self.view.get_widget("ok").set_sensitive(self.OK_ENABLED)
             
-    def append_to_table(self, entry):
+    def append(self, entry):
         self.table.append(entry)
 
 if __name__ == "__main__":
