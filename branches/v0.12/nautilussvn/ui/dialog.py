@@ -86,63 +86,97 @@ class FolderChooser:
         return returner
         
 class Certificate:
+    """
+    Provides a dialog to accept/accept_once/deny an ssl certificate
+    
+    """
+    
     def __init__(self, realm="", host="", 
-            issuer_from="", issuer_to="", valid="", fingerprint=""):
+            issuer="", valid_from="", valid_to="", fingerprint=""):
             
         self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Certificate")
         
         self.view.get_widget("cert_realm").set_label(realm)
         self.view.get_widget("cert_host").set_label(host)
-        self.view.get_widget("cert_issuer").set_label("%s to %s" % (issuer_from,issuer_to))
-        self.view.get_widget("cert_valid").set_label(valid)
+        self.view.get_widget("cert_issuer").set_label(issuer)
+        self.view.get_widget("cert_valid").set_label(
+            "%s to %s" % (valid_from, valid_to)
+        )
         self.view.get_widget("cert_fingerprint").set_label(fingerprint)
         
     def run(self):
+        """
+        Returns three possible values:
+            0   Deny
+            1   Accept Once
+            2   Accept Forever
+            
+        """
+        
         self.dialog = self.view.get_widget("Certificate")
         result = self.dialog.run()
-        
-        if result == -1:
-            self.deny()
-        elif result == 1:
-            self.accept_once()
-        elif result == 2:
-            self.accept_forever()
-        
         self.dialog.destroy()
-        return
-
-    def deny(self):
-        print "Deny"
-   
-    def accept_once(self):
-        print "Accept Once"
-    
-    def accept_forever(self):
-        print "Accept Forever"
+        return result
         
 class Authorization:
-    def __init__(self, location="", realm=""):
+    def __init__(self, realm="", may_save=True):
         self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Authorization")
         
-        self.view.get_widget("auth_location").set_label(location)
         self.view.get_widget("auth_realm").set_label(realm)
+        self.view.get_widget("auth_save").set_sensitive(may_save)
         
     def run(self):
+        returner = None
+        
         self.dialog = self.view.get_widget("Authorization")
         result = self.dialog.run()
         
         if result == 1:
-            self.send_details()
+            returner = (
+                True,
+                self.view.get_widget("auth_login").get_text(),
+                self.view.get_widget("auth_password").get_text(),
+                self.view.get_widget("auth_save").get_active()
+            )
+        else:
+            returner = (
+                False,
+                "",
+                "",
+                False
+            )
             
         self.dialog.destroy()
-        return
+        return returner
+                
+class CertAuthorization:
+    def __init__(self, realm="", may_save=True):
+        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "CertAuthorization")
         
-    def send_details(self):
-        self.login = self.view.get_widget("auth_login").get_text()
-        self.password = self.view.get_widget("auth_password").get_text()
-
-        print "Sending %s:%s" % (self.login, self.password)
+        self.view.get_widget("certauth_realm").set_label(realm)
+        self.view.get_widget("certauth_save").set_sensitive(may_save)
         
+    def run(self):
+        returner = None
+        
+        self.dialog = self.view.get_widget("CertAuthorization")
+        result = self.dialog.run()
+        
+        if result == 1:
+            returner = (
+                True,
+                self.view.get_widget("certauth_password").get_text(),
+                self.view.get_widget("certauth_save").get_active()
+            )
+        else:
+            returner = (
+                False,
+                "",
+                False
+            )
+            
+        self.dialog.destroy()
+        return returner
         
 class Property:
     def __init__(self, name="", value=""):

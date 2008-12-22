@@ -72,7 +72,6 @@ class Add:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_select_all_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL

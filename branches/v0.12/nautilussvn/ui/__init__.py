@@ -25,10 +25,17 @@ import gobject
 import gtk
 import gtk.glade
 
+import nautilussvn.ui.notification
+import nautilussvn.ui.dialog
+import nautilussvn.lib.vcs
+
 class InterfaceView:
     def __init__(self, callback_obj, filename, id):
         
-        path = "%s/glade/%s.glade" % (os.path.dirname(os.path.realpath(__file__)), filename)
+        path = "%s/glade/%s.glade" % (
+            os.path.dirname(os.path.realpath(__file__)), 
+            filename
+        )
         self.tree = gtk.glade.XML(path, id)
         self.tree.signal_autoconnect(callback_obj)
         self.id = id
@@ -41,3 +48,80 @@ class InterfaceView:
         
     def show(self):
         self.get_widget(self.id).set_property('visible', True)
+
+class VCSCallbacks:
+    """
+    Provides a central interface to handle vcs callbacks.
+    Loads UI elements that require user interaction.
+    
+    """
+    
+    def __init__(self, client=None, notification):
+        
+        self.client = client
+        if self.client is None:
+            self.client = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        
+        self.client.set_callback_cancel(self.cancel)
+        self.client.set_callback_notify(self.notify)
+        self.client.set_callback_get_log_message(self.get_log_message)
+        self.client.set_callback_get_login(self.get_login)
+        self.client.set_callback_ssl_server_trust_prompt(self.get_ssl_trust)
+        self.client.set_callback_ssl_client_cert_password_prompt(self.get_ssl_password)
+        
+        self.notification = nautilussvn.ui.notification.Notification()
+        
+    def cancel(self):
+        return True
+    
+    def notify(self, data):
+        self.notification.append(
+            self.client.NOTIFY_ACTIONS[data["action"]],
+            data["path"]
+        )
+        
+        if data["action"] in self.client.NOTIFY_ACTIONS_COMPLETE:
+            self.notification.view.get_widget("ok").set_sensitive(True)
+    
+    def get_log_message(self):
+        return True, "Empty Message"
+    
+    def get_login(self, realm, username, may_save):
+        dialog = nautilussvn.ui.dialog.Authentication(
+            realm,
+            may_save
+        )
+        
+        return dialog.run()
+    
+    def get_ssl_trust(self, data):
+    
+        ACCEPTED_FAILURES = 3
+    
+        dialog = nautilissvn.ui.dialog.Certificate(
+            data["realm"],
+            data["hostname"],
+            data["issuer_dname"],
+            data["valid_from"],
+            data["valid_to"],
+            data["finger_print"]
+        )
+        
+        result = dialog.run()
+        if result == 0:
+            #Deny
+            return (False, ACCEPTED_FAILURES, False)
+        elif result == 1:
+            #Accept Once
+            return (True, ACCEPTED_FAILURES, False)
+        elif result == 2:
+            #Accept Forever
+            return (True, ACCEPTED_FAILURES, True)
+
+    def get_ssl_password(self, realm, may_save):
+        dialog = nautilussvn.ui.dialog.CertAuthentication(
+            realm,
+            may_save
+        )
+        
+        return dialog.run()
