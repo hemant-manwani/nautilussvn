@@ -450,9 +450,7 @@ class SVN:
         
         if paths is None:
             return
-        
-        print paths
-        
+
         try:
             self.client.add(paths)
         except pysvn.ClientError, e:
