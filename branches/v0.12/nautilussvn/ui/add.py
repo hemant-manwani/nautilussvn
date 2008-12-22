@@ -28,6 +28,7 @@ import nautilussvn.ui
 import nautilussvn.ui.widget
 import nautilussvn.ui.notification
 import nautilussvn.ui.dialog
+import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -63,6 +64,8 @@ class Add:
                 item.path, 
                 nautilussvn.lib.helper.get_file_extension(item.path)
             ])
+            
+        
                 
     def on_destroy(self, widget):
         gtk.main_quit()
@@ -72,6 +75,10 @@ class Add:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
+        self.callbacks = nautilussvn.ui.callback.VCSCallbacks(self.vcs)
+        items = self.files_table.get_activated_rows(1)
+        self.vcs.add(items)
+        self.callbacks.finish()
 
     def on_select_all_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
