@@ -54,6 +54,16 @@ class SVN:
         STATUS["unversioned"]
     ]
     
+    PROPERTIES = {
+        "executable":   "svn:executable",
+        "mime-type":    "svn:mime-type",
+        "ignore":       "svn:ignore",
+        "keywords":     "svn:keywords",
+        "eol-style":    "svn:eol-style",
+        "externals":    "svn:externals",
+        "special":      "svn:special"
+    }
+    
     def __init__(self):
         self.client = pysvn.Client()
     
@@ -121,6 +131,16 @@ class SVN:
             return True
         
         return False
+        
+    def is_ignored(self, path):
+        all_status = self.client.status(path)
+        status = all_status[len(all_status) - 1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.ignored:
+            return True
+        
+        return False
+        
         
     #
     # has
@@ -200,5 +220,148 @@ class SVN:
                     continue
                 
             returner.append(st_item)
+        
+        return returner
+        
+    #
+    # properties
+    #
+    
+    def proppath(self, path):
+        """
+        Generates a safe path to use with the prop* functions.
+        If the given path is unversioned, go to the next path up.
+
+        @type   path: string
+        @param  path: a file or directory path
+        
+        @rtype  string
+        @return a prop* function-safe path
+
+        """
+
+        st = self.client.status(path)
+        if st[0].text_status == self.STATUS["unversioned"]:
+            path = os.path.dirname(path)
+        
+        return path
+        
+    def propset(self, path, prop_name, prop_value):
+        """
+        Adds an svn property to a path.  If the item is unversioned,
+        add a recursive property to the parent path
+        
+        @type   path: string
+        @param  path: a file or directory path
+        
+        @type   prop_name: string
+        @param  prop_name: an svn property name
+        
+        @type   prop_value: string
+        @param  prop_value: an svn property value/pattern
+        
+        """
+        
+        path = self.proppath(path)
+
+        props = self.propget(path, prop_name)
+        props = "%s%s" % (props, prop_value)
+        
+        returner = False
+        try:
+            self.client.propset(
+                prop_name, 
+                props, 
+                path, 
+                recurse=True
+            )
+            returner = True
+        except pysvn.ClientError, e:
+            print "pysvn.ClientError exception in svn.py propset()"
+            print str(e)
+        except TypeError, e:
+            print "TypeError exception in svn.py propset()"
+            print str(e)
+            
+        return returner
+        
+    def proplist(self, path):
+        """
+        Retrieves a dict of properties for a path
+        
+        @type   path: string
+        @param  path: a file or directory path
+        
+        @rtype  dict
+        @return a dict of properties
+        
+        """
+        
+        return self.client.proplist(path)[0][1]
+        
+    def propget(self, path, prop_name):
+        """
+        Retrieves a dictionary of the prop_value of the given
+        path and prop_name
+        
+        @type   path: string
+        @param  path: a file or directory path
+        
+        @type   prop_name: string or self.PROPERTIES
+        @param  prop_name: an svn property name
+        
+        @rtype  dict
+        @return a dict where the key is the path, the value is the prop_value
+        
+        """
+
+        path = self.proppath(path)
+        
+        try:
+            returner = self.client.propget(
+                prop_name,
+                path,
+                recurse=True
+            )
+        except pysvn.ClientError, e:
+            print "pysvn.ClientError exception in svn.py propget()"
+            print str(e)
+            return ""
+        
+        try:
+            returner = returner[path]
+        except KeyError, e:
+            returner = ""
+            
+        return returner
+        
+    def propdel(self, path, prop_name):
+        """
+        Removes a property from a given path
+        
+        @type   path: string
+        @param  path: a file or directory path
+        
+        @type   prop_name: string or self.PROPERTIES
+        @param  prop_name: an svn property name
+        
+        """
+        
+        path = self.proppath(path)
+        
+        returner = False
+        try:
+            self.client.propdel(
+                prop_name,
+                path,
+                recurse=True
+            )
+            returner = True
+        except pysvn.ClientError, e:
+            print "pysvn.ClientError exception in svn.py propdel()"
+            print str(e)
+        except TypeError, e:
+            print "TypeError exception in svn.py propdel()"
+            print str(e)
         
         return returner
