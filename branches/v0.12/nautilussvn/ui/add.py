@@ -65,8 +65,6 @@ class Add:
                 nautilussvn.lib.helper.get_file_extension(item.path)
             ])
             
-        
-                
     def on_destroy(self, widget):
         gtk.main_quit()
 
