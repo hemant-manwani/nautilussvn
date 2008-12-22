@@ -65,17 +65,17 @@ class SVN:
     }
     
     NOTIFY_ACTIONS = {
-        pysvn.wc_notify_action.add:                     "Add",
-        pysvn.wc_notify_action.copy:                    "Copy",
-        pysvn.wc_notify_action.delete:                  "Delete",
-        pysvn.wc_notify_action.restore:                 "Restore",
-        pysvn.wc_notify_action.revert:                  "Revert",
+        pysvn.wc_notify_action.add:                     "Added",
+        pysvn.wc_notify_action.copy:                    "Copied",
+        pysvn.wc_notify_action.delete:                  "Deleted",
+        pysvn.wc_notify_action.restore:                 "Restored",
+        pysvn.wc_notify_action.revert:                  "Reverted",
         pysvn.wc_notify_action.failed_revert:           "Failed Revert",
         pysvn.wc_notify_action.resolved:                "Resolved",
-        pysvn.wc_notify_action.skip:                    "Skip",
-        pysvn.wc_notify_action.update_delete:           "Delete",
-        pysvn.wc_notify_action.update_add:              "Add",
-        pysvn.wc_notify_action.update_update:           "Update",
+        pysvn.wc_notify_action.skip:                    "Skipped",
+        pysvn.wc_notify_action.update_delete:           "Deleted",
+        pysvn.wc_notify_action.update_add:              "Addd",
+        pysvn.wc_notify_action.update_update:           "Updated",
         pysvn.wc_notify_action.update_completed:        "Completed",
         pysvn.wc_notify_action.update_external:         "External",
         pysvn.wc_notify_action.status_completed:        "Completed",
@@ -85,7 +85,7 @@ class SVN:
         pysvn.wc_notify_action.commit_deleted:          "Copied",
         pysvn.wc_notify_action.commit_replaced:         "Replaced",
         pysvn.wc_notify_action.commit_postfix_txdelta:  "Postfix Delta",
-        pysvn.wc_notify_action.annotate_revision:       "Annotate",
+        pysvn.wc_notify_action.annotate_revision:       "Annotated",
         pysvn.wc_notify_action.locked:                  "Locked",
         pysvn.wc_notify_action.unlocked:                "Unlocked",
         pysvn.wc_notify_action.failed_lock:             "Failed Lock",
@@ -434,3 +434,30 @@ class SVN:
     
     def set_callback_ssl_client_cert_password_prompt(self, func):
         self.client.callback_ssl_client_cert_password_prompt = func
+        
+    #
+    # actions
+    #
+    
+    def add(self, paths):
+        """
+        Add files or directories to the repository
+        
+        @type   paths: list
+        @param  paths: a list of files/directories
+        
+        """
+        
+        if paths is None:
+            return
+        
+        print paths
+        
+        try:
+            self.client.add(paths)
+        except pysvn.ClientError, e:
+            print "pysvn.ClientError exception in svn.py add()"
+            print str(e)
+        except TypeError, e:
+            print "TypeError exception in svn.py add()"
+            print str(e)
