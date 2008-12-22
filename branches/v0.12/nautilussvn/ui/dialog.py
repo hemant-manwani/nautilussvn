@@ -44,6 +44,9 @@ class PreviousMessages:
             ["Date", "Message"]
         )
         self.entries = nautilussvn.lib.helper.get_previous_messages()
+        if self.entries is None:
+            return None
+            
         for entry in self.entries:
             tmp = entry[1]
             if len(tmp) > 80:
