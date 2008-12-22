@@ -103,13 +103,9 @@ def get_previous_messages():
     
     path = get_previous_messages_path()
     if not os.path.exists(path):
-        dlg = gtk.Dialog(
-            "NautilusSvn", 
-            "There are no previous messages to view", 
-            [gtk.STOCK_OK, gtk.OK_RESPONSE]
+        nautilussvn.ui.dialog.MessageBox(
+            "There are no previous messages to view"
         )
-        dlg.run()
-        dlg.destroy()
         return
         
     lines = open(path, "r").readlines()
