@@ -64,6 +64,50 @@ class SVN:
         "special":      "svn:special"
     }
     
+    NOTIFY_ACTIONS = {
+        pysvn.wc_notify_action.add:                     "Add",
+        pysvn.wc_notify_action.copy:                    "Copy",
+        pysvn.wc_notify_action.delete:                  "Delete",
+        pysvn.wc_notify_action.restore:                 "Restore",
+        pysvn.wc_notify_action.revert:                  "Revert",
+        pysvn.wc_notify_action.failed_revert:           "Failed Revert",
+        pysvn.wc_notify_action.resolved:                "Resolved",
+        pysvn.wc_notify_action.skip:                    "Skip",
+        pysvn.wc_notify_action.update_delete:           "Delete",
+        pysvn.wc_notify_action.update_add:              "Add",
+        pysvn.wc_notify_action.update_update:           "Update",
+        pysvn.wc_notify_action.update_completed:        "Completed",
+        pysvn.wc_notify_action.update_external:         "External",
+        pysvn.wc_notify_action.status_completed:        "Completed",
+        pysvn.wc_notify_action.status_external:         "External",
+        pysvn.wc_notify_action.commit_modified:         "Modified",
+        pysvn.wc_notify_action.commit_added:            "Added",
+        pysvn.wc_notify_action.commit_deleted:          "Copied",
+        pysvn.wc_notify_action.commit_replaced:         "Replaced",
+        pysvn.wc_notify_action.commit_postfix_txdelta:  "Postfix Delta",
+        pysvn.wc_notify_action.annotate_revision:       "Annotate",
+        pysvn.wc_notify_action.locked:                  "Locked",
+        pysvn.wc_notify_action.unlocked:                "Unlocked",
+        pysvn.wc_notify_action.failed_lock:             "Failed Lock",
+        pysvn.wc_notify_action.failed_unlock:           "Failed Unlock"
+    }
+    
+    NOTIFY_ACTIONS_COMPLETE = [
+        pysvn.wc_notify_action.status_completed,
+        pysvn.wc_notify_action.update_completed        
+    ]
+    
+    NOTIFY_STATES = {
+        pysvn.wc_notify_state.inapplicable:             "Inapplicable",
+        pysvn.wc_notify_state.unknown:                  "Unknown",
+        pysvn.wc_notify_state.unchanged:                "Unchanged",
+        pysvn.wc_notify_state.missing:                  "Missing",
+        pysvn.wc_notify_state.obstructed:               "Obstructed",
+        pysvn.wc_notify_state.changed:                  "Changed",
+        pysvn.wc_notify_state.merged:                   "Merged",
+        pysvn.wc_notify_state.conflicted:               "Conflicted"
+    }
+    
     def __init__(self):
         self.client = pysvn.Client()
     
@@ -368,3 +412,25 @@ class SVN:
             print str(e)
         
         return returner
+    
+    #
+    # callbacks
+    #
+    
+    def set_callback_cancel(self, func):
+        self.client.callback_cancel = func
+
+    def set_callback_notify(self, func):
+        self.client.callback_notify = func
+    
+    def set_callback_get_log_message(self, func):
+        self.client.callback_get_log_message = func
+        
+    def set_callback_get_login(self, func):
+        self.client.callback_get_login = func
+    
+    def set_callback_ssl_server_trust_prompt(self, func):
+        self.client.callback_ssl_server_trust_prompt = func
+    
+    def set_callback_ssl_client_cert_password_prompt(self, func):
+        self.client.callback_ssl_client_cert_password_prompt = func
