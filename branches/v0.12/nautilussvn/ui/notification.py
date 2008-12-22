@@ -34,8 +34,8 @@ class Notification:
     
         self.table = nautilussvn.ui.widget.Table(
             self.view.get_widget("table"),
-            [gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Action", "Path"]
+            [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
+            ["Action", "Path", "Mime Type"]
         )
             
     def on_destroy(self, widget):
