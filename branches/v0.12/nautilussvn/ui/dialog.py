@@ -145,22 +145,15 @@ class Authorization:
         
         
 class Property:
-
-    PROPS = ['', 'svn:executable','svn:mime',
-        'svn:ignore','svn:keywords','svn:eol',
-        'svn:externals','svn:special']
-
     def __init__(self, name="", value=""):
         self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Property")
         
         self.save_name = name
         self.save_value = value
         
-        self.names = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("property_name"), 
-            self.PROPS
-        )
-        self.names.set_active_from_value(name)
+        self.name = self.view.get_widget("property_name")
+        self.name.set_text(name)
+        
         self.value = nautilussvn.ui.widget.TextView(
             self.view.get_widget("property_value"), 
             value
@@ -177,7 +170,7 @@ class Property:
         return (self.save_name, self.save_value)
     
     def save(self):
-        self.save_name = self.names.get_active_text()
+        self.save_name = self.name.get_text()
         self.save_value = self.value.get_text()
 
 class FileChooser:

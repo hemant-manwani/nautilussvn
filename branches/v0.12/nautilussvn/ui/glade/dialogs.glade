@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Dec 12 14:51:35 2008 -->
+<!--Generated with glade3 3.4.5 on Mon Dec 22 07:57:57 2008 -->
 <glade-interface>
   <widget class="GtkDialog" id="Authorization">
     <property name="width_request">400</property>
@@ -693,8 +693,9 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkComboBox" id="property_name">
+                          <widget class="GtkEntry" id="property_name">
                             <property name="visible">True</property>
+                            <property name="can_focus">True</property>
                           </widget>
                           <packing>
                             <property name="position">1</property>

@@ -25,25 +25,40 @@ import gtk
 import nautilussvn.ui
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
+import nautilussvn.lib.vcs
 
 class Properties:
+    """
+    Provides an interface to add/edit/delete properties on versioned
+    items in the working copy.
+    
+    """
 
     SELECTED_ROW = None
 
-    def __init__(self):
+    def __init__(self, path):
         self.view = nautilussvn.ui.InterfaceView(self, "properties", "Properties")
+        
+        self.path = path
+        self.delete_stack = []
+        
+        self.view.get_widget("Properties").set_title(
+            "Properties - %s" % path
+        )
+        
+        self.view.get_widget("path").set_text(path)
         
         self.table = nautilussvn.ui.widget.Table(
             self.view.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Name", "Value"]
-        )        
-        self.entries = [
-            ["svn:ignore", "*.pyc"],
-            ["svn:externals", "*"]
-        ]
-        for entry in self.entries:
-            self.table.append(entry)
+        )
+        
+        self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        self.proplist = self.vcs.proplist(path)
+        
+        for key,val in self.proplist.items():
+            self.table.append([key,val])
 
     def on_destroy(self, widget):
         gtk.main_quit()
@@ -52,13 +67,21 @@ class Properties:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
-        print "OK"
+        self.save()
+        gtk.main_quit()
+    
+    def save(self):
+        for row in self.delete_stack:
+            self.vcs.propdel(self.path, row[0])
+
+        for row in self.table.get_items():
+            self.vcs.propset(self.path, row[0], row[1], overwrite=True)
         
     def on_new_clicked(self, widget):
         dialog = nautilussvn.ui.dialog.Property()
         name,value = dialog.run()
         if name is not None:
-            self.entries.append([name,value])
+            self.table.append([name,value])
     
     def on_edit_clicked(self, widget):
         (name,value) = self.get_selected_name_value()
@@ -68,6 +91,8 @@ class Properties:
             self.set_selected_name_value(name, value)
     
     def on_delete_clicked(self, widget, data=None):
+        row = self.table.get_row(self.SELECTED_ROW)
+        self.delete_stack.append([row[0],row[1]])
         self.table.remove(self.SELECTED_ROW)
     
     def set_selected_name_value(self, name, value):
@@ -94,5 +119,5 @@ class Properties:
             self.view.get_widget("delete").set_sensitive(False)
 
 if __name__ == "__main__":
-    window = Properties()
+    window = Properties("log.py")
     gtk.main()
