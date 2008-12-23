@@ -26,12 +26,19 @@ import nautilussvn.ui
 import nautilussvn.ui.dialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.notification
-
 import nautilussvn.lib.helper
+import nautilussvn.lib.vcs
 
 class Branch:
-    def __init__(self):
+    def __init__(self, path):
         self.view = nautilussvn.ui.InterfaceView(self, "branch", "Branch")
+        
+        self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        
+        self.view.get_widget("from_url").set_text(
+            self.vcs.get_repo_url(path)
+        )
+        
         self.message = nautilussvn.ui.widget.TextView(
             self.view.get_widget("message")
         )
@@ -68,5 +75,5 @@ class Branch:
             self.view.get_widget("from_revision_number").set_text(data)
 
 if __name__ == "__main__":
-    window = Branch()
+    window = Branch("/home/adam/Development/nautilussvn")
     gtk.main()

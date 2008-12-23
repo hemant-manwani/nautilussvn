@@ -267,6 +267,28 @@ class SVN:
         
         return returner
         
+    def get_repo_url(self, path):
+        """
+        Retrieve the repository URL for the given working copy path
+        
+        @type   path: string
+        @param  path: a working copy path
+        
+        @rtype  string
+        @return a repository URL
+        
+        """
+        
+        info = self.client.info(path)
+        
+        returner = None
+        try:
+            returner = info["repos"]
+        except KeyError, e:
+            print "KeyError exception in svn.py get_repo_url()"
+            print str(e)
+        
+        return returner
     #
     # properties
     #
