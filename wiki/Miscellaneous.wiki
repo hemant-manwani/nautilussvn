@@ -9,7 +9,7 @@
 
 == Running ==
 {{{
-xauth +local: # This is required to be able to connect to the X Server after sudoing
+xhost +local: # This is required to be able to connect to the X Server after sudoing
 
 sudo adduser nautilussvn
 sudo -i -u nautilussvn
