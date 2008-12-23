@@ -35,9 +35,10 @@ class Branch:
         
         self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
         
-        self.view.get_widget("from_url").set_text(
-            self.vcs.get_repo_url(path)
-        )
+        url = self.vcs.get_repo_url(path)
+        
+        self.view.get_widget("from_url").set_text(url)
+        self.view.get_widget("to_url").set_text(url)
         
         self.message = nautilussvn.ui.widget.TextView(
             self.view.get_widget("message")
@@ -46,6 +47,17 @@ class Branch:
             self.view.get_widget("to_urls"), 
             nautilussvn.lib.helper.get_repository_paths()
         )
+        
+        if self.vcs.has_modified(path):
+            self.tooltips = gtk.Tooltips()
+            self.tooltips.set_tip(
+                self.view.get_widget("from_revision_number_opt"),
+                "There have been modifications to your working copy.  If you copy from the HEAD revision you will lose your changes."
+            )
+            self.set_revision_number_opt_active()
+            self.view.get_widget("from_revision_number").set_text(
+                str(self.vcs.get_revision(path))
+            )
 
     def on_destroy(self, widget):
         gtk.main_quit()
@@ -58,6 +70,9 @@ class Branch:
         self.notification = nautilussvn.ui.notification.Notification()
 
     def on_from_revision_number_focused(self, widget, data=None):
+        self.set_revision_number_opt_active()
+        
+    def set_revision_number_opt_active(self):
         self.view.get_widget("from_revision_number_opt").set_active(True)
 
     def on_previous_messages_clicked(self, widget, data=None):
@@ -75,5 +90,5 @@ class Branch:
             self.view.get_widget("from_revision_number").set_text(data)
 
 if __name__ == "__main__":
-    window = Branch("/home/adam/Development/nautilussvn")
+    window = Branch("/home/adam/Development/nautilussvn/branches/v0.12/nautilussvn/ui/add.py")
     gtk.main()
