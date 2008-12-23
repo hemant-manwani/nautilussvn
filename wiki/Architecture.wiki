@@ -1,4 +1,4 @@
-#summary This page, as the title implies, describes how NautilusSvn works.
+#summary This page, as the title implies, describes the architecture of NautilusSvn.
 #labels Phase-Implementation
 
 = Introduction =
@@ -10,6 +10,7 @@ In this page we'll look at what exactly a Nautilus extension is (the interface e
 NautilusSvn is a Nautilus extension written in Python using the [http://svn.gnome.org/viewvc/nautilus-python/trunk/ Python bindings for the Nautilus extension library] (nautilus-python in short). For an extensive introduction see [http://taschenorakel.de/svn/repos/bulldozer/branches/bugfixes-0.2.3/documentation/NautilusExtensions.html Nautilus Extensions].
 
 A Nautilus extension can implement a couple of providers (interfaces), namely: 
+
   * NautilusInfoProvider: Information providers are used to add data to a NautilusFileInfo object and keep it up to date.
   * NautilusColumnProvider: Column providers add information to display in the list and icon views.
   * NautilusMenuProvider: Menu providers add menu items. Menu items can be added in three places: Per-file (shown in the file's context menu and the Edit menu), per-folder (shown in the background context menu and the File menu), and the toolbar.
@@ -23,10 +24,12 @@ When implementing the NautilusInfoProvider interface one has to implement the up
   * TODO: write something about when update_file_info is exactly called and the relation with invalidate_extension_info on a GnomeVFSFileInfo. 
 
 == NautilusSvn specifics ==
-=== How NautilusSvn determines the file status ===
+
+=== Pre v0.12 ===
+==== How NautilusSvn determines the file status ====
 Let's take a look at all the different steps NautilusSvn takes when determining the file status and applying an emblem accordingly.
 
-==== General ====
+===== General =====
 First of all NautilusSvn uses the pysvn library for doing Subversion 'stuff', here's a tiny snippet showing how that works:
 {{{
 import pysvn
@@ -34,10 +37,14 @@ client = pysvn.Client()
 state = client.status(path)
 }}}
 
-==== The workflow ====
+===== The workflow =====
   # When recursing in a directory Nautilus calls _update_file_info_
   # NautilusSvn adds the file to the scanStack
   # OnIdle is called which in turn calls ScanFile until the scanStack is empty
   # ScanFile checks the status using pysvn.status
   # If the argument to update_file_info was a file ScanFile also adds it to monitoredFiles
   # After every action RescanFilesAfterProcess calls invalidate_extension_info on every monitored file.
+
+=== v0.12 ===
+
+
