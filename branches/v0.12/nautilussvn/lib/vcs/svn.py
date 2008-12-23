@@ -283,12 +283,39 @@ class SVN:
         
         returner = None
         try:
-            returner = info["repos"]
+            returner = info["url"]
         except KeyError, e:
             print "KeyError exception in svn.py get_repo_url()"
             print str(e)
         
         return returner
+    
+    def get_revision(self, path):
+        """
+        Retrieve the current revision number for a path
+        
+        @type   path: string
+        @param  path: a working copy path
+        
+        @rtype  int
+        @return a repository revision
+        
+        """
+    
+        info = self.client.info(path)
+        
+        returner = None
+        try:
+            returner = info["revision"].number
+        except KeyError, e:
+            print "KeyError exception in svn.py get_revision()"
+            print str(e)
+        except AttributeError, e:
+            print "AttributeError exception in svn.py get_revision()"
+            print str(e)
+        
+        return returner
+    
     #
     # properties
     #
