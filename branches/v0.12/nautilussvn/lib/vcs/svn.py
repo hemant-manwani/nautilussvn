@@ -108,8 +108,13 @@ class SVN:
         pysvn.wc_notify_state.conflicted:               "Conflicted"
     }
     
+    status_cache = {}
+    
     def __init__(self):
         self.client = pysvn.Client()
+    
+    def status(self, path, recurse=True):
+        return self.client.status(path, recurse=recurse)
     
     #
     # is
@@ -141,7 +146,7 @@ class SVN:
         return False
     
     def is_normal(self, path):
-        all_status = self.client.status(path)
+        all_status = self.status(path, recurse=False)
         status = all_status[len(all_status) - 1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.normal:
@@ -150,7 +155,7 @@ class SVN:
         return False
     
     def is_added(self, path):
-        all_status = self.client.status(path)
+        all_status = self.status(path, recurse=False)
         status = all_status[len(all_status) - 1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -159,7 +164,7 @@ class SVN:
         return False
         
     def is_modified(self, path):
-        all_status = self.client.status(path)
+        all_status = self.status(path, recurse=False)
         status = all_status[len(all_status) - 1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -168,7 +173,7 @@ class SVN:
         return False
     
     def is_deleted(self, path):
-        all_status = self.client.status(path)
+        all_status = self.status(path, recurse=False)
         status = all_status[len(all_status) - 1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.deleted:
@@ -177,7 +182,7 @@ class SVN:
         return False
         
     def is_ignored(self, path):
-        all_status = self.client.status(path)
+        all_status = self.status(path, recurse=False)
         status = all_status[len(all_status) - 1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.ignored:
@@ -191,7 +196,7 @@ class SVN:
     #
     
     def has_unversioned(self, path):
-        all_status = self.client.status(path)[:-1]
+        all_status = self.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
@@ -200,7 +205,7 @@ class SVN:
         return False
     
     def has_added(self, path):
-        all_status = self.client.status(path)[:-1]
+        all_status = self.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -209,7 +214,7 @@ class SVN:
         return False
         
     def has_modified(self, path):
-        all_status = self.client.status(path)[:-1]
+        all_status = self.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -218,7 +223,7 @@ class SVN:
         return False
 
     def has_deleted(self, path):
-        all_status = self.client.status(path)[:-1]
+        all_status = self.status(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.deleted:

@@ -22,9 +22,9 @@
 import os.path
 from os.path import isdir, isfile
 
+import gobject
 import gnomevfs
 import nautilus
-import pysvn
 
 from nautilussvn.lib.vcs import VCSFactory
 
@@ -99,7 +99,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items 
             if item.get_uri().startswith("file://")]
         
-        return MainContextMenu(paths).construct_menu()
+        return MainContextMenu(paths, self.vcs).construct_menu()
         
     def get_background_items(self, window, item):
         """
@@ -116,7 +116,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        return MainContextMenu([path]).construct_menu()
+        return MainContextMenu([path], self.vcs).construct_menu()
         
 class MainContextMenu():
     """
@@ -124,9 +124,9 @@ class MainContextMenu():
     
     """
     
-    def __init__(self, paths):
+    def __init__(self, paths, vcs):
         self.paths = paths
-        self.vcs = VCSFactory().create_vcs_instance()
+        self.vcs = vcs
         
     def construct_menu(self):
         """
@@ -438,18 +438,17 @@ class MainContextMenu():
         
     def condition_commit(self):
         for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    (self.vcs.is_added(path) or 
-                    self.vcs.is_modified(path) or
-                    self.vcs.is_deleted(path))):
-                return True
-            else:
-                if (isdir(path) and
-                        self.vcs.is_in_a_or_a_working_copy(path) and
-                        (self.vcs.has_added(path) or 
-                        self.vcs.has_modified(path) or
-                        self.vcs.is_deleted(path))):
+            if self.vcs.is_in_a_or_a_working_copy(path): 
+                if (self.vcs.is_added(path) or 
+                        self.vcs.is_modified(path) or
+                        self.vcs.is_deleted(path)):
                     return True
+                else:
+                    if (isdir(path) and
+                            (self.vcs.has_added(path) or 
+                            self.vcs.has_modified(path) or
+                            self.vcs.has_deleted(path))):
+                        return True
         
         return False
         
@@ -512,18 +511,17 @@ class MainContextMenu():
         
     def condition_revert(self):
         for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    (self.vcs.is_added(path) or
-                    self.vcs.is_modified(path) or
-                    self.vcs.is_deleted(path))):
-                return True
-            else:
-                if (isdir(path) and
-                        self.vcs.is_in_a_or_a_working_copy(path) and
-                        (self.vcs.has_added(path) or
-                        self.vcs.has_modified(path) or
-                        self.vcs.is_deleted(path))):
+            if self.vcs.is_in_a_or_a_working_copy(path): 
+                if (self.vcs.is_added(path) or 
+                        self.vcs.is_modified(path) or
+                        self.vcs.is_deleted(path)):
                     return True
+                else:
+                    if (isdir(path) and
+                            (self.vcs.has_added(path) or 
+                            self.vcs.has_modified(path) or
+                            self.vcs.has_deleted(path))):
+                        return True
         
         return False
         
