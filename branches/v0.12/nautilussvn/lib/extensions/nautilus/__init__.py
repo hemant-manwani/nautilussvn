@@ -22,11 +22,10 @@
 import os.path
 from os.path import isdir, isfile
 
-import gobject
 import gnomevfs
 import nautilus
-
-from nautilussvn.lib.vcs import VCSFactory
+import pysvn
+import gobject
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
@@ -34,8 +33,16 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     
     """
     
+    EMBLEMS = {
+        pysvn.wc_status_kind.added : 'emblem-added',
+        pysvn.wc_status_kind.deleted: 'emblem-deleted',
+        pysvn.wc_status_kind.modified: 'emblem-modified',
+        pysvn.wc_status_kind.conflicted: 'embled-conflicted',
+        pysvn.wc_status_kind.normal: 'emblem-normal', 
+    }
+    
     def __init__(self):
-        self.vcs = VCSFactory().create_vcs_instance()
+        pass
         
     def get_columns(self):
         """
@@ -47,9 +54,17 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
     def update_file_info(self, item):
         """
-        Callback from Nautilus to get the item status. This is where the magic 
-        happens! This function check the current status of *item*, and updates 
-        the display with the relevant emblem.
+        This is a callback Nautilus uses to let us know a file has either been
+        modified or added. 
+        
+        We used to use it to apply an emblem however we've stopped using it for 
+        that purpose since v0.12 because in the context of this extension it 
+        just doesn't supply enough information so we're using our own monitoring 
+        solution.
+        
+        We still use this function to create a lookup table for NautilusVFSFiles
+        though because we need a NautilusVFSFile to apply emblems and there's no
+        way for us to get one from a path/uri.
         
         @type   item: NautilusVFSFile
         @param  item: 
@@ -59,30 +74,34 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
+        client = pysvn.Client()
+        
         # If we're not a or inside a working copy we don't even have to bother.
-        if not self.vcs.is_in_a_or_a_working_copy(path):
+        # Same when we're an unversioned file or directory.
+        try:
+            entry = client.info(path)
+            if not entry: return
+        except pysvn.ClientError:
             return
         
-        # If we're a directory we have to do a recursive status check to see if
-        # any files below us have modifications (added, modified or deleted).
+        # A directory should have a modified emblem when any of its children
+        # have a certain status (see modified_statuses below). Jason thought up 
+        # of a nifty way to do this by using sets and the bitwise AND operator (&).
         if isdir(path):
-            if (self.vcs.has_modified(path) or
-                    self.vcs.has_added(path) or
-                    self.vcs.has_deleted(path)):
+            modified_statuses = set([
+                pysvn.wc_status_kind.added, 
+                pysvn.wc_status_kind.deleted, 
+                pysvn.wc_status_kind.modified
+            ])
+            statuses = set([status.data["text_status"] for status in client.status(path)][:-1])
+            if len(modified_statuses & statuses): 
                 item.add_emblem("emblem-modified")
-                return
+                return # no reason to continue since we already have an emblem
         
-        # Verifiying one of following statuses: 
-        #   added, missing, deleted
-        # is common for both single files and directories.
-        if self.vcs.is_added(path):
-            item.add_emblem("emblem-added")
-        elif self.vcs.is_modified(path):
-            item.add_emblem("emblem-modified")
-        elif self.vcs.is_deleted(path):
-            item.add_emblem("emblem-deleted")
-        elif self.vcs.is_normal(path):
-            item.add_emblem("emblem-normal")
+        # Verifiying the rest of the statuses is common for both files and directories.
+        status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
+        if status in self.EMBLEMS:
+            item.add_emblem(self.EMBLEMS[status])
         
     def get_file_items(self, window, items):
         """
@@ -99,7 +118,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items 
             if item.get_uri().startswith("file://")]
         
-        return MainContextMenu(paths, self.vcs).construct_menu()
+        return MainContextMenu(paths).construct_menu()
         
     def get_background_items(self, window, item):
         """
@@ -116,7 +135,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        return MainContextMenu([path], self.vcs).construct_menu()
+        return MainContextMenu([path]).construct_menu()
         
 class MainContextMenu():
     """
@@ -124,9 +143,8 @@ class MainContextMenu():
     
     """
     
-    def __init__(self, paths, vcs):
+    def __init__(self, paths):
         self.paths = paths
-        self.vcs = vcs
         
     def construct_menu(self):
         """
@@ -420,125 +438,37 @@ class MainContextMenu():
     #
     
     def condition_checkout(self):
-        if (len(self.paths) == 1 and
-                isdir(self.paths[0]) and
-                not self.vcs.is_working_copy(self.paths[0])):
-            return True
-            
         return False
         
     def condition_update(self):
-        for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    self.vcs.is_versioned(path) and
-                    not self.vcs.is_added(path)):
-                return True
-                
         return False
         
     def condition_commit(self):
-        for path in self.paths:
-            if self.vcs.is_in_a_or_a_working_copy(path): 
-                if (self.vcs.is_added(path) or 
-                        self.vcs.is_modified(path) or
-                        self.vcs.is_deleted(path)):
-                    return True
-                else:
-                    if (isdir(path) and
-                            (self.vcs.has_added(path) or 
-                            self.vcs.has_modified(path) or
-                            self.vcs.has_deleted(path))):
-                        return True
-        
         return False
         
     def condition_diff(self):
-        if len(self.paths) == 2:
-            return True
-        elif (len(self.paths) == 1 and 
-                self.vcs.is_in_a_or_a_working_copy(self.paths[0]) and
-                self.vcs.is_modified(self.paths[0])):
-            return True
-        
         return False
         
     def condition_show_log(self):
-        if (len(self.paths) == 1 and
-                self.vcs.is_in_a_or_a_working_copy(self.paths[0]) and
-                self.vcs.is_versioned(self.paths[0]) and
-                not self.vcs.is_added(self.paths[0])):
-            return True
-        
         return False
         
     def condition_add(self):
-        for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    not self.vcs.is_versioned(path)):
-                return True
-            else:
-                if (isdir(path) and
-                        self.vcs.is_in_a_or_a_working_copy(path) and
-                        self.vcs.has_unversioned(path)):
-                    return True
-            
         return False
         
     def condition_add_to_ignore_list(self):
-        for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    self.vcs.is_versioned(path)):
-                return False
-                
-        return True
+        return False
         
     def condition_rename(self):
-        if (len(self.paths) == 1 and
-                self.vcs.is_in_a_or_a_working_copy(self.paths[0]) and
-                self.vcs.is_versioned(self.paths[0]) and
-                not self.vcs.is_added(self.paths[0])):
-            return True
-        
         return False
         
     def condition_delete(self):
-        for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    self.vcs.is_versioned(path)):
-                return True
-            
         return False
         
     def condition_revert(self):
-        for path in self.paths:
-            if self.vcs.is_in_a_or_a_working_copy(path): 
-                if (self.vcs.is_added(path) or 
-                        self.vcs.is_modified(path) or
-                        self.vcs.is_deleted(path)):
-                    return True
-                else:
-                    if (isdir(path) and
-                            (self.vcs.has_added(path) or 
-                            self.vcs.has_modified(path) or
-                            self.vcs.has_deleted(path))):
-                        return True
-        
         return False
         
     def condition_blame(self):
-        if (len(self.paths) == 1 and
-                self.vcs.is_in_a_or_a_working_copy(path) and
-                self.vcs.is_versioned(self.paths[0]) and
-                not self.vcs.is_added(self.paths[0])):
-            return True
-        
         return False
         
     def condition_properties(self):
-        for path in self.paths:
-            if (self.vcs.is_in_a_or_a_working_copy(path) and
-                    self.vcs.is_versioned(path)):
-                return True
-        
         return False
-        
