@@ -41,6 +41,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         pysvn.wc_status_kind.normal: 'emblem-normal', 
     }
     
+    nautilusVFSFile_table = {}
+    
     def __init__(self):
         pass
         
@@ -55,6 +57,62 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     def update_file_info(self, item):
         """
         
+        update_file_info is called only when:
+        
+          * When you enter a directory (once for each item)
+          * When an viewable from the current window is created or modified
+          
+        This is insufficient for our purpose because:
+        
+          * You're not notified about items you don't see (which is needed to 
+            keep the emblem for the directories above the item up-to-date)
+        
+        When update_file_info is called we do:
+        
+          * Add the NautilusVFSFile to the lookup table for lookups
+          * Add a watch for this item to the StatusMonitor (it's StatusMonitor's
+            responsibility to check whether this is needed)
+          * Register a callback with the StatusMonitor to notify us of any status
+            changes
+          
+        StatusMonitor will in turn do the following:
+        
+          * If there's not already a watch for this item it will add one and
+            do an initial status check.
+        
+        What we do to stay up-to-date is:
+        
+          * We'll notify StatusMonitor of versioning actions (add, commit, lock, 
+            unlock etc.), we register callbacks with dialogs for this
+            
+        What StatusMonitor also does: 
+        
+          * Use inotify to keep track of modifications of any watched items
+            (we actually only care about modifications not creations and deletions)
+          * Either on request, or when something interesting happens, it checks
+            the status for an item which means:
+              
+              * See working code for exactly what a status check means
+              
+              * After checking the status for an item, if there's a watch for
+                a parent directory this is what will happen:
+              
+                * If status is (vcs) modified, (vcs) added or (vcs) deleted:
+                  - for every parent the callback will be called with status 
+                    "modified" (since it cannot be any other way)
+                
+                * If vcs status is normal: 
+                  - a status check is done for the parent directory since we 
+                    cannot be sure what the status for them is
+          
+        In the future we might implement a functionality which also monitors
+        versioning actions so the command-line client can be used and still have
+        the emblems update accordingly. 
+        
+        When StatusMonitor calls us back we just look the NautilusVFSFile up in
+        the look up table using the path and apply an emblem according to the 
+        status we've been given.
+        
         @type   item: NautilusVFSFile
         @param  item: 
         
@@ -62,35 +120,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
-        
-        client = pysvn.Client()
-        
-        # If we're not a or inside a working copy we don't even have to bother.
-        # Same when we're an unversioned file or directory.
-        try:
-            entry = client.info(path)
-            if not entry: return
-        except pysvn.ClientError:
-            return
-        
-        # A directory should have a modified emblem when any of its children
-        # have a certain status (see modified_statuses below). Jason thought up 
-        # of a nifty way to do this by using sets and the bitwise AND operator (&).
-        if isdir(path):
-            modified_statuses = set([
-                pysvn.wc_status_kind.added, 
-                pysvn.wc_status_kind.deleted, 
-                pysvn.wc_status_kind.modified
-            ])
-            statuses = set([status.data["text_status"] for status in client.status(path)][:-1])
-            if len(modified_statuses & statuses): 
-                item.add_emblem("emblem-modified")
-                return # no reason to continue since we already have an emblem
-        
-        # Verifiying the rest of the statuses is common for both files and directories.
-        status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
-        if status in self.EMBLEMS:
-            item.add_emblem(self.EMBLEMS[status])
+            
+        self.nautilusVFSFile_table[path] = item
         
     def get_file_items(self, window, items):
         """
@@ -104,6 +135,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         """
         
+        if len(items) == 0: return
         paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items 
             if item.get_uri().startswith("file://")]
         
