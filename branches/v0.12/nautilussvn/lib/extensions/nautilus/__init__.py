@@ -33,18 +33,28 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     
     """
     
+    # Maps statuses to emblems
     EMBLEMS = {
-        pysvn.wc_status_kind.added : 'emblem-added',
-        pysvn.wc_status_kind.deleted: 'emblem-deleted',
-        pysvn.wc_status_kind.modified: 'emblem-modified',
-        pysvn.wc_status_kind.conflicted: 'embled-conflicted',
-        pysvn.wc_status_kind.normal: 'emblem-normal', 
+        "added" : "emblem-added",
+        "deleted": "emblem-deleted",
+        "modified": "emblem-modified",
+        "conflicted": "embled-conflicted",
+        "normal": "emblem-normal"
     }
     
+    # This is our lookup table for NautilusVFSFiles which we need for attaching
+    # emblems. his is mostly a workaround for not being able to turn a path/uriT
+    # into a NautilusVFSFile.
     nautilusVFSFile_table = {}
     
+    # Keep track of item statuses. This is a workaround for the emblem added
+    # using add_emblem being only temporary, it's used in update_file_info.
+    statuses = {}
+    
     def __init__(self):
-        pass
+        # Create a StatusMonitor and register a callback with it to notify us 
+        # of any status changes.
+        self.status_monitor = StatusMonitor(self.update_emblem)
         
     def get_columns(self):
         """
@@ -60,7 +70,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         update_file_info is called only when:
         
           * When you enter a directory (once for each item)
-          * When an viewable from the current window is created or modified
+          * When an item viewable from the current window is created or modified
           
         This is insufficient for our purpose because:
         
@@ -72,8 +82,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
           * Add the NautilusVFSFile to the lookup table for lookups
           * Add a watch for this item to the StatusMonitor (it's StatusMonitor's
             responsibility to check whether this is needed)
-          * Register a callback with the StatusMonitor to notify us of any status
-            changes
           
         StatusMonitor will in turn do the following:
         
@@ -95,7 +103,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
               * See working code for exactly what a status check means
               
               * After checking the status for an item, if there's a watch for
-                a parent directory this is what will happen:
+                a parent directory this is what will happen:    
               
                 * If status is (vcs) modified, (vcs) added or (vcs) deleted:
                   - for every parent the callback will be called with status 
@@ -120,8 +128,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
+        
+        if not path in self.nautilusVFSFile_table:
+            self.nautilusVFSFile_table[path] = item
+        
+        # See comment for variable: statuses
+        if path in self.statuses:
+            self.update_emblem(path, self.statuses[path])
             
-        self.nautilusVFSFile_table[path] = item
+        self.status_monitor.add_watch(path)
         
     def get_file_items(self, window, items):
         """
@@ -158,9 +173,25 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         return MainContextMenu([path]).construct_menu()
         
+    #
+    # Callbacks
+    #
+    
+    def update_emblem(self, path, status):
+        # See comment for variable: statuses
+        self.statuses[path] = status
+        
+        # Try and lookup the NautilusVFSFile in the lookup table since we need it
+        if not path in self.nautilusVFSFile_table: return
+        
+        item = self.nautilusVFSFile_table[path]
+        if status in self.EMBLEMS:
+            item.add_emblem(self.EMBLEMS[status])
+    
 class MainContextMenu():
     """
     
+    See: http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure
     
     """
     
@@ -455,7 +486,6 @@ class MainContextMenu():
         return menu
     #
     # Conditions
-    # See: http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure
     #
     
     def condition_checkout(self):
@@ -493,3 +523,64 @@ class MainContextMenu():
         
     def condition_properties(self):
         return False
+
+class StatusMonitor():
+    
+    # TODO: this is the reverse of STATUS in the svn module and should probably
+    # be moved there once I figure out what the responsibilities for the svn
+    # module are.
+    STATUS = {
+        pysvn.wc_status_kind.none:          "none",
+        pysvn.wc_status_kind.unversioned:   "unversioned",
+        pysvn.wc_status_kind.normal:        "normal",
+        pysvn.wc_status_kind.added:         "added",
+        pysvn.wc_status_kind.missing:       "missing",
+        pysvn.wc_status_kind.deleted:       "deleted",
+        pysvn.wc_status_kind.replaced:      "replaced",
+        pysvn.wc_status_kind.modified:      "modified",
+        pysvn.wc_status_kind.merged:        "merged",
+        pysvn.wc_status_kind.conflicted:    "conflicted",
+        pysvn.wc_status_kind.ignored:       "ignored",
+        pysvn.wc_status_kind.obstructed:    "obstructed",
+        pysvn.wc_status_kind.external:      "external",
+        pysvn.wc_status_kind.incomplete:    "incomplete"
+    }
+    
+    watches = {}
+    
+    def __init__(self, callback):
+        self.callback = callback
+        
+    def add_watch(self, path):
+        if not path in self.watches:
+            self.watches[path] = None # don't need a value
+            self.status(path)
+            
+    def status(self, path):
+        client = pysvn.Client()
+        
+        # If we're not a or inside a working copy we don't even have to bother.
+        # Same when we're an unversioned file or directory.
+        try:
+            entry = client.info(path)
+            if not entry: return
+        except pysvn.ClientError:
+            return
+        
+        # A directory should have a modified status when any of its children
+        # have a certain status (see modified_statuses below). Jason thought up 
+        # of a nifty way to do this by using sets and the bitwise AND operator (&).
+        if isdir(path):
+            modified_statuses = set([
+                pysvn.wc_status_kind.added, 
+                pysvn.wc_status_kind.deleted, 
+                pysvn.wc_status_kind.modified
+            ])
+            statuses = set([status.data["text_status"] for status in client.status(path)][:-1])
+            if len(modified_statuses & statuses): 
+                self.callback(path, "modified")
+        
+        # Verifiying the rest of the statuses is common for both files and directories.
+        status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
+        if status in self.STATUS:
+            self.callback(path, self.STATUS[status])
