@@ -82,40 +82,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
           * Add the NautilusVFSFile to the lookup table for lookups
           * Add a watch for this item to the StatusMonitor (it's StatusMonitor's
             responsibility to check whether this is needed)
-          
-        StatusMonitor will in turn do the following:
-        
-          * If there's not already a watch for this item it will add one and
-            do an initial status check.
         
         What we do to stay up-to-date is:
         
           * We'll notify StatusMonitor of versioning actions (add, commit, lock, 
             unlock etc.), we register callbacks with dialogs for this
-            
-        What StatusMonitor also does: 
-        
-          * Use inotify to keep track of modifications of any watched items
-            (we actually only care about modifications not creations and deletions)
-          * Either on request, or when something interesting happens, it checks
-            the status for an item which means:
-              
-              * See working code for exactly what a status check means
-              
-              * After checking the status for an item, if there's a watch for
-                a parent directory this is what will happen:    
-              
-                * If status is (vcs) modified, (vcs) added or (vcs) deleted:
-                  - for every parent the callback will be called with status 
-                    "modified" (since it cannot be any other way)
-                
-                * If vcs status is normal: 
-                  - a status check is done for the parent directory since we 
-                    cannot be sure what the status for them is
-          
-        In the future we might implement a functionality which also monitors
-        versioning actions so the command-line client can be used and still have
-        the emblems update accordingly. 
         
         When StatusMonitor calls us back we just look the NautilusVFSFile up in
         the look up table using the path and apply an emblem according to the 
@@ -528,6 +499,37 @@ class MainContextMenu():
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
 class StatusMonitor():
+    """
+    
+    What StatusMonitor does:
+    
+    * When somebody adds a watch and if there's not already a watch for this 
+      item it will add one and do an initial status check.
+    
+    * Use inotify to keep track of modifications of any watched items
+        (we actually only care about modifications not creations and deletions)
+        
+    * Either on request, or when something interesting happens, it checks
+      the status for an item which means:
+        
+        * See working code for exactly what a status check means
+        
+        * After checking the status for an item, if there's a watch for
+          a parent directory this is what will happen:    
+        
+          * If status is (vcs) modified, (vcs) added or (vcs) deleted:
+            - for every parent the callback will be called with status 
+              "modified" (since it cannot be any other way)
+          
+          * If vcs status is normal: 
+            - a status check is done for the parent directory since we 
+              cannot be sure what the status for them is
+      
+    In the future we might implement a functionality which also monitors
+    versioning actions so the command-line client can be used and still have
+    the emblems update accordingly. 
+    
+    """
     
     # TODO: this is the reverse of STATUS in the svn module and should probably
     # be moved there once I figure out what the responsibilities for the svn
