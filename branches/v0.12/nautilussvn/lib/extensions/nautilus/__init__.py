@@ -524,6 +524,9 @@ class MainContextMenu():
     def condition_properties(self):
         return False
 
+
+from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
+
 class StatusMonitor():
     
     # TODO: this is the reverse of STATUS in the svn module and should probably
@@ -546,14 +549,44 @@ class StatusMonitor():
         pysvn.wc_status_kind.incomplete:    "incomplete"
     }
     
+    # A dictionary to keep track of the paths we're watching
     watches = {}
+    
+    # The mask for the inotify events we're interested in
+    mask = EventsCodes.IN_MODIFY
+    
+    class VCSProcessEvent(ProcessEvent):
+        """
+        
+        Our processing class for inotify events.
+        
+        """
+        
+        def __init__(self, status_monitor):
+            self.status_monitor = status_monitor
+        
+        def process_IN_MODIFY(self, event):
+            path = event.path
+            if event.name: os.path.join(path, event.name)
+            self.status_monitor.status(path)
     
     def __init__(self, callback):
         self.callback = callback
+        self.watch_manager = WatchManager()
+        self.notifier = ThreadedNotifier(
+            self.watch_manager, self.VCSProcessEvent(self))
+        self.notifier.start()
         
     def add_watch(self, path):
         if not path in self.watches:
             self.watches[path] = None # don't need a value
+            # TODO: figure out precisely how this watch is added. Does it:
+            #
+            #  * Recursively register watches
+            #  * Call the process method with the path argument originally used
+            #    or with the path for the specific item that was modified.
+            # 
+            self.watch_manager.add_watch(path, self.mask, rec=True)
             self.status(path)
             
     def status(self, path):
