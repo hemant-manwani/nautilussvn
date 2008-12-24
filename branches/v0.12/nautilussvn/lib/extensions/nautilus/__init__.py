@@ -588,6 +588,10 @@ class StatusMonitor():
             #  * Call the process method with the path argument originally used
             #    or with the path for the specific item that was modified.
             # 
+            # FIXME: figure out why when registering a parent directory and the 
+            # file itself the IN_MODIFY event handler is called 3 times (once 
+            # for the directory and twice for the file itself).
+            #
             self.watch_manager.add_watch(path, self.mask, rec=True)
             self.status(path)
             
