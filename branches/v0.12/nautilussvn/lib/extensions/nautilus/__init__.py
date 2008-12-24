@@ -54,17 +54,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
     def update_file_info(self, item):
         """
-        This is a callback Nautilus uses to let us know a file has either been
-        modified or added. 
-        
-        We used to use it to apply an emblem however we've stopped using it for 
-        that purpose since v0.12 because in the context of this extension it 
-        just doesn't supply enough information so we're using our own monitoring 
-        solution.
-        
-        We still use this function to create a lookup table for NautilusVFSFiles
-        though because we need a NautilusVFSFile to apply emblems and there's no
-        way for us to get one from a path/uri.
         
         @type   item: NautilusVFSFile
         @param  item: 
