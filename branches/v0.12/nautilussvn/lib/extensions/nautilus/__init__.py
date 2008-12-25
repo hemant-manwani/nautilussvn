@@ -159,7 +159,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        return MainContextMenu([path], self).construct_menu()
+        # FIXME: because there isn't a cache yet this is impacting performance
+        # too much so disabled for the moment in the interest of convience
+        #~ return MainContextMenu([path], self).construct_menu()
+        return []
         
     #
     # Callbacks
