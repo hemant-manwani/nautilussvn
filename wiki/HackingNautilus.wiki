@@ -1,0 +1,14 @@
+#summary This page shows you how to work on Nautilus
+
+= Introduction =
+Sometimes a feature will be missing from either from the Nautilus Python bindings (such as was the case with submenu support for quite a while) or Nautilus itself. In that case you'll have to hack Nautilus. This guide will explain how to get, build and develop for Nautilus.
+
+== Requirements ==
+sudo apt-get build-dep nautilus
+sudo apt-get install gnome-common # Missing from the build-dep
+
+== Building ==
+./autogen.sh
+./configure --prefix="/usr"
+mkdir -p /tmp/nautilus-testing
+TMPDIR="/tmp/nautilus-testing/ ./src/nautilus --no-desktop
