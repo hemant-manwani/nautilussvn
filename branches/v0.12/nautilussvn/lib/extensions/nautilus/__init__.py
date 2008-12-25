@@ -466,11 +466,11 @@ class MainContextMenu():
                 "label": "",
                 "tooltip": "",
                 "icon": "",
-                "signals": [
+                "signals": {
                     "activate": {
                         "callback": None,
                         "args": None
-                    ]
+                    }
                 }, 
                 "condition": None,
                 "submenus": [
