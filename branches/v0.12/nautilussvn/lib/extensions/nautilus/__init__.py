@@ -285,7 +285,7 @@ class MainContextMenu():
                 "icon": "icon-update",
                 "signals": {
                     "activate": {
-                        "callback": None,
+                        "callback": self.callback_update,
                         "args": None
                     }
                 }, 
@@ -301,7 +301,7 @@ class MainContextMenu():
                 "icon": "icon-commit",
                 "signals": {
                     "activate": {
-                        "callback": None,
+                        "callback": self.callback_commit,
                         "args": None
                     }
                 }, 
@@ -362,7 +362,7 @@ class MainContextMenu():
                         "icon": "icon-add",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_add,
                                 "args": None
                             }
                         }, 
@@ -394,7 +394,7 @@ class MainContextMenu():
                         "icon": "icon-delete",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_delete,
                                 "args": None
                             }
                         }, 
@@ -410,7 +410,7 @@ class MainContextMenu():
                         "icon": "icon-revert",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_revert,
                                 "args": None
                             }
                         }, 
@@ -712,6 +712,34 @@ class MainContextMenu():
         status_monitor = nautilussvn_extension.status_monitor
         for path in paths:
             status_monitor.status(path)
+            
+    def callback_update(self, menu_item, paths):
+        client = pysvn.Client()
+        for path in paths:
+            client.update(path)
+
+    def callback_commit(self, menu_item, paths):
+        from subprocess import Popen, PIPE
+        command = ["zenity", "--entry", "--title=NautilusSVN", "--text=Log message:"]
+        log_message = Popen(command, stdout=PIPE).communicate()[0]
+        
+        client = pysvn.Client()
+        client.checkin(paths, log_message)
+
+    def callback_add(self, menu_item, paths):
+        client = pysvn.Client()
+        for path in paths:
+            client.add(path)
+
+    def callback_delete(self, menu_item, paths):
+        client = pysvn.Client()
+        for path in paths:
+            client.remove(path)
+
+    def callback_revert(self, menu_item, paths):
+        client = pysvn.Client()
+        for path in paths:
+            client.revert(path)
 
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
