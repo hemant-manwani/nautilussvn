@@ -90,5 +90,5 @@ class Branch:
             self.view.get_widget("from_revision_number").set_text(data)
 
 if __name__ == "__main__":
-    window = Branch("/home/adam/Development/nautilussvn/branches/v0.12/nautilussvn/ui/add.py")
+    window = Branch("/home/adam/Development/test/file1.txt")
     gtk.main()

@@ -254,9 +254,18 @@ class SVN:
         if paths is None:
             return []
  
+        if len(paths) > 1:
+            path = os.path.commonprefix(paths)
+        else:
+            path = paths[0]
+        
+        #if the current path is a parent of the given path, cut off the parents
+        if path.find(os.getcwd()) != -1:
+            path = path[len(os.getcwd())+1:]
+        
         #recursively searches the common path of all "paths" item
         st = self.client.status(
-            os.path.commonprefix(paths)[len(os.getcwd())+1:]
+            path
         )
 
         if st is None:
