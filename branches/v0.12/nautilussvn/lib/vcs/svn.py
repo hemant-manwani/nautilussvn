@@ -121,21 +121,14 @@ class SVN:
     #
     
     def is_working_copy(self, path):
-        if (isdir(path) and
-                isdir(os.path.join(path, ".svn"))):
+        try:
+            entry = self.client.info(path)
             return True
-        
-        return False
+        except pysvn.ClientError:
+            return False
         
     def is_in_a_or_a_working_copy(self, path):
-        # If we're a file we have to check the directory we're in instead
-        if isfile(path):
-            path = os.path.abspath(os.path.join(path, os.path.pardir))
-        
-        if self.is_working_copy(path):
-            return True
-            
-        return False
+        return self.is_working_copy(path)
         
     def is_versioned(self, path):
         
