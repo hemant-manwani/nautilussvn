@@ -51,6 +51,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # using add_emblem being only temporary, it's used in update_file_info.
     statuses = {}
     
+    # This is a dictionary we use to keep track of everything that's interesting
+    # debugging wise.
+    debugging_information = {
+        "items": {}
+    }
+    
     def __init__(self):
         # Create a StatusMonitor and register a callback with it to notify us 
         # of any status changes.
@@ -102,6 +108,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not path in self.nautilusVFSFile_table:
             self.nautilusVFSFile_table[path] = item
+        
+        # Begin debugging code
+        if not path in self.debugging_information["items"]:
+            self.debugging_information["items"][path] = {
+                "added_emblems": []
+            }
+        else:
+            self.debugging_information["items"][path]["added_emblems"] = []
+        # End debugging code
         
         # See comment for variable: statuses
         if path in self.statuses:
@@ -157,12 +172,16 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         item = self.nautilusVFSFile_table[path]
         if status in self.EMBLEMS:
-            # TODO: I added the invalidate_extension_info call because icons
-            # wouldn't actually change for parent directories, so I don't think
-            # the file_info (including the new emblem) is updated yet.
-            #
-            # So figure out what this add_emblem call really does.
             item.add_emblem(self.EMBLEMS[status])
+            
+            # Begin debugging code
+            if path in self.debugging_information["items"]:
+                self.debugging_information["items"][path]["added_emblems"].append(self.EMBLEMS[status])
+            # End debugging code
+            
+            # We need to invalidate the extension info because the emblem added
+            # through add_emblem is only temporary, also see the comment for 
+            # variable: statuses
             item.invalidate_extension_info()
     
 class MainContextMenu():
@@ -667,7 +686,7 @@ class StatusMonitor():
         
         def process_IN_MODIFY(self, event):
             path = event.path
-            if event.name: os.path.join(path, event.name)
+            if event.name: path = os.path.join(path, event.name)
             self.status_monitor.status(path)
     
     def __init__(self, callback):
@@ -747,4 +766,5 @@ class StatusMonitor():
                     pysvn.wc_status_kind.modified,
                 ):
                     self.callback(path, "modified")
-            
+                elif status == pysvn.wc_status_kind.normal:
+                    self.status(path)
