@@ -125,7 +125,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items 
             if item.get_uri().startswith("file://")]
         
-        return MainContextMenu(paths).construct_menu()
+        return MainContextMenu(paths, self).construct_menu()
         
     def get_background_items(self, window, item):
         """
@@ -142,7 +142,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        return MainContextMenu([path]).construct_menu()
+        return MainContextMenu([path], self).construct_menu()
         
     #
     # Callbacks
@@ -157,7 +157,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         item = self.nautilusVFSFile_table[path]
         if status in self.EMBLEMS:
+            # TODO: I added the invalidate_extension_info call because icons
+            # wouldn't actually change for parent directories, so I don't think
+            # the file_info (including the new emblem) is updated yet.
+            #
+            # So figure out what this add_emblem call really does.
             item.add_emblem(self.EMBLEMS[status])
+            item.invalidate_extension_info()
     
 class MainContextMenu():
     """
@@ -166,8 +172,9 @@ class MainContextMenu():
     
     """
     
-    def __init__(self, paths):
+    def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
+        self.nautilussvn_extension = nautilussvn_extension
         
     def construct_menu(self):
         """
@@ -176,6 +183,53 @@ class MainContextMenu():
         
         # The following dictionary defines the complete contextmenu
         menu_definition = [
+            {
+                "identifier": "NautilusSvn::Debug",
+                "label": "Debug",
+                "tooltip": "",
+                "icon": "icon-monkey",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                },
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Debug_Info",
+                        "label": "Debug Info",
+                        "tooltip": "",
+                        "icon": "gnome-terminal",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_debug_info,
+                                "args": None
+                            }
+                        },
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Refresh_Status",
+                        "label": "Refresh Status",
+                        "tooltip": "",
+                        "icon": "icon-refresh",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_refresh_status,
+                                "args": None
+                            }
+                        },
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    }
+                ]
+            },
             {
                 "identifier": "NautilusSvn::Checkout",
                 "label": "Checkout",
@@ -412,11 +466,11 @@ class MainContextMenu():
                 "label": "",
                 "tooltip": "",
                 "icon": "",
-                "signals": {
+                "signals": [
                     "activate": {
                         "callback": None,
                         "args": None
-                    }
+                    ]
                 }, 
                 "condition": None,
                 "submenus": [
@@ -438,6 +492,11 @@ class MainContextMenu():
                     definition_item["tooltip"],
                     definition_item["icon"]
                 )
+                
+                for signal, value in definition_item["signals"].items():
+                    if value["callback"] != None:
+                        menu_item.connect(signal, value["callback"], self.paths)
+                
                 menu.append(menu_item)
                 
                 # Since we can't just call set_submenu and run the risk of not
@@ -494,7 +553,24 @@ class MainContextMenu():
         
     def condition_properties(self):
         return False
-
+        
+    #
+    # Callbacks
+    #
+    
+    def callback_debug_info(self, menu_item, paths):
+        nautilussvn_extension = self.nautilussvn_extension
+        statuses = nautilussvn_extension.statuses
+        for path in paths:
+            if path in statuses:
+                print "Emblem for %s is set to %s" % (
+                    os.path.basename(path), statuses[path],)
+    
+    def callback_refresh_status(self, menu_item, paths):
+        nautilussvn_extension = self.nautilussvn_extension
+        status_monitor = nautilussvn_extension.status_monitor
+        for path in paths:
+            status_monitor.status(path)
 
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
@@ -596,6 +672,20 @@ class StatusMonitor():
             self.status(path)
             
     def status(self, path):
+        
+        def split_path(path):
+            """
+            
+            Sorta lot like os.path.split, but removes any trailing pathseps.
+            
+            >>> split_path("/foo/bar/baz")
+            '/foo/bar'
+            
+            """
+            
+            path = path.rstrip(os.path.sep)
+            return path[:path.rfind(os.path.sep)]
+        
         client = pysvn.Client()
         
         # If we're not a or inside a working copy we don't even have to bother.
@@ -618,8 +708,21 @@ class StatusMonitor():
             statuses = set([status.data["text_status"] for status in client.status(path)][:-1])
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
+                while path != "":
+                    path = split_path(path)
+                    self.callback(path, "modified")
+                return;
         
         # Verifiying the rest of the statuses is common for both files and directories.
         status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
         if status in self.STATUS:
             self.callback(path, self.STATUS[status])
+            while path != "":
+                path = split_path(path)
+                if status in (
+                    pysvn.wc_status_kind.added, 
+                    pysvn.wc_status_kind.deleted, 
+                    pysvn.wc_status_kind.modified,
+                ):
+                    self.callback(path, "modified")
+            
