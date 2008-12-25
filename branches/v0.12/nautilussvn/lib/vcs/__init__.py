@@ -18,14 +18,23 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
 from svn import SVN
+from ..decorators import deprecated
 
 class VCS:
     pass
     
+
 class VCSFactory:
     
+    @deprecated
     def create_vcs_instance(self):
-        # TODO: we'll figure this out later by looking at the working copy.
+        """
+        @deprecated: Use nautilussvn.lib.vcs.create_vcs_instance() instead.
+        """
+        
         return SVN()
+
+def create_vcs_instance():
+    # TODO: we'll figure this out later by looking at the working copy.
+    return SVN()

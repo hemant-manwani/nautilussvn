@@ -27,6 +27,8 @@ import nautilus
 import pysvn
 import gobject
 
+import nautilussvn.lib.vcs 
+
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
     This is the main class that implements all of our awesome features.
@@ -690,6 +692,7 @@ class StatusMonitor():
         
         def __init__(self, status_monitor):
             self.status_monitor = status_monitor
+            self.vcs_client = nautilussvn.lib.vcs.create_vcs_instance()
         
         def process_IN_MODIFY(self, event):
             path = event.path
@@ -702,10 +705,14 @@ class StatusMonitor():
             # Make sure to strip any trailing slashes because that will 
             # cause problems for the status checking
             # TODO: not 100% sure about it causing problems
-            self.status_monitor.status(path.rstrip(os.pathsep))
+            if self.vcs_client.is_in_a_or_a_working_copy(path):
+                self.status_monitor.status(path.rstrip(os.pathsep))
     
     def __init__(self, callback):
         self.callback = callback
+        
+        self.vcs_client = nautilussvn.lib.vcs.create_vcs_instance()
+        
         self.watch_manager = WatchManager()
         self.notifier = ThreadedNotifier(
             self.watch_manager, self.VCSProcessEvent(self))
@@ -713,19 +720,27 @@ class StatusMonitor():
         
     def add_watch(self, path):
         if not path in self.watches:
-            self.watches[path] = None # don't need a value
-            # TODO: figure out precisely how this watch is added. Does it:
-            #
-            #  * Recursively register watches
-            #  * Call the process method with the path argument originally used
-            #    or with the path for the specific item that was modified.
-            # 
-            # FIXME: figure out why when registering a parent directory and the 
-            # file itself the IN_MODIFY event handler is called 3 times (once 
-            # for the directory and twice for the file itself).
-            #
-            self.watch_manager.add_watch(path, self.mask, rec=True)
-            self.status(path)
+            # We can safely ignore items that aren't inside a working_copy or
+            # a working copy administration area (.svn)
+            if (path.find(".svn") > 0 or 
+                    self.vcs_client.is_in_a_or_a_working_copy(path)):
+                self.watches[path] = None # don't need a value
+                # TODO: figure out precisely how this watch is added. Does it:
+                #
+                #  * Recursively register watches
+                #  * Call the process method with the path argument originally used
+                #    or with the path for the specific item that was modified.
+                # 
+                # FIXME: figure out why when registering a parent directory and the 
+                # file itself the IN_MODIFY event handler is called 3 times (once 
+                # for the directory and twice for the file itself).
+                #
+                self.watch_manager.add_watch(path, self.mask, rec=True)
+                
+                # But we shouldn't do any status checks on files in the working
+                # copy administration area.
+                if self.vcs_client.is_in_a_or_a_working_copy(path):
+                    self.status(path)
             
     def status(self, path):
         
@@ -745,10 +760,7 @@ class StatusMonitor():
         client = pysvn.Client()
         
         # If we're not a or inside a working copy we don't even have to bother.
-        try:
-            entry = client.info(path)
-        except pysvn.ClientError:
-            return
+        if not self.vcs_client.is_in_a_or_a_working_copy(path): return
         
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
