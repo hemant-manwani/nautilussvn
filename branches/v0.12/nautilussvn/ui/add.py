@@ -183,5 +183,5 @@ class Add:
             self.files_table.remove(self.last_row_clicked)
         
 if __name__ == "__main__":
-    window = Add(["/home/adam/Development/nautilussvn/branches/v0.12/nautilussvn/ui/"])
+    window = Add(["/home/adam/Development/test/"])
     gtk.main()
