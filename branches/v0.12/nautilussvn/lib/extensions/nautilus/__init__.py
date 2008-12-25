@@ -915,3 +915,17 @@ class StatusMonitor():
                         pysvn.wc_status_kind.unversioned,
                     ):
                     self.status(path)
+                    # If we don't break out here it would result in the 
+                    # recursive status checks on (^):
+                    #
+                    # /foo/bar/baz/qux
+                    #   ^   ^   ^
+                    #   ^   ^
+                    #   ^
+                    #
+                    # Instead of "just":
+                    #
+                    # /foo/bar/baz/qux
+                    #   ^   ^   ^
+                    #
+                    break;
