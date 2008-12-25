@@ -687,7 +687,10 @@ class StatusMonitor():
         def process_IN_MODIFY(self, event):
             path = event.path
             if event.name: path = os.path.join(path, event.name)
-            self.status_monitor.status(path)
+            # Make sure to strip any trailing slashes because that will 
+            # cause problems for the status checking
+            # TODO: not 100% sure about it causing problems
+            self.status_monitor.status(path.rstrip(os.pathsep))
     
     def __init__(self, callback):
         self.callback = callback
