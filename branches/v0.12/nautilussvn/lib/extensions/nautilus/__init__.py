@@ -120,7 +120,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         # See comment for variable: statuses
         if path in self.statuses:
-            self.update_emblem(path, self.statuses[path])
+            self.update_emblem(path, self.statuses[path], invalidate=False)
             
         self.status_monitor.add_watch(path)
         
@@ -163,7 +163,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # Callbacks
     #
     
-    def update_emblem(self, path, status):
+    def update_emblem(self, path, status, invalidate=True):
+        """
+        
+        @type   invalidate: boolean
+        @param  invalidate: Whether or not to invalidate the item found
+        
+        """
+        
         # See comment for variable: statuses
         self.statuses[path] = status
         
@@ -179,10 +186,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 self.debugging_information["items"][path]["added_emblems"].append(self.EMBLEMS[status])
             # End debugging code
             
-            # We need to invalidate the extension info because the emblem added
-            # through add_emblem is only temporary, also see the comment for 
-            # variable: statuses
-            item.invalidate_extension_info()
+        # We need to invalidate the extension info because the emblem added
+        # through add_emblem is only temporary, also see the comment for 
+        # variable: statuses
+        if invalidate: item.invalidate_extension_info()
     
 class MainContextMenu():
     """
@@ -687,6 +694,11 @@ class StatusMonitor():
         def process_IN_MODIFY(self, event):
             path = event.path
             if event.name: path = os.path.join(path, event.name)
+            
+            # Begin debugging code
+            print "Event triggered for: %s" % path.rstrip(os.pathsep)
+            # End debugging code
+            
             # Make sure to strip any trailing slashes because that will 
             # cause problems for the status checking
             # TODO: not 100% sure about it causing problems
@@ -733,10 +745,8 @@ class StatusMonitor():
         client = pysvn.Client()
         
         # If we're not a or inside a working copy we don't even have to bother.
-        # Same when we're an unversioned file or directory.
         try:
             entry = client.info(path)
-            if not entry: return
         except pysvn.ClientError:
             return
         
@@ -769,5 +779,8 @@ class StatusMonitor():
                     pysvn.wc_status_kind.modified,
                 ):
                     self.callback(path, "modified")
-                elif status == pysvn.wc_status_kind.normal:
+                elif status in (
+                        pysvn.wc_status_kind.normal,
+                        pysvn.wc_status_kind.unversioned,
+                    ):
                     self.status(path)
