@@ -197,13 +197,13 @@ class MainContextMenu():
                 "condition": (lambda: True),
                 "submenus": [
                     {
-                        "identifier": "NautilusSvn::Debug_Info",
-                        "label": "Debug Info",
+                        "identifier": "NautilusSvn::Debug_Shell",
+                        "label": "Open Shell",
                         "tooltip": "",
                         "icon": "gnome-terminal",
                         "signals": {
                             "activate": {
-                                "callback": self.callback_debug_info,
+                                "callback": self.callback_debug_shell,
                                 "args": None
                             }
                         },
@@ -558,13 +558,35 @@ class MainContextMenu():
     # Callbacks
     #
     
-    def callback_debug_info(self, menu_item, paths):
-        nautilussvn_extension = self.nautilussvn_extension
-        statuses = nautilussvn_extension.statuses
-        for path in paths:
-            if path in statuses:
-                print "Emblem for %s is set to %s" % (
-                    os.path.basename(path), statuses[path],)
+    def callback_debug_shell(self, menu_item, paths):
+        """
+        
+        Open up an IPython shell which shares the context of the extension.
+        
+        See: http://ipython.scipy.org/moin/Cookbook/EmbeddingInGTK
+        
+        """
+        
+        # TODO: use a Glade file for most of this instead.
+        import gtk
+        from nautilussvn.debug.ipython_view import IPythonView
+        
+        window = gtk.Window()
+        window.set_size_request(750,550)
+        window.set_resizable(True)
+        scrolled_window = gtk.ScrolledWindow()
+        scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        ipython_view = IPythonView()
+        ipython_view.updateNamespace(locals())
+        ipython_view.set_wrap_mode(gtk.WRAP_CHAR)
+        ipython_view.show()
+        scrolled_window.add(ipython_view)
+        scrolled_window.show()
+        window.add(scrolled_window)
+        window.show()
+        window.connect('delete_event', lambda x,y: False)
+        window.connect('destroy', lambda x: gtk.main_quit())
+        gtk.main()
     
     def callback_refresh_status(self, menu_item, paths):
         nautilussvn_extension = self.nautilussvn_extension
