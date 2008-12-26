@@ -36,12 +36,16 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     """
     
     # Maps statuses to emblems
+    # TODO: should probably be possible to create this dynamically
     EMBLEMS = {
         "added" : "emblem-added",
         "deleted": "emblem-deleted",
         "modified": "emblem-modified",
         "conflicted": "embled-conflicted",
-        "normal": "emblem-normal"
+        "normal": "emblem-normal",
+        "ignored": "emblem-ignored",
+        "locked": "emblem-locked",
+        "read_only": "emblem-read_only"
     }
     
     # This is our lookup table for NautilusVFSFiles which we need for attaching
@@ -107,6 +111,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
+        
+        # Begin debugging code
+        print "Debug: update_file_info() called for %s" % path
+        # End debugging code
         
         if not path in self.nautilusVFSFile_table:
             self.nautilusVFSFile_table[path] = item
@@ -175,6 +183,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  invalidate: Whether or not to invalidate the item found
         
         """
+        
+        # Begin debugging code
+        print "update_emblem() called for %s with status %s" % (path, status)
+        # End debugging code
         
         # See comment for variable: statuses
         self.statuses[path] = status
@@ -800,7 +812,7 @@ class StatusMonitor():
     watches = {}
     
     # The mask for the inotify events we're interested in
-    mask = EventsCodes.IN_MODIFY
+    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVE_SELF
     
     class VCSProcessEvent(ProcessEvent):
         """
@@ -818,7 +830,7 @@ class StatusMonitor():
             if event.name: path = os.path.join(path, event.name)
             
             # Begin debugging code
-            print "Event triggered for: %s" % path.rstrip(os.pathsep)
+            print "Event IN_MODIFY triggered for: %s" % path.rstrip(os.pathsep)
             # End debugging code
             
             # Make sure to strip any trailing slashes because that will 
@@ -826,6 +838,14 @@ class StatusMonitor():
             # TODO: not 100% sure about it causing problems
             if self.vcs_client.is_in_a_or_a_working_copy(path):
                 self.status_monitor.status(path.rstrip(os.pathsep))
+        
+        def process_IN_MOVE_SELF(self, event):
+            path = event.path
+            if event.name: path = os.path.join(path, event.name)
+            
+            # Begin debugging code
+            print "Event IN_MOVE_SELF triggered for: %s" % path.rstrip(os.pathsep)
+            # End debugging code
     
     def __init__(self, callback):
         self.callback = callback
@@ -895,7 +915,8 @@ class StatusMonitor():
                 self.callback(path, "modified")
                 while path != "":
                     path = split_path(path)
-                    self.callback(path, "modified")
+                    if self.vcs_client.is_in_a_or_a_working_copy(path):
+                        self.callback(path, "modified")
                 return;
         
         # Verifiying the rest of the statuses is common for both files and directories.
@@ -909,7 +930,8 @@ class StatusMonitor():
                     pysvn.wc_status_kind.deleted, 
                     pysvn.wc_status_kind.modified,
                 ):
-                    self.callback(path, "modified")
+                    if self.vcs_client.is_in_a_or_a_working_copy(path):
+                        self.callback(path, "modified")
                 elif status in (
                         pysvn.wc_status_kind.normal,
                         pysvn.wc_status_kind.unversioned,
