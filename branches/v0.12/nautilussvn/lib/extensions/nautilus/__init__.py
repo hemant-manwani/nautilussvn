@@ -38,24 +38,35 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # Maps statuses to emblems
     # TODO: should probably be possible to create this dynamically
     EMBLEMS = {
-        "added" : "emblem-added",
-        "deleted": "emblem-deleted",
-        "modified": "emblem-modified",
-        "conflicted": "embled-conflicted",
-        "normal": "emblem-normal",
-        "ignored": "emblem-ignored",
-        "locked": "emblem-locked",
-        "read_only": "emblem-read_only"
+        "added" :       "emblem-added",
+        "deleted":      "emblem-deleted",
+        "modified":     "emblem-modified",
+        "conflicted":   "embled-conflicted",
+        "normal":       "emblem-normal",
+        "ignored":      "emblem-ignored",
+        "locked":       "emblem-locked",
+        "read_only":    "emblem-read_only"
     }
     
     # This is our lookup table for NautilusVFSFiles which we need for attaching
-    # emblems. his is mostly a workaround for not being able to turn a path/uriT
-    # into a NautilusVFSFile.
+    # emblems. his is mostly a workaround for not being able to turn a path/uri
+    # into a NautilusVFSFile. It looks like:
+    #
+    # nautilusVFSFile_table = {
+    #    "/foo/bar/baz": <NautilusVFSFile>
+    #
+    # }
     nautilusVFSFile_table = {}
     
     # Keep track of item statuses. This is a workaround for the emblem added
     # using add_emblem being only temporary, the emblems are removed when you
-    # item is no longer viewable from the Window. it's used in update_file_info.
+    # item is no longer viewable from the Window. This is used to remember
+    # what the last state for a file should be, e.g.:
+    #
+    # statuses = {
+    #     "/foo/bar/baz": "modified"
+    # }
+    #
     statuses = {}
     
     # This is a dictionary we use to keep track of everything that's interesting
@@ -125,12 +136,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         # Always replace the item in the table with the one we receive, because
         # for example if a file is deleted and recreated the NautilusVFSFile
-        # will be invalid.
+        # we had before will be invalid (think pointers and such).
         self.nautilusVFSFile_table[path] = item
         
         # Begin debugging code
-        # This is just used to initialize the debugging_information dict for the
-        # first time. Other than that it's not important.
+        # The following lines of code are used to keep track of how many
+        # emblems are attached to a item (there are issues with a item having
+        # two emblems, which leads to the most recent one being hidden).
         if not path in self.debugging_information["items"]:
             self.debugging_information["items"][path] = {
                 "added_emblems": []
@@ -868,9 +880,16 @@ class StatusMonitor():
     }
     
     # A dictionary to keep track of the paths we're watching
+    #
+    # watches = {
+    #     # Always None because we just want to check if a watch has been set
+    #     "/foo/bar/baz": None
+    # }
+    #
     watches = {}
     
     # The mask for the inotify events we're interested in
+    # TODO: understand how masking works
     mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVE_SELF
     
     class VCSProcessEvent(ProcessEvent):
@@ -983,6 +1002,15 @@ class StatusMonitor():
             statuses = set([status.data["text_status"] for status in client.status(path)][:-1])
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
+                
+                #
+                # We have to change the emblems on any parent directories aswell
+                # when an item is modified this is pretty easy because we know
+                # the status for the parent has to be "modified" too.
+                #
+                # There's another section below which also takes into account
+                # the other statuses.
+                #
                 while path != "":
                     path = split_path(path)
                     if self.vcs_client.is_in_a_or_a_working_copy(path):
@@ -1008,6 +1036,7 @@ class StatusMonitor():
                         pysvn.wc_status_kind.unversioned,
                     ):
                     self.status(path)
+                    
                     # If we don't break out here it would result in the 
                     # recursive status checks on (^):
                     #
