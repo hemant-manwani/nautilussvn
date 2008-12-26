@@ -26,7 +26,6 @@ import gtk
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
-import nautilussvn.ui.notification
 import nautilussvn.ui.dialog
 import nautilussvn.ui.callback
 import nautilussvn.lib.helper
@@ -72,11 +71,13 @@ class Add:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
         self.callbacks = nautilussvn.ui.callback.VCSCallbacks(self.vcs)
         items = self.files_table.get_activated_rows(1)
+
+        self.view.hide()        
+        self.callbacks.start("Running Add Command...")
         self.vcs.add(items)
-        self.callbacks.finish()
+        self.callbacks.finish("Add Complete")
 
     def on_select_all_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL

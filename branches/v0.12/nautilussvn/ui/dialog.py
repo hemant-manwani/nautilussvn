@@ -32,8 +32,7 @@ GLADE = 'dialogs'
 class PreviousMessages:
     def __init__(self):
         self.view = nautilussvn.ui.InterfaceView(self, GLADE, "PreviousMessages")
-        
-    def run(self):
+
         self.message = nautilussvn.ui.widget.TextView(
             self.view.get_widget("prevmes_message")
         )
@@ -54,11 +53,16 @@ class PreviousMessages:
         
             self.message_table.append([entry[0],tmp])
         
+        if len(self.entries) > 0:
+            self.message.set_text(self.entries[0][1])
+        
+    def run(self):
         returner = None
         self.dialog = self.view.get_widget("PreviousMessages")
         result = self.dialog.run()
         if result == 1:
             returner = self.message.get_text()
+        
         self.dialog.destroy()
 
         return returner
