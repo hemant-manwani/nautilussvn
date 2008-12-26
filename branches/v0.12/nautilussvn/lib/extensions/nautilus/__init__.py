@@ -1021,4 +1021,7 @@ class StatusMonitor():
                     # /foo/bar/baz/qux
                     #   ^   ^   ^
                     #
+                    
+                    # FIXME: if those were just cache hits performance would
+                    # be significantly increased.
                     break;
