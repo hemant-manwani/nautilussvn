@@ -63,7 +63,7 @@ python_nautilus_extensions_path = subprocess.Popen(
     stdout=subprocess.PIPE
 ).stdout.read().strip()
 
-icon_theme_directory = "/usr/share/icons/hicolor" # TODO: does this really need to be hardcoded?
+icon_theme_directory = "/usr/share/icons/NautilusSvn" # TODO: does this really need to be hardcoded?
 
 #==============================================================================
 # Gather all the files that need to be included
@@ -83,9 +83,9 @@ nautilus_extension = [(
 
 # Icons
 icons = []
-for root, dirs, files in os.walk("nautilussvn/data/icons/hicolor"):
+for root, dirs, files in os.walk("nautilussvn/data/icons/NautilusSvn"):
     icons.append((
-        root.replace("nautilussvn/data/icons/hicolor", icon_theme_directory),
+        root.replace("nautilussvn/data/icons/NautilusSvn", icon_theme_directory),
         [os.path.join(root, file) for file in files if file.find(".svg") > 0]
     ))
 
