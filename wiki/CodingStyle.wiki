@@ -30,7 +30,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 = Style Guide =
 
 == Example ==
-  _See [http://code.google.com/p/nautilussvn/source/detail?r=315 this code review] for an in-depth explanation of what qualifies as good code_
+  _See [http://code.google.com/p/nautilussvn/source/browse/branches/v0.12/nautilussvn/lib/extensions/nautilus/__init__.py?spec=svn315&r=315 this code review] for an in-depth explanation of what qualifies as good code_
 
 {{{
 #
