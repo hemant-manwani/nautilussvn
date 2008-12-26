@@ -6,6 +6,7 @@
 == Dependencies ==
 
   * python-configobj
+  * python-pyinotify
 
 == Running ==
 {{{
