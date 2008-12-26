@@ -269,7 +269,6 @@ foreach my $chlog (reverse sort keys %changelogs) {
     close OLD_CHANGE_LOG;
     open CHANGE_LOG, "> ${chlog}/ChangeLog" or die "Could not write ChangeLog\n.";
     print CHANGE_LOG "$date  $name  <$email_address>\n\n";
-    print CHANGE_LOG "\treviewed by: <delete if not using a buddy>\n\n";
     foreach my $file (sort keys %function_lists) {
         my $fname = "./$file";
         if ($fname =~ /^${chlog}\//) {
