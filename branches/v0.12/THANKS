@@ -10,4 +10,5 @@ Gonçalo Silva <GoncaloSSilva@gmail.com> - several patches and Gentoo support
 Rion <rion4ik@gmail.com> - several patches and Gentoo support
 Garrett Mitchener <garrett.mitchener@gmail.com> - help debugging problems on Fedora
 Ivan Sagalaev <Maniac@softwaremaniacs.org> - for being the first to let us know about problems with UTF-8
+Clément Lorteau <northern_lights@users.sourceforge.net> - for building one of the first Debian packages
 Stuart Langridge <sil@kryogenix.org> - for his initial post about using emblems on files for SVN information
