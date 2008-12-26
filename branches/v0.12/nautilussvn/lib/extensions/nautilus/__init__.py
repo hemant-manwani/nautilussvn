@@ -798,13 +798,29 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths)
 
     def callback_commit(self, menu_item, paths):
-        from subprocess import Popen, PIPE
-        command = ["zenity", "--entry", "--title=NautilusSVN", "--text=Log message:"]
-        log_message = Popen(command, stdout=PIPE).communicate()[0]
+        def commit_dialog():
+            from subprocess import Popen, PIPE
+            command = ["zenity", "--entry", "--title=NautilusSVN", "--text=Log message:"]
+            log_message = Popen(command, stdout=PIPE).communicate()[0]
+            
+            client = pysvn.Client()
+            client.checkin(paths, log_message)
+            self.callback_refresh_status(menu_item, paths)
         
-        client = pysvn.Client()
-        client.checkin(paths, log_message)
-        self.callback_refresh_status(menu_item, paths)
+        # Eureka! Plain Python threads don't seem to work properly in the context
+        # of a Nautilus extension, so this doesn't work properly (the thread isn't
+        # inmediatly processed and such stuff):
+        # 
+        # import thread
+        # thread.start_new_thread(commit_dialog, ())
+        #
+        # But adding functions to gobject.idle_add does. You also don't have to
+        # call gtk.gdk.threads_init() or gobject.threads_init().
+        #
+        # See: http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
+        #
+        gobject.idle_add(commit_dialog)
+        
 
     def callback_add(self, menu_item, paths):
         client = pysvn.Client()
@@ -985,13 +1001,11 @@ class StatusMonitor():
         print "Debug: StatusMonitor.status() called for %s" % path
         # End debugging information
         
-        client = pysvn.Client()
-        
         # If we're not a or inside a working copy we don't even have to bother.
         if not self.vcs_client.is_in_a_or_a_working_copy(path): return
         
         # We need the status object for the item alone
-        status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
+        status = self.vcs_client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
         
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
@@ -1002,7 +1016,7 @@ class StatusMonitor():
                 pysvn.wc_status_kind.deleted, 
                 pysvn.wc_status_kind.modified
             ])
-            statuses = set([sub_status.data["text_status"] for sub_status in client.status(path)][:-1])
+            statuses = set([sub_status.data["text_status"] for sub_status in self.vcs_client.status(path)][:-1])
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
                 
