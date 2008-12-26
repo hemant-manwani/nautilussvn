@@ -314,6 +314,26 @@ def delete_item(path):
     """
     
     os.system("gvfs-trash %s" % path)
+
+#
+# Path manipulation
+#
+
+def split_path(path):
+    """
+    
+    Sorta lot like os.path.split, but removes any trailing pathseps.
+    
+    >>> split_path("/foo/bar/baz")
+    '/foo/bar'
+    
+    @type   path: string
+    @param  path: an item path
+    
+    """
+    
+    path = path.rstrip(os.path.sep)
+    return path[:path.rfind(os.path.sep)]
     
 def save_log_message(message):
     """
