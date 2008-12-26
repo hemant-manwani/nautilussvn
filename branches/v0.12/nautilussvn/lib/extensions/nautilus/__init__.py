@@ -302,6 +302,22 @@ class MainContextMenu():
                         "submenus": [
                             
                         ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Debug_Invalidate",
+                        "label": "Invalidate",
+                        "tooltip": "Force a invalidate_extension_info() call",
+                        "icon": "icon-clear",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_debug_invalidate,
+                                "args": None
+                            }
+                        },
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
                     }
                 ]
             },
@@ -720,6 +736,7 @@ class MainContextMenu():
     # Callbacks
     #
     
+    # Begin debugging callbacks
     def callback_debug_shell(self, menu_item, paths):
         """
         
@@ -756,6 +773,15 @@ class MainContextMenu():
         for path in paths:
             status_monitor.status(path)
             
+    def callback_debug_invalidate(self, menu_item, paths):
+        nautilussvn_extension = self.nautilussvn_extension
+        nautilusVFSFile_table = nautilussvn_extension.nautilusVFSFile_table
+        for path in paths:
+            if path in nautilusVFSFile_table:
+                nautilusVFSFile_table[path].invalidate_extension_info()
+    
+    # End debugging callbacks
+    
     def callback_update(self, menu_item, paths):
         client = pysvn.Client()
         for path in paths:
