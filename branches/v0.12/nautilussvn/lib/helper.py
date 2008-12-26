@@ -20,6 +20,7 @@
 
 import os
 import re
+import time
 
 import nautilussvn.ui.dialog
 import nautilussvn.lib.settings
@@ -115,7 +116,7 @@ def get_previous_messages():
     date = None
     msg = ""
     for line in lines:
-        m = re.compile(r"-- ([\d:]+ [\d\.]+) --").match(line)
+        m = re.compile(r"-- ([\d\-]+ [\d\:]+) --").match(line)
         if m:
             cur_entry = m.groups()[0]
             if date:
@@ -124,6 +125,9 @@ def get_previous_messages():
             date = cur_entry
         else:
             msg += line
+
+    if date and msg:
+        returner.append((date, msg.replace("\n", "")))
 
     returner.reverse()
     
@@ -310,3 +314,22 @@ def delete_item(path):
     """
     
     os.system("gvfs-trash %s" % path)
+    
+def save_log_message(message):
+    """
+    Saves a log message to the user's home folder for later usage
+    
+    @type   message: string
+    @param  message: a log message
+    
+    """
+    
+    t = time.strftime("%Y-%m-%d %H:%M:%S")
+    f = open(get_previous_messages_path(), "a+")
+    s = """\
+-- %(t)s --
+%(message)s
+"""%(locals())
+    f.write(s)
+    f.close()
+    
