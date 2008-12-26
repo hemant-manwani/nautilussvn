@@ -35,7 +35,7 @@ class Branch:
     def __init__(self, path):
         self.view = nautilussvn.ui.InterfaceView(self, "branch", "Branch")
         
-        self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
         url = self.vcs.get_repo_url(path)

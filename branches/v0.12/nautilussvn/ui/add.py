@@ -36,6 +36,8 @@ class Add:
     Provides an interface for the user to add unversioned files to a
     repository.  Also, provides a context menu with some extra functionality.
     
+    Send a list of paths to be added
+    
     """
 
     TOGGLE_ALL = True
@@ -51,7 +53,7 @@ class Add:
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
-        self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.files = self.vcs.get_items(
             paths, 
             self.vcs.STATUSES_FOR_ADD
