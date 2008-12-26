@@ -71,13 +71,14 @@ class Add:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
-        self.callbacks = nautilussvn.ui.callback.VCSCallbacks(self.vcs)
         items = self.files_table.get_activated_rows(1)
+        self.view.hide()
 
-        self.view.hide()        
-        self.callbacks.start("Running Add Command...")
-        self.vcs.add(items)
-        self.callbacks.finish("Add Complete")
+        self.action = nautilussvn.ui.callback.VCSAction(self.vcs)
+        self.action.set_action(self.vcs.add, items)        
+        self.action.set_before("Running Add Command...")
+        self.action.set_after("Completed Add")
+        self.action.start()
 
     def on_select_all_toggled(self, widget):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
