@@ -324,7 +324,7 @@ def delete_item(path):
 def split_path(path):
     """
     
-    Sorta lot like os.path.split, but removes any trailing pathseps.
+    Sorta like os.path.split, but removes any trailing path separators.
     
     >>> split_path("/foo/bar/baz")
     '/foo/bar'
