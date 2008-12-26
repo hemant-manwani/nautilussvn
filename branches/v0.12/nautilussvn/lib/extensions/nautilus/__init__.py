@@ -999,7 +999,7 @@ class StatusMonitor():
             if event.name: path = os.path.join(path, event.name)
             
             # Begin debugging code
-            print "Event %s triggered for: %s" % (event.event_name, path.rstrip(os.pathsep))
+            print "Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
             # End debugging code
             
             # Subversion (pysvn? svn?) makes temporary files for some purpose which
@@ -1013,7 +1013,7 @@ class StatusMonitor():
             # cause problems for the status checking
             # TODO: not 100% sure about it causing problems
             if self.vcs_client.is_in_a_or_a_working_copy(path):
-                self.status_monitor.status(path.rstrip(os.pathsep))
+                self.status_monitor.status(path.rstrip(os.path.sep))
     
         def process_IN_MODIFY(self, event):
             self.process(event)
