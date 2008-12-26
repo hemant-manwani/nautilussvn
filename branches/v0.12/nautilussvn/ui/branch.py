@@ -25,9 +25,11 @@ import gtk
 import nautilussvn.ui
 import nautilussvn.ui.dialog
 import nautilussvn.ui.widget
-import nautilussvn.ui.notification
+import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
+
+gtk.gdk.threads_init()
 
 class Branch:
     def __init__(self, path):
@@ -35,6 +37,7 @@ class Branch:
         
         self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
         
+        self.path = path
         url = self.vcs.get_repo_url(path)
         
         self.view.get_widget("from_url").set_text(url)
@@ -48,7 +51,7 @@ class Branch:
             nautilussvn.lib.helper.get_repository_paths()
         )
         
-        if self.vcs.has_modified(path):
+        if self.vcs.has_modified(path) or self.vcs.is_modified(path):
             self.tooltips = gtk.Tooltips()
             self.tooltips.set_tip(
                 self.view.get_widget("from_revision_number_opt"),
@@ -66,9 +69,40 @@ class Branch:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        src = self.view.get_widget("from_url").get_text()
+        dest = self.view.get_widget("to_url").get_text()
+        
+        if dest == "":
+            nautilussvn.ui.dialog.MessageBox("You must supply a destination.")
+            return
+        
+        revision = None
+        if self.view.get_widget("from_head_opt").get_active():
+            revision = self.vcs.revision("head")
+        elif self.view.get_widget("from_revision_number_opt").get_active():
+            rev_num = self.view.get_widget("from_revision_number").get_text()
+            
+            if rev_num == "":
+                nautilussvn.ui.dialog.MessageBox("When copying from a specific revision, you must specify which revision to copy from.")
+                return
+            
+            revision = self.vcs.revision("number", number=rev_num)
+        elif self.view.get_widget("from_working_copy_opt").get_active():
+            src = self.path
+            revision = self.vcs.revision("working")
 
+        if revision is None:
+            nautilussvn.ui.dialog.MessageBox("Invalid revision information")
+            return
+
+        self.view.hide()
+        self.action = nautilussvn.ui.callback.VCSAction(self.vcs)
+        self.action.set_log_message(self.message.get_text())
+        self.action.set_action(self.vcs.copy, src, dest, revision)        
+        self.action.set_before("Running Copy/Branch Command...")
+        self.action.set_after("Completed Copy/Branch")
+        self.action.start()
+                
     def on_from_revision_number_focused(self, widget, data=None):
         self.set_revision_number_opt_active()
         
