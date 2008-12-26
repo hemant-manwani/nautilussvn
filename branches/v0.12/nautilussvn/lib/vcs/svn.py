@@ -84,7 +84,7 @@ class SVN:
         pysvn.wc_notify_action.commit_added:            "Added",
         pysvn.wc_notify_action.commit_deleted:          "Copied",
         pysvn.wc_notify_action.commit_replaced:         "Replaced",
-        pysvn.wc_notify_action.commit_postfix_txdelta:  "Postfix Delta",
+        pysvn.wc_notify_action.commit_postfix_txdelta:  "Changed",
         pysvn.wc_notify_action.annotate_revision:       "Annotated",
         pysvn.wc_notify_action.locked:                  "Locked",
         pysvn.wc_notify_action.unlocked:                "Unlocked",
@@ -106,6 +106,16 @@ class SVN:
         pysvn.wc_notify_state.changed:                  "Changed",
         pysvn.wc_notify_state.merged:                   "Merged",
         pysvn.wc_notify_state.conflicted:               "Conflicted"
+    }
+    
+    REVISIONS = {
+        "unspecified":      pysvn.opt_revision_kind.unspecified,
+        "number":           pysvn.opt_revision_kind.number,
+        "date":             pysvn.opt_revision_kind.date,
+        "committed":        pysvn.opt_revision_kind.committed,
+        "previous":         pysvn.opt_revision_kind.previous,
+        "working":          pysvn.opt_revision_kind.working,
+        "head":             pysvn.opt_revision_kind.head
     }
     
     status_cache = {}
@@ -500,6 +510,53 @@ class SVN:
     
     def set_callback_ssl_client_cert_password_prompt(self, func):
         self.client.callback_ssl_client_cert_password_prompt = func
+    
+    #
+    # revision
+    #
+    
+    def revision(self, kind, date=None, number=None):
+        """
+        Create a revision object usable by pysvn
+        
+        @type   kind: string
+        @param  kind: an svn.REVISIONS keyword
+        
+        @type   date: integer
+        @param  date: used for kind=date, in the form of UNIX TIMESTAMP (secs)
+        
+        @type   number: integer
+        @param  number: used for kind=number, specifies the revision number
+        
+        @rtype  pysvn.Revision object
+        @return a pysvn.Revision object
+        
+        """
+        
+        try:
+            pysvn_obj = self.REVISIONS[kind]
+        except KeyError, e:
+            print "pysvn.ClientError exception in svn.py revision()"
+            print str(e)
+            return None
+        
+        returner = None
+        if kind == "date":
+            if date is None:
+                print "In svn.py revision(),kind = date, but date not given"
+            
+            returner = pysvn.Revision(pysvn_obj, date)
+        
+        elif kind == "number":
+            if number is None:
+                print "In svn.py revision(),kind = number, but number not given"
+        
+            returner = pysvn.Revision(pysvn_obj, number)
+        
+        else:
+            returner = pysvn.Revision(pysvn_obj)
+        
+        return returner
         
     #
     # actions
@@ -515,13 +572,41 @@ class SVN:
         """
         
         if paths is None:
-            return
+            return "Path is not set"
 
         try:
             self.client.add(paths)
         except pysvn.ClientError, e:
-            print "pysvn.ClientError exception in svn.py add()"
-            print str(e)
+            return str(e)
         except TypeError, e:
-            print "TypeError exception in svn.py add()"
-            print str(e)
+            return str(e)
+        
+        return None
+    
+    def copy(self, src, dest, revision):
+        """
+        Copy files/directories from src to dest.  src or dest may both be either
+        a local path or a repository URL.  revision is a pysvn.Revision object.
+        
+        @type   src: string
+        @param  src: source url or path
+        
+        @type   dest: string
+        @param  dest: destination url or path
+        
+        @type   revision: pysvn.Revision object
+        @param  revision: a pysvn Revision object
+        
+        """
+        
+        if src is None or dest is None:
+            return "Neither src nor dest is specified"
+        
+        try:
+            self.client.copy(src, dest, revision)
+        except pysvn.ClientError, e:
+            return str(e)
+        except TypeError, e:
+            return str(e)
+        
+        return None
