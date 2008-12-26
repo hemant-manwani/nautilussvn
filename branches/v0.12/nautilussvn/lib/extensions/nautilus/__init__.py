@@ -27,7 +27,8 @@ import nautilus
 import pysvn
 import gobject
 
-import nautilussvn.lib.vcs 
+import nautilussvn.lib.vcs
+from nautilussvn.lib.helper import split_path
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
@@ -56,6 +57,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     #    "/foo/bar/baz": <NautilusVFSFile>
     #
     # }
+    #
+    # Keeping track of NautilusVFSFiles is a little bit complicated because
+    # when a file is moved (renamed) update_file_info doesn't get called. So
+    # we also add NautilusVFSFiles to this table from get_file_items etc.
     nautilusVFSFile_table = {}
     
     # Keep track of item statuses. This is a workaround for the emblem added
@@ -170,9 +175,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         if len(items) == 0: return
-        paths = [gnomevfs.get_local_path_from_uri(item.get_uri()) for item in items 
-            if item.get_uri().startswith("file://")]
         
+        paths = []
+        for item in items:
+            if item.get_uri().startswith("file://"):
+                path = gnomevfs.get_local_path_from_uri(item.get_uri())
+                paths.append(path)
+                self.nautilusVFSFile_table[path] = item
+                
         return MainContextMenu(paths, self).construct_menu()
         
     def get_background_items(self, window, item):
@@ -190,7 +200,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        return MainContextMenu([path], self).construct_menu()
+        self.nautilusVFSFile_table[path] = item
+        
+        # Since building the menu fires off multiple recursive status checks 
+        # as soon as a folder is opened this does affect performance. So disabled
+        # temporarily for convience while working on implementing the cache.
+        #~ return MainContextMenu([path], self).construct_menu()
+        return []
         
     #
     # Callbacks
@@ -304,6 +320,22 @@ class MainContextMenu():
                         "signals": {
                             "activate": {
                                 "callback": self.callback_refresh_status,
+                                "args": None
+                            }
+                        },
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Debug_Revert",
+                        "label": "Revert",
+                        "tooltip": "Reverts everything it sees",
+                        "icon": "icon-revert",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_debug_revert,
                                 "args": None
                             }
                         },
@@ -781,11 +813,27 @@ class MainContextMenu():
         status_monitor = nautilussvn_extension.status_monitor
         for path in paths:
             status_monitor.status(path)
-            
+    
+    def callback_debug_revert(self, menu_item, paths):
+        for path in paths:
+            # Normal revert
+            self.callback_revert(menu_item, paths)
+            # Super revert
+            statuses = self.vcs_client.status(path)[:-1]
+            for status in statuses:
+                if status == pysvn.wc_status_kind.missing:
+                    self.callback_revert(
+                        menu_item,
+                        os.path.join(path, status.data["path"])
+                    )
+        
     def callback_debug_invalidate(self, menu_item, paths):
         nautilussvn_extension = self.nautilussvn_extension
         nautilusVFSFile_table = nautilussvn_extension.nautilusVFSFile_table
         for path in paths:
+            # Begin debugging code
+            print "Debug: callback_debug_invalidate() called for %s" % path
+            # End debugging code
             if path in nautilusVFSFile_table:
                 nautilusVFSFile_table[path].invalidate_extension_info()
     
@@ -835,6 +883,9 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths)
 
     def callback_revert(self, menu_item, paths):
+        # FIXME: if called on a directory should revert also revert items that
+        # were svn added, but then manually deleted (resulting in missing)? See
+        # callback_debug_revert.
         client = pysvn.Client()
         for path in paths:
             client.revert(path)
@@ -906,7 +957,9 @@ class StatusMonitor():
     
     # The mask for the inotify events we're interested in
     # TODO: understand how masking works
-    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVE_SELF
+    # TODO: maybe we should just analyze VCSProcessEvent and determine this 
+    # dynamically because one might tend to forgot to update these
+    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO
     
     class VCSProcessEvent(ProcessEvent):
         """
@@ -919,12 +972,12 @@ class StatusMonitor():
             self.status_monitor = status_monitor
             self.vcs_client = nautilussvn.lib.vcs.create_vcs_instance()
         
-        def process_IN_MODIFY(self, event):
+        def process(self, event):
             path = event.path
             if event.name: path = os.path.join(path, event.name)
             
             # Begin debugging code
-            print "Event IN_MODIFY triggered for: %s" % path.rstrip(os.pathsep)
+            print "Event %s triggered for: %s" % (event.event_name, path.rstrip(os.pathsep))
             # End debugging code
             
             # Subversion (pysvn? svn?) makes temporary files for some purpose which
@@ -939,14 +992,19 @@ class StatusMonitor():
             # TODO: not 100% sure about it causing problems
             if self.vcs_client.is_in_a_or_a_working_copy(path):
                 self.status_monitor.status(path.rstrip(os.pathsep))
+    
+        def process_IN_MODIFY(self, event):
+            self.process(event)
         
-        def process_IN_MOVE_SELF(self, event):
-            path = event.path
-            if event.name: path = os.path.join(path, event.name)
-            
-            # Begin debugging code
-            print "Event IN_MOVE_SELF triggered for: %s" % path.rstrip(os.pathsep)
-            # End debugging code
+        def process_IN_MOVED_TO(self, event):
+            # FIXME: because update_file_info isn't called when things are moved,
+            # and we can't convert a path/uri to a NautilusVFSFile we can't
+            # always update the emblems properly on files that are moved (our 
+            # nautilusVFSFile_table points to a file that no longer exists).
+            #
+            # Once get_file_items() is called on an item, we once again have the 
+            # NautilusVFSFile we need (happens whenever a file is selected).
+            self.process(event)
     
     def __init__(self, callback):
         self.callback = callback
@@ -977,26 +1035,17 @@ class StatusMonitor():
                 #
                 self.watch_manager.add_watch(path, self.mask, rec=True)
                 
-                # But we shouldn't do any status checks on files in the working
-                # copy administration area.
-                if self.vcs_client.is_in_a_or_a_working_copy(path):
-                    self.status(path)
-            
+                # To always be able to track moves (renames are moves too) we 
+                # have to make sure we register with our parent directory
+                self.watch_manager.add_watch(split_path(path), self.mask, rec=True)
+                
+                # Begin debugging code
+                print "Debug: StatusMonitor.add_watch() added watch for %s" % path
+                # End debugging code
+                
+                self.status(path)
+        
     def status(self, path):
-        
-        def split_path(path):
-            """
-            
-            Sorta lot like os.path.split, but removes any trailing pathseps.
-            
-            >>> split_path("/foo/bar/baz")
-            '/foo/bar'
-            
-            """
-            
-            path = path.rstrip(os.path.sep)
-            return path[:path.rfind(os.path.sep)]
-        
         # Begin debugging information
         print "Debug: StatusMonitor.status() called for %s" % path
         # End debugging information
