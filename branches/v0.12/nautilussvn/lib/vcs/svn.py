@@ -126,15 +126,16 @@ class SVN:
             # when a versioned directory is removed and replaced with a
             # non-versioned directory (one that doesn't have a working copy
             # administration area, or .svn directory) you can't do a status 
-            # call. 
+            # call on that item itself (results in an exception).
             # 
             # Note that this is not a conflict, it's more of a corruption. 
             # And it's associated with the status "obstructed".
             #
             # TODO: This check doesn't really belong here though.
             #
-            if isdir(path) and not isdir(os.path.join(path, ".svn")):
-                return False
+            if entry:
+                if isdir(path) and not isdir(os.path.join(path, ".svn")):
+                    return False
             return True
         except pysvn.ClientError:
             return False
