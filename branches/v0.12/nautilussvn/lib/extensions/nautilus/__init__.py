@@ -2,7 +2,9 @@
 # This is an extension to the Nautilus file manager to allow better 
 # integration with the Subversion source control system.
 # 
-# Copyright (C) 2006 Jason Field
+# Copyright (C) 2006-2008 by Jason Field <jason@jasonfield.com>
+# Copyright (C) 2007-2008 by Bruce van der Kooij <brucevdk@gmail.com>
+# Copyright (C) 2008-2008 by Adam Plumb <adamplumb@gmail.com>
 # 
 # NautilusSvn is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +17,7 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with NautilusSvn; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
 import os.path
@@ -268,6 +269,12 @@ class MainContextMenu():
     """
     
     See: http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure
+    
+    FIXME: There's currently a problem with the order in which menu items 
+    appear, even though a list such as [<Update>, <Commit>, <NautilusSvn>] 
+    would be returned it might end up as [<NautilusSvn>, <Update>, <Commit>].
+    
+    TODO: Jason had some more information regarding the bug above.
     
     """
     
@@ -871,12 +878,27 @@ class MainContextMenu():
         
 
     def callback_add(self, menu_item, paths):
+        """
+        Put files and directories under version control, scheduling
+        them for addition to repository. They will be added in next commit.
+        
+        If paths only contains files then the files are added directly, 
+        otherwise an Add dialog is instantiated.
+        
+        @type   menu_item: nautilus.MenuItem
+        @param  menu_item: The menu item that was selected.
+        
+        @type   paths: list
+        @param  paths: A list of paths to add
+        """
+        
         client = pysvn.Client()
         for path in paths:
             client.add(path)
         self.callback_refresh_status(menu_item, paths)
 
     def callback_delete(self, menu_item, paths):
+        # FIXME: ClientError has local modifications
         client = pysvn.Client()
         for path in paths:
             client.remove(path)
