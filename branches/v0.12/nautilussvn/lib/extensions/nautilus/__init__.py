@@ -54,7 +54,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     nautilusVFSFile_table = {}
     
     # Keep track of item statuses. This is a workaround for the emblem added
-    # using add_emblem being only temporary, it's used in update_file_info.
+    # using add_emblem being only temporary, the emblems are removed when you
+    # item is no longer viewable from the Window. it's used in update_file_info.
     statuses = {}
     
     # This is a dictionary we use to keep track of everything that's interesting
@@ -104,6 +105,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         the look up table using the path and apply an emblem according to the 
         status we've been given.
         
+        FIXME: This function is in a race condition with the StatusMonitor
+        (which is threaded) to make things update the emblem. For now this
+        doesn't seem to be causing any problems (but that doesn't mean anything).
+        
+        We'll probably have to look into locking and all that stuff.
+        
         @type   item: NautilusVFSFile
         @param  item: 
         
@@ -116,10 +123,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         print "Debug: update_file_info() called for %s" % path
         # End debugging code
         
-        if not path in self.nautilusVFSFile_table:
-            self.nautilusVFSFile_table[path] = item
+        # Always replace the item in the table with the one we receive, because
+        # for example if a file is deleted and recreated the NautilusVFSFile
+        # will be invalid.
+        self.nautilusVFSFile_table[path] = item
         
         # Begin debugging code
+        # This is just used to initialize the debugging_information dict for the
+        # first time. Other than that it's not important.
         if not path in self.debugging_information["items"]:
             self.debugging_information["items"][path] = {
                 "added_emblems": []
@@ -130,7 +141,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         # See comment for variable: statuses
         if path in self.statuses:
-            self.update_emblem(path, self.statuses[path], invalidate=False)
+            self.update_emblem(path, self.statuses[path])
             
         self.status_monitor.add_watch(path)
         
@@ -176,8 +187,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # Callbacks
     #
     
-    def update_emblem(self, path, status, invalidate=True):
+    def update_emblem(self, path, status):
         """
+        
+        This function is used both as a callback and as a function to set emblems.
+        
+        TODO: should this be split into two functions, update_emblem and set_emblem?
         
         @type   invalidate: boolean
         @param  invalidate: Whether or not to invalidate the item found
@@ -188,13 +203,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         print "update_emblem() called for %s with status %s" % (path, status)
         # End debugging code
         
-        # See comment for variable: statuses
-        self.statuses[path] = status
-        
         # Try and lookup the NautilusVFSFile in the lookup table since we need it
         if not path in self.nautilusVFSFile_table: return
-        
         item = self.nautilusVFSFile_table[path]
+        
+        # See comment for variable: statuses
+        # There's no reason to do a lot of stuff if the emblem is the same
+        # but since we're the only function who does a add_emblem, we have to.
+        self.statuses[path] = status
+        
         if status in self.EMBLEMS:
             item.add_emblem(self.EMBLEMS[status])
             
@@ -203,10 +220,24 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 self.debugging_information["items"][path]["added_emblems"].append(self.EMBLEMS[status])
             # End debugging code
             
-        # We need to invalidate the extension info because the emblem added
-        # through add_emblem is only temporary, also see the comment for 
-        # variable: statuses
-        if invalidate: item.invalidate_extension_info()
+        # We need to invalidate the extension info for two reasons:
+        # 
+        # 1) Because the emblem added through add_emblem is only temporary and
+        #    Nautilus won't add an emblem if we don't (is this reason really valid?).
+        #
+        # 2) Invalidating the extension info will cause Nautilus to remove all
+        #    temporary emblems we applied so we don't have overlay problems
+        #    (with ourselves, we'd still have some with other extensions).
+        #
+        # TODO: figure out how come the combination with the call to update_emblem
+        # from update_file_info which again calls update_emblem doesn't result 
+        # in a lock-up. Because everything logical tells me it should.
+        #
+        # FIXME: for some reason the invalidate_extension_info isn't always 
+        # processed and update_file_info isn't called which will lead to having
+        # two emblems applied to an item at once (and this leads to the user
+        # seeing the wrong emblem, not the last applied).
+        item.invalidate_extension_info()
     
 class MainContextMenu():
     """
@@ -729,6 +760,7 @@ class MainContextMenu():
         client = pysvn.Client()
         for path in paths:
             client.update(path)
+        self.callback_refresh_status(menu_item, paths)
 
     def callback_commit(self, menu_item, paths):
         from subprocess import Popen, PIPE
@@ -737,21 +769,25 @@ class MainContextMenu():
         
         client = pysvn.Client()
         client.checkin(paths, log_message)
+        self.callback_refresh_status(menu_item, paths)
 
     def callback_add(self, menu_item, paths):
         client = pysvn.Client()
         for path in paths:
             client.add(path)
+        self.callback_refresh_status(menu_item, paths)
 
     def callback_delete(self, menu_item, paths):
         client = pysvn.Client()
         for path in paths:
             client.remove(path)
+        self.callback_refresh_status(menu_item, paths)
 
     def callback_revert(self, menu_item, paths):
         client = pysvn.Client()
         for path in paths:
             client.revert(path)
+        self.callback_refresh_status(menu_item, paths)
 
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
@@ -833,6 +869,13 @@ class StatusMonitor():
             print "Event IN_MODIFY triggered for: %s" % path.rstrip(os.pathsep)
             # End debugging code
             
+            # Subversion (pysvn? svn?) makes temporary files for some purpose which
+            # are detected by inotify but are deleted shortly thereafter. So we
+            # ignore them.
+            # TODO: this obviously doesn't account for the fact that people might
+            # version files with a .tmp extension.
+            if path.endswith(".tmp"): return
+            
             # Make sure to strip any trailing slashes because that will 
             # cause problems for the status checking
             # TODO: not 100% sure about it causing problems
@@ -896,6 +939,10 @@ class StatusMonitor():
             path = path.rstrip(os.path.sep)
             return path[:path.rfind(os.path.sep)]
         
+        # Begin debugging information
+        print "Debug: StatusMonitor.status() called for %s" % path
+        # End debugging information
+        
         client = pysvn.Client()
         
         # If we're not a or inside a working copy we don't even have to bother.
@@ -917,6 +964,7 @@ class StatusMonitor():
                     path = split_path(path)
                     if self.vcs_client.is_in_a_or_a_working_copy(path):
                         self.callback(path, "modified")
+                        break;
                 return;
         
         # Verifiying the rest of the statuses is common for both files and directories.
