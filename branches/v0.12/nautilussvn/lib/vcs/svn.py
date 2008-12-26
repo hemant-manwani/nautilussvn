@@ -113,8 +113,11 @@ class SVN:
     def __init__(self):
         self.client = pysvn.Client()
     
-    def status(self, path, recurse=True):
-        return self.client.status(path, recurse=recurse)
+    def status(self, path, recurse=True, depth=None):
+        if depth:
+            return self.client.status(path, depth=depth)
+        else:
+            return self.client.status(path, recurse=recurse)
     
     #
     # is
@@ -144,7 +147,6 @@ class SVN:
         return self.is_working_copy(path)
         
     def is_versioned(self, path):
-        
         # info will return nothing for an unversioned file inside a working copy
         if self.client.info(path):
             return True
@@ -152,8 +154,7 @@ class SVN:
         return False
     
     def is_normal(self, path):
-        all_status = self.status(path, recurse=False)
-        status = all_status[len(all_status) - 1]
+        status = self.status(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.normal:
             return True
@@ -161,8 +162,7 @@ class SVN:
         return False
     
     def is_added(self, path):
-        all_status = self.status(path, recurse=False)
-        status = all_status[len(all_status) - 1]
+        status = self.status(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.added:
             return True
@@ -170,8 +170,7 @@ class SVN:
         return False
         
     def is_modified(self, path):
-        all_status = self.status(path, recurse=False)
-        status = all_status[len(all_status) - 1]
+        status = self.status(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.modified:
             return True
@@ -179,8 +178,7 @@ class SVN:
         return False
     
     def is_deleted(self, path):
-        all_status = self.status(path, recurse=False)
-        status = all_status[len(all_status) - 1]
+        status = self.status(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.deleted:
             return True
@@ -188,8 +186,7 @@ class SVN:
         return False
         
     def is_ignored(self, path):
-        all_status = self.status(path, recurse=False)
-        status = all_status[len(all_status) - 1]
+        status = self.status(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.ignored:
             return True

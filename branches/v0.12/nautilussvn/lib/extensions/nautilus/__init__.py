@@ -990,16 +990,19 @@ class StatusMonitor():
         # If we're not a or inside a working copy we don't even have to bother.
         if not self.vcs_client.is_in_a_or_a_working_copy(path): return
         
+        # We need the status object for the item alone
+        status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
+        
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
         # of a nifty way to do this by using sets and the bitwise AND operator (&).
-        if isdir(path):
+        if isdir(path) and status != pysvn.wc_status_kind.added:
             modified_statuses = set([
                 pysvn.wc_status_kind.added, 
                 pysvn.wc_status_kind.deleted, 
                 pysvn.wc_status_kind.modified
             ])
-            statuses = set([status.data["text_status"] for status in client.status(path)][:-1])
+            statuses = set([sub_status.data["text_status"] for sub_status in client.status(path)][:-1])
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
                 
@@ -1019,7 +1022,6 @@ class StatusMonitor():
                 return;
         
         # Verifiying the rest of the statuses is common for both files and directories.
-        status = client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
         if status in self.STATUS:
             self.callback(path, self.STATUS[status])
             while path != "":
@@ -1029,7 +1031,8 @@ class StatusMonitor():
                     pysvn.wc_status_kind.deleted, 
                     pysvn.wc_status_kind.modified,
                 ):
-                    if self.vcs_client.is_in_a_or_a_working_copy(path):
+                    if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                            not self.vcs_client.is_added(path)):
                         self.callback(path, "modified")
                 elif status in (
                         pysvn.wc_status_kind.normal,
