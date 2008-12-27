@@ -76,7 +76,7 @@ class SVN:
         pysvn.wc_notify_action.resolved:                "Resolved",
         pysvn.wc_notify_action.skip:                    "Skipped",
         pysvn.wc_notify_action.update_delete:           "Deleted",
-        pysvn.wc_notify_action.update_add:              "Addd",
+        pysvn.wc_notify_action.update_add:              "Added",
         pysvn.wc_notify_action.update_update:           "Updated",
         pysvn.wc_notify_action.update_completed:        "Completed",
         pysvn.wc_notify_action.update_external:         "External",
@@ -118,6 +118,22 @@ class SVN:
         "previous":         pysvn.opt_revision_kind.previous,
         "working":          pysvn.opt_revision_kind.working,
         "head":             pysvn.opt_revision_kind.head
+    }
+    
+    DEPTHS = {
+        "empty":        pysvn.depth.empty,
+        "exclude":      pysvn.depth.exclude,
+        "files":        pysvn.depth.files,
+        "immediates":   pysvn.depth.immediates,
+        "infinity":     pysvn.depth.infinity,
+        "unknown":      pysvn.depth.unknown
+    }
+    
+    DEPTHS_FOR_CHECKOUT = {
+        "Fully Recursive":                          DEPTHS["infinity"],
+        "Immediate children, including folders":    DEPTHS["immediates"],
+        "Only file children":                       DEPTHS["files"],
+        "Only this item":                           DEPTHS["empty"]
     }
     
     status_cache = {}
@@ -606,6 +622,43 @@ class SVN:
         
         try:
             self.client.copy(src, dest, revision)
+        except pysvn.ClientError, e:
+            return str(e)
+        except TypeError, e:
+            return str(e)
+        
+        return None
+    
+    def checkout(self, url, path, 
+        recurse=True, 
+        revision=pysvn.Revision(pysvn.opt_revision_kind.head),
+        ignore_externals=False):
+        
+        """
+        Checkout a working copy from a vcs repository
+        
+        @type   url: string
+        @param  url: a repository url
+        
+        @type   path: string
+        @param  path: a local destination for the working copy
+        
+        @type   recurse: boolean
+        @param  recurse: whether or not to run a recursive checkout
+        
+        @type   ignore_externals: boolean
+        @param  ignore_externals: whether or not to ignore externals
+        
+        """
+        
+        try:
+            self.client.checkout(
+                url,
+                path,
+                recurse=recurse,
+                revision=revision,
+                ignore_externals=ignore_externals
+            )
         except pysvn.ClientError, e:
             return str(e)
         except TypeError, e:

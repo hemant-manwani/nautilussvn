@@ -20,38 +20,33 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
+
 import pygtk
 import gobject
 import gtk
 
 import nautilussvn.ui
 import nautilussvn.ui.widget
-import nautilussvn.ui.notification
+import nautilussvn.ui.callback
 import nautilussvn.ui.dialog
 import nautilussvn.lib.helper
+import nautilussvn.lib.vcs
 
 class Checkout:
 
-    DEPTHS = [
-        'Fully recursive',
-        'Immediate children, including folders',
-        'Only file children',
-        'Only this item'
-    ]
-
-    def __init__(self):
+    def __init__(self, path):
         self.view = nautilussvn.ui.InterfaceView(self, "checkout", "Checkout")
+        
+        self.path = path
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("repositories"), 
             nautilussvn.lib.helper.get_repository_paths()
         )
-        self.depth = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("depth")
-        )
-        for i in self.DEPTHS:
-            self.depth.append(i)
-        self.depth.set_active(0)
+        
+        self.view.get_widget("destination").set_text(path)
 
     def on_destroy(self, widget):
         gtk.main_quit()
@@ -60,8 +55,31 @@ class Checkout:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
+        
+        url = self.view.get_widget("url").get_text()
+        path = self.view.get_widget("destination").get_text()
+        omit_externals = self.view.get_widget("omit_externals").get_active()
+        recursive = self.view.get_widget("recursive").get_active()
+        
+        revision = self.vcs.revision("head")
+        if self.view.get_widget("revision_number_opt").get_active():
+            revision = self.vcs.revision(
+                "number",
+                int(self.view.get_widget("revision_number").get_text())
+            )
+    
         self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        self.action = nautilussvn.ui.callback.VCSAction(self.vcs)
+        self.action.set_action(
+            self.vcs.checkout, 
+            url, 
+            path, 
+            recurse=recursive,
+            revision=revision,
+            ignore_externals=omit_externals
+        )        
+        self.action.set_before("Running Checkout Command...")
+        self.action.start()
 
     def on_revision_number_focused(self, widget, data=None):
         self.view.get_widget("revision_number_opt").set_active(True)
@@ -81,5 +99,10 @@ class Checkout:
             self.view.get_widget("revision_number").set_text(data)
 
 if __name__ == "__main__":
-    window = Checkout()
-    gtk.main()
+    args = sys.argv
+    args.pop(0)
+    if len(args) > 0:
+        window = Checkout(args[0])
+        gtk.main()
+    else:
+        print "Usage: python checkout.py [path]"

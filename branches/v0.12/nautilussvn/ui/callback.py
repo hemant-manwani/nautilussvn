@@ -108,7 +108,7 @@ class VCSAction(threading.Thread):
         ])
         
         if data["action"] in self.client.NOTIFY_ACTIONS_COMPLETE:
-            self.finish()
+            self.finish("Revision %s" % data["revision"].number)
     
     def finish(self, message=None):
         self.set_status(message)
