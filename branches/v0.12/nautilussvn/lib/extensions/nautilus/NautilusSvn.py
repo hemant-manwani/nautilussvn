@@ -865,13 +865,12 @@ class MainContextMenu():
         def add_emblem_dialog():
             from subprocess import Popen, PIPE
             command = ["zenity", "--entry", "--title=NautilusSVN", "--text=Emblem to add:"]
-            emblem = Popen(command, stdout=PIPE).communicate()[0]
+            emblem = Popen(command, stdout=PIPE).communicate()[0].replace("\n", "")
             
             nautilussvn_extension = self.nautilussvn_extension
             nautilusVFSFile_table = nautilussvn_extension.nautilusVFSFile_table
             for path in paths:
                 if path in nautilusVFSFile_table:
-                    # FIXME: doesn't work
                     nautilusVFSFile_table[path].add_emblem(emblem)
             return False
             
