@@ -46,3 +46,4 @@ class InterfaceView:
         
     def show(self):
         self.get_widget(self.id).set_property('visible', True)
+

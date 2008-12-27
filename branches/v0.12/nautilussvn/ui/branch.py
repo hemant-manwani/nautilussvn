@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
+
 import pygtk
 import gobject
 import gtk
@@ -30,8 +32,6 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
-
-gtk.gdk.threads_init()
 
 class Branch:
     def __init__(self, path):
@@ -126,5 +126,10 @@ class Branch:
             self.view.get_widget("from_revision_number").set_text(data)
 
 if __name__ == "__main__":
-    window = Branch("/home/adam/Development/test/file1.txt")
-    gtk.main()
+    args = sys.argv
+    args.pop(0)
+    if len(args) > 0:
+        window = Branch(args[0])
+        gtk.main()
+    else:
+        print "Usage: python branch.py [path]"
