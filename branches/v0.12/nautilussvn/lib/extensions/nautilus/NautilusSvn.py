@@ -83,13 +83,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     }
     
     def __init__(self):
-        # We have a lot of custom icons that we've put in a custom icon theme
-        # but to make them available we have to append the parent directory
-        # to the icon theme search path.
-        icon_theme = gtk.icon_theme_get_default()
-        icon_theme.append_search_path("/usr/share/icons")
-        icon_theme.append_search_path(os.path.expanduser("~/.icons"))
-        
         # Create a StatusMonitor and register a callback with it to notify us 
         # of any status changes.
         self.status_monitor = StatusMonitor(self.update_emblem)
