@@ -41,14 +41,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # Maps statuses to emblems
     # TODO: should probably be possible to create this dynamically
     EMBLEMS = {
-        "added" :       "emblem-added",
-        "deleted":      "emblem-deleted",
-        "modified":     "emblem-modified",
+        "added" :       "nautilussvn-added",
+        "deleted":      "nautilussvn-deleted",
+        "modified":     "nautilussvn-modified",
         "conflicted":   "embled-conflicted",
-        "normal":       "emblem-normal",
-        "ignored":      "emblem-ignored",
-        "locked":       "emblem-locked",
-        "read_only":    "emblem-read_only"
+        "normal":       "nautilussvn-normal",
+        "ignored":      "nautilussvn-ignored",
+        "locked":       "nautilussvn-locked",
+        "read_only":    "nautilussvn-read_only"
     }
     
     # This is our lookup table for NautilusVFSFiles which we need for attaching
@@ -295,7 +295,7 @@ class MainContextMenu():
                 "identifier": "NautilusSvn::Debug",
                 "label": "Debug",
                 "tooltip": "",
-                "icon": "icon-monkey",
+                "icon": "nautilussvn-monkey",
                 "signals": {
                     "activate": {
                         "callback": None,
@@ -324,7 +324,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Refresh_Status",
                         "label": "Refresh Status",
                         "tooltip": "",
-                        "icon": "icon-refresh",
+                        "icon": "nautilussvn-refresh",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_refresh_status,
@@ -340,7 +340,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Debug_Revert",
                         "label": "Revert",
                         "tooltip": "Reverts everything it sees",
-                        "icon": "icon-revert",
+                        "icon": "nautilussvn-revert",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_debug_revert,
@@ -356,10 +356,26 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Debug_Invalidate",
                         "label": "Invalidate",
                         "tooltip": "Force a invalidate_extension_info() call",
-                        "icon": "icon-clear",
+                        "icon": "nautilussvn-clear",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_debug_invalidate,
+                                "args": None
+                            }
+                        },
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Debug_Add_Emblem",
+                        "label": "Add Emblem",
+                        "tooltip": "Add an emblem",
+                        "icon": "nautilussvn-emblems",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_debug_add_emblem,
                                 "args": None
                             }
                         },
@@ -374,7 +390,7 @@ class MainContextMenu():
                 "identifier": "NautilusSvn::Checkout",
                 "label": "Checkout",
                 "tooltip": "",
-                "icon": "icon-checkout",
+                "icon": "nautilussvn-checkout",
                 "signals": {
                     "activate": {
                         "callback": None,
@@ -390,7 +406,7 @@ class MainContextMenu():
                 "identifier": "NautilusSvn::Update",
                 "label": "Update",
                 "tooltip": "",
-                "icon": "icon-update",
+                "icon": "nautilussvn-update",
                 "signals": {
                     "activate": {
                         "callback": self.callback_update,
@@ -406,7 +422,7 @@ class MainContextMenu():
                 "identifier": "NautilusSvn::Commit",
                 "label": "Commit",
                 "tooltip": "",
-                "icon": "icon-commit",
+                "icon": "nautilussvn-commit",
                 "signals": {
                     "activate": {
                         "callback": self.callback_commit,
@@ -435,7 +451,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Diff",
                         "label": "Diff",
                         "tooltip": "",
-                        "icon": "icon-diff",
+                        "icon": "nautilussvn-diff",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -451,7 +467,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Show_Log",
                         "label": "Show Log",
                         "tooltip": "",
-                        "icon": "icon-show_log",
+                        "icon": "nautilussvn-show_log",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -467,7 +483,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Add",
                         "label": "Add",
                         "tooltip": "",
-                        "icon": "icon-add",
+                        "icon": "nautilussvn-add",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_add,
@@ -483,7 +499,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Rename",
                         "label": "Rename",
                         "tooltip": "",
-                        "icon": "icon-rename",
+                        "icon": "nautilussvn-rename",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -499,7 +515,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Delete",
                         "label": "Delete",
                         "tooltip": "",
-                        "icon": "icon-delete",
+                        "icon": "nautilussvn-delete",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_delete,
@@ -515,7 +531,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Revert",
                         "label": "Revert",
                         "tooltip": "",
-                        "icon": "icon-revert",
+                        "icon": "nautilussvn-revert",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_revert,
@@ -531,7 +547,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Properties",
                         "label": "Properties",
                         "tooltip": "",
-                        "icon": "icon-properties",
+                        "icon": "nautilussvn-properties",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -547,7 +563,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Help",
                         "label": "Help",
                         "tooltip": "",
-                        "icon": "icon-help",
+                        "icon": "nautilussvn-help",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -563,7 +579,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Settings",
                         "label": "Settings",
                         "tooltip": "",
-                        "icon": "icon-settings",
+                        "icon": "nautilussvn-settings",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -579,7 +595,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::About",
                         "label": "About",
                         "tooltip": "",
-                        "icon": "icon-about",
+                        "icon": "nautilussvn-about",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -845,6 +861,22 @@ class MainContextMenu():
             if path in nautilusVFSFile_table:
                 nautilusVFSFile_table[path].invalidate_extension_info()
     
+    def callback_debug_add_emblem(self, menu_item, paths):
+        def add_emblem_dialog():
+            from subprocess import Popen, PIPE
+            command = ["zenity", "--entry", "--title=NautilusSVN", "--text=Emblem to add:"]
+            emblem = Popen(command, stdout=PIPE).communicate()[0]
+            
+            nautilussvn_extension = self.nautilussvn_extension
+            nautilusVFSFile_table = nautilussvn_extension.nautilusVFSFile_table
+            for path in paths:
+                if path in nautilusVFSFile_table:
+                    # FIXME: doesn't work
+                    nautilusVFSFile_table[path].add_emblem(emblem)
+            return False
+            
+        gobject.idle_add(add_emblem_dialog)        
+    
     # End debugging callbacks
     
     def callback_update(self, menu_item, paths):
@@ -862,6 +894,8 @@ class MainContextMenu():
             client = pysvn.Client()
             client.checkin(paths, log_message)
             self.callback_refresh_status(menu_item, paths)
+            
+            return False
         
         # Eureka! Plain Python threads don't seem to work properly in the context
         # of a Nautilus extension, so this doesn't work properly (the thread isn't
@@ -906,7 +940,7 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths)
 
     def callback_revert(self, menu_item, paths):
-        # FIXME: if called on a directory should revert also revert items that
+        # TODO: if called on a directory should revert also revert items that
         # were svn added, but then manually deleted (resulting in missing)? See
         # callback_debug_revert.
         client = pysvn.Client()
