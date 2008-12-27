@@ -21,6 +21,7 @@
 #
 
 import os
+import sys
 
 import pygtk
 import gobject
@@ -189,5 +190,10 @@ class Add:
             self.files_table.remove(self.last_row_clicked)
         
 if __name__ == "__main__":
-    window = Add(["/home/adam/Development/test/"])
-    gtk.main()
+    args = sys.argv
+    args.pop(0)
+    if len(args) > 0:
+        window = Add(args)
+        gtk.main()
+    else:
+        print "Usage: python add.py [path1] [path2]..."
