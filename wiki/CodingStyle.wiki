@@ -21,6 +21,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 = Specific =
 
   * Double quotes should be used to indicate strings, i.e. "This is a string."
+  * When referring to both files and directories use the term "items" not "files". Also sometimes you want to use "paths".
 
 = Comments =
 
