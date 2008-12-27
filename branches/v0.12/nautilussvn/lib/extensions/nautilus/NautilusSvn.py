@@ -66,10 +66,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     nautilusVFSFile_table = {}
     
     # Keep track of item statuses. This is a workaround for the fact that
-    # emblems added using add_emblem are removed are removed once the 
-    # NautilusVFSFile is invalidated (Nautilus does this itself when items for
-    # example are modified). This dictionary is used to remember what the last 
-    # state for an item should be, e.g.:
+    # emblems added using NautilusVFSFile.add_emblem are removed once the 
+    # NautilusVFSFile is invalidated (one example of when this happens is
+    # when an item is modified). 
+    #
+    # This is used to remember what the status for an item should be, e.g.:
     #
     # statuses = {
     #     "/foo/bar/baz": "modified"
