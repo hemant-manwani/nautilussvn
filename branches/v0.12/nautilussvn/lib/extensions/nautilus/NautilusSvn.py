@@ -61,14 +61,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # }
     #
     # Keeping track of NautilusVFSFiles is a little bit complicated because
-    # when a file is moved (renamed) update_file_info doesn't get called. So
+    # when an item is moved (renamed) update_file_info doesn't get called. So
     # we also add NautilusVFSFiles to this table from get_file_items etc.
     nautilusVFSFile_table = {}
     
-    # Keep track of item statuses. This is a workaround for the emblem added
-    # using add_emblem being only temporary, the emblems are removed when you
-    # item is no longer viewable from the Window. This is used to remember
-    # what the last state for a file should be, e.g.:
+    # Keep track of item statuses. This is a workaround for the fact that
+    # emblems added using add_emblem are removed are removed once the 
+    # NautilusVFSFile is invalidated (Nautilus does this itself when items for
+    # example are modified). This dictionary is used to remember what the last 
+    # state for an item should be, e.g.:
     #
     # statuses = {
     #     "/foo/bar/baz": "modified"
@@ -100,7 +101,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         update_file_info is called only when:
         
-          * When you enter a directory (once for each item)
+          * When you enter a directory (once for each item) but only when the
+            item was modified since the last time it was listed
           * When an item viewable from the current window is created or modified
           
         This is insufficient for our purpose because:
@@ -142,7 +144,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # End debugging code
         
         # Always replace the item in the table with the one we receive, because
-        # for example if a file is deleted and recreated the NautilusVFSFile
+        # for example if an item is deleted and recreated the NautilusVFSFile
         # we had before will be invalid (think pointers and such).
         self.nautilusVFSFile_table[path] = item
         
@@ -1055,11 +1057,11 @@ class StatusMonitor():
         def process_IN_MOVED_TO(self, event):
             # FIXME: because update_file_info isn't called when things are moved,
             # and we can't convert a path/uri to a NautilusVFSFile we can't
-            # always update the emblems properly on files that are moved (our 
-            # nautilusVFSFile_table points to a file that no longer exists).
+            # always update the emblems properly on items that are moved (our 
+            # nautilusVFSFile_table points to an item that no longer exists).
             #
             # Once get_file_items() is called on an item, we once again have the 
-            # NautilusVFSFile we need (happens whenever a file is selected).
+            # NautilusVFSFile we need (happens whenever an item is selected).
             self.process(event)
     
     def __init__(self, callback):
