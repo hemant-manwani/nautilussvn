@@ -2,8 +2,6 @@
 # postremoval script for apt-file
 set -e;
 
-if [ "purge" = "$1" ]; then
-	rm -f /var/lib/update-notifier/user.d/nautilussvn-restart-required
-fi;
+rm -f /var/lib/update-notifier/user.d/nautilussvn-restart-required
 
 ##DEBHELPER##

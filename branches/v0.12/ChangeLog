@@ -1,5 +1,15 @@
 2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* packages/ubuntu/debian/do-nautilussvn-restart-nautilus:
+	* packages/ubuntu/debian/nautilussvn-restart-required.update-notifi
+	er:
+	* packages/ubuntu/debian/postinst:
+	* packages/ubuntu/debian/postrm:
+	* setup.py:
+	Command needs to point to an executable (+x) shell script.
+
+2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* packages/ubuntu/debian/postinst:
 	Whoops, some leftover stuff from apt-file and some other errors.
 
