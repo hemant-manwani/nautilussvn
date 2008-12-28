@@ -27,3 +27,7 @@ mkdir -p /tmp/nautilussvn_nautilus-testing
 export TMPDIR=/tmp/nautilussvn_nautilus-testing
 nautilus --no-desktop .
 }}}
+
+
+= No never ending loop? =
+In a [http://code.google.com/p/nautilussvn/source/browse/branches/v0.12/nautilussvn/lib/extensions/nautilus/NautilusSvn.py?spec=svn362&r=362#218 particular revision] there was a function update_emblem which was called by update_file_info but which indirectly called update_file_info back by calling NautilusVFSFile.invalidate_extension_info. Everything logical told me this should cause a neverending loop, but that wasn't the case. I never found out why that did not happen. 
