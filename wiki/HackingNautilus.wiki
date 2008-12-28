@@ -12,7 +12,7 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * Documentation for both end-users and developers can be found in the [http://library.gnome.org/ GNOME Documentation Library]. 
   * Though the GNOME Documentation Library is the official spot for documentation the [http://live.gnome.org/ GNOME Live!] (the GNOME wiki) is probably more helpful.
-  * Subversion
+  * [http://svn.gnome.org/ GNOME Subversion Services].
 
 == Hints ==
 
