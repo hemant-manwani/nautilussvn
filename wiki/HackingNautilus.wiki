@@ -33,11 +33,15 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 = Building Nautilus =
 
 == Requirements ==
+{{{
 sudo apt-get build-dep nautilus
 sudo apt-get install gnome-common # Missing from the build-dep
+}}}
 
 == Building ==
+{{{
 ./autogen.sh
 ./configure --prefix="/usr"
 mkdir -p /tmp/nautilus-testing
 TMPDIR="/tmp/nautilus-testing/ ./src/nautilus --no-desktop
+}}}
