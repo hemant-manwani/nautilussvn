@@ -7,7 +7,7 @@ In this page we'll look at what exactly a Nautilus extension is (the interface e
 = Details =
 
 == The basics of a Nautilus extension ==
-NautilusSvn is a Nautilus extension written in Python using the [http://svn.gnome.org/viewvc/nautilus-python/trunk/ Python bindings for the Nautilus extension library] (nautilus-python in short). For an extensive introduction see [http://taschenorakel.de/svn/repos/bulldozer/branches/bugfixes-0.2.3/documentation/NautilusExtensions.html Nautilus Extensions].
+NautilusSvn is a Nautilus extension written in Python using the [http://svn.gnome.org/viewvc/nautilus-python/trunk/ Python bindings for the Nautilus extension library] (nautilus-python in short). For an extensive introduction see [http://taschenorakel.de/svn/repos/bulldozer/trunk/documentation/NautilusExtensions.html Nautilus Extensions].
 
 A Nautilus extension can implement a couple of providers (interfaces), namely: 
 
@@ -46,5 +46,3 @@ state = client.status(path)
   # After every action RescanFilesAfterProcess calls invalidate_extension_info on every monitored file.
 
 === v0.12 ===
-
-
