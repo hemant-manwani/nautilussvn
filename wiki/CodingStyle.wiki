@@ -12,6 +12,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
   * Use 4 spaces per indentation level.
   * Never mix tabs and spaces. Spaces only.
   * Limit all lines to a maximum of 79 characters.
+  * Imports are always put at the top of the file, just after any module comments and docstrings
   * Imports should usually be on separate lines
   * Imports should be grouped in the following order (you should put a blank line between each group of imports): 
     ** 1. standard library imports
