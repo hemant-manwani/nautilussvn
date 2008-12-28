@@ -1,5 +1,12 @@
 2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Added all the information I have in my head about the problems with 
+	threading within a Nautilus Python extension including a debug callback
+	demonstrating the problems.
+
+2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* packages/ubuntu/debian/do-nautilussvn-restart-nautilus:
 	* packages/ubuntu/debian/nautilussvn-restart-required.update-notifi
 	er:

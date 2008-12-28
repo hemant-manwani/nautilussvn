@@ -214,6 +214,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not path in self.nautilusVFSFile_table: return
         item = self.nautilusVFSFile_table[path]
         
+        # Begin debugging code
+        print "set_emblem_by_status() called for %s with status %s" % (path, status)
+        # End debugging code
+        
         if status in self.EMBLEMS:
             item.add_emblem(self.EMBLEMS[status])
     
@@ -242,6 +246,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # See comment for variable: statuses
         # There's no reason to do a lot of stuff if the emblem is the same
         # but since we're the only function who does a add_emblem, we have to.
+        
         self.statuses[path] = status
         
         # We need to invalidate the extension info for only one reason:
@@ -296,6 +301,22 @@ class MainContextMenu():
                 "condition": (lambda: True),
                 "submenus": [
                     {
+                        "identifier": "NautilusSvn::Debug_Asynchronicity",
+                        "label": "Test Asynchronicity",
+                        "tooltip": "",
+                        "icon": "nautilussvn-asynchronous",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_debug_asynchronicity,
+                                "args": None
+                            }
+                        },
+                        "condition": (lambda: True),
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::Debug_Shell",
                         "label": "Open Shell",
                         "tooltip": "",
@@ -329,7 +350,7 @@ class MainContextMenu():
                     },
                     {
                         "identifier": "NautilusSvn::Debug_Revert",
-                        "label": "Revert",
+                        "label": "Debug Revert",
                         "tooltip": "Reverts everything it sees",
                         "icon": "nautilussvn-revert",
                         "signals": {
@@ -793,6 +814,64 @@ class MainContextMenu():
     #
     
     # Begin debugging callbacks
+    def callback_debug_asynchronicity(self, menu_item, paths):
+        """
+        This is a function to test doing things asynchronously.
+        
+        Plain Python threads don't seem to work properly in the context of a
+        Nautilus extension, so this doesn't work out all too well:
+        
+        import thread
+        thread.start_new_thread(asynchronous_function, ())
+        
+        The thread will _only_ run when not idle (e.g. it will run for a short 
+        while when you change the item selection).
+        
+        A few words of advice. Don't be misled, as I was, into thinking that a 
+        function you add using gobject.add_idle is run asynchronously. 
+        
+        Calling time.sleep() or doing something for a long time will simply block 
+        the main thread while the function is running. It's just that Nautilus
+        is idle a lot so it might create that impression.
+        
+        Calling gtk.gdk.threads_init() or gobject.threads_init() is not needed.
+        
+        Also see:
+        
+          * http://www.pygtk.org/pygtk2reference/gobject-functions.html
+          * http://www.pygtk.org/docs/pygtk/gdk-functions.html
+        
+        Interesting links (but not relevant per se): 
+        
+          * http://research.operationaldynamics.com/blogs/andrew/software/gnome-desktop/gtk-thread-awareness.html
+          * http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
+        
+        """
+    
+        import thread
+        import time
+        
+        def asynchronous_function():
+            # If you do:
+            # 
+            #   tail -f /tmp/nautilussvn/counter
+            #
+            # You will notice that the thread is only run for a short while.
+            print "Debug: inside asynchronous_function()"
+            
+            temporary_directory = "/tmp/nautilussvn"
+            if not os.path.isdir(temporary_directory): os.mkdir(temporary_directory)
+            file = open(os.path.join(temporary_directory, "counterlog"), "w")
+            
+            for i in range(0, 100000):
+                print i
+                file.write(str(i) + "\n")
+            
+            file.close()    
+            print "Debug: asynchronous_function() finished"
+            
+        thread.start_new_thread(asynchronous_function, ())
+        
     def callback_debug_shell(self, menu_item, paths):
         """
         
@@ -801,8 +880,6 @@ class MainContextMenu():
         See: http://ipython.scipy.org/moin/Cookbook/EmbeddingInGTK
         
         """
-        
-        # TODO: use a Glade file for most of this instead.
         import gtk
         from nautilussvn.debug.ipython_view import IPythonView
         
@@ -820,9 +897,6 @@ class MainContextMenu():
         scrolled_window.show()
         window.add(scrolled_window)
         window.show()
-        window.connect('delete_event', lambda x,y: False)
-        window.connect('destroy', lambda x: gtk.main_quit())
-        gtk.main()
     
     def callback_refresh_status(self, menu_item, paths):
         nautilussvn_extension = self.nautilussvn_extension
@@ -888,18 +962,6 @@ class MainContextMenu():
             
             return False
         
-        # Eureka! Plain Python threads don't seem to work properly in the context
-        # of a Nautilus extension, so this doesn't work properly (the thread isn't
-        # inmediatly processed and such stuff):
-        # 
-        # import thread
-        # thread.start_new_thread(commit_dialog, ())
-        #
-        # But adding functions to gobject.idle_add does. You also don't have to
-        # call gtk.gdk.threads_init() or gobject.threads_init().
-        #
-        # See: http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
-        #
         gobject.idle_add(commit_dialog)
         
 
@@ -1147,7 +1209,7 @@ class StatusMonitor():
                         self.callback(path, "modified")
                 elif status in (
                         pysvn.wc_status_kind.normal,
-                        pysvn.wc_status_kind.unversioned,
+                        pysvn.wc_status_kind.unversioned, # FIXME: but only if it was previously versioned
                     ):
                     self.status(path)
                     
