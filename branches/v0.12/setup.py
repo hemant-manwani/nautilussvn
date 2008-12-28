@@ -88,6 +88,9 @@ for root, dirs, files in os.walk("nautilussvn/data/icons/hicolor"):
         root.replace("nautilussvn/data/icons/hicolor", icon_theme_directory),
         [os.path.join(root, file) for file in files if file.find(".svg") > 0]
     ))
+    
+# Update notifier
+update_notifier = [("/usr/share/nautilussvn", ["packages/ubuntu/debian/nautilussvn-restart-required.update-notifier"])]
 
 #==============================================================================
 # Ready to install
@@ -115,5 +118,5 @@ dist = setup(
     #   file) into site-packages
     # - data_files: any file you want, anywhere you want it
     packages=packages,
-    data_files=nautilus_extension+icons
+    data_files=nautilus_extension+icons+update_notifier
 )
