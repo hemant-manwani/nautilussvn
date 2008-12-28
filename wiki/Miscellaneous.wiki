@@ -7,6 +7,8 @@
 
   * python-configobj
   * python-pyinotify
+  * python-gtk2
+  * python-glade
 
 == Running ==
 {{{
