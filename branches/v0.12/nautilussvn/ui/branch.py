@@ -104,7 +104,10 @@ class Branch(InterfaceView):
             return
 
         self.hide()
-        self.action = nautilussvn.ui.callback.VCSAction(self.vcs)
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
         self.action.set_log_message(self.message.get_text())
         self.action.set_action(self.vcs.copy, src, dest, revision)        
         self.action.set_before_message("Running Copy/Branch Command...")
