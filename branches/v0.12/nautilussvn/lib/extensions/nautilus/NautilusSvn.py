@@ -76,12 +76,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     #
     statuses = {}
     
-    # This is a dictionary we use to keep track of everything that's interesting
-    # debugging wise.
-    debugging_information = {
-        "items": {}
-    }
-    
     def __init__(self):
         # Create a StatusMonitor and register a callback with it to notify us 
         # of any status changes.
@@ -146,18 +140,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # for example if an item is deleted and recreated the NautilusVFSFile
         # we had before will be invalid (think pointers and such).
         self.nautilusVFSFile_table[path] = item
-        
-        # Begin debugging code
-        # The following lines of code are used to keep track of how many
-        # emblems are attached to a item (there are issues with a item having
-        # two emblems, which leads to the most recent one being hidden).
-        if not path in self.debugging_information["items"]:
-            self.debugging_information["items"][path] = {
-                "added_emblems": []
-            }
-        else:
-            self.debugging_information["items"][path]["added_emblems"] = []
-        # End debugging code
         
         # See comment for variable: statuses
         if path in self.statuses:
@@ -243,11 +225,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if status in self.EMBLEMS:
             item.add_emblem(self.EMBLEMS[status])
             
-            # Begin debugging code
-            if path in self.debugging_information["items"]:
-                self.debugging_information["items"][path]["added_emblems"].append(self.EMBLEMS[status])
-            # End debugging code
-            
         # We need to invalidate the extension info for only one reason:
         #
         # * Invalidating the extension info will cause Nautilus to remove all
@@ -259,9 +236,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # in a lock-up. Because everything logical tells me it should.
         #
         # FIXME: for some reason the invalidate_extension_info isn't always 
-        # processed and update_file_info isn't called which will lead to having
-        # two emblems applied to an item at once (and this leads to the user
-        # seeing the wrong emblem, not the last applied).
+        # processed and update_file_info isn't called
         # ^^^^^^
         # TODO: is that still the case?
         item.invalidate_extension_info()
