@@ -44,7 +44,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         "added" :       "nautilussvn-added",
         "deleted":      "nautilussvn-deleted",
         "modified":     "nautilussvn-modified",
-        "conflicted":   "embled-conflicted",
+        "conflicted":   "nautilussvn-conflicted",
         "normal":       "nautilussvn-normal",
         "ignored":      "nautilussvn-ignored",
         "locked":       "nautilussvn-locked",
@@ -69,8 +69,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # emblems added using NautilusVFSFile.add_emblem are removed once the 
     # NautilusVFSFile is invalidated (one example of when this happens is
     # when an item is modified). 
-    #
-    # This is used to remember what the status for an item should be, e.g.:
     #
     # statuses = {
     #     "/foo/bar/baz": "modified"
@@ -821,6 +819,7 @@ class MainContextMenu():
         window = gtk.Window()
         window.set_size_request(750,550)
         window.set_resizable(True)
+        window.set_position(gtk.WIN_POS_CENTER)
         scrolled_window = gtk.ScrolledWindow()
         scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         ipython_view = IPythonView()
