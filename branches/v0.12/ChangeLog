@@ -1,5 +1,10 @@
 2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* packages/ubuntu/debian/postinst:
+	Whoops, some leftover stuff from apt-file and some other errors.
+
+2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* packages/ubuntu/debian/nautilussvn-restart-required.update-notifi
 	er:
 	* packages/ubuntu/debian/postinst:
