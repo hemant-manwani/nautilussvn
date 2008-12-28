@@ -20,6 +20,8 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * For an example of how a bug report filed against documentation looks, see [http://bugzilla.gnome.org/show_bug.cgi?id=565835 Bug 565835 – Three spelling errors in gtk-doc-manual]. The documentation that describes the procedure for this is [http://live.gnome.org/DocumentationProject/Contributing/SubmittingPatches DocumentationProject/Contributing/SubmittingPatches]. 
 
+  * Source code documentation is automatically generated using GTK-Doc. Usually documentation for use with GTK-doc can be found in trunk/help/, for example see [http://svn.gnome.org/viewvc/gtk-doc/trunk/help/manual/ gtk-doc-manual]. 
+
 = Nautilus documentation =
 
   * The website for Nautilus can be found at http://projects.gnome.org/nautilus/ 
@@ -28,7 +30,7 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * Here's the [http://library.gnome.org/users/user-guide/stable/nautilus.html.en end-user documentation] (accessed through Help -> Contents), interestingly enough there's a chapter on [http://library.gnome.org/users/user-guide/stable/gosnautilus-440.html.en Extending Nautilus] (though it is limited). 
 
-  * Source code documentation is automatically generated using GTK-Doc. Note however that at the moment nowhere in Nautilus . The only reference currently available is for [http://library.gnome.org/devel/libnautilus-extension/stable/ libnautilus-extension], which can be found in Subversion under [http://svn.gnome.org/viewvc/nautilus/trunk/docs/reference/libnautilus-extension/ docs/reference/libnautilus-extension]. Usually however documentation for use with GTK-doc can be found in trunk/help/, for example see [http://svn.gnome.org/viewvc/gtk-doc/trunk/help/manual/ gtk-doc-manual]. 
+  * The only reference currently available for Nautilus is [http://library.gnome.org/devel/libnautilus-extension/stable/ libnautilus-extension], which can be found in Subversion under [http://svn.gnome.org/viewvc/nautilus/trunk/docs/reference/libnautilus-extension/ docs/reference/libnautilus-extension]. 
 
 = Building Nautilus =
 
