@@ -78,7 +78,10 @@ class Add(InterfaceView):
         items = self.files_table.get_activated_rows(1)
         self.hide()
 
-        self.action = nautilussvn.ui.callback.VCSAction(self.vcs)
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
         self.action.set_action(self.vcs.add, items)        
         self.action.set_before_message("Running Add Command...")
         self.action.set_after_message("Completed Add")
