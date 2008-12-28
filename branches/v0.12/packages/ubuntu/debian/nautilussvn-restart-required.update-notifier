@@ -1,6 +1,6 @@
 Name: Nautilus restart required
 Priority: High
-Command: "nautilus -q && nautilus &"
+Command: "/usr/share/nautilussvn/do-nautilussvn-restart-nautilus"
 Terminal: True
 DontShowAfterReboot: True
 DisplayIf: pgrep -x nautilus -U $(id -u) > /dev/null

@@ -90,7 +90,10 @@ for root, dirs, files in os.walk("nautilussvn/data/icons/hicolor"):
     ))
     
 # Update notifier
-update_notifier = [("/usr/share/nautilussvn", ["packages/ubuntu/debian/nautilussvn-restart-required.update-notifier"])]
+update_notifier = [("/usr/share/nautilussvn", [
+    "packages/ubuntu/debian/nautilussvn-restart-required.update-notifier",
+    "packages/ubuntu/debian/do-nautilussvn-restart-nautilus"
+])]
 
 #==============================================================================
 # Ready to install
