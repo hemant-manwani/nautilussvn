@@ -24,7 +24,7 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui
+from nautilussvn.ui import InterfaceView
 
 class Cleanup:
     """

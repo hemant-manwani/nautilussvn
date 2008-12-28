@@ -24,7 +24,7 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui
+from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
 import nautilussvn.ui.notification
 import nautilussvn.ui.dialog

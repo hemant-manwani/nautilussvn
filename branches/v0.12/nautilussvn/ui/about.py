@@ -24,9 +24,9 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui
+from nautilussvn.ui import InterfaceView
 
-class About:
+class About(InterfaceView):
     """
     This class provides an interface to the About window.
     Displays:
@@ -37,14 +37,17 @@ class About:
     """
 
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "about", "About")
+        InterfaceView.__init__(self, "about", "About")
 
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_close_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
         
 if __name__ == "__main__":
+    import sys
+    args = sys.argv[1:]
     window = About()
+    window.register_gtk_quit()
     gtk.main()

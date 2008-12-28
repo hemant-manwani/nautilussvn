@@ -28,15 +28,26 @@ import gtk
 import gtk.glade
 
 class InterfaceView:
-    def __init__(self, callback_obj, filename, id):
-        
+    """
+    Every ui window should inherit this class and send it the "self"
+    variable, the glade filename (without the extension), and the id of the
+    main window widget.
+    
+    When calling from the __main__ area (i.e. a window is opened via CLI,
+    call the register_gtk_quit method to make sure the main app quits when
+    the app is destroyed or finished.
+    
+    """
+    
+    def __init__(self, filename, id):
         path = "%s/glade/%s.glade" % (
             os.path.dirname(os.path.realpath(__file__)), 
             filename
         )
         self.tree = gtk.glade.XML(path, id)
-        self.tree.signal_autoconnect(callback_obj)
+        self.tree.signal_autoconnect(self)
         self.id = id
+        self.do_gtk_quit = False
         
     def get_widget(self, id):
         return self.tree.get_widget(id)
@@ -46,4 +57,16 @@ class InterfaceView:
         
     def show(self):
         self.get_widget(self.id).set_property('visible', True)
-
+    
+    def close(self):
+        window = self.get_widget(self.id)
+        if window is not None:
+            window.destroy()
+        if self.do_gtk_quit:
+            gtk.main_quit()
+            
+    def register_gtk_quit(self):
+        self.do_gtk_quit = True
+    
+    def gtk_quit_is_set(self):
+        return self.do_gtk_quit

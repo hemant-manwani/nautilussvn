@@ -95,6 +95,10 @@ class Table:
                 returner.append(item)
                 
         return returner
+    
+    def scroll_to_bottom(self):
+        bottom = len(self.get_items()) - 1
+        self.treeview.scroll_to_cell(bottom)
 
 class ComboBox:
     def __init__(self, cb, items=None):

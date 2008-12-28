@@ -354,4 +354,23 @@ def save_log_message(message):
 """%(locals())
     f.write(s)
     f.close()
+
+def save_repository_path(path):
+    """
+    Saves a repository path to the user's home folder for later usage
+    If the given path has already been saved, remove the old one from the list
+    and append the new one to the end.
     
+    @type   path: string
+    @param  path: a repository path
+    
+    """
+    
+    paths = get_repository_paths()
+    if path in paths:
+        paths.pop(paths.index(path))
+    paths.insert(0, path)
+    
+    f = open(get_repository_paths_path(), "w")
+    f.write("\n".join(paths))
+    f.close()
