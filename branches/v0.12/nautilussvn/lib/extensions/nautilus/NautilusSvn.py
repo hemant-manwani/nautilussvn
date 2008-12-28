@@ -854,7 +854,7 @@ class MainContextMenu():
         def asynchronous_function():
             # If you do:
             # 
-            #   tail -f /tmp/nautilussvn/counter
+            #   tail -f /tmp/nautilussvn/counterlog
             #
             # You will notice that the thread is only run for a short while.
             print "Debug: inside asynchronous_function()"
