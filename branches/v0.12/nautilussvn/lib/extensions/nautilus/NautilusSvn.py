@@ -248,14 +248,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 self.debugging_information["items"][path]["added_emblems"].append(self.EMBLEMS[status])
             # End debugging code
             
-        # We need to invalidate the extension info for two reasons:
-        # 
-        # 1) Because the emblem added through add_emblem is only temporary and
-        #    Nautilus won't add an emblem if we don't (is this reason really valid?).
+        # We need to invalidate the extension info only one reason:
         #
-        # 2) Invalidating the extension info will cause Nautilus to remove all
-        #    temporary emblems we applied so we don't have overlay problems
-        #    (with ourselves, we'd still have some with other extensions).
+        # * Invalidating the extension info will cause Nautilus to remove all
+        #   temporary emblems we applied so we don't have overlay problems
+        #   (with ourselves, we'd still have some with other extensions).
         #
         # TODO: figure out how come the combination with the call to update_emblem
         # from update_file_info which again calls update_emblem doesn't result 
@@ -265,6 +262,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # processed and update_file_info isn't called which will lead to having
         # two emblems applied to an item at once (and this leads to the user
         # seeing the wrong emblem, not the last applied).
+        # ^^^^^^
+        # TODO: is that still the case?
         item.invalidate_extension_info()
     
 class MainContextMenu():
