@@ -667,3 +667,21 @@ class SVN:
             return str(e)
         
         return None
+    
+    def cleanup(self, path):
+        """
+        Clean up a working copy.
+        
+        @type   path: string
+        @param  path: a local working copy path
+        
+        """
+        
+        try:
+            self.client.cleanup(path)
+        except pysvn.ClientError, e:
+            return str(e)
+        except TypeError, e:
+            return str(e)
+        
+        return None

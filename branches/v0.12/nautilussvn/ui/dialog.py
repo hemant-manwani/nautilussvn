@@ -31,16 +31,16 @@ import nautilussvn.lib.helper
 
 GLADE = 'dialogs'
 
-class PreviousMessages:
+class PreviousMessages(InterfaceView):
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "PreviousMessages")
+        InterfaceView.__init__(self, GLADE, "PreviousMessages")
 
         self.message = nautilussvn.ui.widget.TextView(
-            self.view.get_widget("prevmes_message")
+            self.get_widget("prevmes_message")
         )
 
         self.message_table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("prevmes_table"),
+            self.get_widget("prevmes_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Date", "Message"]
         )
@@ -60,7 +60,7 @@ class PreviousMessages:
         
     def run(self):
         returner = None
-        self.dialog = self.view.get_widget("PreviousMessages")
+        self.dialog = self.get_widget("PreviousMessages")
         result = self.dialog.run()
         if result == 1:
             returner = self.message.get_text()
@@ -94,7 +94,7 @@ class FolderChooser:
         self.dialog.destroy()
         return returner
         
-class Certificate:
+class Certificate(InterfaceView):
     """
     Provides a dialog to accept/accept_once/deny an ssl certificate
     
@@ -103,15 +103,15 @@ class Certificate:
     def __init__(self, realm="", host="", 
             issuer="", valid_from="", valid_to="", fingerprint=""):
             
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Certificate")
+        InterfaceView.__init__(self, GLADE, "Certificate")
         
-        self.view.get_widget("cert_realm").set_label(realm)
-        self.view.get_widget("cert_host").set_label(host)
-        self.view.get_widget("cert_issuer").set_label(issuer)
-        self.view.get_widget("cert_valid").set_label(
+        self.get_widget("cert_realm").set_label(realm)
+        self.get_widget("cert_host").set_label(host)
+        self.get_widget("cert_issuer").set_label(issuer)
+        self.get_widget("cert_valid").set_label(
             "%s to %s" % (valid_from, valid_to)
         )
-        self.view.get_widget("cert_fingerprint").set_label(fingerprint)
+        self.get_widget("cert_fingerprint").set_label(fingerprint)
         
     def run(self):
         """
@@ -122,30 +122,30 @@ class Certificate:
             
         """
         
-        self.dialog = self.view.get_widget("Certificate")
+        self.dialog = self.get_widget("Certificate")
         result = self.dialog.run()
         self.dialog.destroy()
         return result
         
-class Authorization:
+class Authorization(InterfaceView):
     def __init__(self, realm="", may_save=True):
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Authorization")
+        InterfaceView.__init__(self, GLADE, "Authorization")
         
-        self.view.get_widget("auth_realm").set_label(realm)
-        self.view.get_widget("auth_save").set_sensitive(may_save)
+        self.get_widget("auth_realm").set_label(realm)
+        self.get_widget("auth_save").set_sensitive(may_save)
         
     def run(self):
         returner = None
         
-        self.dialog = self.view.get_widget("Authorization")
+        self.dialog = self.get_widget("Authorization")
         result = self.dialog.run()
         
         if result == 1:
             returner = (
                 True,
-                self.view.get_widget("auth_login").get_text(),
-                self.view.get_widget("auth_password").get_text(),
-                self.view.get_widget("auth_save").get_active()
+                self.get_widget("auth_login").get_text(),
+                self.get_widget("auth_password").get_text(),
+                self.get_widget("auth_save").get_active()
             )
         else:
             returner = (
@@ -158,24 +158,24 @@ class Authorization:
         self.dialog.destroy()
         return returner
                 
-class CertAuthorization:
+class CertAuthorization(InterfaceView):
     def __init__(self, realm="", may_save=True):
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "CertAuthorization")
+        InterfaceView.__init__(self, GLADE, "CertAuthorization")
         
-        self.view.get_widget("certauth_realm").set_label(realm)
-        self.view.get_widget("certauth_save").set_sensitive(may_save)
+        self.get_widget("certauth_realm").set_label(realm)
+        self.get_widget("certauth_save").set_sensitive(may_save)
         
     def run(self):
         returner = None
         
-        self.dialog = self.view.get_widget("CertAuthorization")
+        self.dialog = self.get_widget("CertAuthorization")
         result = self.dialog.run()
         
         if result == 1:
             returner = (
                 True,
-                self.view.get_widget("certauth_password").get_text(),
-                self.view.get_widget("certauth_save").get_active()
+                self.get_widget("certauth_password").get_text(),
+                self.get_widget("certauth_save").get_active()
             )
         else:
             returner = (
@@ -187,23 +187,23 @@ class CertAuthorization:
         self.dialog.destroy()
         return returner
         
-class Property:
+class Property(InterfaceView):
     def __init__(self, name="", value=""):
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Property")
+        InterfaceView.__init__(self, GLADE, "Property")
         
         self.save_name = name
         self.save_value = value
         
-        self.name = self.view.get_widget("property_name")
+        self.name = self.get_widget("property_name")
         self.name.set_text(name)
         
         self.value = nautilussvn.ui.widget.TextView(
-            self.view.get_widget("property_value"), 
+            self.get_widget("property_value"), 
             value
         )
         
     def run(self):
-        self.dialog = self.view.get_widget("Property")
+        self.dialog = self.get_widget("Property")
         result = self.dialog.run()
         
         if result == 1:
@@ -235,25 +235,25 @@ class FileChooser:
         self.dialog.destroy()
         return returner
         
-class Confirmation:
+class Confirmation(InterfaceView):
     def __init__(self, message="Are you sure you want to continue?"):
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "Confirmation")
-        self.view.get_widget("confirm_message").set_text(message)
+        InterfaceView.__init__(self, GLADE, "Confirmation")
+        self.get_widget("confirm_message").set_text(message)
         
     def run(self):
-        dialog = self.view.get_widget("Confirmation")
+        dialog = self.get_widget("Confirmation")
         result = dialog.run()
         
         dialog.destroy()
         
         return result
         
-class MessageBox:
+class MessageBox(InterfaceView):
     def __init__(self, message):
-        self.view = nautilussvn.ui.InterfaceView(self, GLADE, "MessageBox")
-        self.view.get_widget("messagebox_message").set_text(message)
+        InterfaceView.__init__(self, GLADE, "MessageBox")
+        self.get_widget("messagebox_message").set_text(message)
 
-        dialog = self.view.get_widget("MessageBox")
+        dialog = self.get_widget("MessageBox")
         dialog.run()
         dialog.destroy()
         
@@ -272,10 +272,10 @@ class LogDialog(nautilussvn.ui.log.Log):
         pass
     
     def on_cancel_clicked(self, widget, data=None):
-        self.view.hide()
+        self.hide()
     
     def on_ok_clicked(self, widget, data=None):
-        self.view.hide()
+        self.hide()
         if self.ok_callback is not None:
             if self.multiple == True:
                 self.ok_callback(self.get_selected_revision_numbers())
