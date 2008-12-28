@@ -1,5 +1,10 @@
 2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Whoops, updated comment. I meant counterlog.
+
+2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-async
 	hronous.svg:
 	Forgot to add emblem.
