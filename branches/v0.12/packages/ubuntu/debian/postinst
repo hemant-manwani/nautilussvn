@@ -16,6 +16,6 @@ UPDATENOTIFIERDIR=/var/lib/update-notifier/user.d
 echo "You need to run 'nautilus -q && nautilus &' to restart Nautilus."
 
 if [ -d $UPDATENOTIFIERDIR ]; then
-	cp -f /usr/share/nautilussvn/nautilussvn.update-notifier \
-	    "$unud/apt-file-update"
+	cp -f /usr/share/nautilussvn/nautilussvn-restart-required.update-notifier \
+	    "$UPDATENOTIFIERDIR/nautilussvn-restart-required"
 fi
