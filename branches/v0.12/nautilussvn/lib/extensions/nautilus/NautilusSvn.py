@@ -248,7 +248,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 self.debugging_information["items"][path]["added_emblems"].append(self.EMBLEMS[status])
             # End debugging code
             
-        # We need to invalidate the extension info only one reason:
+        # We need to invalidate the extension info for only one reason:
         #
         # * Invalidating the extension info will cause Nautilus to remove all
         #   temporary emblems we applied so we don't have overlay problems
