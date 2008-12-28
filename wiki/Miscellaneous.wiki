@@ -5,6 +5,7 @@
 
 == Dependencies ==
 
+  * python-nautilus
   * python-configobj
   * python-pyinotify
   * python-gtk2
@@ -20,7 +21,7 @@ sudo -i -u nautilussvn
 svn checkout http://nautilussvn.googlecode.com/svn/branches/v0.12/ ~/nautilussvn
 
 mkdir -p ~/.nautilus/python-extensions
-ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/__init__.py ~/.nautilus/python-extensions/NautilusSvn.py
+ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
 mkdir -p ~/.icons
 ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
 
