@@ -24,7 +24,7 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui.add
+from nautilussvn.ui import InterfaceView.add
 
 class Unlock(nautilussvn.ui.add.Add):
     def __init__(self):

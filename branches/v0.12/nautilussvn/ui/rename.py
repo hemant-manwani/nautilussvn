@@ -24,8 +24,8 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui
-import nautilussvn.ui.notification
+from nautilussvn.ui import InterfaceView
+import nautilussvn.ui.callback
 
 class Rename:
     def __init__(self, filename=""):

@@ -26,7 +26,7 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui
+from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.vcs
@@ -34,43 +34,41 @@ import nautilussvn.lib.helper
 
 gtk.gdk.threads_init()
 
-class Notification:
+class Notification(InterfaceView):
 
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "notification", "Notification")
+        InterfaceView.__init__(self, "notification", "Notification")
     
         self.table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("table"),
+            self.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path", "Mime Type"]
         )
             
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
     
     def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
         
     def on_ok_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def toggle_ok_button(self, sensitive):
         gtk.gdk.threads_enter()
-        self.view.get_widget("ok").set_sensitive(sensitive)
+        self.get_widget("ok").set_sensitive(sensitive)
         gtk.gdk.threads_leave()
             
     def append(self, entry):
         gtk.gdk.threads_enter()
         self.table.append(entry)
+        self.table.scroll_to_bottom()
         gtk.gdk.threads_leave()
     
     def set_title(self, title):
         gtk.gdk.threads_enter()
-        self.view.get_widget("Notification").set_title(title)
+        self.get_widget("Notification").set_title(title)
         gtk.gdk.threads_leave()
-    
-    def show(self):
-        self.view.show()
 
 
 class VCSAction(threading.Thread):
@@ -80,22 +78,30 @@ class VCSAction(threading.Thread):
     
     """
     
-    def __init__(self, client):
+    def __init__(self, client, register_gtk_quit=False):
         threading.Thread.__init__(self)
         
         self.message = "Empty Message"
         
-        self.started = False
-        
-        self.client = client
-        
         self.notification = Notification()
         
+        # Tells the notification window to do a gtk.main_quit() when closing
+        # Is used when the script is run from a command line
+        if register_gtk_quit:
+            self.notification.register_gtk_quit()
+        
+        self.client = client
         self.client.set_callback_notify(self.notify)
         self.client.set_callback_get_log_message(self.get_log_message)
         self.client.set_callback_get_login(self.get_login)
         self.client.set_callback_ssl_server_trust_prompt(self.get_ssl_trust)
         self.client.set_callback_ssl_client_cert_password_prompt(self.get_ssl_password)
+        
+        self.before = None
+        self.after = None
+        self.func = None
+        self.pre_func = None
+        self.post_func = None
     
     def cancel(self):
         return False
@@ -166,12 +172,22 @@ class VCSAction(threading.Thread):
                 "", message, ""
             ])
             
-    def set_before(self, message):
+    def set_before_message(self, message):
         self.before = message
     
-    def set_after(self, message):
+    def set_after_message(self, message):
         self.after = message
-            
+    
+    def run_before(self, func, *args, **kargs):
+        self.pre_func = func
+        self.pre_args = args
+        self.pre_kwargs = kwargs
+    
+    def run_after(self, func, *args, **kwargs):
+        self.post_func = func
+        self.post_args = args
+        self.post_kwargs = kwargs
+    
     def set_action(self, func, *args, **kwargs):
         self._func = func
         self._args = args
@@ -182,11 +198,23 @@ class VCSAction(threading.Thread):
             return
     
         self.set_status(self.before)
+        
+        # If a "run_before" callback is set, call it
+        if self.pre_func is not None:
+            self.pre_func(*self.pre_args, **self.pre_kwargs)
+        
+        # Run the main callback function
         ret = self._func(*self._args, **self._kwargs)
         
+        # If all went well, the callback function should return None
         if ret == None:
             self.finish(self.after)
             if self.message:
                 nautilussvn.lib.helper.save_log_message(self.message)
         else:
             self.finish(ret)
+
+        # If a "run_after" callback is set, call it
+        if self.post_func is not None:
+            self.post_func(*self.post_args, **self.post_kwargs)
+

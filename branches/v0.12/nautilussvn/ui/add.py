@@ -21,20 +21,19 @@
 #
 
 import os
-import sys
 
 import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui
+from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
-class Add:
+class Add(InterfaceView):
     """
     Provides an interface for the user to add unversioned files to a
     repository.  Also, provides a context menu with some extra functionality.
@@ -46,12 +45,12 @@ class Add:
     TOGGLE_ALL = True
 
     def __init__(self, paths):
-        self.view = nautilussvn.ui.InterfaceView(self, "add", "Add")
+        InterfaceView.__init__(self, "add", "Add")
 
         self.last_row_clicked = None
 
         self.files_table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("files_table"), 
+            self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
@@ -68,21 +67,21 @@ class Add:
                 item.path, 
                 nautilussvn.lib.helper.get_file_extension(item.path)
             ])
-            
+    
     def on_destroy(self, widget):
-        gtk.main_quit()
-
+        self.close()
+        
     def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_ok_clicked(self, widget):
         items = self.files_table.get_activated_rows(1)
-        self.view.hide()
+        self.hide()
 
         self.action = nautilussvn.ui.callback.VCSAction(self.vcs)
         self.action.set_action(self.vcs.add, items)        
-        self.action.set_before("Running Add Command...")
-        self.action.set_after("Completed Add")
+        self.action.set_before_message("Running Add Command...")
+        self.action.set_after_message("Completed Add")
         self.action.start()
 
     def on_select_all_toggled(self, widget):
@@ -190,10 +189,10 @@ class Add:
             self.files_table.remove(self.last_row_clicked)
         
 if __name__ == "__main__":
-    args = sys.argv
-    args.pop(0)
-    if len(args) > 0:
-        window = Add(args)
-        gtk.main()
-    else:
-        print "Usage: python add.py [path1] [path2]..."
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python add.py [path1] [path2] ...")
+    window = Add(args)
+    window.register_gtk_quit()
+    gtk.main()

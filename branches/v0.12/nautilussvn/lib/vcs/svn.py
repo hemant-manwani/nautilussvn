@@ -562,12 +562,14 @@ class SVN:
         if kind == "date":
             if date is None:
                 print "In svn.py revision(),kind = date, but date not given"
+                return None
             
             returner = pysvn.Revision(pysvn_obj, date)
         
         elif kind == "number":
             if number is None:
                 print "In svn.py revision(),kind = number, but number not given"
+                return None
         
             returner = pysvn.Revision(pysvn_obj, number)
         
