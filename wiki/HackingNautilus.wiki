@@ -1,7 +1,36 @@
 #summary This page shows you how to work on Nautilus
+#labels Phase-Implementation
 
 = Introduction =
-Sometimes a feature will be missing from either from the Nautilus Python bindings (such as was the case with submenu support for quite a while) or Nautilus itself. In that case you'll have to hack Nautilus. This guide will explain how to get, build and develop for Nautilus.
+Sometimes a feature will be missing either from the Nautilus Python bindings (such as was the case with submenu support for quite a while) or Nautilus itself. In that case you'll have to hack Nautilus. This guide will explain how to get, build and develop for Nautilus.
+
+The first barrier to developing for Nautilus is familiarity with how GNOME projects are organized. Though there's an overwhelming amount of documentation it's not always directly clear where to find it (it certainly was for me). Coupled with the fact that Nautilus itself is quite honestly poorly documented, developing for Nautilus can be a little daunting at first.
+
+= GNOME =
+
+A few words of advice. Don't start off by using Google to locate GNOME documentation. Especially in regard to the wiki (GNOME Live!) this doesn't tend to work out well. Try to stick to navigating by clicking links. This is also a good exercise to see if something is organized well enough.
+
+  * Documentation for both end-users and developers can be found in the [http://library.gnome.org/ GNOME Documentation Library]. 
+  * Though the GNOME Documentation Library is the official spot for documentation the [http://live.gnome.org/ GNOME Live!] (the GNOME wiki) is probably more helpful.
+  * Subversion
+
+== Hints ==
+
+  * Documentation that will end up in the GNOME Documentation Library is postfixed with -docs. For example see: [http://svn.gnome.org/viewvc/gnome-user-docs/trunk gnome-user-docs] and [http://svn.gnome.org/viewvc/gnome-devel-docs/trunk/ gnome-devel-docs], See the [http://library.gnome.org/devel/gdp-handbook/stable/intro.html.en GNOME Handbook of Writing Software Documentation].
+
+  * For an example of how a bug report filed against documentation looks, see [http://bugzilla.gnome.org/show_bug.cgi?id=565835 Bug 565835 – Three spelling errors in gtk-doc-manual]. The documentation that describes the procedure for this is [http://live.gnome.org/DocumentationProject/Contributing/SubmittingPatches DocumentationProject/Contributing/SubmittingPatches]. 
+
+= Nautilus documentation =
+
+  * The website for Nautilus can be found at http://projects.gnome.org/nautilus/ 
+
+  * The code for Nautilus can be found in the repository ([http://svn.gnome.org/viewvc/nautilus/trunk viewvc] / [http://svn.gnome.org/svn/nautilus/trunk svn]). 
+
+  * Here's the [http://library.gnome.org/users/user-guide/stable/nautilus.html.en end-user documentation] (accessed through Help -> Contents), interestingly enough there's a chapter on [http://library.gnome.org/users/user-guide/stable/gosnautilus-440.html.en Extending Nautilus] (though it is limited). 
+
+  * Source code documentation is automatically generated using GTK-Doc. Note however that at the moment nowhere in Nautilus . The only reference currently available is for [http://library.gnome.org/devel/libnautilus-extension/stable/ libnautilus-extension], which can be found in Subversion under [http://svn.gnome.org/viewvc/nautilus/trunk/docs/reference/libnautilus-extension/ docs/reference/libnautilus-extension]. Usually however documentation for use with GTK-doc can be found in trunk/help/, for example see [http://svn.gnome.org/viewvc/gtk-doc/trunk/help/manual/ gtk-doc-manual]. 
+
+= Building Nautilus =
 
 == Requirements ==
 sudo apt-get build-dep nautilus
