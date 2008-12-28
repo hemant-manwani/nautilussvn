@@ -251,9 +251,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         #   (with ourselves, we'd still have some with other extensions).
         #
         # FIXME: for some reason the invalidate_extension_info isn't always 
-        # processed and update_file_info isn't called.
-        # ^^^^^^
-        # TODO: is that still the case?
+        # processed and update_file_info isn't called. So as a workaround we
+        # already set the emblem, running the risk of applying multiple emblems
+        # at the same time which overlap potentially resulting in the actual 
+        # status of an item not being displayed.
+        #
+        self.set_emblem_by_status(path, status)
         item.invalidate_extension_info()
     
 class MainContextMenu():
