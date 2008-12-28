@@ -79,7 +79,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     def __init__(self):
         # Create a StatusMonitor and register a callback with it to notify us 
         # of any status changes.
-        self.status_monitor = StatusMonitor(self.update_emblem)
+        self.status_monitor = StatusMonitor(self.cb_status)
         
     def get_columns(self):
         """
@@ -143,7 +143,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         # See comment for variable: statuses
         if path in self.statuses:
-            self.update_emblem(path, self.statuses[path])
+            self.set_emblem_by_status(path, self.statuses[path])
             
         self.status_monitor.add_watch(path)
         
@@ -192,28 +192,50 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # temporarily for convience while working on implementing the cache.
         #~ return MainContextMenu([path], self).construct_menu()
         return []
+    
+    #
+    # Helper functions
+    #
+    
+    def set_emblem_by_status(self, path, status):
+        """
+        Set the emblem for a path by status. 
         
+        @type   path: string
+        @param  path: the path for which to set the emblem
+        
+        @type   status: string
+        @param  status: a string indicating the status of an item (see: EMBLEMS)
+        """
+        
+        # Try and lookup the NautilusVFSFile in the lookup table since we need it
+        # TODO: should we remove this? This function is only called by 
+        # update_file_info so this should be guaranteed.
+        if not path in self.nautilusVFSFile_table: return
+        item = self.nautilusVFSFile_table[path]
+        
+        if status in self.EMBLEMS:
+            item.add_emblem(self.EMBLEMS[status])
+    
     #
     # Callbacks
     #
     
-    def update_emblem(self, path, status):
+    def cb_status(self, path, status):
         """
+        This is the callback that StatusMonitor calls. 
         
-        This function is used both as a callback and as a function to set emblems.
+        @type   path: string
+        @param  path: the path of the item something interesting happend to
         
-        TODO: should this be split into two functions, update_emblem and set_emblem?
-        
-        @type   invalidate: boolean
-        @param  invalidate: Whether or not to invalidate the item found
-        
+        @type   status: string
+        @param  status: a string indicating the status of an item (see: EMBLEMS)
         """
         
         # Begin debugging code
-        print "update_emblem() called for %s with status %s" % (path, status)
+        print "cb_status() called for %s with status %s" % (path, status)
         # End debugging code
         
-        # Try and lookup the NautilusVFSFile in the lookup table since we need it
         if not path in self.nautilusVFSFile_table: return
         item = self.nautilusVFSFile_table[path]
         
@@ -222,21 +244,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # but since we're the only function who does a add_emblem, we have to.
         self.statuses[path] = status
         
-        if status in self.EMBLEMS:
-            item.add_emblem(self.EMBLEMS[status])
-            
         # We need to invalidate the extension info for only one reason:
         #
         # * Invalidating the extension info will cause Nautilus to remove all
         #   temporary emblems we applied so we don't have overlay problems
         #   (with ourselves, we'd still have some with other extensions).
         #
-        # TODO: figure out how come the combination with the call to update_emblem
-        # from update_file_info which again calls update_emblem doesn't result 
-        # in a lock-up. Because everything logical tells me it should.
-        #
         # FIXME: for some reason the invalidate_extension_info isn't always 
-        # processed and update_file_info isn't called
+        # processed and update_file_info isn't called.
         # ^^^^^^
         # TODO: is that still the case?
         item.invalidate_extension_info()
