@@ -1,1 +1,6 @@
+2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* setup.py:
+	Forgot to modify the icon theme name back to hicolor.
+
 
