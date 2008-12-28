@@ -275,8 +275,6 @@ class MainContextMenu():
     appear, even though a list such as [<Update>, <Commit>, <NautilusSvn>] 
     would be returned it might end up as [<NautilusSvn>, <Update>, <Commit>].
     
-    TODO: Jason had some more information regarding the bug above.
-    
     """
     
     def __init__(self, paths, nautilussvn_extension):
