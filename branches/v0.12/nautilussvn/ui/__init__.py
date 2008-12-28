@@ -70,3 +70,23 @@ class InterfaceView:
     
     def gtk_quit_is_set(self):
         return self.do_gtk_quit
+        
+class InterfaceNonView:
+    """
+    Provides a way for an interface to handle quitting, etc without having
+    to have a visible interface.
+    
+    """
+    
+    def __init__(self, ):
+        self.do_gtk_quit = False
+
+    def close(self):
+        if self.do_gtk_quit:
+            gtk.main_quit()
+            
+    def register_gtk_quit(self):
+        self.do_gtk_quit = True
+    
+    def gtk_quit_is_set(self):
+        return self.do_gtk_quit
