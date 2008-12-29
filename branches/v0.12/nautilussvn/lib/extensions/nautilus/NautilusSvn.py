@@ -24,6 +24,11 @@
 
 Known issues:
 
+  * Emblems sometimes don't update untill the selection is modified.
+  
+    This is either caused by threading problems or update_file_info not being 
+    called. There's a bunch of FIXME's below with more information.
+
   * Multiple emblems are attached to a single item which leads to the one
     obscuring the other. So if an item has "normal" status, but it changes to 
     "modified" two emblems are applied and only the emblem "normal" is visible.
@@ -205,7 +210,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 path = gnomevfs.get_local_path_from_uri(item.get_uri())
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
-                
+        
         return MainContextMenu(paths, self).construct_menu()
         
     def get_background_items(self, window, item):
@@ -225,30 +230,30 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        print "Debug: get_background_items() for %s" % path
+        #~ print "Debug: get_background_items() for %s" % path
         # End debugging code
         
         self.nautilusVFSFile_table[path] = item
         
-        # FIXME:
-        # This is a hack to try and work around the multiple emblems on a single
-        # item bug. Since get_background_items is called once when you enter
-        # a directory we just invalidate all items immediately below it.
-        for child_basename in os.listdir(path):
-            child_path = os.path.join(path, child_basename)
-            if child_path in self.nautilusVFSFile_table:
-                # Begin debugging code
-                print "Debug: invalidated %s in get_background_items()" % child_basename
-                # End debugging code
-                child_item = self.nautilusVFSFile_table[child_path]
-                # FIXME: still doesn't work but committing to save
-                child_item.invalidate_extension_info()
+        #~ # FIXME:
+        #~ # This is a hack to try and work around the multiple emblems on a single
+        #~ # item bug. Since get_background_items is called once when you enter
+        #~ # a directory we just invalidate all items immediately below it.
+        #~ for child_basename in os.listdir(path):
+            #~ child_path = os.path.join(path, child_basename)
+            #~ if child_path in self.nautilusVFSFile_table:
+                #~ # Begin debugging code
+                #~ print "Debug: invalidated %s in get_background_items()" % child_basename
+                #~ # End debugging code
+                #~ child_item = self.nautilusVFSFile_table[child_path]
+                #~ # FIXME: still doesn't work but committing to save
+                #~ child_item.invalidate_extension_info()
         
         # Since building the menu fires off multiple recursive status checks 
         # as soon as a folder is opened this does affect performance. So disabled
         # temporarily for convience while working on implementing the cache.
         #~ return MainContextMenu([path], self).construct_menu()
-        #~ return []
+        return []
     
     #
     # Helper functions
@@ -294,7 +299,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         # Begin debugging code
-        print "Debug: cb_status() called for %s with status %s" % (path, status)
+        #~ print "Debug: cb_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         if not path in self.nautilusVFSFile_table: return
@@ -959,7 +964,7 @@ class MainContextMenu():
         nautilussvn_extension = self.nautilussvn_extension
         status_monitor = nautilussvn_extension.status_monitor
         for path in paths:
-            status_monitor.status(path)
+            status_monitor.status(path, invalidate=True)
     
     def callback_debug_revert(self, menu_item, paths):
         for path in paths:
@@ -1096,23 +1101,23 @@ class StatusMonitor():
     
     UML sequence diagram:
 
-        +--------------+          +----------------+         
-        | NautilusSVN  |          | StatusMonitor  |         
-        +--------------+          +----------------+         
-              |                           |                  
-              |   new(self.cb_status)     |                  
-              |-------------------------->|                  
-              |                           |                  
-              |     add_watch(path)       |                  
-              |-------------------------->|---+              
-              |                           |   |              
-              |  cb_status(path, status)  |   | status(path) 
-              |<--------------------------|<--+              
-              |                           |                  
-              |---+                       |                  
-              |   | set_emblem_by_status(path, status)      
-              |<--+                       |                  
-              |                           |                  
+        +---------------+          +-----------------+         
+        |  NautilusSVN  |          |  StatusMonitor  |         
+        +---------------+          +-----------------+         
+               |                            |                  
+               |   new(self.cb_status)      |                  
+               |--------------------------->|                  
+               |                            |                  
+               |     add_watch(path)        |                  
+               |--------------------------->|---+              
+               |                            |   |              
+               |  cb_status(path, status)   |   | status(path) 
+               |<---------------------------|<--+              
+               |                            |                  
+               |---+                        |                  
+               |   | set_emblem_by_status(path, status)      
+               |<--+                        |                  
+               |                            |                  
 
     
     """
@@ -1159,9 +1164,9 @@ class StatusMonitor():
         
         """
         
-        def __init__(self, status_monitor):
+        def __init__(self, status_monitor, vcs_client):
             self.status_monitor = status_monitor
-            self.vcs_client = nautilussvn.lib.vcs.create_vcs_instance()
+            self.vcs_client = vcs_client
         
         def process(self, event):
             path = event.path
@@ -1182,7 +1187,7 @@ class StatusMonitor():
             # cause problems for the status checking
             # TODO: not 100% sure about it causing problems
             if self.vcs_client.is_in_a_or_a_working_copy(path):
-                self.status_monitor.status(path.rstrip(os.path.sep))
+                self.status_monitor.status(path.rstrip(os.path.sep), invalidate=True)
     
         def process_IN_MODIFY(self, event):
             self.process(event)
@@ -1204,7 +1209,7 @@ class StatusMonitor():
         
         self.watch_manager = WatchManager()
         self.notifier = ThreadedNotifier(
-            self.watch_manager, self.VCSProcessEvent(self))
+            self.watch_manager, self.VCSProcessEvent(self, self.vcs_client))
         self.notifier.start()
         
     def add_watch(self, path):
@@ -1228,25 +1233,72 @@ class StatusMonitor():
                 
                 # To always be able to track moves (renames are moves too) we 
                 # have to make sure we register with our parent directory
-                self.watch_manager.add_watch(split_path(path), self.mask, rec=True)
+                # TODO: this is code duplication, please refactor
+                parent_path = split_path(path)
+                if not parent_path in self.watches:
+                    if (parent_path.find(".svn") > 0 or 
+                            self.vcs_client.is_in_a_or_a_working_copy(parent_path)):
+                            
+                        self.watches[parent_path] = None
+                        self.watch_manager.add_watch(split_path(path), self.mask, rec=True)
                 
                 # Begin debugging code
-                print "Debug: StatusMonitor.add_watch() added watch for %s" % path
+                #~ print "Debug: StatusMonitor.add_watch() added watch for %s" % path
                 # End debugging code
                 
+                # Note that we don't have to set invalidate to True here to 
+                # bypass the cache because since there isn't one it will be
+                # bypassed anyways. We could add it for clarity though.
                 self.status(path)
         
-    def status(self, path):
+    def status(self, path, invalidate=False):
+        """
+        
+        Status checks:
+        
+        +-----------------+                  +-------------+
+        |  StatusMonitor  |                  |  VCSClient  |
+        +-----------------+                  +-------------+
+                |                                   |
+                |    status(path, depth=empty)      |
+                |---------------------------------->|
+                |+-------------------+-------------+|
+                || [if isdir(path)]  |             ||
+                |+-------------------+             ||
+                ||                                 ||
+                ||          status(path)           ||
+                ||-------------------------------->||
+                |+---------------------------------+|
+                |                                   |
+                |+--------------------------+------+|
+                || [foreach parent folder]  |      ||
+                |+--------------------------+      ||
+                ||                                 ||
+                ||          status(path)           ||
+                ||-------------------------------->||
+                |+---------------------------------+|
+                |                                   |
+        
+        @type   path: string
+        @param  path: the path for which to check the status
+        
+        @type   invalidate: boolean
+        @param  invalidate: whether or not the cache should be bypassed
+        """
+        
+        # If we're not a or inside a working copy we don't even have to bother.
+        if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+            
         # Begin debugging information
         print "Debug: StatusMonitor.status() called for %s" % path
         # End debugging information
         
-        # If we're not a or inside a working copy we don't even have to bother.
-        if not self.vcs_client.is_in_a_or_a_working_copy(path): return
-        
         # We need the status object for the item alone
-        status = self.vcs_client.status(path, depth=pysvn.depth.empty)[0].data["text_status"]
-        
+        status = self.vcs_client.status(
+            path, 
+            invalidate=invalidate, 
+            depth=pysvn.depth.empty)[0].data["text_status"]
+            
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
         # of a nifty way to do this by using sets and the bitwise AND operator (&).
@@ -1256,7 +1308,10 @@ class StatusMonitor():
                 pysvn.wc_status_kind.deleted, 
                 pysvn.wc_status_kind.modified
             ])
-            statuses = set([sub_status.data["text_status"] for sub_status in self.vcs_client.status(path)][:-1])
+            
+            sub_statuses = self.vcs_client.status(path, invalidate=invalidate)[:-1]
+            statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
+            
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
                 
@@ -1292,7 +1347,7 @@ class StatusMonitor():
                         pysvn.wc_status_kind.normal,
                         pysvn.wc_status_kind.unversioned, # FIXME: but only if it was previously versioned
                     ):
-                    self.status(path)
+                    self.status(path, invalidate=invalidate)
                     
                     # If we don't break out here it would result in the 
                     # recursive status checks on (^):

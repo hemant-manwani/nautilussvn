@@ -1,3 +1,14 @@
+2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	Implemented cache to significantly improve performance. Also fixed bug
+	which resulted in watches being added recursvily on the parent
+	directory for every direct child item (see code review for more info),
+	that was obviously a major performance drag.
+	
+	Not 100% sure if the status cache is implemently correctly, it's quite ugly.
+
 2008-12-29  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
