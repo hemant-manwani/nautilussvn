@@ -47,7 +47,7 @@
 	* setup.py:
 	Added an update notification to be displayed after installing.
 
-2008-12-28  Bruce van der Kooij  <brucevdk@gmail.com>
+2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	I think I understand the bug now invalidate_extension_info doesn't always

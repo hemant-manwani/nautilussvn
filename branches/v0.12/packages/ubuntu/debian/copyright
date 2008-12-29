@@ -1,16 +1,16 @@
-This package was debianized by Bruce van der Kooij <brucevdk@gmail.com>
+This package was debianized by Bruce van der Kooij <brucevdkooij@gmail.com>
 
 It was downloaded from: {http://code.google.com/p/nautilussvn} 
 
 Upstream Author(s): 
     Jason Field <jason@jasonfield.com>
-    Bruce van der Kooij <brucevdk@gmail.com>
+    Bruce van der Kooij <brucevdkooij@gmail.com>
     Adam Plumb <adamplumb@gmail.com>
 
 Copyright:
 
     Copyright (C) 2006-2008 by Jason Field <jason@jasonfield.com>
-    Copyright (C) 2007-2008 by Bruce van der Kooij <brucevdk@gmail.com>
+    Copyright (C) 2007-2008 by Bruce van der Kooij <brucevdkooij@gmail.com>
     Copyright (C) 2008-2008 by Adam Plumb <adamplumb@gmail.com>
 
 Main license:
@@ -45,5 +45,5 @@ Included components:
     Licensed under: BSD
 
 Packaging:
-    Copyright (C) 2008 by Bruce van der Kooij <brucevdk@gmail.com>
+    Copyright (C) 2008 by Bruce van der Kooij <brucevdkooij@gmail.com>
     released under GPL v3 or later

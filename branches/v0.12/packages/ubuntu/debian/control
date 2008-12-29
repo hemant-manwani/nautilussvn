@@ -1,5 +1,5 @@
 Source: nautilussvn
-Maintainer: Bruce van der Kooij <brucevdk@gmail.com>
+Maintainer: Bruce van der Kooij <brucevdkooij@gmail.com>
 Section: universe/gnome
 Priority: optional
 Build-Depends: debhelper (>= 7.0.13),
