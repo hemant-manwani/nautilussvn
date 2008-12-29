@@ -136,16 +136,68 @@ class SVN:
         "Only this item":                           DEPTHS["empty"]
     }
     
+    #
     status_cache = {}
     
     def __init__(self):
         self.client = pysvn.Client()
     
-    def status(self, path, recurse=True, depth=None):
+    def status(self, path, invalidate=False, recurse=True, depth=None):
+        """
+        
+        If invalidate is set to False this function will look to see if a 
+        status for the requested path is available in the cache and if so
+        return that.
+        
+        FIXME: this function is ugly!
+        
+        @type   invalidate: boolean
+        @param  invalidate: whether or not the cache should be bypassed
+        
+        """
+        
+        #
+        # TODO: this two inner functions should probably be moved outta here
+        #
+        
+        def get_status_function():
+            """
+            This is a little trick we use to at least stop some duplication for
+            now. Depending on whether or not a cache bypass was requested it
+            will return a certain function (one that does, one that doesn't).
+            """
+            if not invalidate:
+                def get_status(*args, **kwargs):
+                    return self.status_cache[path]
+                if path in self.status_cache:
+                    # FIXME: temporary hack because status checks with depth
+                    # are written to the cache before the directory checks
+                    if not depth and len(self.status_cache[path]) == 1:
+                        print "Debug: cache replaced for %s" % path
+                        return self.client.status
+                    return get_status
+                else:
+                    print "Debug: cache replaced for %s" % path
+                    return self.client.status
+            else:
+                print "Debug: cache replaced for %s" % path
+                return self.client.status
+        
+        def set_cache_for_path(statuses):
+            # TODO: this can be improved by setting the status for everything
+            # lower (if we have it) too.
+            self.status_cache[path] = statuses
+        
+        # TODO: code duplication. For the arguments, perhaps build up a 
+        # **kwargs var to pass instead. 
         if depth:
-            return self.client.status(path, depth=depth)
+            statuses = get_status_function()(path, depth=depth)
+            set_cache_for_path(statuses)
+            return statuses
         else:
-            return self.client.status(path, recurse=recurse)
+            statuses = get_status_function()(path, recurse=recurse)
+            set_cache_for_path(statuses)
+            return statuses
     
     #
     # is
