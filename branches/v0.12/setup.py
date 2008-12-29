@@ -45,7 +45,7 @@ version             = "0.12"
 description         = "Integrated Subversion support for Nautilus"
 long_description    = """An extension to Nautilus to allow better integration with the Subversion source control system. Similar to the TortoiseSVN project on Windows."""
 author              = "Bruce van der Kooij"
-author_email        = "brucevdk@gmail.com"
+author_email        = "brucevdkooij@gmail.com"
 url                 = "http://code.google.com/p/nautilussvn"
 license             = "GNU General Public License version 2 or later"
 
