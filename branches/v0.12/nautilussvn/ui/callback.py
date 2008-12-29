@@ -91,6 +91,7 @@ class VCSAction(threading.Thread):
             self.notification.register_gtk_quit()
         
         self.client = client
+        self.client.set_callback_cancel(self.cancel)
         self.client.set_callback_notify(self.notify)
         self.client.set_callback_get_log_message(self.get_log_message)
         self.client.set_callback_get_login(self.get_login)
@@ -104,7 +105,7 @@ class VCSAction(threading.Thread):
         self.post_func = None
     
     def cancel(self):
-        return False
+        return True
     
     def notify(self, data):
         self.notification.append([
@@ -124,12 +125,17 @@ class VCSAction(threading.Thread):
         return True, self.message
     
     def get_login(self, realm, username, may_save):
-        dialog = nautilussvn.ui.dialog.Authentication(
+        dialog = nautilussvn.ui.dialog.Authorization(
             realm,
             may_save
         )
         
-        return dialog.run()
+        returner = dialog.run()
+        
+        if returner is not None:
+            return returner
+        else:
+            self.client.callback_cancel()
     
     def get_ssl_trust(self, data):
     

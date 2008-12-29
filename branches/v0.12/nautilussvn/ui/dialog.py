@@ -148,12 +148,7 @@ class Authorization(InterfaceView):
                 self.get_widget("auth_save").get_active()
             )
         else:
-            returner = (
-                False,
-                "",
-                "",
-                False
-            )
+            returner = None
             
         self.dialog.destroy()
         return returner

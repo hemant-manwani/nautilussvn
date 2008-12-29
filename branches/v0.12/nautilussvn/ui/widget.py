@@ -162,13 +162,17 @@ class ContextMenu:
         
         self.view = gtk.Menu()
         for item in menu:
-            menuitem = gtk.MenuItem(item['label'])
-            if 'signals' in item:
-                for signal, info in item['signals'].items():
-                    menuitem.connect(signal, info['callback'], info['args'])
+        
+            if item["condition"]() is False:
+                continue
+                
+            menuitem = gtk.MenuItem(item["label"])
+            if "signals" in item:
+                for signal, info in item["signals"].items():
+                    menuitem.connect(signal, info["callback"], info["args"])
             
-            if 'submenu' in item:
-                submenu = ContextMenu(item['submenu'])
+            if "submenu" in item:
+                submenu = ContextMenu(item["submenu"])
                 menuitem.set_submenu(submenu.get_widget())
             
             self.view.add(menuitem)

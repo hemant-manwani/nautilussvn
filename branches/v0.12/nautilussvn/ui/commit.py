@@ -20,50 +20,70 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+
 import pygtk
 import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.notification
+import nautilussvn.lib.helper
 
-class Commit:
+class Commit(InterfaceView):
+    """
+    Provides a user interface for the user to commit working copy
+    changes to a repository.
+    
+    """
 
     TOGGLE_ALL = False
     SHOW_UNVERSIONED = True
 
-    def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "commit", "Commit")
+    def __init__(self, paths):
+        """
+        @type:  paths: list of strings
+        @param: paths: a list of local paths
+        
+        """
+    
+        InterfaceView.__init__(self, "commit", "Commit")
 
         self.files_table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("files_table"),
+            self.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension", 
                 "Text Status", "Property Status"],
         )
+        self.last_row_selected = None
         
-        self.files = [
-            [True, "test.php", ".php", "modified", ""],
-            [False, "added.php", ".php", "unversioned", ""]
-        ]
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        self.get_widget("to").set_text(
+            self.vcs.get_repo_url(os.path.commonprefix(paths))
+        )
+        
+        self.items = self.vcs.get_items(
+            paths, 
+            self.vcs.STATUSES_FOR_COMMIT
+        )
         self.populate_files_from_original()
         
         self.message = nautilussvn.ui.widget.TextView(
-            self.view.get_widget("message")
+            self.get_widget("message")
         )
     
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
         
     def on_cancel_clicked(self, widget, data=None):
-        gtk.main_quit()
+        self.close()
         
     def on_ok_clicked(self, widget, data=None):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        self.hide()
     
     def on_toggle_show_all_toggled(self, widget, data=None):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
@@ -84,8 +104,19 @@ class Commit:
 
     def populate_files_from_original(self):
         self.files_table.clear()
-        for row in self.files:
-            self.files_table.append(row)
+
+        for item in self.items:
+            checked = True
+            if not item.is_versioned:
+                checked = False
+            
+            self.files_table.append([
+                checked,
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path),
+                item.text_status,
+                item.prop_status
+            ])
         
     def on_files_table_button_pressed(self, treeview, event):
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
@@ -97,67 +128,85 @@ class Commit:
             fileinfo = treeview_model[path]
             
             if event.button == 3:
+                self.last_row_selected = path
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        'label': 'View Diff',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_diff_activated, 
-                                'args':fileinfo
+                        "label": 'View Diff',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_diff_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": self.condition_view_diff
                     },{
-                        'label': 'Open',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_open_activated, 
-                                'args':fileinfo
+                        "label": 'Open',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_open_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     },{
-                        'label': 'Browse',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_browse_activated, 
-                                'args':fileinfo
+                        "label": 'Browse to',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_browse_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     },{
-                        'label': 'Delete',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_delete_activated, 
-                                'args':fileinfo
+                        "label": 'Delete',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_delete_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     },{
-                        'label': 'Add',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_add_activated, 
-                                'args':fileinfo
+                        "label": 'Add',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_add_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": self.condition_add
                     },{
-                        'label': 'Add to ignore list',
+                        "label": 'Revert',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_revert_activated, 
+                                "args":fileinfo
+                            }
+                        },
+                        "condition": self.condition_revert
+                    },{
+                        "label": 'Add to ignore list',
                         'submenu': [{
-                                'label': fileinfo[1],
-                                'signals': {
-                                    'activate': {
-                                        'callback':self.on_subcontext_ignore_by_filename_activated, 
-                                        'args':fileinfo
+                                "label": os.path.basename(fileinfo[1]),
+                                "signals": {
+                                    "activate": {
+                                        "callback":self.on_subcontext_ignore_by_filename_activated, 
+                                        "args":fileinfo
                                      }
-                                 }
+                                 },
+                                "condition": (lambda: True)
                             },
                             {
-                                'label': "*.%s"%fileinfo[2],
-                                'signals': {
-                                    'activate': {
-                                        'callback':self.on_subcontext_ignore_by_fileext_activated, 
-                                        'args':fileinfo
+                                "label": "*%s"%fileinfo[2],
+                                "signals": {
+                                    "activate": {
+                                        "callback":self.on_subcontext_ignore_by_fileext_activated, 
+                                        "args":fileinfo
                                     }
-                                }
+                                },
+                                "condition": (lambda: True)
                             }
-                        ]
+                        ],
+                        "condition": (lambda: True)
                     }
                 ])
                 context_menu.show(event)
@@ -168,35 +217,95 @@ class Commit:
         treeview_model = treeview.get_model()
         fileinfo = treeview_model[event[0]]
         
-        print "Row Double-clicked"
+        nautilussvn.lib.helper.launch_diff_tool(fileinfo[1])
 
     def on_context_add_activated(self, widget, data=None):
-        print "Add Item"
+        self.vcs.add(data[1])
 
-    def on_context_diff_activated(self, widget, Data=None):
-        print "Diff Item"
+    def on_context_revert_activated(self, widget, data=None):
+        self.vcs.revert(data[1])
+
+    def on_context_diff_activated(self, widget, data=None):
+        nautilussvn.lib.helper.launch_diff_tool(data[1])
 
     def on_context_open_activated(self, widget, data=None):
-        print "Open Item"
+        nautilussvn.lib.helper.open_item(data[1])
         
     def on_context_browse_activated(self, widget, data=None):
-        print "Browse Item"
+        nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_delete_activated(self, widget, data=None):
-        print "Delete Item"
+        confirm = nautilussvn.ui.dialog.Confirmation(
+            "Are you sure you want to send this file to the trash?"
+        )
+        
+        if confirm.run():
+            nautilussvn.lib.helper.delete_item(data[1])
+            self.files_table.remove(self.last_row_clicked)
         
     def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
-        print "Ignore by file name"
+        prop_name = self.vcs.PROPERTIES["ignore"]
+        prop_value = os.path.basename(data[1])
+        
+        if self.vcs.propset("", prop_name, prop_value):
+            self.files_table.remove(self.last_row_clicked)
         
     def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
-        print "Ignore by file extension"
+        prop_name = self.vcs.PROPERTIES["ignore"]
+        prop_value = "*%s" % data[2]
+        
+        if self.vcs.propset("", prop_name, prop_value):
+            self.files_table.remove(self.last_row_clicked)
         
     def on_previous_messages_clicked(self, widget, data=None):
         dialog = nautilussvn.ui.dialog.PreviousMessages()
         message = dialog.run()
         if message is not None:
             self.message.set_text(message)
+            
+    def condition_add(self):
+        """
+        Determines whether or not to show the add context menu item.
+        Show the Add item when the file is unversioned.
+        
+        @rtype  boolean
+        
+        """
+        
+        path = self.files_table.get_row(self.last_row_selected)[1]
+        return not self.vcs.is_versioned(path)
+    
+    def condition_revert(self):
+        """
+        Determines whether or not to show the revert context menu item.
+        Show the Revert item when the file has been added but not committed
+        to the repository.
+        
+        @rtype  boolean
+        
+        """
+
+        path = self.files_table.get_row(self.last_row_selected)[1]
+        return self.vcs.is_added(path)
+
+    def condition_view_diff(self):
+        """
+        Determines whether or not to show the view diff context menu item.
+        Show the View Diff item when the file has been modified but not
+        yet committed to the repository.
+        
+        @rtype  boolean
+        
+        """
+
+        path = self.files_table.get_row(self.last_row_selected)[1]
+        return self.vcs.is_modified(path)
         
 if __name__ == "__main__":
-    window = Commit()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
+    window = Commit(args)
+    window.register_gtk_quit()
     gtk.main()
