@@ -106,50 +106,56 @@ class Add(InterfaceView):
                 self.last_row_clicked = path[0]
                 
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        'label': 'Open',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_open_activated, 
-                                'args':fileinfo
+                        "label": 'Open',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_open_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     },{
-                        'label': 'Browse to',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_browse_activated, 
-                                'args':fileinfo
+                        "label": 'Browse to',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_browse_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     },{
-                        'label': 'Delete',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_delete_activated, 
-                                'args':fileinfo
+                        "label": 'Delete',
+                        "signals": {
+                            "activate": {
+                                "callback":self.on_context_delete_activated, 
+                                "args":fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     },{
-                        'label': 'Add to ignore list',
+                        "label": 'Add to ignore list',
                         'submenu': [{
-                                'label': os.path.basename(fileinfo[1]),
-                                'signals': {
-                                    'activate': {
-                                        'callback':self.on_subcontext_ignore_by_filename_activated, 
-                                        'args':fileinfo
+                                "label": os.path.basename(fileinfo[1]),
+                                "signals": {
+                                    "activate": {
+                                        "callback":self.on_subcontext_ignore_by_filename_activated, 
+                                        "args":fileinfo
                                      }
-                                 }
+                                 },
+                                "condition": (lambda: True)
                             },
                             {
-                                'label': "*%s"%fileinfo[2],
-                                'signals': {
-                                    'activate': {
-                                        'callback':self.on_subcontext_ignore_by_fileext_activated, 
-                                        'args':fileinfo
+                                "label": "*%s"%fileinfo[2],
+                                "signals": {
+                                    "activate": {
+                                        "callback":self.on_subcontext_ignore_by_fileext_activated, 
+                                        "args":fileinfo
                                     }
-                                }
+                                },
+                                "condition": (lambda: True)
                             }
-                        ]
+                        ],
+                        "condition": (lambda: True)
                     }
                 ])
                 context_menu.show(event)
@@ -195,7 +201,7 @@ if __name__ == "__main__":
     import sys
     args = sys.argv[1:]
     if len(args) < 1:
-        raise SystemExit("Usage: python add.py [path1] [path2] ...")
+        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
     window = Add(args)
     window.register_gtk_quit()
     gtk.main()

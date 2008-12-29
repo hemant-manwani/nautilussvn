@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Dec 22 15:18:19 2008 -->
+<!--Generated with glade3 3.4.5 on Mon Dec 29 11:01:40 2008 -->
 <glade-interface>
   <widget class="GtkDialog" id="Authorization">
     <property name="width_request">400</property>
@@ -910,6 +910,7 @@
                             <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
+                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">Realm:</property>
                           </widget>
                           <packing>
@@ -920,6 +921,8 @@
                         <child>
                           <widget class="GtkLabel" id="certauth_realm">
                             <property name="visible">True</property>
+                            <property name="xalign">0</property>
+                            <property name="wrap">True</property>
                           </widget>
                           <packing>
                             <property name="position">1</property>
