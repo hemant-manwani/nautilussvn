@@ -20,6 +20,41 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+"""
+
+Known issues:
+
+  * Multiple emblems are attached to a single item which leads to the one
+    obscuring the other. So if an item has "normal" status, but it changes to 
+    "modified" two emblems are applied and only the emblem "normal" is visible.
+    
+    How to reproduce:
+    
+    You need a working copy with at least 2 items (combination doesn't matter).
+    
+    Use the following working_copy (do not open it in Nautilus before doing this):
+    
+    mkdir -p /tmp/nautilussvn_testing
+    cd /tmp/nautilussvn_testing
+    svnadmin create repository
+    svn co file:///tmp/nautilussvn_testing/repository working_copy
+    touch working_copy/add-this-file
+    touch working_copy/or-this-file
+    
+      * Then after adding one of the files move up the tree so you can see the 
+        status for the working_copy directory.
+  
+    Things I researched but weren't the cause (so don't look into these!):
+    
+      * One idea I had was that because of the nautilusVFSFile_table we might
+        have two seperate NautilusVFSFile instances (with different emblems
+        attached) pointing to the same file. But that wasn't the case.
+  
+"""
+
+# TODO: right before releasing move the commentary above to an actual issue 
+# report on the tracker and just refer to the Bug #.
+
 import os.path
 from os.path import isdir, isfile
 
@@ -151,6 +186,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         Menu activated with items selected.
         
+        Note that calling nautilusVFSFile.invalidate_extension_info() will also
+        cause get_file_items to be called.
+        
         @type   window: NautilusNavigationWindow
         @param  window:
         
@@ -172,7 +210,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
     def get_background_items(self, window, item):
         """
-        Menu activated on window background.
+        Menu activated on entering a directory. Builds context menu for File
+        menu and for window background.
         
         @type   window: NautilusNavigationWindow
         @param  window:
@@ -185,13 +224,31 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
+        # Begin debugging code
+        print "Debug: get_background_items() for %s" % path
+        # End debugging code
+        
         self.nautilusVFSFile_table[path] = item
+        
+        # FIXME:
+        # This is a hack to try and work around the multiple emblems on a single
+        # item bug. Since get_background_items is called once when you enter
+        # a directory we just invalidate all items immediately below it.
+        for child_basename in os.listdir(path):
+            child_path = os.path.join(path, child_basename)
+            if child_path in self.nautilusVFSFile_table:
+                # Begin debugging code
+                print "Debug: invalidated %s in get_background_items()" % child_basename
+                # End debugging code
+                child_item = self.nautilusVFSFile_table[child_path]
+                # FIXME: still doesn't work but committing to save
+                child_item.invalidate_extension_info()
         
         # Since building the menu fires off multiple recursive status checks 
         # as soon as a folder is opened this does affect performance. So disabled
         # temporarily for convience while working on implementing the cache.
         #~ return MainContextMenu([path], self).construct_menu()
-        return []
+        #~ return []
     
     #
     # Helper functions
@@ -215,7 +272,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         item = self.nautilusVFSFile_table[path]
         
         # Begin debugging code
-        print "set_emblem_by_status() called for %s with status %s" % (path, status)
+        print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         if status in self.EMBLEMS:
@@ -237,7 +294,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         # Begin debugging code
-        print "cb_status() called for %s with status %s" % (path, status)
+        print "Debug: cb_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         if not path in self.nautilusVFSFile_table: return
@@ -986,7 +1043,10 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths)
 
     def callback_delete(self, menu_item, paths):
-        # FIXME: ClientError has local modifications
+        # FIXME: 
+        #   * ClientError has local modifications
+        #   * ClientError is not under version control
+        #   * ClientERror has local modifications
         client = pysvn.Client()
         for path in paths:
             client.remove(path)
@@ -1033,6 +1093,27 @@ class StatusMonitor():
     In the future we might implement a functionality which also monitors
     versioning actions so the command-line client can be used and still have
     the emblems update accordingly. 
+    
+    UML sequence diagram:
+
+        +--------------+          +----------------+         
+        | NautilusSVN  |          | StatusMonitor  |         
+        +--------------+          +----------------+         
+              |                           |                  
+              |   new(self.cb_status)     |                  
+              |-------------------------->|                  
+              |                           |                  
+              |     add_watch(path)       |                  
+              |-------------------------->|---+              
+              |                           |   |              
+              |  cb_status(path, status)  |   | status(path) 
+              |<--------------------------|<--+              
+              |                           |                  
+              |---+                       |                  
+              |   | set_emblem_by_status(path, status)      
+              |<--+                       |                  
+              |                           |                  
+
     
     """
     
@@ -1087,7 +1168,7 @@ class StatusMonitor():
             if event.name: path = os.path.join(path, event.name)
             
             # Begin debugging code
-            print "Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
+            print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
             # End debugging code
             
             # Subversion (pysvn? svn?) makes temporary files for some purpose which

@@ -1,3 +1,10 @@
+2008-12-29  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Described multiple emblem bug in detail, added sequence diagram to describe
+	the interaction with StatusMonitor, modified debug statements and improved
+	several comments.
+
 2008-12-28  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
