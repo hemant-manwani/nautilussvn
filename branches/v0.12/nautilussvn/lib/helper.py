@@ -23,6 +23,7 @@
 import os
 import re
 import time
+import shutil
 
 import nautilussvn.ui.dialog
 import nautilussvn.lib.settings
@@ -236,15 +237,19 @@ def get_diff_tool():
         "swap": diff_tool_swap
     }
     
-def launch_diff_tool(lhs, rhs):
+def launch_diff_tool(path):
     """
-    Launches the diff tool of choice
+    Launches the diff tool of choice.
     
-    @type lhs:  string
-    @param lhs: the left hand side path
+    1.  Generate a standard diff between the path and the latest revision.
+    2.  Write the diff text to a tmp file
+    3.  Copy the given file (path) to the tmp directory
+    4.  Do a reverse patch to get a version of the file that is in the repo.
+    5.  Now you have two files and you can send them to the diff tool.
     
-    @type rhs:  string
-    @param lhs: the right hand side path
+    @type   path: string
+    @param  path: path to the file in question
+
     """
     
     diff = get_diff_tool()
@@ -255,6 +260,18 @@ def launch_diff_tool(lhs, rhs):
     if not os.path.exists(diff["path"]):
         nautilussvn.ui.dialog.MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings.")
         return
+
+    patch = os.popen("svn diff '%s'" % path).read()
+    open("/tmp/tmp.patch", "w").write(patch)
+    
+    tmp_path = "/tmp/%s" % os.path.split(path)[-1]
+    shutil.copy(path, "/tmp")
+    os.popen(
+        "patch --reverse '%s' < /tmp/tmp.patch" % 
+        tmp_path
+    )
+    
+    (lhs, rhs) = (path, tmp_path)
         
     if diff["swap"]:
         (lhs, rhs) = (rhs, lhs)
