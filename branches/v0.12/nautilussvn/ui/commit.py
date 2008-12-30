@@ -130,67 +130,67 @@ class Commit(InterfaceView):
             if event.button == 3:
                 self.last_row_selected = path
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        "label": 'View Diff',
+                        "label": "View Diff",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_diff_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_diff_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": self.condition_view_diff
                     },{
-                        "label": 'Open',
+                        "label": "Open",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_open_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_open_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": 'Browse to',
+                        "label": "Browse to",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_browse_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_browse_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": 'Delete',
+                        "label": "Delete",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_delete_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_delete_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": 'Add',
+                        "label": "Add",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_add_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_add_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": self.condition_add
                     },{
-                        "label": 'Revert',
+                        "label": "Revert",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_revert_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_revert_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": self.condition_revert
                     },{
-                        "label": 'Add to ignore list',
+                        "label": "Add to ignore list",
                         'submenu': [{
                                 "label": os.path.basename(fileinfo[1]),
                                 "signals": {
                                     "activate": {
-                                        "callback":self.on_subcontext_ignore_by_filename_activated, 
-                                        "args":fileinfo
+                                        "callback": self.on_subcontext_ignore_by_filename_activated, 
+                                        "args": fileinfo
                                      }
                                  },
                                 "condition": (lambda: True)
@@ -199,8 +199,8 @@ class Commit(InterfaceView):
                                 "label": "*%s"%fileinfo[2],
                                 "signals": {
                                     "activate": {
-                                        "callback":self.on_subcontext_ignore_by_fileext_activated, 
-                                        "args":fileinfo
+                                        "callback": self.on_subcontext_ignore_by_fileext_activated, 
+                                        "args": fileinfo
                                     }
                                 },
                                 "condition": (lambda: True)
