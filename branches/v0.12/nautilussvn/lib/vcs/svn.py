@@ -25,6 +25,9 @@ from os.path import isdir, isfile
 
 import pysvn
 
+from ..decorators import deprecated, print_timing
+from ..helper import split_path
+
 class SVN:
     
     STATUS = {
@@ -142,63 +145,67 @@ class SVN:
     def __init__(self):
         self.client = pysvn.Client()
     
-    def status(self, path, invalidate=False, recurse=True, depth=None):
+    def status(self, path, recurse=True, depth=None):
         """
+        This function will eventually be deprecated for status_with_cache which
+        at the moment is still in flux.
+        
+        """
+        if depth:
+            return self.client.status(path, depth=depth)
+        else:
+            return self.client.status(path, recurse=recurse)
+    
+    @print_timing
+    def status_with_cache(self, path, invalidate=False, depth=pysvn.depth.infinity):
+        """
+        
+        Look up the status for path.
         
         If invalidate is set to False this function will look to see if a 
         status for the requested path is available in the cache and if so
-        return that.
+        return that. Otherwise it will bypass the cache entirely.
         
-        FIXME: this function is ugly!
+        @type   path: string
+        @param  path: A path pointing to an item (file or directory).
         
         @type   invalidate: boolean
-        @param  invalidate: whether or not the cache should be bypassed
+        @param  invalidate: Whether or not the cache should be bypassed.
+        
+        @type   depth: one of pysvn.depth
+        @param  depth: Defines how deep the status check should go.
+        
+        @rtype: list of PysvnStatus
+        @return: A list of statuses for the given path.
         
         """
         
-        #
-        # TODO: this two inner functions should probably be moved outta here
-        #
-        
-        def get_status_function():
-            """
-            This is a little trick we use to at least stop some duplication for
-            now. Depending on whether or not a cache bypass was requested it
-            will return a certain function (one that does, one that doesn't).
-            """
-            if not invalidate:
-                def get_status(*args, **kwargs):
-                    return self.status_cache[path]
-                if path in self.status_cache:
-                    # FIXME: temporary hack because status checks with depth
-                    # are written to the cache before the directory checks
-                    if not depth and len(self.status_cache[path]) == 1:
-                        print "Debug: cache replaced for %s" % path
-                        return self.client.status
-                    return get_status
-                else:
-                    print "Debug: cache replaced for %s" % path
-                    return self.client.status
-            else:
-                print "Debug: cache replaced for %s" % path
-                return self.client.status
-        
-        def set_cache_for_path(statuses):
-            # TODO: this can be improved by setting the status for everything
-            # lower (if we have it) too.
-            self.status_cache[path] = statuses
-        
-        # TODO: code duplication. For the arguments, perhaps build up a 
-        # **kwargs var to pass instead. 
-        if depth:
-            statuses = get_status_function()(path, depth=depth)
-            set_cache_for_path(statuses)
-            return statuses
+        # FIXME: the len check is a temporary hack untill I think up of something
+        # better. It's needed because status checks with a depth of empty are done
+        # first for every file, meaning that the following infinity check would
+        # otherwise be an inmediate cache hit.
+        if (invalidate or 
+                path not in self.status_cache or
+                len(self.status_cache[path]) == 1):
+            statuses = self.client.status(path, depth=depth)
         else:
-            statuses = get_status_function()(path, recurse=recurse)
-            set_cache_for_path(statuses)
-            return statuses
-    
+            return self.status_cache[path]
+
+        # pysvn starts deep and then goes up the tree so we have to reverse it so we
+        # can sort it properly.
+        statuses.reverse()
+
+        for status in statuses:
+            full_path = os.path.join(path, status.data["path"])
+            
+            while full_path != "":
+                if not full_path in self.status_cache:
+                    self.status_cache[full_path] = []
+                self.status_cache[full_path].append(status)
+                
+                full_path = split_path(full_path)
+        
+        return self.status_cache[path]
     #
     # is
     #

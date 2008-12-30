@@ -213,6 +213,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @type   items: list of NautilusVFSFile
         @param  items:
         
+        @rtype: list of MenuItems
+        @return: The context menu entries to add to the menu.
+        
         """
         
         if len(items) == 0: return
@@ -227,6 +230,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         return MainContextMenu(paths, self).construct_menu()
         
     def get_background_items(self, window, item):
+        
         """
         Menu activated on entering a directory. Builds context menu for File
         menu and for window background.
@@ -234,8 +238,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @type   window: NautilusNavigationWindow
         @param  window:
         
-        @type   item:   NautilusVFSFile
+        @type   item: NautilusVFSFile
         @param  item:
+        
+        @rtype: list of MenuItems
+        @return: The context menu entries to add to the menu.
         
         """
         
@@ -253,7 +260,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # item bug. Since get_background_items is called once when you enter
         # a directory we just invalidate all items immediately below it.
         
-        
+        # MARKER: performance 
         parent_path = split_path(path)
         if parent_path in self.nautilusVFSFile_table:
             item = self.nautilusVFSFile_table[parent_path]
@@ -365,6 +372,11 @@ class MainContextMenu():
     def construct_menu(self):
         """
         
+        This function is really only used to contain the menu defintion. The
+        actual menu is build using create_menu_from_definition.
+        
+        @rtype: list of MenuItems
+        @return: A list of MenuItems representing the context menu.
         """
         
         # The following dictionary defines the complete contextmenu
@@ -731,6 +743,9 @@ class MainContextMenu():
         @type   menu_definition  list
         @param  menu_definition  A list of definition items.
         
+        @rtype: list of MenuItems
+        @return: A list of MenuItems representing the context menu.
+        
         """
         
         menu = []
@@ -991,7 +1006,7 @@ class MainContextMenu():
             # Normal revert
             self.callback_revert(menu_item, paths)
             # Super revert
-            statuses = self.vcs_client.status(path)[:-1]
+            statuses = self.vcs_client.status_with_cache(path, invalidate=True)[:-1]
             for status in statuses:
                 if status == pysvn.wc_status_kind.missing:
                     self.callback_revert(
@@ -1249,18 +1264,21 @@ class StatusMonitor():
                 # file itself the IN_MODIFY event handler is called 3 times (once 
                 # for the directory and twice for the file itself).
                 #
+                # MARKER: performance 
                 self.watch_manager.add_watch(path, self.mask, rec=True)
                 
                 # To always be able to track moves (renames are moves too) we 
                 # have to make sure we register with our parent directory
                 # TODO: this is code duplication, please refactor
+                # MARKER: performance 
                 parent_path = split_path(path)
                 if not parent_path in self.watches:
                     if (parent_path.find(".svn") > 0 or 
                             self.vcs_client.is_in_a_or_a_working_copy(parent_path)):
                             
                         self.watches[parent_path] = None
-                        self.watch_manager.add_watch(split_path(path), self.mask, rec=True)
+                        # FIXME: can rec be False here?
+                        self.watch_manager.add_watch(split_path(path), self.mask, rec=False)
                 
                 # Begin debugging code
                 #~ print "Debug: StatusMonitor.add_watch() added watch for %s" % path
@@ -1273,6 +1291,9 @@ class StatusMonitor():
         
     def status(self, path, invalidate=False):
         """
+        
+        This function doesn't return anything but calls the callback supplied
+        to StatusMonitor by the caller.
         
         Status checks:
         
@@ -1300,10 +1321,10 @@ class StatusMonitor():
                 |                                   |
         
         @type   path: string
-        @param  path: the path for which to check the status
+        @param  path: The path for which to check the status.
         
         @type   invalidate: boolean
-        @param  invalidate: whether or not the cache should be bypassed
+        @param  invalidate: Whether or not the cache should be bypassed.
         """
         
         # If we're not a or inside a working copy we don't even have to bother.
@@ -1314,10 +1335,12 @@ class StatusMonitor():
         # End debugging information
         
         # We need the status object for the item alone
-        status = self.vcs_client.status(
+        # MARKER: performance 
+        status = self.vcs_client.status_with_cache(
             path, 
             invalidate=invalidate, 
             depth=pysvn.depth.empty)[0].data["text_status"]
+        #~ status = pysvn.wc_status_kind.normal
             
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
@@ -1329,8 +1352,10 @@ class StatusMonitor():
                 pysvn.wc_status_kind.modified
             ])
             
-            sub_statuses = self.vcs_client.status(path, invalidate=invalidate)[:-1]
+            # MARKER: performance 
+            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
             statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
+            #~ statuses = set([])
             
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
@@ -1367,6 +1392,7 @@ class StatusMonitor():
                         pysvn.wc_status_kind.normal,
                         pysvn.wc_status_kind.unversioned, # FIXME: but only if it was previously versioned
                     ):
+                    # MARKER: performance 
                     self.status(path, invalidate=invalidate)
                     
                     # If we don't break out here it would result in the 
