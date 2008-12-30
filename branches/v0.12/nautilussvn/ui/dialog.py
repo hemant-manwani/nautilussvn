@@ -127,60 +127,47 @@ class Certificate(InterfaceView):
         self.dialog.destroy()
         return result
         
-class Authorization(InterfaceView):
+class Authentication(InterfaceView):
     def __init__(self, realm="", may_save=True):
-        InterfaceView.__init__(self, GLADE, "Authorization")
+        InterfaceView.__init__(self, GLADE, "Authentication")
         
         self.get_widget("auth_realm").set_label(realm)
         self.get_widget("auth_save").set_sensitive(may_save)
         
     def run(self):
         returner = None
-        
-        self.dialog = self.get_widget("Authorization")
+        self.dialog = self.get_widget("Authentication")
         result = self.dialog.run()
         
-        if result == 1:
-            returner = (
-                True,
-                self.get_widget("auth_login").get_text(),
-                self.get_widget("auth_password").get_text(),
-                self.get_widget("auth_save").get_active()
-            )
-        else:
-            returner = None
-            
+        login = self.get_widget("auth_login").get_text()
+        password = self.get_widget("auth_password").get_text()
+        save = self.get_widget("auth_save").get_active()
         self.dialog.destroy()
-        return returner
-                
-class CertAuthorization(InterfaceView):
+        
+        if result == 1:
+            return (True, login, password, save)
+        else:
+            return (False, "", "", False)
+
+class CertAuthentication(InterfaceView):
     def __init__(self, realm="", may_save=True):
-        InterfaceView.__init__(self, GLADE, "CertAuthorization")
+        InterfaceView.__init__(self, GLADE, "CertAuthentication")
         
         self.get_widget("certauth_realm").set_label(realm)
         self.get_widget("certauth_save").set_sensitive(may_save)
         
     def run(self):
-        returner = None
-        
-        self.dialog = self.get_widget("CertAuthorization")
+        self.dialog = self.get_widget("CertAuthentication")
         result = self.dialog.run()
         
-        if result == 1:
-            returner = (
-                True,
-                self.get_widget("certauth_password").get_text(),
-                self.get_widget("certauth_save").get_active()
-            )
-        else:
-            returner = (
-                False,
-                "",
-                False
-            )
-            
+        password = self.get_widget("certauth_password").get_text()
+        save = self.get_widget("certauth_save").get_active()
         self.dialog.destroy()
-        return returner
+        
+        if result == 1:
+            return (True, password, save)
+        else:
+            return (False, "", False)
         
 class Property(InterfaceView):
     def __init__(self, name="", value=""):
