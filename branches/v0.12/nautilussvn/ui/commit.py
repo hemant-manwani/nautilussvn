@@ -221,9 +221,11 @@ class Commit(InterfaceView):
 
     def on_context_add_activated(self, widget, data=None):
         self.vcs.add(data[1])
+        self.refresh_row_status()
 
     def on_context_revert_activated(self, widget, data=None):
         self.vcs.revert(data[1])
+        self.refresh_row_status()
 
     def on_context_diff_activated(self, widget, data=None):
         nautilussvn.lib.helper.launch_diff_tool(data[1])
@@ -300,6 +302,15 @@ class Commit(InterfaceView):
 
         path = self.files_table.get_row(self.last_row_selected)[1]
         return self.vcs.is_modified(path)
+    
+    def refresh_row_status(self):
+        """
+        Refresh the status of the row.
+   
+        """
+        
+        path = self.files_table.get_row(self.last_row_selected)[1]
+        self.files_table.get_row(self.last_row_selected)[3] =  self.vcs.status(path)[0].text_status
         
 if __name__ == "__main__":
     import sys
