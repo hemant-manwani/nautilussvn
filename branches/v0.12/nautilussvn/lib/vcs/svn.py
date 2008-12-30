@@ -638,7 +638,7 @@ class SVN:
     # actions
     #
     
-    def add(self, paths):
+    def add(self, *args, **kwargs):
         """
         Add files or directories to the repository
         
@@ -647,16 +647,9 @@ class SVN:
         
         """
         
-        try:
-            self.client.add(paths)
-        except pysvn.ClientError, e:
-            return str(e)
-        except TypeError, e:
-            return str(e)
-        
-        return None
+        return self.action(self.client.add, *args, **kwargs)
     
-    def copy(self, src, dest, revision):
+    def copy(self, *args, **kwargs):
         """
         Copy files/directories from src to dest.  src or dest may both be either
         a local path or a repository URL.  revision is a pysvn.Revision object.
@@ -672,19 +665,9 @@ class SVN:
         
         """
 
-        try:
-            self.client.copy(src, dest, revision)
-        except pysvn.ClientError, e:
-            return str(e)
-        except TypeError, e:
-            return str(e)
-        
-        return None
+        return self.action(self.client.copy, *args, **kwargs)
     
-    def checkout(self, url, path, 
-        recurse=True, 
-        revision=pysvn.Revision(pysvn.opt_revision_kind.head),
-        ignore_externals=False):
+    def checkout(self, *args, **kwargs):
         
         """
         Checkout a working copy from a vcs repository
@@ -703,22 +686,9 @@ class SVN:
         
         """
         
-        try:
-            self.client.checkout(
-                url,
-                path,
-                recurse=recurse,
-                revision=revision,
-                ignore_externals=ignore_externals
-            )
-        except pysvn.ClientError, e:
-            return str(e)
-        except TypeError, e:
-            return str(e)
-        
-        return None
+        return self.action(self.client.checkout, *args, **kwargs)
     
-    def cleanup(self, path):
+    def cleanup(self, *args, **kwargs):
         """
         Clean up a working copy.
         
@@ -727,16 +697,9 @@ class SVN:
         
         """
         
-        try:
-            self.client.cleanup(path)
-        except pysvn.ClientError, e:
-            return str(e)
-        except TypeError, e:
-            return str(e)
+        return self.action(self.client.cleanup, *args, **kwargs)
         
-        return None
-
-    def revert(self, paths):
+    def revert(self, *args, **kwargs):
         """
         Revert files or directories so they are unversioned
         
@@ -745,8 +708,45 @@ class SVN:
         
         """
         
+        return self.action(self.client.revert, *args, **kwargs)
+
+    def commit(self, *args, **kwargs):
+        """
+        Commit a list of files to the repository.
+        
+        @type   paths: list
+        @param  paths: a list of files/directories
+        
+        @type   log_message: string
+        @param  log_message: a commit log message
+        
+        @type   recurse: boolean
+        @param  recurse: whether or not to recurse into sub-directories
+        
+        @type   keep_locks: boolean
+        @param  keep_locks: whether or not to keep locks on commit
+        
+        """
+        
+        return self.action(self.client.checkin, *args, **kwargs)
+    
+    def action(self, func, *args, **kwargs):
+        """
+        Perform a vcs action.
+        
+        @type   func: def
+        @param  func: a function
+        
+        @type   *args: arguments
+        @param  *args: any arguments passed
+        
+        @type   **kwargs: keyword arguments
+        @param  **kwargs: any keyword arguments passed
+        
+        """
+        
         try:
-            self.client.revert(paths)
+            func(*args, **kwargs)
         except pysvn.ClientError, e:
             return str(e)
         except TypeError, e:
