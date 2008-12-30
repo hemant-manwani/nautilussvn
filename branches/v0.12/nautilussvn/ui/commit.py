@@ -58,7 +58,7 @@ class Commit(InterfaceView):
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension", 
                 "Text Status", "Property Status"],
         )
-        self.last_row_selected = None
+        self.last_row_clicked = None
         
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
@@ -128,7 +128,7 @@ class Commit(InterfaceView):
             fileinfo = treeview_model[path]
             
             if event.button == 3:
-                self.last_row_selected = path
+                self.last_row_clicked = path
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
                         "label": "View Diff",
                         "signals": {
@@ -274,7 +274,7 @@ class Commit(InterfaceView):
         
         """
         
-        path = self.files_table.get_row(self.last_row_selected)[1]
+        path = self.files_table.get_row(self.last_row_clicked)[1]
         return not self.vcs.is_versioned(path)
     
     def condition_revert(self):
@@ -287,7 +287,7 @@ class Commit(InterfaceView):
         
         """
 
-        path = self.files_table.get_row(self.last_row_selected)[1]
+        path = self.files_table.get_row(self.last_row_clicked)[1]
         return self.vcs.is_added(path)
 
     def condition_view_diff(self):
@@ -300,7 +300,7 @@ class Commit(InterfaceView):
         
         """
 
-        path = self.files_table.get_row(self.last_row_selected)[1]
+        path = self.files_table.get_row(self.last_row_clicked)[1]
         return self.vcs.is_modified(path)
     
     def refresh_row_status(self):
@@ -309,8 +309,8 @@ class Commit(InterfaceView):
    
         """
         
-        path = self.files_table.get_row(self.last_row_selected)[1]
-        self.files_table.get_row(self.last_row_selected)[3] =  self.vcs.status(path)[0].text_status
+        path = self.files_table.get_row(self.last_row_clicked)[1]
+        self.files_table.get_row(self.last_row_clicked)[3] =  self.vcs.status(path)[0].text_status
         
 if __name__ == "__main__":
     import sys
