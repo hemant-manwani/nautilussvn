@@ -1,6 +1,12 @@
 2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Added temporary hack in get_background_items back in again to try and work
+	around the multiple emblem problem (because it seems to work).
+
+2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	* nautilussvn/lib/vcs/svn.py:
 	Implemented cache to significantly improve performance. Also fixed bug
 	which resulted in watches being added recursvily on the parent

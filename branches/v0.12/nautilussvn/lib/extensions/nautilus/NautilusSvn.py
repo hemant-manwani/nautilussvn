@@ -235,19 +235,19 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         self.nautilusVFSFile_table[path] = item
         
-        #~ # FIXME:
-        #~ # This is a hack to try and work around the multiple emblems on a single
-        #~ # item bug. Since get_background_items is called once when you enter
-        #~ # a directory we just invalidate all items immediately below it.
-        #~ for child_basename in os.listdir(path):
-            #~ child_path = os.path.join(path, child_basename)
-            #~ if child_path in self.nautilusVFSFile_table:
-                #~ # Begin debugging code
-                #~ print "Debug: invalidated %s in get_background_items()" % child_basename
-                #~ # End debugging code
-                #~ child_item = self.nautilusVFSFile_table[child_path]
-                #~ # FIXME: still doesn't work but committing to save
-                #~ child_item.invalidate_extension_info()
+        # FIXME:
+        # This is a hack to try and work around the multiple emblems on a single
+        # item bug. Since get_background_items is called once when you enter
+        # a directory we just invalidate all items immediately below it.
+        for child_basename in os.listdir(path):
+            child_path = os.path.join(path, child_basename)
+            if child_path in self.nautilusVFSFile_table:
+                # Begin debugging code
+                print "Debug: invalidated %s in get_background_items()" % child_basename
+                # End debugging code
+                child_item = self.nautilusVFSFile_table[child_path]
+                # FIXME: still doesn't work but committing to save
+                child_item.invalidate_extension_info()
         
         # Since building the menu fires off multiple recursive status checks 
         # as soon as a folder is opened this does affect performance. So disabled
@@ -1288,7 +1288,7 @@ class StatusMonitor():
         
         # If we're not a or inside a working copy we don't even have to bother.
         if not self.vcs_client.is_in_a_or_a_working_copy(path): return
-            
+        
         # Begin debugging information
         print "Debug: StatusMonitor.status() called for %s" % path
         # End debugging information
