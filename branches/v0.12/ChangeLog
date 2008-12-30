@@ -1,6 +1,11 @@
 2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Updated workaround for the multiple emblem problem, now it seems to work.
+
+2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Ok, I've thought up of a possible workaround for the threading issues.
 
 2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
