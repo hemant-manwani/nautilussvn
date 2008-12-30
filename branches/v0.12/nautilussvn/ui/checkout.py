@@ -20,8 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys
-
 import pygtk
 import gobject
 import gtk
@@ -34,6 +32,12 @@ import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
 class Checkout(InterfaceView):
+    """
+    Provides an interface to check out a working copy.
+    
+    Pass it the destination path.
+    
+    """
 
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
