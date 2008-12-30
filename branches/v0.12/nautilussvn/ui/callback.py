@@ -310,33 +310,114 @@ class VCSAction(threading.Thread):
         self.message = message
     
     def set_status(self, message):
+        """
+        Set the current status of the vcs action.  Currently, this method
+        is called at the beginning and end of each action, to display what is
+        going on.  Currently, it just appends the status message to the 
+        notification window.  In the future, I may set up a progress bar
+        and put the status message there.
+        
+        @type   message: string
+        @param  message: a status message        
+        
+        """
+        
         if message is not None:
             self.notification.append([
                 "", message, ""
             ])
             
     def set_before_message(self, message):
+        """
+        Set a message to be displayed before the VCS action starts running.
+        This is generally called from the ui class.
+
+        @type   message: string
+        @param  message: a status message
+        
+        """
+        
         self.before = message
     
     def set_after_message(self, message):
+        """
+        Set a message to be displayed before the VCS action after running.
+        This is generally called from the ui class.
+
+        @type   message: string
+        @param  message: a status message
+        
+        """
+
         self.after = message
     
     def run_before(self, func, *args, **kargs):
+        """
+        Set a callback function to be run before the VCS action begins running.
+        The actual function is called from the self.run() method.
+        
+        @type   func: def
+        @param  func: the function
+        
+        @type   *args: arguments
+        @param  *args: any passed arguments
+
+        @type   **kwargs: keyword arguments
+        @param  **kwargs: any passed keyword arguments
+        
+        """
+
         self.pre_func = func
         self.pre_args = args
         self.pre_kwargs = kwargs
     
     def run_after(self, func, *args, **kwargs):
+        """
+        Set a callback function to be run after the VCS action has run.
+        The actual function is called from the self.run() method.
+        
+        @type   func: def
+        @param  func: the function
+        
+        @type   *args: arguments
+        @param  *args: any passed arguments
+
+        @type   **kwargs: keyword arguments
+        @param  **kwargs: any passed keyword arguments
+        
+        """
+        
         self.post_func = func
         self.post_args = args
         self.post_kwargs = kwargs
     
     def set_action(self, func, *args, **kwargs):
+        """
+        Set the callback function to be run as the main vcs action.
+        The actual function is called from the self.run() method.
+        
+        @type   func: def
+        @param  func: the function
+        
+        @type   *args: arguments
+        @param  *args: any passed arguments
+
+        @type   **kwargs: keyword arguments
+        @param  **kwargs: any passed keyword arguments
+        
+        """
+
         self._func = func
         self._args = args
         self._kwargs = kwargs
      
     def run(self):
+        """
+        The central method that drives this class.  It runs the before and 
+        after methods, as well as the main vcs method.
+        
+        """
+        
         if self._func is None:
             return
     
