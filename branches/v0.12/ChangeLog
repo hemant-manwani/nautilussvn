@@ -1,3 +1,15 @@
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	NautilusSvn.py is in a state of flux right now (might be broken), but 
+	committing anyways to save changes.
+	
+	* nautilussvn/lib/vcs/svn.py:
+	Reverted SVN.status back to r387 but marked it deprecated and added 
+	function status_with_cache to replace it (entirely refactored). I'm too 
+	worried replacing status right now would break other stuff (and bother 
+	Adam in the process). 
+
 2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
