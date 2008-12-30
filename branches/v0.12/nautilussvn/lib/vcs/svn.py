@@ -565,6 +565,10 @@ class SVN:
     
     def set_callback_cancel(self, func):
         self.client.callback_cancel = func
+    
+    def callback_cancel(self):
+        if hasattr(self.client, "callback_cancel"):
+            self.client.callback_cancel()
 
     def set_callback_notify(self, func):
         self.client.callback_notify = func
@@ -643,9 +647,6 @@ class SVN:
         
         """
         
-        if paths is None:
-            return "Path is not set"
-
         try:
             self.client.add(paths)
         except pysvn.ClientError, e:
@@ -670,10 +671,7 @@ class SVN:
         @param  revision: a pysvn Revision object
         
         """
-        
-        if src is None or dest is None:
-            return "Neither src nor dest is specified"
-        
+
         try:
             self.client.copy(src, dest, revision)
         except pysvn.ClientError, e:
@@ -731,6 +729,24 @@ class SVN:
         
         try:
             self.client.cleanup(path)
+        except pysvn.ClientError, e:
+            return str(e)
+        except TypeError, e:
+            return str(e)
+        
+        return None
+
+    def revert(self, paths):
+        """
+        Revert files or directories so they are unversioned
+        
+        @type   paths: list
+        @param  paths: a list of files/directories
+        
+        """
+        
+        try:
+            self.client.revert(paths)
         except pysvn.ClientError, e:
             return str(e)
         except TypeError, e:
