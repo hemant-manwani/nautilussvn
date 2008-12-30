@@ -199,7 +199,8 @@ class SVN:
             full_path = os.path.join(path, status.data["path"])
             
             while full_path != "":
-                if not full_path in self.status_cache:
+                if (invalidate or 
+                        not full_path in self.status_cache):
                     self.status_cache[full_path] = []
                 self.status_cache[full_path].append(status)
                 
