@@ -106,40 +106,40 @@ class Add(InterfaceView):
                 self.last_row_clicked = path[0]
                 
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        "label": 'Open',
+                        "label": "Open",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_open_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_open_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": 'Browse to',
+                        "label": "Browse to",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_browse_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_browse_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": 'Delete',
+                        "label": "Delete",
                         "signals": {
                             "activate": {
-                                "callback":self.on_context_delete_activated, 
-                                "args":fileinfo
+                                "callback": self.on_context_delete_activated, 
+                                "args": fileinfo
                             }
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": 'Add to ignore list',
+                        "label": "Add to ignore list",
                         'submenu': [{
                                 "label": os.path.basename(fileinfo[1]),
                                 "signals": {
                                     "activate": {
-                                        "callback":self.on_subcontext_ignore_by_filename_activated, 
-                                        "args":fileinfo
+                                        "callback": self.on_subcontext_ignore_by_filename_activated, 
+                                        "args": fileinfo
                                      }
                                  },
                                 "condition": (lambda: True)
@@ -148,8 +148,8 @@ class Add(InterfaceView):
                                 "label": "*%s"%fileinfo[2],
                                 "signals": {
                                     "activate": {
-                                        "callback":self.on_subcontext_ignore_by_fileext_activated, 
-                                        "args":fileinfo
+                                        "callback": self.on_subcontext_ignore_by_fileext_activated, 
+                                        "args": fileinfo
                                     }
                                 },
                                 "condition": (lambda: True)
@@ -159,14 +159,6 @@ class Add(InterfaceView):
                     }
                 ])
                 context_menu.show(event)
-                
-    def on_files_table_row_doubleclicked(self, treeview, event, col):
-        treeview.grab_focus()
-        treeview.set_cursor(event[0], col, 0)
-        treeview_model = treeview.get_model()
-        fileinfo = treeview_model[event[0]]
-        
-        print "Row Double-clicked"
                 
     def on_context_open_activated(self, widget, data=None):
         nautilussvn.lib.helper.open_item(data[1])
