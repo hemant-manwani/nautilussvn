@@ -83,8 +83,30 @@ class Commit(InterfaceView):
         self.close()
         
     def on_ok_clicked(self, widget, data=None):
+        items = self.files_table.get_activated_rows(1)
         self.hide()
-    
+
+        if len(items) == 0:
+            self.close()
+            return
+
+        for item in items:
+            if self.vcs.status(item, recurse=False)[0].text_status == self.vcs.STATUS["unversioned"]:
+                self.vcs.add(item)
+        
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        self.action.set_action(
+            self.vcs.commit, 
+            items,
+            self.message.get_text()
+        )        
+        self.action.set_before_message("Running Commit Command...")
+        self.action.set_after_message("Completed Commit")
+        self.action.start()
+        
     def on_toggle_show_all_toggled(self, widget, data=None):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
         for row in self.files_table.get_items():
