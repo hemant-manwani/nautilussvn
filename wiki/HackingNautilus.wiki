@@ -26,6 +26,8 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * The website for Nautilus can be found at http://projects.gnome.org/nautilus/ 
 
+  * The wiki page for Nautilus can be found at http://live.gnome.org/Nautilus
+
   * The code for Nautilus can be found in the repository ([http://svn.gnome.org/viewvc/nautilus/trunk viewvc] / [http://svn.gnome.org/svn/nautilus/trunk svn]). 
 
   * Here's the [http://library.gnome.org/users/user-guide/stable/nautilus.html.en end-user documentation] (accessed through Help -> Contents), interestingly enough there's a chapter on [http://library.gnome.org/users/user-guide/stable/gosnautilus-440.html.en Extending Nautilus] (though it is limited). 
