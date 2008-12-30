@@ -1,6 +1,11 @@
 2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Ok, I've thought up of a possible workaround for the threading issues.
+
+2008-12-30  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Added temporary hack in get_background_items back in again to try and work
 	around the multiple emblem problem (because it seems to work).
 
