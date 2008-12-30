@@ -35,7 +35,7 @@ import nautilussvn.lib.helper
 class Commit(InterfaceView):
     """
     Provides a user interface for the user to commit working copy
-    changes to a repository.
+    changes to a repository.  Pass it a list of local paths to commit.
     
     """
 
