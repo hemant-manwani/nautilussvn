@@ -1,5 +1,11 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/vcs/svn.py:
+	Fixed tiny, but with serious consequences, logic error. Cache should now
+	be properly bypassed when invalidate is set to True.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	NautilusSvn.py is in a state of flux right now (might be broken), but 
 	committing anyways to save changes.
