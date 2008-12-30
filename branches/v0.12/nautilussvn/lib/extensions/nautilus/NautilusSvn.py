@@ -252,6 +252,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # This is a hack to try and work around the multiple emblems on a single
         # item bug. Since get_background_items is called once when you enter
         # a directory we just invalidate all items immediately below it.
+        
+        
+        parent_path = split_path(path)
+        if parent_path in self.nautilusVFSFile_table:
+            item = self.nautilusVFSFile_table[parent_path]
+            item.invalidate_extension_info()
+        
         for child_basename in os.listdir(path):
             child_path = os.path.join(path, child_basename)
             if child_path in self.nautilusVFSFile_table:
