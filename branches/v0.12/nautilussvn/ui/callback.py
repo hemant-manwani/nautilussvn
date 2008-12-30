@@ -36,7 +36,7 @@ gtk.gdk.threads_init()
 
 class Notification(InterfaceView):
 
-    def __init__(self):
+    def __init__(self, callback_cancel=None):
         InterfaceView.__init__(self, "notification", "Notification")
     
         self.table = nautilussvn.ui.widget.Table(
@@ -44,12 +44,15 @@ class Notification(InterfaceView):
             [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path", "Mime Type"]
         )
+        
+        self.callback_cancel = callback_cancel
             
     def on_destroy(self, widget):
         self.close()
     
     def on_cancel_clicked(self, widget):
-        self.close()
+        if self.callback_cancel is not None:
+            self.callback_cancel()
         
     def on_ok_clicked(self, widget):
         self.close()
@@ -83,13 +86,6 @@ class VCSAction(threading.Thread):
         
         self.message = "Empty Message"
         
-        self.notification = Notification()
-        
-        # Tells the notification window to do a gtk.main_quit() when closing
-        # Is used when the script is run from a command line
-        if register_gtk_quit:
-            self.notification.register_gtk_quit()
-        
         self.client = client
         self.client.set_callback_cancel(self.cancel)
         self.client.set_callback_notify(self.notify)
@@ -103,11 +99,50 @@ class VCSAction(threading.Thread):
         self.func = None
         self.pre_func = None
         self.post_func = None
+        
+        self.login_tries = 0
+        self.cancel = False
+
+        self.notification = Notification(callback_cancel=self.set_cancel)
+        
+        # Tells the notification window to do a gtk.main_quit() when closing
+        # Is used when the script is run from a command line
+        if register_gtk_quit:
+            self.notification.register_gtk_quit()
     
     def cancel(self):
-        return True
+        """
+        pysvn calls this callback method frequently to see if the user wants
+        to cancel the action.  If self.cancel is True, then it will cancel
+        the action.  If self.cancel is False, it will continue.
+        
+        """
+        
+        return self.cancel
+
+    def set_cancel(self, cancel=True):
+        """
+        Used as a callback function by the Notification UI.  When the cancel
+        button is clicked, it sets self.cancel to True, and the cancel callback
+        method returns True.
+        
+        """
+        
+        self.cancel = cancel
     
     def notify(self, data):
+        """
+        This method is called every time the VCS function wants to tell us
+        something.  It passes us a dictionary of useful information.  When
+        this method is called, it appends some useful data to the notifcation
+        window.
+        
+        TODO: We need to implement this in a more VCS-agnostic way, since the
+        supplied data dictionary is pysvn-dependent.  I'm going to implement
+        something in lib/vcs/svn.py soon.
+        
+        """
+        
         self.notification.append([
             self.client.NOTIFY_ACTIONS[data["action"]],
             data["path"],
@@ -118,29 +153,101 @@ class VCSAction(threading.Thread):
             self.finish("Revision %s" % data["revision"].number)
     
     def finish(self, message=None):
+        """
+        This is called when the final notifcation message has been received,
+        or it is called manually when no final notification message is expected.
+        
+        It sets the current "status", and enables the OK button to allow
+        the user to leave the window.
+        
+        @type   message: string
+        @param  message: a message to show the user
+        
+        """
+        
         self.set_status(message)
         self.notification.toggle_ok_button(True)
     
     def get_log_message(self):
+        """
+        A callback method that retrieves a supplied log message.
+        
+        Returns a list where the first element is True/False.  Returning true
+        tells the action to continue, false tells it to cancel.  The second
+        element is the log message, which is specified by self.message.
+        self.message is set by calling the self.set_log_message() method from
+        the UI interface class.
+        
+        @rtype  (boolean, string)
+        @return (True=continue/False=cancel, log message)
+        
+        """
+        
         return True, self.message
     
     def get_login(self, realm, username, may_save):
-        dialog = nautilussvn.ui.dialog.Authorization(
+        """
+        A callback method that requests a username/password to login to a 
+        password-protected repository.  This method runs the Authentication
+        dialog, which provides a username, password, and saving widget.  The
+        dialog returns a tuple, which is returned directly to the VCS caller.
+        
+        If the login fails greater than three times, cancel the action.
+        
+        The dialog must be called from within a threaded block, otherwise it
+        will not be responsive.
+        
+        @type   realm: string
+        @param  realm: the realm of the repository
+        
+        @type   username: string
+        @param  username: username passed by the vcs caller
+        
+        @type   may_save: boolean
+        @param  may_save: whether or not the authentication can be saved
+        
+        @rtype  (boolean, string, string, boolean)
+        @return (True=continue/False=cancel,username,password,may_save)
+        
+        """
+    
+        if self.login_tries >= 3:
+            return (False, "", "", False)
+    
+        gtk.gdk.threads_enter()
+        dialog = nautilussvn.ui.dialog.Authentication(
             realm,
             may_save
         )
+        result = dialog.run()
+        gtk.gdk.threads_leave()
         
-        returner = dialog.run()
+        if result is not None:
+            self.login_tries += 1
         
-        if returner is not None:
-            return returner
-        else:
-            self.client.callback_cancel()
+        return result
     
     def get_ssl_trust(self, data):
+        """
+        A callback method that requires the user to either accept or deny
+        a certificate from an ssl secured repository.  It opens a dialog that
+        shows the user information about the ssl certificate and then gives
+        them the option of denying, accepting, or accepting once.
+
+        The dialog must be called from within a threaded block, otherwise it
+        will not be responsive.
+
+        @type   data: dictionary
+        @param  data: a dictionary with SSL certificate info
+        
+        @rtype  (boolean, int, boolean)
+        @return (True=Accept/False=Deny, number of accepted failures, remember)
+        
+        """
     
         ACCEPTED_FAILURES = 3
     
+        gtk.gdk.threads_enter()
         dialog = nautilissvn.ui.dialog.Certificate(
             data["realm"],
             data["hostname"],
@@ -149,8 +256,9 @@ class VCSAction(threading.Thread):
             data["valid_to"],
             data["finger_print"]
         )
-        
         result = dialog.run()
+        gtk.gdk.threads_leave()
+
         if result == 0:
             #Deny
             return (False, ACCEPTED_FAILURES, False)
@@ -162,14 +270,43 @@ class VCSAction(threading.Thread):
             return (True, ACCEPTED_FAILURES, True)
 
     def get_ssl_password(self, realm, may_save):
+        """
+        A callback method that is used to get an ssl certificate passphrase.
+        
+        The dialog must be called from within a threaded block, otherwise it
+        will not be responsive.       
+
+        @type   realm: string
+        @param  realm: the certificate realm
+        
+        @type   may_save: boolean
+        @param  may_save: whether or not the passphrase can be saved
+        
+        @rtype  (boolean, string, boolean)
+        @return (True=continue/False=cancel, password, may save)
+        
+        """
+        
+        gtk.gdk.threads_enter()
         dialog = nautilussvn.ui.dialog.CertAuthentication(
             realm,
             may_save
         )
-        
-        return dialog.run()
+        result = dialog.run()
+        gtk.gdk.threads_leave()
+
+        return result
         
     def set_log_message(self, message):
+        """
+        Set this action's log message from the UI interface.  self.message
+        is referred to when the VCS does the get_log_message callback.
+        
+        @type   message: string
+        @param  message: set a log message
+        
+        """
+        
         self.message = message
     
     def set_status(self, message):
