@@ -44,8 +44,9 @@ class Commit(InterfaceView):
 
     def __init__(self, paths):
         """
-        @type:  paths: list of strings
-        @param: paths: a list of local paths
+        
+        @type  paths:   list of strings
+        @param paths:   A list of local paths.
         
         """
     
@@ -75,6 +76,18 @@ class Commit(InterfaceView):
         self.message = nautilussvn.ui.widget.TextView(
             self.get_widget("message")
         )
+    
+    #
+    # Helper functions
+    # 
+    
+    def refresh_row_status(self):
+        path = self.files_table.get_row(self.last_row_clicked)[1]
+        self.files_table.get_row(self.last_row_clicked)[3] =  self.vcs.status(path)[0].text_status
+        
+    #
+    # Event handlers
+    #
     
     def on_destroy(self, widget):
         self.close()
@@ -151,7 +164,8 @@ class Commit(InterfaceView):
             
             if event.button == 3:
                 self.last_row_clicked = path
-                context_menu = nautilussvn.ui.widget.ContextMenu([{
+                context_menu = nautilussvn.ui.widget.ContextMenu([
+                    {
                         "label": "View Diff",
                         "signals": {
                             "activate": {
@@ -160,7 +174,8 @@ class Commit(InterfaceView):
                             }
                         },
                         "condition": self.condition_view_diff
-                    },{
+                    },
+                    {
                         "label": "Open",
                         "signals": {
                             "activate": {
@@ -169,7 +184,8 @@ class Commit(InterfaceView):
                             }
                         },
                         "condition": (lambda: True)
-                    },{
+                    },
+                    {
                         "label": "Browse to",
                         "signals": {
                             "activate": {
@@ -178,7 +194,8 @@ class Commit(InterfaceView):
                             }
                         },
                         "condition": (lambda: True)
-                    },{
+                    },
+                    {
                         "label": "Delete",
                         "signals": {
                             "activate": {
@@ -187,7 +204,8 @@ class Commit(InterfaceView):
                             }
                         },
                         "condition": (lambda: True)
-                    },{
+                    },
+                    {
                         "label": "Add",
                         "signals": {
                             "activate": {
@@ -196,7 +214,8 @@ class Commit(InterfaceView):
                             }
                         },
                         "condition": self.condition_add
-                    },{
+                    },
+                    {
                         "label": "Revert",
                         "signals": {
                             "activate": {
@@ -205,9 +224,11 @@ class Commit(InterfaceView):
                             }
                         },
                         "condition": self.condition_revert
-                    },{
+                    },
+                    {
                         "label": "Add to ignore list",
-                        'submenu': [{
+                        'submenu': [
+                            {
                                 "label": os.path.basename(fileinfo[1]),
                                 "signals": {
                                     "activate": {
@@ -286,13 +307,19 @@ class Commit(InterfaceView):
         message = dialog.run()
         if message is not None:
             self.message.set_text(message)
-            
+    
+    #
+    # Conditions
+    # TODO: I'm not sure if the comments below are really needed (they describe
+    # what is being done, it's basically an English version of the code below).
+    #
+    
     def condition_add(self):
         """
-        Determines whether or not to show the add context menu item.
         Show the Add item when the file is unversioned.
         
-        @rtype  boolean
+        @rtype:     boolean
+        @return:    Whether or not to show the add context menu item.
         
         """
         
@@ -301,11 +328,11 @@ class Commit(InterfaceView):
     
     def condition_revert(self):
         """
-        Determines whether or not to show the revert context menu item.
         Show the Revert item when the file has been added but not committed
         to the repository.
         
-        @rtype  boolean
+        @rtype:     boolean
+        @return:    Whether or not to show the revert context menu item.
         
         """
 
@@ -314,25 +341,16 @@ class Commit(InterfaceView):
 
     def condition_view_diff(self):
         """
-        Determines whether or not to show the view diff context menu item.
         Show the View Diff item when the file has been modified but not
         yet committed to the repository.
         
-        @rtype  boolean
+        @rtype:  boolean
+        @return: Whether or not to show the view diff context menu item.
         
         """
 
         path = self.files_table.get_row(self.last_row_clicked)[1]
         return self.vcs.is_modified(path)
-    
-    def refresh_row_status(self):
-        """
-        Refresh the status of the row.
-   
-        """
-        
-        path = self.files_table.get_row(self.last_row_clicked)[1]
-        self.files_table.get_row(self.last_row_clicked)[3] =  self.vcs.status(path)[0].text_status
         
 if __name__ == "__main__":
     import sys

@@ -211,11 +211,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @type   window: NautilusNavigationWindow
         @param  window:
         
-        @type   items: list of NautilusVFSFile
+        @type   items:  list of NautilusVFSFile
         @param  items:
         
-        @rtype: list of MenuItems
-        @return: The context menu entries to add to the menu.
+        @rtype:         list of MenuItems
+        @return:        The context menu entries to add to the menu.
         
         """
         
@@ -239,11 +239,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @type   window: NautilusNavigationWindow
         @param  window:
         
-        @type   item: NautilusVFSFile
+        @type   item:   NautilusVFSFile
         @param  item:
         
-        @rtype: list of MenuItems
-        @return: The context menu entries to add to the menu.
+        @rtype:         list of MenuItems
+        @return:        The context menu entries to add to the menu.
         
         """
         
@@ -292,10 +292,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         Set the emblem for a path by status. 
         
         @type   path: string
-        @param  path: the path for which to set the emblem
+        @param  path: The path for which to set the emblem.
         
         @type   status: string
-        @param  status: a string indicating the status of an item (see: EMBLEMS)
+        @param  status: A string indicating the status of an item (see: EMBLEMS).
         """
         
         # Try and lookup the NautilusVFSFile in the lookup table since we need it
@@ -320,10 +320,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         This is the callback that StatusMonitor calls. 
         
         @type   path: string
-        @param  path: the path of the item something interesting happend to
+        @param  path: The path of the item something interesting happend to.
         
         @type   status: string
-        @param  status: a string indicating the status of an item (see: EMBLEMS)
+        @param  status: A string indicating the status of an item (see: EMBLEMS).
         """
         
         # Begin debugging code
@@ -376,8 +376,8 @@ class MainContextMenu():
         This function is really only used to contain the menu defintion. The
         actual menu is build using create_menu_from_definition.
         
-        @rtype: list of MenuItems
-        @return: A list of MenuItems representing the context menu.
+        @rtype:     list of MenuItems
+        @return:    A list of MenuItems representing the context menu.
         """
         
         # The following dictionary defines the complete contextmenu
@@ -744,8 +744,8 @@ class MainContextMenu():
         @type   menu_definition  list
         @param  menu_definition  A list of definition items.
         
-        @rtype: list of MenuItems
-        @return: A list of MenuItems representing the context menu.
+        @rtype:     list of MenuItems
+        @return:    A list of MenuItems representing the context menu.
         
         """
         
@@ -1075,7 +1075,7 @@ class MainContextMenu():
         @param  menu_item: The menu item that was selected.
         
         @type   paths: list
-        @param  paths: A list of paths to add
+        @param  paths: A list of paths to add.
         """
         
         client = pysvn.Client()

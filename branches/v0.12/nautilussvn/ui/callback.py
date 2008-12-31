@@ -112,7 +112,7 @@ class VCSAction(threading.Thread):
     
     def cancel(self):
         """
-        pysvn calls this callback method frequently to see if the user wants
+        PySVN calls this callback method frequently to see if the user wants
         to cancel the action.  If self.cancel is True, then it will cancel
         the action.  If self.cancel is False, it will continue.
         
@@ -161,7 +161,7 @@ class VCSAction(threading.Thread):
         the user to leave the window.
         
         @type   message: string
-        @param  message: a message to show the user
+        @param  message: A message to show the user.
         
         """
         
@@ -178,8 +178,8 @@ class VCSAction(threading.Thread):
         self.message is set by calling the self.set_log_message() method from
         the UI interface class.
         
-        @rtype  (boolean, string)
-        @return (True=continue/False=cancel, log message)
+        @rtype:  (boolean, string)
+        @return: (True=continue/False=cancel, log message)
         
         """
         
@@ -197,17 +197,17 @@ class VCSAction(threading.Thread):
         The dialog must be called from within a threaded block, otherwise it
         will not be responsive.
         
-        @type   realm: string
-        @param  realm: the realm of the repository
+        @type   realm:      string
+        @param  realm:      The realm of the repository.
         
-        @type   username: string
-        @param  username: username passed by the vcs caller
+        @type   username:   string
+        @param  username:   Username passed by the vcs caller.
         
-        @type   may_save: boolean
-        @param  may_save: whether or not the authentication can be saved
+        @type   may_save:   boolean
+        @param  may_save:   Whether or not the authentication can be saved.
         
-        @rtype  (boolean, string, string, boolean)
-        @return (True=continue/False=cancel,username,password,may_save)
+        @rtype:             (boolean, string, string, boolean)
+        @return:            (True=continue/False=cancel, username,password, may_save)
         
         """
     
@@ -237,11 +237,11 @@ class VCSAction(threading.Thread):
         The dialog must be called from within a threaded block, otherwise it
         will not be responsive.
 
-        @type   data: dictionary
-        @param  data: a dictionary with SSL certificate info
+        @type   data:   dictionary
+        @param  data:   A dictionary with SSL certificate info.
         
-        @rtype  (boolean, int, boolean)
-        @return (True=Accept/False=Deny, number of accepted failures, remember)
+        @rtype:         (boolean, int, boolean)
+        @return:        (True=Accept/False=Deny, number of accepted failures, remember)
         
         """
     
@@ -276,14 +276,14 @@ class VCSAction(threading.Thread):
         The dialog must be called from within a threaded block, otherwise it
         will not be responsive.       
 
-        @type   realm: string
-        @param  realm: the certificate realm
+        @type   realm:      string
+        @param  realm:      The certificate realm.
         
-        @type   may_save: boolean
-        @param  may_save: whether or not the passphrase can be saved
+        @type   may_save:   boolean
+        @param  may_save:   Whether or not the passphrase can be saved.
         
-        @rtype  (boolean, string, boolean)
-        @return (True=continue/False=cancel, password, may save)
+        @rtype:             (boolean, string, boolean)
+        @return:            (True=continue/False=cancel, password, may save)
         
         """
         
@@ -303,7 +303,7 @@ class VCSAction(threading.Thread):
         is referred to when the VCS does the get_log_message callback.
         
         @type   message: string
-        @param  message: set a log message
+        @param  message: Set a log message.
         
         """
         
@@ -311,14 +311,14 @@ class VCSAction(threading.Thread):
     
     def set_status(self, message):
         """
-        Set the current status of the vcs action.  Currently, this method
+        Set the current status of the VCS action.  Currently, this method
         is called at the beginning and end of each action, to display what is
         going on.  Currently, it just appends the status message to the 
         notification window.  In the future, I may set up a progress bar
         and put the status message there.
         
         @type   message: string
-        @param  message: a status message        
+        @param  message: A status message.
         
         """
         
@@ -333,7 +333,7 @@ class VCSAction(threading.Thread):
         This is generally called from the ui class.
 
         @type   message: string
-        @param  message: a status message
+        @param  message: A status message.
         
         """
         
@@ -345,7 +345,7 @@ class VCSAction(threading.Thread):
         This is generally called from the ui class.
 
         @type   message: string
-        @param  message: a status message
+        @param  message: A status message.
         
         """
 
@@ -356,14 +356,8 @@ class VCSAction(threading.Thread):
         Set a callback function to be run before the VCS action begins running.
         The actual function is called from the self.run() method.
         
-        @type   func: def
-        @param  func: the function
-        
-        @type   *args: arguments
-        @param  *args: any passed arguments
-
-        @type   **kwargs: keyword arguments
-        @param  **kwargs: any passed keyword arguments
+        @type   func: function
+        @param  func: The function to run before the VCS action begins running.
         
         """
 
@@ -373,17 +367,11 @@ class VCSAction(threading.Thread):
     
     def run_after(self, func, *args, **kwargs):
         """
-        Set a callback function to be run after the VCS action has run.
+        Set a callback function to be run after the VCS action has ran.
         The actual function is called from the self.run() method.
         
-        @type   func: def
-        @param  func: the function
-        
-        @type   *args: arguments
-        @param  *args: any passed arguments
-
-        @type   **kwargs: keyword arguments
-        @param  **kwargs: any passed keyword arguments
+        @type   func: function
+        @param  func: The function to run after the VCS action has ran.
         
         """
         
@@ -393,17 +381,11 @@ class VCSAction(threading.Thread):
     
     def set_action(self, func, *args, **kwargs):
         """
-        Set the callback function to be run as the main vcs action.
+        Set the callback function to be run as the main VCS action.
         The actual function is called from the self.run() method.
         
-        @type   func: def
-        @param  func: the function
-        
-        @type   *args: arguments
-        @param  *args: any passed arguments
-
-        @type   **kwargs: keyword arguments
-        @param  **kwargs: any passed keyword arguments
+        @type   func: function
+        @param  func: The function to be run as the main VCS action.
         
         """
 

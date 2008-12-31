@@ -186,8 +186,9 @@ class SVN:
         @type   depth: one of pysvn.depth
         @param  depth: Defines how deep the status check should go.
         
-        @rtype: list of PysvnStatus
-        @return: A list of statuses for the given path.
+        @rtype:        list of PysvnStatus
+        @return:       A list of statuses for the given path, with the status 
+                       for the path being the first item in the list.
         
         """
         
@@ -354,14 +355,14 @@ class SVN:
         """
         Retrieves a list of files that have one of a set of statuses
         
-        @type   paths: list
-        @param  paths: a list of paths or files
+        @type   paths:      list
+        @param  paths:      A list of paths or files.
         
-        @type   statuses: list
-        @param  statuses: a list of pysvn.wc_status_kind statuses
+        @type   statuses:   list
+        @param  statuses:   A list of pysvn.wc_status_kind statuses.
         
-        @rtype list
-        @returner a list of PysvnStatus objects
+        @rtype:             list
+        @return:            A list of PysvnStatus objects.
         
         """
 
@@ -399,11 +400,11 @@ class SVN:
         """
         Retrieve the repository URL for the given working copy path
         
-        @type   path: string
-        @param  path: a working copy path
+        @type   path:   string
+        @param  path:   A working copy path.
         
-        @rtype  string
-        @return a repository URL
+        @rtype:         string
+        @return:        A repository URL.
         
         """
         
@@ -422,11 +423,11 @@ class SVN:
         """
         Retrieve the current revision number for a path
         
-        @type   path: string
-        @param  path: a working copy path
+        @type   path:   string
+        @param  path:   A working copy path.
         
-        @rtype  int
-        @return a repository revision
+        @rtype:         integer
+        @return:        A repository revision.
         
         """
     
@@ -453,11 +454,11 @@ class SVN:
         Generates a safe path to use with the prop* functions.
         If the given path is unversioned, go to the next path up.
 
-        @type   path: string
-        @param  path: a file or directory path
+        @type   path:   string
+        @param  path:   A file or directory path.
         
-        @rtype  string
-        @return a prop* function-safe path
+        @rtype:         string
+        @return:        A prop* function-safe path.
 
         """
 
@@ -473,13 +474,13 @@ class SVN:
         add a recursive property to the parent path
         
         @type   path: string
-        @param  path: a file or directory path
+        @param  path: A file or directory path.
         
         @type   prop_name: string
-        @param  prop_name: an svn property name
+        @param  prop_name: An svn property name.
         
         @type   prop_value: string
-        @param  prop_value: an svn property value/pattern
+        @param  prop_value: An svn property value/pattern.
         
         """
         
@@ -511,13 +512,13 @@ class SVN:
         
     def proplist(self, path):
         """
-        Retrieves a dict of properties for a path
+        Retrieves a dictionary of properties for a path.
         
-        @type   path: string
-        @param  path: a file or directory path
+        @type   path:   string
+        @param  path:   A file or directory path.
         
-        @rtype  dict
-        @return a dict of properties
+        @rtype:         dictionary
+        @return:        A dictionary of properties.
         
         """
         
@@ -528,14 +529,15 @@ class SVN:
         Retrieves a dictionary of the prop_value of the given
         path and prop_name
         
-        @type   path: string
-        @param  path: a file or directory path
+        @type   path:       string
+        @param  path:       A file or directory path.
         
-        @type   prop_name: string or self.PROPERTIES
-        @param  prop_name: an svn property name
+        @type   prop_name:  string or self.PROPERTIES
+        @param  prop_name:  An svn property name.
         
-        @rtype  dict
-        @return a dict where the key is the path, the value is the prop_value
+        @rtype:             dictionary
+        @return:            A dictionary where the key is the path, the value 
+                            is the prop_value.
         
         """
 
@@ -564,10 +566,10 @@ class SVN:
         Removes a property from a given path
         
         @type   path: string
-        @param  path: a file or directory path
+        @param  path: A file or directory path.
         
         @type   prop_name: string or self.PROPERTIES
-        @param  prop_name: an svn property name
+        @param  prop_name: An svn property name.
         
         """
         
@@ -624,17 +626,17 @@ class SVN:
         """
         Create a revision object usable by pysvn
         
-        @type   kind: string
-        @param  kind: an svn.REVISIONS keyword
+        @type   kind:   string
+        @param  kind:   An svn.REVISIONS keyword.
         
-        @type   date: integer
-        @param  date: used for kind=date, in the form of UNIX TIMESTAMP (secs)
+        @type   date:   integer
+        @param  date:   Used for kind=date, in the form of UNIX TIMESTAMP (secs).
         
         @type   number: integer
-        @param  number: used for kind=number, specifies the revision number
+        @param  number: Used for kind=number, specifies the revision number.
         
-        @rtype  pysvn.Revision object
-        @return a pysvn.Revision object
+        @rtype:         pysvn.Revision object
+        @return:        A pysvn.Revision object.
         
         """
         
@@ -674,7 +676,7 @@ class SVN:
         Add files or directories to the repository
         
         @type   paths: list
-        @param  paths: a list of files/directories
+        @param  paths: A list of files/directories.
         
         """
         
@@ -686,13 +688,13 @@ class SVN:
         a local path or a repository URL.  revision is a pysvn.Revision object.
         
         @type   src: string
-        @param  src: source url or path
+        @param  src: Source URL or path.
         
         @type   dest: string
-        @param  dest: destination url or path
+        @param  dest: Destination URL or path.
         
         @type   revision: pysvn.Revision object
-        @param  revision: a pysvn Revision object
+        @param  revision: A pysvn.Revision object.
         
         """
 
@@ -704,16 +706,16 @@ class SVN:
         Checkout a working copy from a vcs repository
         
         @type   url: string
-        @param  url: a repository url
+        @param  url: A repository url.
         
         @type   path: string
-        @param  path: a local destination for the working copy
+        @param  path: A local destination for the working copy.
         
         @type   recurse: boolean
-        @param  recurse: whether or not to run a recursive checkout
+        @param  recurse: Whether or not to run a recursive checkout.
         
         @type   ignore_externals: boolean
-        @param  ignore_externals: whether or not to ignore externals
+        @param  ignore_externals: Whether or not to ignore externals.
         
         """
         
@@ -724,7 +726,7 @@ class SVN:
         Clean up a working copy.
         
         @type   path: string
-        @param  path: a local working copy path
+        @param  path: A local working copy path.
         
         """
         
@@ -735,7 +737,7 @@ class SVN:
         Revert files or directories so they are unversioned
         
         @type   paths: list
-        @param  paths: a list of files/directories
+        @param  paths: A list of files/directories.
         
         """
         
@@ -746,16 +748,16 @@ class SVN:
         Commit a list of files to the repository.
         
         @type   paths: list
-        @param  paths: a list of files/directories
+        @param  paths: A list of files/directories.
         
         @type   log_message: string
-        @param  log_message: a commit log message
+        @param  log_message: A commit log message.
         
         @type   recurse: boolean
-        @param  recurse: whether or not to recurse into sub-directories
+        @param  recurse: Whether or not to recurse into sub-directories.
         
         @type   keep_locks: boolean
-        @param  keep_locks: whether or not to keep locks on commit
+        @param  keep_locks: Whether or not to keep locks on commit.
         
         """
         
@@ -766,13 +768,7 @@ class SVN:
         Perform a vcs action.
         
         @type   func: def
-        @param  func: a function
-        
-        @type   *args: arguments
-        @param  *args: any arguments passed
-        
-        @type   **kwargs: keyword arguments
-        @param  **kwargs: any keyword arguments passed
+        @param  func: A function.
         
         """
         
