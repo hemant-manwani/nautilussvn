@@ -466,8 +466,6 @@ class IPythonView(ConsoleView, IterableIPShell):
     Key press callback with plenty of shell goodness, like history, 
     autocompletions, etc.
     
-    @param widget: Widget that key press occured in.
-    @type widget: gtk.Widget
     @param event: Event object.
     @type event: gtk.gdk.Event
     

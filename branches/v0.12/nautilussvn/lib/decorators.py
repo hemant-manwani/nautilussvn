@@ -22,10 +22,12 @@
 
 """
 
+Simple decorators (usable in Python >= 2.4).
+
 See: 
 
-  * https://linkchecker.svn.sourceforge.net/svnroot/linkchecker/trunk/linkchecker/linkcheck/decorators.py
-  * http://wiki.python.org/moin/PythonDecoratorLibrary
+  - https://linkchecker.svn.sourceforge.net/svnroot/linkchecker/trunk/linkchecker/linkcheck/decorators.py
+  - http://wiki.python.org/moin/PythonDecoratorLibrary
   
 """
 

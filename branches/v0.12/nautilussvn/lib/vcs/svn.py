@@ -20,6 +20,12 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+"""
+
+Concrete VCS implementation for Subversion functionality.
+
+"""
+
 import os.path
 from os.path import isdir, isfile
 
@@ -139,19 +145,18 @@ class SVN:
         "Only this item":                           DEPTHS["empty"]
     }
     
-    # This variable is used to maintain a status cache. Paths function as keys
-    # and every item in the cache has all the statuses for all the items below
-    # it, though the first item is always the status for the path. 
-    #
-    # It looks like:
-    # 
-    # status_cache = {
-    #    "/foo": [<PysvnStatus u'foo'>, <PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
-    #    "/foo/bar": [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
-    #    "/foo/bar/baz": [<PysvnStatus u'baz'>]
-    # }
-    #
-    #
+    #: This variable is used to maintain a status cache. Paths function as keys
+    #: and every item in the cache has all the statuses for all the items below
+    #: it, though the first item is always the status for the path. 
+    #: 
+    #: It looks like:::
+    #:  
+    #:     status_cache = {
+    #:        "/foo": [<PysvnStatus u'foo'>, <PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
+    #:        "/foo/bar": [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
+    #:        "/foo/bar/baz": [<PysvnStatus u'baz'>]
+    #:     }
+    #:
     status_cache = {}
     
     def __init__(self):

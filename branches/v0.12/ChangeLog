@@ -1,5 +1,20 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/debug/ipython_view.py:
+	* nautilussvn/lib/decorators.py:
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/extensions/nautilus/__init__.py:
+	* nautilussvn/lib/helper.py:
+	* nautilussvn/lib/settings.py:
+	* nautilussvn/lib/vcs/svn.py:
+	* nautilussvn/ui/__init__.py:
+	* nautilussvn/ui/about.py:
+	* nautilussvn/ui/dialog.py:
+	* nautilussvn/ui/unlock.py:
+	Updated all docstrings and other inline documentation to conform to EpyDoc.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/helper.py:
 	* nautilussvn/lib/settings.py:
 	Replaced "dict" with "dictionary" for comments.
