@@ -147,14 +147,14 @@ class SVN:
     
     #: This variable is used to maintain a status cache. Paths function as keys
     #: and every item in the cache has all the statuses for all the items below
-    #: it, though the first item is always the status for the path. 
+    #: it, though the last item is always the status for the path. 
     #: 
     #: It looks like:::
     #:  
     #:     status_cache = {
-    #:        "/foo": [<PysvnStatus u'foo'>, <PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
-    #:        "/foo/bar": [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
     #:        "/foo/bar/baz": [<PysvnStatus u'baz'>]
+    #:        "/foo/bar": [<PysvnStatus u'baz'>, <PysvnStatus u'bar'>, ]
+    #:        "/foo": [<PysvnStatus u'foo'>, <PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
     #:     }
     #:
     status_cache = {}
@@ -216,24 +216,19 @@ class SVN:
         #   <PysvnStatus u'foo/bar'>, 
         #   <PysvnStatus u'foo'>]
         #
-        # To the one described in the comments for status_cache.
+        # To the one described in the comments for C{status_cache}.
         #
-        
-        # PySVN starts deep and then goes up the tree (see above) so we just
-        # revese it to make it easier on us (otherwise we'd have to walk it
-        # in reverse using index values).
-        statuses.reverse()
 
         for status in statuses:
-            full_path = os.path.join(path, status.data["path"])
+            path_bit = os.path.abspath(os.path.join(path, status.data["path"]))
             
-            while full_path != "":
+            while path_bit != "":
                 if (invalidate or 
-                        not full_path in self.status_cache):
-                    self.status_cache[full_path] = []
-                self.status_cache[full_path].append(status)
-                
-                full_path = split_path(full_path)
+                        not path_bit in self.status_cache):
+                    self.status_cache[path_bit] = []
+                    
+                self.status_cache[path_bit].append(status)
+                path_bit = split_path(path_bit)
         
         return self.status_cache[path]
     #
@@ -316,7 +311,7 @@ class SVN:
     #
     
     def has_unversioned(self, path):
-        all_status = self.status_with_cache(path)[1:]
+        all_status = self.status_with_cache(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
@@ -325,7 +320,7 @@ class SVN:
         return False
     
     def has_added(self, path):
-        all_status = self.status_with_cache(path)[1:]
+        all_status = self.status_with_cache(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -334,7 +329,7 @@ class SVN:
         return False
         
     def has_modified(self, path):
-        all_status = self.status_with_cache(path)[1:]
+        all_status = self.status_with_cache(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -343,7 +338,7 @@ class SVN:
         return False
 
     def has_deleted(self, path):
-        all_status = self.status_with_cache(path)[1:]
+        all_status = self.status_with_cache(path)[:-1]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.deleted:
