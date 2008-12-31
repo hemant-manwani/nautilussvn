@@ -28,21 +28,8 @@ Known issues:
 
   - Emblems sometimes don't update untill the selection is modified.
   
-    This is either caused by threading problems or update_file_info not being 
-    called. There's a bunch of FIXME's below with more information.
-    
-    A quick workaround for this that might work:
-    
-      - At the moment we're _only_ using our inotify handler to let us know
-        when something changes. This is a workaround for C{update_file_info}'s
-        limitations. We're basically only using C{update_file_info} to apply the 
-        emblem. However, C{update_file_info} works perfectly to let us know
-        an item we're currently viewing modified.
-        
-        So the workaround is to use that... next to the inotify handler.
-        
-        The inotify handler will be used to let us know of things we can't see
-        and C{update_file_info} for those things that we can see.
+    This is caused by threading problems. There's a bunch of FIXME's below 
+    with more information.
 
   - Multiple emblems are attached to a single item which leads to the one
     obscuring the other. So if an item has "normal" status, but it changes to 
