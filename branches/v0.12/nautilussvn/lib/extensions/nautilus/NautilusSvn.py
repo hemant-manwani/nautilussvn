@@ -1197,8 +1197,10 @@ class StatusMonitor():
     }
     
    
-    #: A dictionary to keep track of the paths we're watching.::
+    #: A dictionary to keep track of the paths we're watching.
     #: 
+    #: It looks like:::
+    #:
     #:     watches = {
     #:         # Always None because we just want to check if a watch has been set
     #:         "/foo/bar/baz": None
