@@ -1,5 +1,11 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/api/api:
+	Deleted API documentation, shouldn't be in the repo. We'll upload it
+	somewhere later.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* generate_documentation.sh:
 	* nautilussvn/api
 	First generation of the Epydoc documentation.
