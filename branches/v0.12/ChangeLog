@@ -1,5 +1,10 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/vcs/svn.py:
+	Oops, comments for status_cache had some errors in them. Fixed.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Fixed minor spelling error.
 
