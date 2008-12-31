@@ -1,5 +1,11 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/helper.py:
+	* nautilussvn/lib/settings.py:
+	Replaced "dict" with "dictionary" for comments.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	* nautilussvn/lib/helper.py:
 	* nautilussvn/lib/settings.py:
