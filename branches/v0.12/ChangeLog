@@ -1,6 +1,11 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* generate_documentation.sh:
+	Added --graphs all to generate diagrams etc.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* generate_documentation.sh:
 	gnome-open started annoying me when the documentation was already open
 	
 	* api:
