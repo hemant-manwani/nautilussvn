@@ -86,7 +86,6 @@ import gtk
 
 import nautilussvn.lib.vcs
 from nautilussvn.lib.helper import split_path
-from nautilussvn.lib.decorators import print_timing
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
@@ -1265,7 +1264,6 @@ class StatusMonitor():
             self.watch_manager, self.VCSProcessEvent(self, self.vcs_client))
         self.notifier.start()
     
-    @print_timing
     def add_watch(self, path):
         """
         
@@ -1370,7 +1368,7 @@ class StatusMonitor():
         if not self.vcs_client.is_in_a_or_a_working_copy(path): return
         
         # Begin debugging information
-        #~ print "Debug: StatusMonitor.status() called for %s" % path
+        print "Debug: StatusMonitor.status() called for %s" % path
         # End debugging information
         
         # We need the status object for the item alone
@@ -1415,20 +1413,24 @@ class StatusMonitor():
         # Verifiying the rest of the statuses is common for both files and directories.
         if status in self.STATUS:
             self.callback(path, self.STATUS[status])
+            
+            # Now we have to invalidate the parent directories
             while path != "":
                 path = split_path(path)
+                if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+                    
                 if status in (
                     pysvn.wc_status_kind.added, 
                     pysvn.wc_status_kind.deleted, 
                     pysvn.wc_status_kind.modified,
                 ):
-                    if (self.vcs_client.is_in_a_or_a_working_copy(path) and
-                            not self.vcs_client.is_added(path)): # FIXME: we should probably bypass the cache here
+                    if not self.vcs_client.is_added(path): # FIXME: we should probably bypass the cache here
                         self.callback(path, "modified")
                 elif status in (
                         pysvn.wc_status_kind.normal,
                         pysvn.wc_status_kind.unversioned, # FIXME: but only if it was previously versioned
                     ):
+                    
                     # MARKER: performance 
                     self.status(path, invalidate=invalidate)
                     
