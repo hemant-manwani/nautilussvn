@@ -146,9 +146,9 @@ class SVN:
     # It looks like:
     # 
     # status_cache = {
-    #    "/foo": [<PysvnStatus u'foo'>], [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>],
-    #    "/foo/bar: [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>],
-    #    "/foo/bar/baz: [<PysvnStatus u'baz'>]
+    #    "/foo": [<PysvnStatus u'foo'>, <PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
+    #    "/foo/bar": [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
+    #    "/foo/bar/baz": [<PysvnStatus u'baz'>]
     # }
     #
     #
