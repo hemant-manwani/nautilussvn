@@ -1,5 +1,12 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	This is being caused by threading problems and that's not a valid 
+	workaround since we have to monitor folders below. A valid workaround
+	is moving everything status checks out-of-process.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/decorators.py:
 	Updated module docstring.
 	
