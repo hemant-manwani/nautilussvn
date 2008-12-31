@@ -105,8 +105,8 @@ class SettingsManager:
         @type keyword:  string
         @param keyword: A particular setting in a section.
         
-        @rtype:         dict or string
-        @return:        Either a dict or string with setting(s).
+        @rtype:         dictionary or string
+        @return:        Either a dictionary or string with setting(s).
         
         """
         
@@ -134,7 +134,7 @@ class SettingsManager:
         @type keyword:  string
         @param keyword: A particular setting in a section.
         
-        @type value:    string or dict
+        @type value:    string or dictionary
         @param value:   Setting value.
 
         """
@@ -218,8 +218,8 @@ class SettingsManager:
         @type keyword:  string
         @param keyword: A particular setting in a section.
         
-        @rtype:         dict or string
-        @return:        Either a dict or string with setting(s).
+        @rtype:         dictionary or string
+        @return:        Either a dictionary or string with setting(s).
         
         """
         

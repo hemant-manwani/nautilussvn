@@ -222,9 +222,9 @@ def decode_revisions(string, head):
 
 def get_diff_tool():
     """
-    Gets the path to the diff_tool, and whether or not to swap lhs/rhs
+    Gets the path to the diff_tool, and whether or not to swap lhs/rhs.
     
-    @rtype:     dict
+    @rtype:     dictionary
     @return:    A dictionary with the diff tool path and swap boolean value.
     """
     
