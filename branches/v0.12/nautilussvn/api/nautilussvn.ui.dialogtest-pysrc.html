@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>nautilussvn.ui.dialogtest</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="nautilussvn-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="nautilussvn-module.html">Package&nbsp;nautilussvn</a> ::
+        <a href="nautilussvn.ui-module.html">Package&nbsp;ui</a> ::
+        Module&nbsp;dialogtest
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="nautilussvn.ui.dialogtest-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="nautilussvn.ui.dialogtest-module.html">Module nautilussvn.ui.dialogtest</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># This is an extension to the Nautilus file manager to allow better </tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># integration with the Subversion source control system.</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># </tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Copyright (C) 2006-2008 by Jason Field &lt;jason@jasonfield.com&gt;</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Copyright (C) 2007-2008 by Bruce van der Kooij &lt;brucevdkooij@gmail.com&gt;</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># Copyright (C) 2008-2008 by Adam Plumb &lt;adamplumb@gmail.com&gt;</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># </tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># NautilusSvn is free software; you can redistribute it and/or modify</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># the Free Software Foundation; either version 2 of the License, or</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># (at your option) any later version.</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># </tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># NautilusSvn is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># GNU General Public License for more details.</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># </tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment"># along with NautilusSvn;  If not, see &lt;http://www.gnu.org/licenses/&gt;.</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt class="py-comment">#</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-comment"></tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pygtk</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">gobject</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">gtk</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line"> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Package nautilussvn=nautilussvn-module.html"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-0', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-1" class="py-name" targets="Package nautilussvn.ui=nautilussvn.ui-module.html"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-1', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-2" class="py-name" targets="Module nautilussvn.ui.dialog=nautilussvn.ui.dialog-module.html"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-2', 'dialog', 'link-2');">dialog</a></tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line"> </tt>
+<a name="CertificateTest"></a><div id="CertificateTest-def"><a name="L29"></a><tt class="py-lineno">29</tt> <a class="py-toggle" href="#" id="CertificateTest-toggle" onclick="return toggle('CertificateTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.CertificateTest-class.html">CertificateTest</a><tt class="py-op">:</tt> </tt>
+</div><div id="CertificateTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="CertificateTest-expanded"><a name="CertificateTest.__init__"></a><div id="CertificateTest.__init__-def"><a name="L30"></a><tt class="py-lineno">30</tt> <a class="py-toggle" href="#" id="CertificateTest.__init__-toggle" onclick="return toggle('CertificateTest.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.CertificateTest-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CertificateTest.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="CertificateTest.__init__-expanded"><a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-3', 'dialog', 'link-2');">dialog</a></tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-4', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-5', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-6', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Class nautilussvn.ui.dialog.Certificate=nautilussvn.ui.dialog.Certificate-class.html"><a title="nautilussvn.ui.dialog.Certificate" class="py-name" href="#" onclick="return doclink('link-7', 'Certificate', 'link-7');">Certificate</a></tt><tt class="py-op">(</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">            <tt class="py-name">realm</tt><tt class="py-op">=</tt><tt class="py-string">"this realm"</tt><tt class="py-op">,</tt> <tt class="py-name">host</tt><tt class="py-op">=</tt><tt class="py-string">"this host"</tt><tt class="py-op">,</tt>  </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">            <tt class="py-name">issuer_from</tt><tt class="py-op">=</tt><tt class="py-string">"2008-10-20"</tt><tt class="py-op">,</tt> <tt class="py-name">issuer_to</tt><tt class="py-op">=</tt><tt class="py-string">"2008-12-12"</tt><tt class="py-op">,</tt>  </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">            <tt class="py-name">valid</tt><tt class="py-op">=</tt><tt class="py-string">"valid from xxx to xxx"</tt><tt class="py-op">,</tt> <tt class="py-name">fingerprint</tt><tt class="py-op">=</tt><tt class="py-string">"this fingerprint"</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">        <tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">             </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-8', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method nautilussvn.ui.callback.VCSAction.run()=nautilussvn.ui.callback.VCSAction-class.html#run,Method nautilussvn.ui.dialog.Authentication.run()=nautilussvn.ui.dialog.Authentication-class.html#run,Method nautilussvn.ui.dialog.CertAuthentication.run()=nautilussvn.ui.dialog.CertAuthentication-class.html#run,Method nautilussvn.ui.dialog.Certificate.run()=nautilussvn.ui.dialog.Certificate-class.html#run,Method nautilussvn.ui.dialog.Confirmation.run()=nautilussvn.ui.dialog.Confirmation-class.html#run,Method nautilussvn.ui.dialog.FileChooser.run()=nautilussvn.ui.dialog.FileChooser-class.html#run,Method nautilussvn.ui.dialog.FolderChooser.run()=nautilussvn.ui.dialog.FolderChooser-class.html#run,Method nautilussvn.ui.dialog.PreviousMessages.run()=nautilussvn.ui.dialog.PreviousMessages-class.html#run,Method nautilussvn.ui.dialog.Property.run()=nautilussvn.ui.dialog.Property-class.html#run"><a title="nautilussvn.ui.callback.VCSAction.run
+nautilussvn.ui.dialog.Authentication.run
+nautilussvn.ui.dialog.CertAuthentication.run
+nautilussvn.ui.dialog.Certificate.run
+nautilussvn.ui.dialog.Confirmation.run
+nautilussvn.ui.dialog.FileChooser.run
+nautilussvn.ui.dialog.FolderChooser.run
+nautilussvn.ui.dialog.PreviousMessages.run
+nautilussvn.ui.dialog.Property.run" class="py-name" href="#" onclick="return doclink('link-9', 'run', 'link-9');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line"> </tt>
+<a name="AuthorizationTest"></a><div id="AuthorizationTest-def"><a name="L39"></a><tt class="py-lineno">39</tt> <a class="py-toggle" href="#" id="AuthorizationTest-toggle" onclick="return toggle('AuthorizationTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.AuthorizationTest-class.html">AuthorizationTest</a><tt class="py-op">:</tt> </tt>
+</div><div id="AuthorizationTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="AuthorizationTest-expanded"><a name="AuthorizationTest.__init__"></a><div id="AuthorizationTest.__init__-def"><a name="L40"></a><tt class="py-lineno">40</tt> <a class="py-toggle" href="#" id="AuthorizationTest.__init__-toggle" onclick="return toggle('AuthorizationTest.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.AuthorizationTest-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AuthorizationTest.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="AuthorizationTest.__init__-expanded"><a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-10', 'dialog', 'link-2');">dialog</a></tt> <tt class="py-op">=</tt> <tt id="link-11" class="py-name"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-11', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-12', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-13', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt class="py-name">Authorization</tt><tt class="py-op">(</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-name">location</tt><tt class="py-op">=</tt><tt class="py-string">"this location"</tt><tt class="py-op">,</tt>  </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">            <tt class="py-name">realm</tt><tt class="py-op">=</tt><tt class="py-string">"this realm"</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">        <tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">             </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-14', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="nautilussvn.ui.callback.VCSAction.run
+nautilussvn.ui.dialog.Authentication.run
+nautilussvn.ui.dialog.CertAuthentication.run
+nautilussvn.ui.dialog.Certificate.run
+nautilussvn.ui.dialog.Confirmation.run
+nautilussvn.ui.dialog.FileChooser.run
+nautilussvn.ui.dialog.FolderChooser.run
+nautilussvn.ui.dialog.PreviousMessages.run
+nautilussvn.ui.dialog.Property.run" class="py-name" href="#" onclick="return doclink('link-15', 'run', 'link-9');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line"> </tt>
+<a name="PropertyTest"></a><div id="PropertyTest-def"><a name="L48"></a><tt class="py-lineno">48</tt> <a class="py-toggle" href="#" id="PropertyTest-toggle" onclick="return toggle('PropertyTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.PropertyTest-class.html">PropertyTest</a><tt class="py-op">:</tt> </tt>
+</div><div id="PropertyTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="PropertyTest-expanded"><a name="PropertyTest.__init__"></a><div id="PropertyTest.__init__-def"><a name="L49"></a><tt class="py-lineno">49</tt> <a class="py-toggle" href="#" id="PropertyTest.__init__-toggle" onclick="return toggle('PropertyTest.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.PropertyTest-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PropertyTest.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PropertyTest.__init__-expanded"><a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-16', 'dialog', 'link-2');">dialog</a></tt> <tt class="py-op">=</tt> <tt id="link-17" class="py-name"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-17', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-18', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-19', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Class nautilussvn.ui.dialog.Property=nautilussvn.ui.dialog.Property-class.html"><a title="nautilussvn.ui.dialog.Property" class="py-name" href="#" onclick="return doclink('link-20', 'Property', 'link-20');">Property</a></tt><tt class="py-op">(</tt><tt class="py-name">name</tt><tt class="py-op">=</tt><tt class="py-string">"prop name"</tt><tt class="py-op">,</tt> <tt class="py-name">value</tt><tt class="py-op">=</tt><tt class="py-string">""</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-21', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="nautilussvn.ui.callback.VCSAction.run
+nautilussvn.ui.dialog.Authentication.run
+nautilussvn.ui.dialog.CertAuthentication.run
+nautilussvn.ui.dialog.Certificate.run
+nautilussvn.ui.dialog.Confirmation.run
+nautilussvn.ui.dialog.FileChooser.run
+nautilussvn.ui.dialog.FolderChooser.run
+nautilussvn.ui.dialog.PreviousMessages.run
+nautilussvn.ui.dialog.Property.run" class="py-name" href="#" onclick="return doclink('link-22', 'run', 'link-9');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line"> </tt>
+<a name="PreviousMessagesTest"></a><div id="PreviousMessagesTest-def"><a name="L53"></a><tt class="py-lineno">53</tt> <a class="py-toggle" href="#" id="PreviousMessagesTest-toggle" onclick="return toggle('PreviousMessagesTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.PreviousMessagesTest-class.html">PreviousMessagesTest</a><tt class="py-op">:</tt> </tt>
+</div><div id="PreviousMessagesTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="PreviousMessagesTest-expanded"><a name="PreviousMessagesTest.__init__"></a><div id="PreviousMessagesTest.__init__-def"><a name="L54"></a><tt class="py-lineno">54</tt> <a class="py-toggle" href="#" id="PreviousMessagesTest.__init__-toggle" onclick="return toggle('PreviousMessagesTest.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.PreviousMessagesTest-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="PreviousMessagesTest.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="PreviousMessagesTest.__init__-expanded"><a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-23', 'dialog', 'link-2');">dialog</a></tt> <tt class="py-op">=</tt> <tt id="link-24" class="py-name"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-24', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-25', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-26', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Class nautilussvn.ui.dialog.PreviousMessages=nautilussvn.ui.dialog.PreviousMessages-class.html"><a title="nautilussvn.ui.dialog.PreviousMessages" class="py-name" href="#" onclick="return doclink('link-27', 'PreviousMessages', 'link-27');">PreviousMessages</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-28', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="nautilussvn.ui.callback.VCSAction.run
+nautilussvn.ui.dialog.Authentication.run
+nautilussvn.ui.dialog.CertAuthentication.run
+nautilussvn.ui.dialog.Certificate.run
+nautilussvn.ui.dialog.Confirmation.run
+nautilussvn.ui.dialog.FileChooser.run
+nautilussvn.ui.dialog.FolderChooser.run
+nautilussvn.ui.dialog.PreviousMessages.run
+nautilussvn.ui.dialog.Property.run" class="py-name" href="#" onclick="return doclink('link-29', 'run', 'link-9');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">         </tt>
+<a name="ConfirmationTest"></a><div id="ConfirmationTest-def"><a name="L58"></a><tt class="py-lineno">58</tt> <a class="py-toggle" href="#" id="ConfirmationTest-toggle" onclick="return toggle('ConfirmationTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.ConfirmationTest-class.html">ConfirmationTest</a><tt class="py-op">:</tt> </tt>
+</div><div id="ConfirmationTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="ConfirmationTest-expanded"><a name="ConfirmationTest.__init__"></a><div id="ConfirmationTest.__init__-def"><a name="L59"></a><tt class="py-lineno">59</tt> <a class="py-toggle" href="#" id="ConfirmationTest.__init__-toggle" onclick="return toggle('ConfirmationTest.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.ConfirmationTest-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="ConfirmationTest.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="ConfirmationTest.__init__-expanded"><a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-30', 'dialog', 'link-2');">dialog</a></tt> <tt class="py-op">=</tt> <tt id="link-31" class="py-name"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-31', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-32', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-33', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Class nautilussvn.ui.dialog.Confirmation=nautilussvn.ui.dialog.Confirmation-class.html"><a title="nautilussvn.ui.dialog.Confirmation" class="py-name" href="#" onclick="return doclink('link-34', 'Confirmation', 'link-34');">Confirmation</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">        <tt class="py-name">result</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-35', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="nautilussvn.ui.callback.VCSAction.run
+nautilussvn.ui.dialog.Authentication.run
+nautilussvn.ui.dialog.CertAuthentication.run
+nautilussvn.ui.dialog.Certificate.run
+nautilussvn.ui.dialog.Confirmation.run
+nautilussvn.ui.dialog.FileChooser.run
+nautilussvn.ui.dialog.FolderChooser.run
+nautilussvn.ui.dialog.PreviousMessages.run
+nautilussvn.ui.dialog.Property.run" class="py-name" href="#" onclick="return doclink('link-36', 'run', 'link-9');">run</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">         </tt>
+<a name="MessageBoxTest"></a><div id="MessageBoxTest-def"><a name="L63"></a><tt class="py-lineno">63</tt> <a class="py-toggle" href="#" id="MessageBoxTest-toggle" onclick="return toggle('MessageBoxTest');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.MessageBoxTest-class.html">MessageBoxTest</a><tt class="py-op">:</tt> </tt>
+</div><div id="MessageBoxTest-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="MessageBoxTest-expanded"><a name="MessageBoxTest.__init__"></a><div id="MessageBoxTest.__init__-def"><a name="L64"></a><tt class="py-lineno">64</tt> <a class="py-toggle" href="#" id="MessageBoxTest.__init__-toggle" onclick="return toggle('MessageBoxTest.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="nautilussvn.ui.dialogtest.MessageBoxTest-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="MessageBoxTest.__init__-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="MessageBoxTest.__init__-expanded"><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-37', 'dialog', 'link-2');">dialog</a></tt> <tt class="py-op">=</tt> <tt id="link-38" class="py-name"><a title="nautilussvn" class="py-name" href="#" onclick="return doclink('link-38', 'nautilussvn', 'link-0');">nautilussvn</a></tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="nautilussvn.ui" class="py-name" href="#" onclick="return doclink('link-39', 'ui', 'link-1');">ui</a></tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="nautilussvn.ui.dialog" class="py-name" href="#" onclick="return doclink('link-40', 'dialog', 'link-2');">dialog</a></tt><tt class="py-op">.</tt><tt id="link-41" class="py-name" targets="Class nautilussvn.ui.dialog.MessageBox=nautilussvn.ui.dialog.MessageBox-class.html"><a title="nautilussvn.ui.dialog.MessageBox" class="py-name" href="#" onclick="return doclink('link-41', 'MessageBox', 'link-41');">MessageBox</a></tt><tt class="py-op">(</tt><tt class="py-string">"This is a test message"</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">         </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"><tt class="py-keyword">if</tt> <tt class="py-name">__name__</tt> <tt class="py-op">==</tt> <tt class="py-string">"__main__"</tt><tt class="py-op">:</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">    <tt class="py-name">window</tt> <tt class="py-op">=</tt> <tt id="link-42" class="py-name" targets="Class nautilussvn.ui.dialogtest.AuthorizationTest=nautilussvn.ui.dialogtest.AuthorizationTest-class.html"><a title="nautilussvn.ui.dialogtest.AuthorizationTest" class="py-name" href="#" onclick="return doclink('link-42', 'AuthorizationTest', 'link-42');">AuthorizationTest</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">    <tt class="py-name">gtk</tt><tt class="py-op">.</tt><tt class="py-name">main</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="nautilussvn-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Dec 31 13:44:05 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

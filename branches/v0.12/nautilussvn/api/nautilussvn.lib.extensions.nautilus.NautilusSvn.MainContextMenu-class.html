@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="nautilussvn-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="nautilussvn-module.html">Package&nbsp;nautilussvn</a> ::
+        <a href="nautilussvn.lib-module.html">Package&nbsp;lib</a> ::
+        <a href="nautilussvn.lib.extensions-module.html">Package&nbsp;extensions</a> ::
+        <a href="nautilussvn.lib.extensions.nautilus-module.html">Package&nbsp;nautilus</a> ::
+        <a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-module.html">Module&nbsp;NautilusSvn</a> ::
+        Class&nbsp;MainContextMenu
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class MainContextMenu</h1><p class="nomargin-top"><span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu">source&nbsp;code</a></span></p>
+<p>A class that represents our context menu.</p>
+  <p>See: 
+  http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure</p>
+  <p>FIXME: There's currently a problem with the order in which menu items 
+  appear, even though a list such as <code>[&lt;Update&gt;, &lt;Commit&gt;,
+  &lt;NautilusSvn&gt;]</code> would be returned it might end up as 
+  <code>[&lt;NautilusSvn&gt;, &lt;Update&gt;, &lt;Commit&gt;]</code>.</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">paths</span>,
+        <span class="summary-sig-arg">nautilussvn_extension</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list of MenuItems</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu-class.html#construct_menu" class="summary-sig-name">construct_menu</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      This function is really only used to contain the menu defintion.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.construct_menu">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list of MenuItems</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu-class.html#create_menu_from_definition" class="summary-sig-name">create_menu_from_definition</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_definition</span>)</span><br />
+      Create the actual menu from a menu definiton.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.create_menu_from_definition">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_checkout"></a><span class="summary-sig-name">condition_checkout</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_checkout">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_update"></a><span class="summary-sig-name">condition_update</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_update">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_commit"></a><span class="summary-sig-name">condition_commit</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_commit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_diff"></a><span class="summary-sig-name">condition_diff</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_diff">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_show_log"></a><span class="summary-sig-name">condition_show_log</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_show_log">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_add"></a><span class="summary-sig-name">condition_add</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_add">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_add_to_ignore_list"></a><span class="summary-sig-name">condition_add_to_ignore_list</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_add_to_ignore_list">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_rename"></a><span class="summary-sig-name">condition_rename</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_rename">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_delete"></a><span class="summary-sig-name">condition_delete</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_delete">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_revert"></a><span class="summary-sig-name">condition_revert</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_revert">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_blame"></a><span class="summary-sig-name">condition_blame</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_blame">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="condition_properties"></a><span class="summary-sig-name">condition_properties</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.condition_properties">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu-class.html#callback_debug_asynchronicity" class="summary-sig-name">callback_debug_asynchronicity</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span><br />
+      This is a function to test doing things asynchronously.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_asynchronicity">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu-class.html#callback_debug_shell" class="summary-sig-name">callback_debug_shell</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span><br />
+      Open up an IPython shell which shares the context of the extension.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_shell">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_refresh_status"></a><span class="summary-sig-name">callback_refresh_status</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_refresh_status">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_debug_revert"></a><span class="summary-sig-name">callback_debug_revert</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_revert">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_debug_invalidate"></a><span class="summary-sig-name">callback_debug_invalidate</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_invalidate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_debug_add_emblem"></a><span class="summary-sig-name">callback_debug_add_emblem</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_add_emblem">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_update"></a><span class="summary-sig-name">callback_update</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_update">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_commit"></a><span class="summary-sig-name">callback_commit</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_commit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn.MainContextMenu-class.html#callback_add" class="summary-sig-name">callback_add</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span><br />
+      Put files and directories under version control, scheduling them for 
+      addition to repository.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_add">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_delete"></a><span class="summary-sig-name">callback_delete</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_delete">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="callback_revert"></a><span class="summary-sig-name">callback_revert</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">menu_item</span>,
+        <span class="summary-sig-arg">paths</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_revert">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="construct_menu"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">construct_menu</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.construct_menu">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>This function is really only used to contain the menu defintion. The 
+  actual menu is build using <code>create_menu_from_definition</code>.</p>
+  <dl class="fields">
+    <dt>Returns: list of MenuItems</dt>
+        <dd>A list of MenuItems representing the context menu.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="create_menu_from_definition"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_menu_from_definition</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">menu_definition</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.create_menu_from_definition">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create the actual menu from a menu definiton.</p>
+  <p>A single menu item definition looks like:</p>
+<pre class="literalblock">
+   {
+       &quot;identifier&quot;: &quot;NautilusSvn::Identifier&quot;,
+       &quot;label&quot;: &quot;&quot;,
+       &quot;tooltip&quot;: &quot;&quot;,
+       &quot;icon&quot;: &quot;&quot;,
+       &quot;signals&quot;: {
+           &quot;activate&quot;: {
+               &quot;callback&quot;: None,
+               &quot;args&quot;: None
+           }
+       }, 
+       &quot;condition&quot;: None,
+       &quot;submenus&quot;: [
+           
+       ]
+   }
+</pre>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>menu_definition</code></strong> (list) - A list of definition items.</li>
+    </ul></dd>
+    <dt>Returns: list of MenuItems</dt>
+        <dd>A list of MenuItems representing the context menu.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="callback_debug_asynchronicity"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">callback_debug_asynchronicity</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">menu_item</span>,
+        <span class="sig-arg">paths</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_asynchronicity">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>This is a function to test doing things asynchronously.</p>
+  <p>Plain Python threads don't seem to work properly in the context of a 
+  Nautilus extension, so this doesn't work out all too well:</p>
+<pre class="literalblock">
+   import thread
+   thread.start_new_thread(asynchronous_function, ())
+</pre>
+  <p>The thread will _only_ run when not idle (e.g. it will run for a short
+  while when you change the item selection).</p>
+  <p>A few words of advice. Don't be misled, as I was, into thinking that a
+  function you add using <code>gobject.add_idle</code> is run 
+  asynchronously.</p>
+  <p>Calling <code>time.sleep()</code> or doing something for a long time 
+  will simply block the main thread while the function is running. It's 
+  just that Nautilus is idle a lot so it might create that impression.</p>
+  <p>Calling <code>gtk.gdk.threads_init()</code> or 
+  <code>gobject.threads_init()</code> is not needed.</p>
+  <p>Also see:</p>
+  <ul>
+    <li>
+      http://www.pygtk.org/pygtk2reference/gobject-functions.html
+    </li>
+    <li>
+      http://www.pygtk.org/docs/pygtk/gdk-functions.html
+    </li>
+  </ul>
+  <p>Interesting links (but not relevant per se):</p>
+  <ul>
+    <li>
+      
+      http://research.operationaldynamics.com/blogs/andrew/software/gnome-desktop/gtk-thread-awareness.html
+    </li>
+    <li>
+      http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
+    </li>
+  </ul>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="callback_debug_shell"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">callback_debug_shell</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">menu_item</span>,
+        <span class="sig-arg">paths</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_debug_shell">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Open up an IPython shell which shares the context of the 
+  extension.</p>
+  <p>See: http://ipython.scipy.org/moin/Cookbook/EmbeddingInGTK</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="callback_add"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">callback_add</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">menu_item</span>,
+        <span class="sig-arg">paths</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="nautilussvn.lib.extensions.nautilus.NautilusSvn-pysrc.html#MainContextMenu.callback_add">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Put files and directories under version control, scheduling them for 
+  addition to repository. They will be added in next commit.</p>
+  <p>If paths only contains files then the files are added directly, 
+  otherwise an Add dialog is instantiated.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>menu_item</code></strong> (nautilus.MenuItem) - The menu item that was selected.</li>
+        <li><strong class="pname"><code>paths</code></strong> (list) - A list of paths to add.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="nautilussvn-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Dec 31 13:44:02 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
