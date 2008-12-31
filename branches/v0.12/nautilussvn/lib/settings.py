@@ -20,6 +20,12 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+"""
+
+Everything related retrieving and storing configuration keys.
+
+"""
+
 import os
 
 import shutil
@@ -32,7 +38,7 @@ def get_home_folder():
     previously used repositories.
     
     NOTE: This is a copy of the helper module's function, because I can't
-        have a circular module reference (helper imports Settings right now)
+    have a circular module reference (helper imports Settings right now).
     
     @rtype:     string
     @return:    The location of our main user storage folder.
@@ -72,7 +78,7 @@ class SettingsManager:
     This class provides an shallow interface for the rest of the program to use 
     to interact with our configuration file.
     
-    Usage:
+    Usage::
     
         Get settings:
             sm = SettingsManager()

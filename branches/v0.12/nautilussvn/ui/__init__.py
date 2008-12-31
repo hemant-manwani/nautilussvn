@@ -20,6 +20,12 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+"""
+
+UI layer.
+
+"""
+
 import os
 
 import pygtk

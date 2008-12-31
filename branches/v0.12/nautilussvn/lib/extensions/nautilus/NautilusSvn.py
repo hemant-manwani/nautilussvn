@@ -22,27 +22,29 @@
 
 """
 
+Our module for everything related to the Nautilus extension.
+
 Known issues:
 
-  * Emblems sometimes don't update untill the selection is modified.
+  - Emblems sometimes don't update untill the selection is modified.
   
     This is either caused by threading problems or update_file_info not being 
     called. There's a bunch of FIXME's below with more information.
     
     A quick workaround for this that might work:
     
-      * At the moment we're _only_ using our inotify handler to let us know
-        when something changes. This is a workaround for update_file_info's
-        limitations. We're basically only using update_file_info to apply the 
-        emblem. However, update_file_info works perfectly to let us know
+      - At the moment we're _only_ using our inotify handler to let us know
+        when something changes. This is a workaround for C{update_file_info}'s
+        limitations. We're basically only using C{update_file_info} to apply the 
+        emblem. However, C{update_file_info} works perfectly to let us know
         an item we're currently viewing modified.
         
         So the workaround is to use that... next to the inotify handler.
         
         The inotify handler will be used to let us know of things we can't see
-        and update_file_info for those things that we can see.
+        and C{update_file_info} for those things that we can see.
 
-  * Multiple emblems are attached to a single item which leads to the one
+  - Multiple emblems are attached to a single item which leads to the one
     obscuring the other. So if an item has "normal" status, but it changes to 
     "modified" two emblems are applied and only the emblem "normal" is visible.
     
@@ -50,22 +52,22 @@ Known issues:
     
     You need a working copy with at least 2 items (combination doesn't matter).
     
-    Use the following working_copy (do not open it in Nautilus before doing this):
+    Use the following working copy (do not open it in Nautilus before doing this):::
     
-    mkdir -p /tmp/nautilussvn_testing
-    cd /tmp/nautilussvn_testing
-    svnadmin create repository
-    svn co file:///tmp/nautilussvn_testing/repository working_copy
-    touch working_copy/add-this-file
-    touch working_copy/or-this-file
+        mkdir -p /tmp/nautilussvn_testing
+        cd /tmp/nautilussvn_testing
+        svnadmin create repository
+        svn co file:///tmp/nautilussvn_testing/repository working_copy
+        touch working_copy/add-this-file
+        touch working_copy/or-this-file
     
-      * Then after adding one of the files move up the tree so you can see the 
-        status for the working_copy directory.
+    Then after adding one of the files move up the tree so you can see the 
+    status for the working_copy directory.
   
     Things I researched but weren't the cause (so don't look into these!):
     
-      * One idea I had was that because of the nautilusVFSFile_table we might
-        have two seperate NautilusVFSFile instances (with different emblems
+      - One idea I had was that because of the C{nautilusVFSFile_table} we might
+        have two seperate C{NautilusVFSFile} instances (with different emblems
         attached) pointing to the same file. But that wasn't the case.
   
 """
@@ -92,8 +94,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     
     """
     
-    # Maps statuses to emblems
-    # TODO: should probably be possible to create this dynamically
+    #: Maps statuses to emblems.
+    #: TODO: should probably be possible to create this dynamically
     EMBLEMS = {
         "added" :       "nautilussvn-added",
         "deleted":      "nautilussvn-deleted",
@@ -105,29 +107,30 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         "read_only":    "nautilussvn-read_only"
     }
     
-    # This is our lookup table for NautilusVFSFiles which we need for attaching
-    # emblems. This is mostly a workaround for not being able to turn a path/uri
-    # into a NautilusVFSFile. It looks like:
-    #
-    # nautilusVFSFile_table = {
-    #    "/foo/bar/baz": <NautilusVFSFile>
-    #
-    # }
-    #
-    # Keeping track of NautilusVFSFiles is a little bit complicated because
-    # when an item is moved (renamed) update_file_info doesn't get called. So
-    # we also add NautilusVFSFiles to this table from get_file_items etc.
+    
+    #: This is our lookup table for C{NautilusVFSFile}s which we need for attaching
+    #: emblems. This is mostly a workaround for not being able to turn a path/uri
+    #: into a C{NautilusVFSFile}. It looks like:::
+    #: 
+    #:     nautilusVFSFile_table = {
+    #:        "/foo/bar/baz": <NautilusVFSFile>
+    #:     
+    #:     }
+    #: 
+    #: Keeping track of C{NautilusVFSFile}s is a little bit complicated because
+    #: when an item is moved (renamed) C{update_file_info} doesn't get called. So
+    #: we also add C{NautilusVFSFile}s to this table from C{get_file_items} etc.
     nautilusVFSFile_table = {}
     
-    # Keep track of item statuses. This is a workaround for the fact that
-    # emblems added using NautilusVFSFile.add_emblem are removed once the 
-    # NautilusVFSFile is invalidated (one example of when this happens is
-    # when an item is modified). 
-    #
-    # statuses = {
-    #     "/foo/bar/baz": "modified"
-    # }
-    #
+    #: Keep track of item statuses. This is a workaround for the fact that
+    #: emblems added using C{NautilusVFSFile.add_emblem} are removed once the 
+    #: C{NautilusVFSFile} is invalidated (one example of when this happens is
+    #: when an item is modified).::
+    #: 
+    #:     statuses = {
+    #:         "/foo/bar/baz": "modified"
+    #:     }
+    #: 
     statuses = {}
     
     def __init__(self):
@@ -146,29 +149,34 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     def update_file_info(self, item):
         """
         
-        update_file_info is called only when:
+        Normally this function is used to monitor changes to items, however 
+        we're using our own C{StatusMonitor} for this. So this function is only
+        used to apply emblems (which is needed because emblems from extensions
+        are temporary).
         
-          * When you enter a directory (once for each item) but only when the
+        C{update_file_info} is called only when:
+        
+          - When you enter a directory (once for each item) but only when the
             item was modified since the last time it was listed
-          * When an item viewable from the current window is created or modified
+          - When an item viewable from the current window is created or modified
           
         This is insufficient for our purpose because:
         
-          * You're not notified about items you don't see (which is needed to 
+          - You're not notified about items you don't see (which is needed to 
             keep the emblem for the directories above the item up-to-date)
         
-        When update_file_info is called we do:
+        When C{update_file_info} is called we do:
         
-          * Add the NautilusVFSFile to the lookup table for lookups
-          * Add a watch for this item to the StatusMonitor (it's StatusMonitor's
-            responsibility to check whether this is needed)
+          - Add the C{NautilusVFSFile} to the lookup table for lookups
+          - Add a watch for this item to the C{StatusMonitor} (it's 
+            C{StatusMonitor}'s responsibility to check whether this is needed)
         
         What we do to stay up-to-date is:
         
-          * We'll notify StatusMonitor of versioning actions (add, commit, lock, 
+          - We'll notify C{StatusMonitor} of versioning actions (add, commit, lock, 
             unlock etc.), we register callbacks with dialogs for this
         
-        When StatusMonitor calls us back we just look the NautilusVFSFile up in
+        When C{StatusMonitor} calls us back we just look the C{NautilusVFSFile} up in
         the look up table using the path and apply an emblem according to the 
         status we've been given.
         
@@ -205,8 +213,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         Menu activated with items selected.
         
-        Note that calling nautilusVFSFile.invalidate_extension_info() will also
-        cause get_file_items to be called.
+        Note that calling C{nautilusVFSFile.invalidate_extension_info()} will 
+        also cause get_file_items to be called.
         
         @type   window: NautilusNavigationWindow
         @param  window:
@@ -317,7 +325,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     
     def cb_status(self, path, status):
         """
-        This is the callback that StatusMonitor calls. 
+        This is the callback that C{StatusMonitor} calls. 
         
         @type   path: string
         @param  path: The path of the item something interesting happend to.
@@ -341,7 +349,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         # We need to invalidate the extension info for only one reason:
         #
-        # * Invalidating the extension info will cause Nautilus to remove all
+        # - Invalidating the extension info will cause Nautilus to remove all
         #   temporary emblems we applied so we don't have overlay problems
         #   (with ourselves, we'd still have some with other extensions).
         #
@@ -357,11 +365,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 class MainContextMenu():
     """
     
+    A class that represents our context menu.
+    
     See: http://code.google.com/p/nautilussvn/wiki/ContextMenuStructure
     
     FIXME: There's currently a problem with the order in which menu items 
-    appear, even though a list such as [<Update>, <Commit>, <NautilusSvn>] 
-    would be returned it might end up as [<NautilusSvn>, <Update>, <Commit>].
+    appear, even though a list such as C{[<Update>, <Commit>, <NautilusSvn>]} 
+    would be returned it might end up as C{[<NautilusSvn>, <Update>, <Commit>]}.
     
     """
     
@@ -374,7 +384,7 @@ class MainContextMenu():
         """
         
         This function is really only used to contain the menu defintion. The
-        actual menu is build using create_menu_from_definition.
+        actual menu is build using C{create_menu_from_definition}.
         
         @rtype:     list of MenuItems
         @return:    A list of MenuItems representing the context menu.
@@ -723,7 +733,10 @@ class MainContextMenu():
     def create_menu_from_definition(self, menu_definition):
         """
         
-        A single menu item definition looks like:
+        Create the actual menu from a menu definiton.
+        
+        A single menu item definition looks like::
+        
             {
                 "identifier": "NautilusSvn::Identifier",
                 "label": "",
@@ -741,8 +754,8 @@ class MainContextMenu():
                 ]
             }
         
-        @type   menu_definition  list
-        @param  menu_definition  A list of definition items.
+        @type   menu_definition:  list
+        @param  menu_definition:  A list of definition items.
         
         @rtype:     list of MenuItems
         @return:    A list of MenuItems representing the context menu.
@@ -917,32 +930,32 @@ class MainContextMenu():
         This is a function to test doing things asynchronously.
         
         Plain Python threads don't seem to work properly in the context of a
-        Nautilus extension, so this doesn't work out all too well:
+        Nautilus extension, so this doesn't work out all too well::
         
-        import thread
-        thread.start_new_thread(asynchronous_function, ())
+            import thread
+            thread.start_new_thread(asynchronous_function, ())
         
         The thread will _only_ run when not idle (e.g. it will run for a short 
         while when you change the item selection).
         
         A few words of advice. Don't be misled, as I was, into thinking that a 
-        function you add using gobject.add_idle is run asynchronously. 
+        function you add using C{gobject.add_idle} is run asynchronously. 
         
-        Calling time.sleep() or doing something for a long time will simply block 
+        Calling C{time.sleep()} or doing something for a long time will simply block 
         the main thread while the function is running. It's just that Nautilus
         is idle a lot so it might create that impression.
         
-        Calling gtk.gdk.threads_init() or gobject.threads_init() is not needed.
+        Calling C{gtk.gdk.threads_init()} or C{gobject.threads_init()} is not needed.
         
         Also see:
         
-          * http://www.pygtk.org/pygtk2reference/gobject-functions.html
-          * http://www.pygtk.org/docs/pygtk/gdk-functions.html
+          - http://www.pygtk.org/pygtk2reference/gobject-functions.html
+          - http://www.pygtk.org/docs/pygtk/gdk-functions.html
         
         Interesting links (but not relevant per se): 
         
-          * http://research.operationaldynamics.com/blogs/andrew/software/gnome-desktop/gtk-thread-awareness.html
-          * http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
+          - http://research.operationaldynamics.com/blogs/andrew/software/gnome-desktop/gtk-thread-awareness.html
+          - http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
         
         """
     
@@ -1085,9 +1098,9 @@ class MainContextMenu():
 
     def callback_delete(self, menu_item, paths):
         # FIXME: 
-        #   * ClientError has local modifications
-        #   * ClientError is not under version control
-        #   * ClientERror has local modifications
+        #   - ClientError has local modifications
+        #   - ClientError is not under version control
+        #   - ClientERror has local modifications
         client = pysvn.Client()
         for path in paths:
             client.remove(path)
@@ -1107,35 +1120,40 @@ from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, Pro
 class StatusMonitor():
     """
     
-    What StatusMonitor does:
+    The C{StatusMonitor} is basically a replacement for the currently limited 
+    C{update_file_info} function.
     
-    * When somebody adds a watch and if there's not already a watch for this 
-      item it will add one and do an initial status check.
+    What C{StatusMonitor} does:
     
-    * Use inotify to keep track of modifications of any watched items
+      - When somebody adds a watch and if there's not already a watch for this 
+        item it will add one and do an initial status check.
+    
+      - Use inotify to keep track of modifications of any watched items
         (we actually only care about modifications not creations and deletions)
         
-    * Either on request, or when something interesting happens, it checks
-      the status for an item which means:
+      - Either on request, or when something interesting happens, it checks
+        the status for an item which means:
         
-        * See working code for exactly what a status check means
+          - See working code for exactly what a status check means
         
-        * After checking the status for an item, if there's a watch for
-          a parent directory this is what will happen:    
+          - After checking the status for an item, if there's a watch for
+            a parent directory this is what will happen:    
         
-          * If status is (vcs) modified, (vcs) added or (vcs) deleted:
-            - for every parent the callback will be called with status 
-              "modified" (since it cannot be any other way)
+              - If status is (vcs) modified, (vcs) added or (vcs) deleted:
+            
+                  - For every parent the callback will be called with status 
+                    "modified" (since it cannot be any other way)
           
-          * If vcs status is normal: 
-            - a status check is done for the parent directory since we 
-              cannot be sure what the status for them is
+              - If vcs status is normal: 
+            
+                  - A status check is done for the parent directory since we 
+                    cannot be sure what the status for them is
       
     In the future we might implement a functionality which also monitors
     versioning actions so the command-line client can be used and still have
     the emblems update accordingly. 
     
-    UML sequence diagram:
+    UML sequence diagram depicting how the StatusMonitor is used::
 
         +---------------+          +-----------------+         
         |  NautilusSVN  |          |  StatusMonitor  |         
@@ -1158,9 +1176,9 @@ class StatusMonitor():
     
     """
     
-    # TODO: this is the reverse of STATUS in the svn module and should probably
-    # be moved there once I figure out what the responsibilities for the svn
-    # module are.
+    #: TODO: this is the reverse of C{STATUS} in the svn module and should probably
+    #: be moved there once I figure out what the responsibilities for the svn
+    #: module are.
     STATUS = {
         pysvn.wc_status_kind.none:          "none",
         pysvn.wc_status_kind.unversioned:   "unversioned",
@@ -1178,19 +1196,20 @@ class StatusMonitor():
         pysvn.wc_status_kind.incomplete:    "incomplete"
     }
     
-    # A dictionary to keep track of the paths we're watching
-    #
-    # watches = {
-    #     # Always None because we just want to check if a watch has been set
-    #     "/foo/bar/baz": None
-    # }
-    #
+   
+    #: A dictionary to keep track of the paths we're watching.::
+    #: 
+    #:     watches = {
+    #:         # Always None because we just want to check if a watch has been set
+    #:         "/foo/bar/baz": None
+    #:     }
+    #:     
     watches = {}
     
-    # The mask for the inotify events we're interested in
-    # TODO: understand how masking works
-    # TODO: maybe we should just analyze VCSProcessEvent and determine this 
-    # dynamically because one might tend to forgot to update these
+    #: The mask for the inotify events we're interested in.
+    #: TODO: understand how masking works
+    #: TODO: maybe we should just analyze VCSProcessEvent and determine this 
+    #: dynamically because one might tend to forgot to update these
     mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO
     
     class VCSProcessEvent(ProcessEvent):
@@ -1268,8 +1287,8 @@ class StatusMonitor():
                 self.watches[path] = None # don't need a value
                 # TODO: figure out precisely how this watch is added. Does it:
                 #
-                #  * Recursively register watches
-                #  * Call the process method with the path argument originally used
+                #  - Recursively register watches
+                #  - Call the process method with the path argument originally used
                 #    or with the path for the specific item that was modified.
                 # 
                 # FIXME: figure out why when registering a parent directory and the 
@@ -1315,32 +1334,32 @@ class StatusMonitor():
         """
         
         This function doesn't return anything but calls the callback supplied
-        to StatusMonitor by the caller.
+        to C{StatusMonitor} by the caller.
         
-        Status checks:
+        UML sequence diagram depicting the status checks::
         
-        +-----------------+                  +-------------+
-        |  StatusMonitor  |                  |  VCSClient  |
-        +-----------------+                  +-------------+
-                |                                   |
-                |    status(path, depth=empty)      |
-                |---------------------------------->|
-                |+-------------------+-------------+|
-                || [if isdir(path)]  |             ||
-                |+-------------------+             ||
-                ||                                 ||
-                ||          status(path)           ||
-                ||-------------------------------->||
-                |+---------------------------------+|
-                |                                   |
-                |+--------------------------+------+|
-                || [foreach parent folder]  |      ||
-                |+--------------------------+      ||
-                ||                                 ||
-                ||          status(path)           ||
-                ||-------------------------------->||
-                |+---------------------------------+|
-                |                                   |
+            +-----------------+                  +-------------+
+            |  StatusMonitor  |                  |  VCSClient  |
+            +-----------------+                  +-------------+
+                    |                                   |
+                    |    status(path, depth=empty)      |
+                    |---------------------------------->|
+                    |+-------------------+-------------+|
+                    || [if isdir(path)]  |             ||
+                    |+-------------------+             ||
+                    ||                                 ||
+                    ||          status(path)           ||
+                    ||-------------------------------->||
+                    |+---------------------------------+|
+                    |                                   |
+                    |+--------------------------+------+|
+                    || [foreach parent folder]  |      ||
+                    |+--------------------------+      ||
+                    ||                                 ||
+                    ||          status(path)           ||
+                    ||-------------------------------->||
+                    |+---------------------------------+|
+                    |                                   |
         
         @type   path: string
         @param  path: The path for which to check the status.

@@ -20,6 +20,12 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+"""
+
+All sorts of helper functions.
+
+"""
+
 import os
 import re
 import time
@@ -90,7 +96,7 @@ def get_previous_messages_path():
     Returns a valid URI for the previous messages file
     
     @rtype:     string
-    @returner:  The location of the previous messages file.
+    @return:    The location of the previous messages file.
     
     """
     
@@ -241,11 +247,11 @@ def launch_diff_tool(path):
     """
     Launches the diff tool of choice.
     
-    1.  Generate a standard diff between the path and the latest revision.
-    2.  Write the diff text to a tmp file
-    3.  Copy the given file (path) to the tmp directory
-    4.  Do a reverse patch to get a version of the file that is in the repo.
-    5.  Now you have two files and you can send them to the diff tool.
+      1.  Generate a standard diff between the path and the latest revision.
+      2.  Write the diff text to a tmp file
+      3.  Copy the given file (path) to the tmp directory
+      4.  Do a reverse patch to get a version of the file that is in the repo.
+      5.  Now you have two files and you can send them to the diff tool.
     
     @type   path: string
     @param  path: Path to the file in question.

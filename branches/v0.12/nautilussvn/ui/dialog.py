@@ -116,9 +116,10 @@ class Certificate(InterfaceView):
     def run(self):
         """
         Returns three possible values:
-            0   Deny
-            1   Accept Once
-            2   Accept Forever
+        
+            - 0   Deny
+            - 1   Accept Once
+            - 2   Accept Forever
             
         """
         

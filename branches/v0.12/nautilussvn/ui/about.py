@@ -29,10 +29,12 @@ from nautilussvn.ui import InterfaceView
 class About(InterfaceView):
     """
     This class provides an interface to the About window.
+    
     Displays:
-        Authors/Credits
-        Version Information
-        Links
+    
+      - Authors/Credits
+      - Version Information
+      - Links
     
     """
 
