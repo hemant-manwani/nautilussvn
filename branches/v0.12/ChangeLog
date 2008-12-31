@@ -1,5 +1,15 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Improved the way watches are added. Changed all status calls to work
+	properly with the new cache (which is reverted).
+	
+	* nautilussvn/lib/vcs/svn.py:
+	Cache is reverted, so fixing all indexes. is_ and has_ functions now use
+	status_with_cache instead of status.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/vcs/svn.py:
 	Fixed tiny, but with serious consequences, logic error. Cache should now
 	be properly bypassed when invalidate is set to True.

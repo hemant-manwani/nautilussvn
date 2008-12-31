@@ -156,7 +156,6 @@ class SVN:
         else:
             return self.client.status(path, recurse=recurse)
     
-    @print_timing
     def status_with_cache(self, path, invalidate=False, depth=pysvn.depth.infinity):
         """
         
@@ -187,6 +186,7 @@ class SVN:
         if (invalidate or 
                 path not in self.status_cache or
                 len(self.status_cache[path]) == 1):
+            print "Debug: status_with_cache() invalidated %s" % path
             statuses = self.client.status(path, depth=depth)
         else:
             return self.status_cache[path]
@@ -242,7 +242,7 @@ class SVN:
         return False
     
     def is_normal(self, path):
-        status = self.status(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.normal:
             return True
@@ -250,7 +250,7 @@ class SVN:
         return False
     
     def is_added(self, path):
-        status = self.status(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.added:
             return True
@@ -258,7 +258,7 @@ class SVN:
         return False
         
     def is_modified(self, path):
-        status = self.status(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.modified:
             return True
@@ -266,7 +266,7 @@ class SVN:
         return False
     
     def is_deleted(self, path):
-        status = self.status(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.deleted:
             return True
@@ -274,7 +274,7 @@ class SVN:
         return False
         
     def is_ignored(self, path):
-        status = self.status(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
         
         if status.data["text_status"] == pysvn.wc_status_kind.ignored:
             return True
@@ -287,7 +287,7 @@ class SVN:
     #
     
     def has_unversioned(self, path):
-        all_status = self.status(path)[:-1]
+        all_status = self.status_with_cache(path)[1:]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
@@ -296,7 +296,7 @@ class SVN:
         return False
     
     def has_added(self, path):
-        all_status = self.status(path)[:-1]
+        all_status = self.status_with_cache(path)[1:]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -305,7 +305,7 @@ class SVN:
         return False
         
     def has_modified(self, path):
-        all_status = self.status(path)[:-1]
+        all_status = self.status_with_cache(path)[1:]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -314,7 +314,7 @@ class SVN:
         return False
 
     def has_deleted(self, path):
-        all_status = self.status(path)[:-1]
+        all_status = self.status_with_cache(path)[1:]
         
         for status in all_status:
             if status.data["text_status"] == pysvn.wc_status_kind.deleted:
