@@ -139,6 +139,18 @@ class SVN:
         "Only this item":                           DEPTHS["empty"]
     }
     
+    # This variable is used to maintain a status cache. Paths function as keys
+    # and every item in the cache has all the statuses for all the items below
+    # it, though the first item is always the status for the path. 
+    #
+    # It looks like:
+    # 
+    # status_cache = {
+    #    "/foo": [<PysvnStatus u'foo'>], [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>],
+    #    "/foo/bar: [<PysvnStatus u'bar'>, <PysvnStatus u'baz'>],
+    #    "/foo/bar/baz: [<PysvnStatus u'baz'>]
+    # }
+    #
     #
     status_cache = {}
     
@@ -190,9 +202,20 @@ class SVN:
             statuses = self.client.status(path, depth=depth)
         else:
             return self.status_cache[path]
-
-        # pysvn starts deep and then goes up the tree so we have to reverse it so we
-        # can sort it properly.
+        
+        # The next few lines convert a list of PysvnStatus returned by
+        # pysvn.Client.status() from:
+        #
+        #  [<PysvnStatus u'foo/bar/baz'>, 
+        #   <PysvnStatus u'foo/bar'>, 
+        #   <PysvnStatus u'foo'>]
+        #
+        # To the one described in the comments for status_cache.
+        #
+        
+        # PySVN starts deep and then goes up the tree (see above) so we just
+        # revese it to make it easier on us (otherwise we'd have to walk it
+        # in reverse using index values).
         statuses.reverse()
 
         for status in statuses:
