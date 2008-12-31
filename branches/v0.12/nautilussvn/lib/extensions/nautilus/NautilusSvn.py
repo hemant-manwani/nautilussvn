@@ -84,6 +84,7 @@ import gtk
 
 import nautilussvn.lib.vcs
 from nautilussvn.lib.helper import split_path
+from nautilussvn.lib.decorators import print_timing
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
@@ -186,7 +187,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        print "Debug: update_file_info() called for %s" % path
+        #~ print "Debug: update_file_info() called for %s" % path
         # End debugging code
         
         # Always replace the item in the table with the one we receive, because
@@ -304,7 +305,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         item = self.nautilusVFSFile_table[path]
         
         # Begin debugging code
-        print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
+        #~ print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         if status in self.EMBLEMS:
@@ -1006,7 +1007,7 @@ class MainContextMenu():
             # Normal revert
             self.callback_revert(menu_item, paths)
             # Super revert
-            statuses = self.vcs_client.status_with_cache(path, invalidate=True)[:-1]
+            statuses = self.vcs_client.status_with_cache(path, invalidate=True)[1:]
             for status in statuses:
                 if status == pysvn.wc_status_kind.missing:
                     self.callback_revert(
@@ -1246,8 +1247,19 @@ class StatusMonitor():
         self.notifier = ThreadedNotifier(
             self.watch_manager, self.VCSProcessEvent(self, self.vcs_client))
         self.notifier.start()
-        
+    
+    @print_timing
     def add_watch(self, path):
+        """
+        
+        Request a watch to be added for path. This function will figure out
+        the best spot to add the watch (most likely a parent directory).
+        
+        TODO: refactor to remove code duplication
+        MARKER: performance 
+        
+        """
+        
         if not path in self.watches:
             # We can safely ignore items that aren't inside a working_copy or
             # a working copy administration area (.svn)
@@ -1264,25 +1276,35 @@ class StatusMonitor():
                 # file itself the IN_MODIFY event handler is called 3 times (once 
                 # for the directory and twice for the file itself).
                 #
+                
+                # We only have to add a full recursive watch once, then we just
+                # add new watches dynamically when events are triggered. So look
+                # up to see whether there's already a watch set.
+                
                 # MARKER: performance 
-                self.watch_manager.add_watch(path, self.mask, rec=True)
+                path_to_check = path
+                watch_is_already_set = False
+                while path_to_check !="":
+                    path_to_check = split_path(path_to_check)
+                    if path_to_check in self.watches:
+                        watch_is_already_set = True
+                        break;
                 
                 # To always be able to track moves (renames are moves too) we 
                 # have to make sure we register with our parent directory
-                # TODO: this is code duplication, please refactor
-                # MARKER: performance 
-                parent_path = split_path(path)
-                if not parent_path in self.watches:
+                if not watch_is_already_set:
+                    parent_path = split_path(path)
+                    
                     if (parent_path.find(".svn") > 0 or 
                             self.vcs_client.is_in_a_or_a_working_copy(parent_path)):
-                            
-                        self.watches[parent_path] = None
-                        # FIXME: can rec be False here?
-                        self.watch_manager.add_watch(split_path(path), self.mask, rec=False)
-                
-                # Begin debugging code
-                #~ print "Debug: StatusMonitor.add_watch() added watch for %s" % path
-                # End debugging code
+                        path_to_be_watched = parent_path
+                    else:
+                        path_to_be_watched = path
+                    
+                    self.watch_manager.add_watch(path_to_be_watched, self.mask, rec=True)
+                    # Begin debugging code
+                    print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_be_watched
+                    # End debugging code
                 
                 # Note that we don't have to set invalidate to True here to 
                 # bypass the cache because since there isn't one it will be
@@ -1331,7 +1353,7 @@ class StatusMonitor():
         if not self.vcs_client.is_in_a_or_a_working_copy(path): return
         
         # Begin debugging information
-        print "Debug: StatusMonitor.status() called for %s" % path
+        #~ print "Debug: StatusMonitor.status() called for %s" % path
         # End debugging information
         
         # We need the status object for the item alone
@@ -1340,7 +1362,6 @@ class StatusMonitor():
             path, 
             invalidate=invalidate, 
             depth=pysvn.depth.empty)[0].data["text_status"]
-        #~ status = pysvn.wc_status_kind.normal
             
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
@@ -1353,9 +1374,8 @@ class StatusMonitor():
             ])
             
             # MARKER: performance 
-            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
+            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[1:]
             statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
-            #~ statuses = set([])
             
             if len(modified_statuses & statuses): 
                 self.callback(path, "modified")
@@ -1386,7 +1406,7 @@ class StatusMonitor():
                     pysvn.wc_status_kind.modified,
                 ):
                     if (self.vcs_client.is_in_a_or_a_working_copy(path) and
-                            not self.vcs_client.is_added(path)):
+                            not self.vcs_client.is_added(path)): # FIXME: we should probably bypass the cache here
                         self.callback(path, "modified")
                 elif status in (
                         pysvn.wc_status_kind.normal,
