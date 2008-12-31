@@ -1,5 +1,10 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Fixed minor spelling error.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/vcs/svn.py:
 	Updated commentary describing how the cache is build so everybody knows and
 	also so I don't have trouble rading the code 6 months from now.

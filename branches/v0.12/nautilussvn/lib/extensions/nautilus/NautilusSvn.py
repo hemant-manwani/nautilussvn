@@ -106,7 +106,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     }
     
     # This is our lookup table for NautilusVFSFiles which we need for attaching
-    # emblems. his is mostly a workaround for not being able to turn a path/uri
+    # emblems. This is mostly a workaround for not being able to turn a path/uri
     # into a NautilusVFSFile. It looks like:
     #
     # nautilusVFSFile_table = {
