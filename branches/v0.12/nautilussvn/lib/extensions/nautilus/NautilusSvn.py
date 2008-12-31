@@ -195,7 +195,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        #~ print "Debug: update_file_info() called for %s" % path
+        print "Debug: update_file_info() called for %s" % path
         # End debugging code
         
         # Always replace the item in the table with the one we receive, because
@@ -259,7 +259,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        #~ print "Debug: get_background_items() for %s" % path
+        print "Debug: get_background_items() for %s" % path
         # End debugging code
         
         self.nautilusVFSFile_table[path] = item
@@ -285,11 +285,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 # FIXME: still doesn't work but committing to save
                 child_item.invalidate_extension_info()
         
-        # Since building the menu fires off multiple recursive status checks 
-        # as soon as a folder is opened this does affect performance. So disabled
-        # temporarily for convience while working on implementing the cache.
-        #~ return MainContextMenu([path], self).construct_menu()
-        return []
+        return MainContextMenu([path], self).construct_menu()
     
     #
     # Helper functions
@@ -313,7 +309,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         item = self.nautilusVFSFile_table[path]
         
         # Begin debugging code
-        #~ print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
+        print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         if status in self.EMBLEMS:
@@ -1020,7 +1016,7 @@ class MainContextMenu():
             # Normal revert
             self.callback_revert(menu_item, paths)
             # Super revert
-            statuses = self.vcs_client.status_with_cache(path, invalidate=True)[1:]
+            statuses = self.vcs_client.status_with_cache(path, invalidate=True)[:-1]
             for status in statuses:
                 if status == pysvn.wc_status_kind.missing:
                     self.callback_revert(
@@ -1382,7 +1378,7 @@ class StatusMonitor():
         status = self.vcs_client.status_with_cache(
             path, 
             invalidate=invalidate, 
-            depth=pysvn.depth.empty)[0].data["text_status"]
+            depth=pysvn.depth.empty)[-1].data["text_status"]
             
         # A directory should have a modified status when any of its children
         # have a certain status (see modified_statuses below). Jason thought up 
@@ -1395,7 +1391,7 @@ class StatusMonitor():
             ])
             
             # MARKER: performance 
-            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[1:]
+            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
             statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
             
             if len(modified_statuses & statuses): 

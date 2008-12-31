@@ -1,5 +1,12 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	The status_with_cache function had a logic error. Also modified the last
+	element to be the one for the path, as it was before (and as PySVN does it).
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* generate_documentation.sh:
 	Added --graphs all to generate diagrams etc.
 
