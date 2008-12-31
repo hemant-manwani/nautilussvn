@@ -73,6 +73,7 @@ import gtk
 
 import nautilussvn.lib.vcs
 from nautilussvn.lib.helper import split_path
+from nautilussvn.lib.decorators import timeit
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
@@ -1251,6 +1252,7 @@ class StatusMonitor():
             self.watch_manager, self.VCSProcessEvent(self, self.vcs_client))
         self.notifier.start()
     
+    @timeit
     def add_watch(self, path):
         """
         
@@ -1267,7 +1269,7 @@ class StatusMonitor():
             # a working copy administration area (.svn)
             if (path.find(".svn") > 0 or 
                     self.vcs_client.is_in_a_or_a_working_copy(path)):
-                self.watches[path] = None # don't need a value
+                
                 # TODO: figure out precisely how this watch is added. Does it:
                 #
                 #  - Recursively register watches
@@ -1303,6 +1305,7 @@ class StatusMonitor():
                     else:
                         path_to_be_watched = path
                     
+                    self.watches[path_to_be_watched] = None # don't need a value
                     self.watch_manager.add_watch(path_to_be_watched, self.mask, rec=True)
                     # Begin debugging code
                     print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_be_watched
