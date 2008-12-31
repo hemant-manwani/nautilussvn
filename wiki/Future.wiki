@@ -35,6 +35,8 @@ Here's a possible directory structure to keep the files organized:
 |-- packages
 }}}
 
+  _generated using the tree command_
+
 _`__init__.py files left out for clarity`_
 
 = Modularity =
