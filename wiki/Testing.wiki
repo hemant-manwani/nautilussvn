@@ -11,7 +11,7 @@ Though we do a lot of informal testing and take great care to make sure the exte
 
 In the future we might look into using a Test Driven Development (TDD) approach.
 
-== Types of tests ==
+= Types of tests =
 
   * Unit testing. See module [http://docs.python.org/library/unittest.html unittest] and [http://pyunit.sourceforge.net/pyunit.html the PyUnit documentation].
 
