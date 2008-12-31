@@ -1,5 +1,17 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/decorators.py:
+	Updated module docstring.
+	
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Ok, some major bug (status went all the way up to /). I don't understand
+	why this didn't manifest sooner.
+	
+	* nautilussvn/lib/vcs/svn.py:
+	Once again had the indices set wrong [0] not [-1].
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	* nautilussvn/lib/vcs/svn.py:
 	The status_with_cache function had a logic error. Also modified the last

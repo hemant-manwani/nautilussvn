@@ -31,7 +31,7 @@ from os.path import isdir, isfile
 
 import pysvn
 
-from ..decorators import deprecated, print_timing
+from ..decorators import deprecated
 from ..helper import split_path
 
 class SVN:
@@ -205,6 +205,8 @@ class SVN:
                 path not in self.status_cache or
                 len(self.status_cache[path]) == 1):
             print "Debug: status_with_cache() invalidated %s" % path
+            # FIXME: the is_ functions call us with an empty depth, that 
+            # probably screws something up.
             statuses = self.client.status(path, depth=depth)
         else:
             return self.status_cache[path]
@@ -266,7 +268,7 @@ class SVN:
         return False
     
     def is_normal(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.normal:
             return True
@@ -274,7 +276,7 @@ class SVN:
         return False
     
     def is_added(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.added:
             return True
@@ -282,7 +284,7 @@ class SVN:
         return False
         
     def is_modified(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.modified:
             return True
@@ -290,7 +292,7 @@ class SVN:
         return False
     
     def is_deleted(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.deleted:
             return True
@@ -298,7 +300,7 @@ class SVN:
         return False
         
     def is_ignored(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[0]
+        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.ignored:
             return True

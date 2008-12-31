@@ -24,6 +24,8 @@
 
 Simple decorators (usable in Python >= 2.4).
 
+Decorators should be named as verbs (present or paste tense).
+
 See: 
 
   - https://linkchecker.svn.sourceforge.net/svnroot/linkchecker/trunk/linkchecker/linkcheck/decorators.py
@@ -69,7 +71,7 @@ def deprecated(func):
         
     return update_func_meta(newfunc, func)
     
-def print_timing(func):
+def time(func):
     """
     This is a decorator which times a function and prints the time it took in
     milliseconds to stdout.
@@ -81,7 +83,7 @@ def print_timing(func):
     
     """
 
-    def newfunc (*args, **kwargs):
+    def newfunc(*args, **kwargs):
         """Execute function and print execution time."""
         start_time = time.time()
         result = func(*args, **kwargs)
@@ -90,4 +92,3 @@ def print_timing(func):
         return result
         
     return update_func_meta(newfunc, func)
-
