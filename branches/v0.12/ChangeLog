@@ -1,5 +1,11 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* generate_documentation.sh:
+	* nautilussvn/api
+	First generation of the Epydoc documentation.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/debug/ipython_view.py:
 	* nautilussvn/lib/decorators.py:
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
