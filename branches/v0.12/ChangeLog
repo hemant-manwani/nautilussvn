@@ -1,5 +1,15 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/helper.py:
+	* nautilussvn/lib/settings.py:
+	* nautilussvn/lib/vcs/svn.py:
+	* nautilussvn/ui/callback.py:
+	* nautilussvn/ui/commit.py:
+	Updated all Epydoc comments to match the same style. See code review.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/vcs/svn.py:
 	Oops, comments for status_cache had some errors in them. Fixed.
 

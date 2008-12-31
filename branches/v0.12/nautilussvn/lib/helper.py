@@ -34,8 +34,8 @@ def get_home_folder():
     This is used for storing things like previous commit messages and
     previously used repositories.
     
-    @rtype string
-    @return The location of our main user storage folder
+    @rtype:     string
+    @return:    The location of our main user storage folder.
     
     """
     
@@ -52,8 +52,8 @@ def get_user_path():
     Returns the location of the user's home directory.
     /home/$USER
     
-    @rtype string
-    @return The location of the user's home directory
+    @rtype:     string
+    @return:    The location of the user's home directory.
     
     """
     
@@ -63,8 +63,8 @@ def get_repository_paths_path():
     """
     Returns a valid URI for the repository paths file
     
-    @rtype string
-    @return the location of the repository paths file
+    @rtype:     string
+    @return:    The location of the repository paths file.
     
     """
     return os.path.join(get_home_folder(), "repos_paths")
@@ -73,8 +73,8 @@ def get_repository_paths():
     """
     Gets all previous repository paths stored in the user's home folder
     
-    @rtype list
-    @return a list of previously used repository paths
+    @rtype:     list
+    @return:    A list of previously used repository paths.
     
     """
     
@@ -89,8 +89,8 @@ def get_previous_messages_path():
     """
     Returns a valid URI for the previous messages file
     
-    @rtype string
-    @returner the location of the previous messages file
+    @rtype:     string
+    @returner:  The location of the previous messages file.
     
     """
     
@@ -100,8 +100,8 @@ def get_previous_messages():
     """
     Gets all previous messages stored in the user's home folder
     
-    @rtype list
-    @return a list of previous used messages
+    @rtype:     list
+    @return:    A list of previous used messages.
     
     """
     
@@ -142,11 +142,11 @@ def encode_revisions(revision_array):
     format. This means we have to determine what numbers are consecutives and
     collapse them into a single element (see doctest below for an example).
     
-    @type revision_array list of integers
-    @param revision_array A list of revision numbers.
+    @type revision_array:   list of integers
+    @param revision_array:  A list of revision numbers.
     
-    @rtype string
-    @return A string of revision numbers in TortoiseSVN-like format.
+    @rtype:                 string
+    @return                 A string of revision numbers in TortoiseSVN-like format.
     
     >>> encode_revisions([4,5,7,9,10,11,12])
     '4-5,7,9-12'
@@ -204,7 +204,7 @@ def decode_revisions(string, head):
     Takes a TortoiseSVN-like revision string and returns a list of integers.
     EX. 4-5,7,9-12 -> [4,5,7,9,10,11,12]
     
-    Note: This function is a first draft.  It may not be production-worthy.
+    TODO: This function is a first draft.  It may not be production-worthy.
     """
     returner = []
     arr = string.split(",")
@@ -224,8 +224,8 @@ def get_diff_tool():
     """
     Gets the path to the diff_tool, and whether or not to swap lhs/rhs
     
-    @rtype dict
-    @return a dictionary with the diff tool path and swap boolean value
+    @rtype:     dict
+    @return:    A dictionary with the diff tool path and swap boolean value.
     """
     
     sm = nautilussvn.lib.settings.SettingsManager()
@@ -248,7 +248,7 @@ def launch_diff_tool(path):
     5.  Now you have two files and you can send them to the diff tool.
     
     @type   path: string
-    @param  path: path to the file in question
+    @param  path: Path to the file in question.
 
     """
     
@@ -288,11 +288,11 @@ def get_file_extension(path):
     """
     Wrapper that retrieves a file path's extension
     
-    @type   path: string
-    @param  path: a filename or path
+    @type   path:   string
+    @param  path:   A filename or path.
     
-    @rtype  string
-    @return a file extension
+    @rtype:         string
+    @return:        A file extension.
     
     """
     
@@ -303,7 +303,7 @@ def open_item(path):
     Use GNOME default opener to handle file opening
     
     @type   path: string
-    @param  path: a file path
+    @param  path: A file path.
     
     """
     
@@ -317,7 +317,7 @@ def browse_to_item(path):
     Browse to the specified path in the file manager
     
     @type   path: string
-    @param  path: a file path
+    @param  path: A file path.
     
     """
 
@@ -328,7 +328,7 @@ def delete_item(path):
     Send an item to the trash
     
     @type   path: string
-    @param  path: a file path
+    @param  path: A file path.
     
     """
     
@@ -347,7 +347,7 @@ def split_path(path):
     '/foo/bar'
     
     @type   path: string
-    @param  path: an item path
+    @param  path: An item path.
     
     """
     
@@ -359,7 +359,7 @@ def save_log_message(message):
     Saves a log message to the user's home folder for later usage
     
     @type   message: string
-    @param  message: a log message
+    @param  message: A log message.
     
     """
     
@@ -379,7 +379,7 @@ def save_repository_path(path):
     and append the new one to the end.
     
     @type   path: string
-    @param  path: a repository path
+    @param  path: A repository path.
     
     """
     

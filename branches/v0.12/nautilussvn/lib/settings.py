@@ -34,8 +34,8 @@ def get_home_folder():
     NOTE: This is a copy of the helper module's function, because I can't
         have a circular module reference (helper imports Settings right now)
     
-    @rtype string
-    @return The location of our main user storage folder
+    @rtype:     string
+    @return:    The location of our main user storage folder.
     
     """
     
@@ -73,9 +73,11 @@ class SettingsManager:
     to interact with our configuration file.
     
     Usage:
+    
         Get settings:
             sm = SettingsManager()
             diff_tool = sm.get("external", "diff_tool")
+            
         Set settings:
             sm = SettingsManager()
             sm.set("external", "diff_tool", "/usr/bin/meld")
@@ -98,13 +100,13 @@ class SettingsManager:
         If no arguments are given, it just returns all settings
         
         @type section:  string
-        @param section: a settings section
+        @param section: A settings section.
         
         @type keyword:  string
-        @param keyword: a particular setting in a section
+        @param keyword: A particular setting in a section.
         
-        @rtype dict or string
-        @return either a dict or string with setting(s)
+        @rtype:         dict or string
+        @return:        Either a dict or string with setting(s).
         
         """
         
@@ -127,13 +129,13 @@ class SettingsManager:
         Set settings for a particular section and keyword
 
         @type section:  string
-        @param section: a settings section
+        @param section: A settings section.
         
         @type keyword:  string
-        @param keyword: a particular setting in a section
+        @param keyword: A particular setting in a section.
         
         @type value:    string or dict
-        @param value:   setting value
+        @param value:   Setting value.
 
         """
         
@@ -151,11 +153,11 @@ class SettingsManager:
         """
         Set multi-line comments for a section
         
-        @type section:  string
-        @param section: a settings section
+        @type section:      string
+        @param section:     A settings section.
         
-        @type comments: list
-        @param comments:a list of strings
+        @type comments:     list
+        @param comments:    A list of strings.
         
         """
 
@@ -165,11 +167,11 @@ class SettingsManager:
         """
         Set inline comments for a section
         
-        @type section:  string
-        @param section: a settings section
+        @type section:      string
+        @param section:     A settings section.
         
-        @type comments: string
-        @param comments:a single line comment
+        @type comments:     string
+        @param comments:    A single line comment.
         
         """
 
@@ -211,13 +213,13 @@ class SettingsManager:
         If no arguments are given, it just returns all settings
         
         @type section:  string
-        @param section: a settings section
+        @param section: A settings section.
         
         @type keyword:  string
-        @param keyword: a particular setting in a section
+        @param keyword: A particular setting in a section.
         
-        @rtype dict or string
-        @return either a dict or string with setting(s)
+        @rtype:         dict or string
+        @return:        Either a dict or string with setting(s).
         
         """
         
