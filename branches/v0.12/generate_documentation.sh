@@ -1,1 +1,1 @@
-epydoc -v -o nautilussvn/api/ nautilussvn
+epydoc -v --graph all -o nautilussvn/api/ nautilussvn
