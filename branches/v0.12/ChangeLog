@@ -1,5 +1,14 @@
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/decorators.py:
+	time as a function name conflicts with time module, so changed to timeit.
+	
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Forgot to register that watches were already added and I was wondering why
+	even though I had implemented a cache everything was slower ;-) Fixed.
+
+2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	This is being caused by threading problems and that's not a valid 
 	workaround since we have to monitor folders below. A valid workaround
