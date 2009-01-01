@@ -1,3 +1,13 @@
+2009-01-01  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Forgot to add watch for the path so only an initial status check is done. 
+	after adding a path. Also removed some VCS related code from the inotify
+	handler (tiny little bit of VCS abstraction).
+	* nautilussvn/lib/vcs/svn.py:
+	FIXME: multi-threading problems galore, PySVN can only be used by one
+	thread at a time and I at the moment it's being used frmo multiple threads.
+
 2008-12-31  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/decorators.py:
