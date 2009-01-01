@@ -1216,18 +1216,10 @@ class StatusMonitor():
             print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
             # End debugging code
             
-            # Subversion (pysvn? svn?) makes temporary files for some purpose which
-            # are detected by inotify but are deleted shortly thereafter. So we
-            # ignore them.
-            # TODO: this obviously doesn't account for the fact that people might
-            # version files with a .tmp extension.
-            if path.endswith(".tmp"): return
-            
             # Make sure to strip any trailing slashes because that will 
             # cause problems for the status checking
             # TODO: not 100% sure about it causing problems
-            if self.vcs_client.is_in_a_or_a_working_copy(path):
-                self.status_monitor.status(path.rstrip(os.path.sep), invalidate=True)
+            self.status_monitor.status(path.rstrip(os.path.sep), invalidate=True)
     
         def process_IN_MODIFY(self, event):
             self.process(event)
@@ -1269,7 +1261,7 @@ class StatusMonitor():
             # a working copy administration area (.svn)
             if (path.find(".svn") > 0 or 
                     self.vcs_client.is_in_a_or_a_working_copy(path)):
-                
+                self.watches[path] = None
                 # TODO: figure out precisely how this watch is added. Does it:
                 #
                 #  - Recursively register watches
@@ -1314,6 +1306,9 @@ class StatusMonitor():
                 # Note that we don't have to set invalidate to True here to 
                 # bypass the cache because since there isn't one it will be
                 # bypassed anyways. We could add it for clarity though.
+                # Begin debugging code
+                print "Debug: StatusMonitor.add_watch() initial status check for %s" % path
+                # End debugging code
                 self.status(path)
         
     def status(self, path, invalidate=False):
@@ -1356,9 +1351,16 @@ class StatusMonitor():
         
         # If we're not a or inside a working copy we don't even have to bother.
         if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+            
+        # Subversion (pysvn? svn?) makes temporary files for some purpose which
+        # are detected by inotify but are deleted shortly thereafter. So we
+        # ignore them.
+        # TODO: this obviously doesn't account for the fact that people might
+        # version files with a .tmp extension.
+        if path.endswith(".tmp"): return
         
         # Begin debugging information
-        print "Debug: StatusMonitor.status() called for %s" % path
+        print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
         # End debugging information
         
         # We need the status object for the item alone

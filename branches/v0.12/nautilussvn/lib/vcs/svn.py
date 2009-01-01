@@ -254,7 +254,9 @@ class SVN:
                 if isdir(path) and not isdir(os.path.join(path, ".svn")):
                     return False
             return True
-        except pysvn.ClientError:
+        except pysvn.ClientError, e:
+            # FIXME: ClientError client in use on another thread
+            print "Debug: exception in is_working_copy(): %s" % str(e)
             return False
         
     def is_in_a_or_a_working_copy(self, path):
