@@ -80,3 +80,12 @@ Traceback (most recent call last):
     entry = self.client.info(path)
 AttributeError: SVN instance has no attribute 'client'
 }}}
+
+= Modules as "singleton" =
+Since modules are only loaded once (per interpreter?) any variables defined in them are only set once. 
+
+= Threading and PySVN =
+
+{{{
+pysvn.ClientError: client in use on another thread
+}}}
