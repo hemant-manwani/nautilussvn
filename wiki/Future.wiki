@@ -11,7 +11,7 @@ The main concerns are:
 
 = Directory structure =
 
-A list of projects to borrow ideas from: [http://dev.deluge-torrent.org/browser/trunk Deluge], [http://www.exaile.org/downloads Exaile], [http://musicbrainz.org/doc/PicardDownload MusicBrainz Picard] and [http://svn.gnome.org/viewvc/gnome-games/trunk/gnome-sudoku/ GNOME Sudoku] (also [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus Actions] and [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus])
+A list of projects to borrow ideas from: [http://dev.deluge-torrent.org/browser/trunk Deluge], [http://pida.co.uk/ PIDA], [http://www.exaile.org/downloads Exaile], [http://musicbrainz.org/doc/PicardDownload MusicBrainz Picard] and [http://svn.gnome.org/viewvc/gnome-games/trunk/gnome-sudoku/ GNOME Sudoku] (also [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus Actions] and [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus])
 
 Here's a possible directory structure to keep the files organized:
 
