@@ -56,7 +56,7 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
 = Nautilus internals =
 
-  _Please see the [http://svn.gnome.org/svn/nautilus/trunk/docs/nautilus-internals.pdf nautilus-internals.pdf], it's a little bit outdated (ignore references to Bonobo for example) but it explains a lot of this in more detail._
+  _Please see [http://svn.gnome.org/svn/nautilus/trunk/docs/nautilus-internals.pdf nautilus-internals.pdf], it's a little bit outdated (ignore references to Bonobo for example) but it explains a lot of this in more detail._
 
 {{{
 |-- ChangeLog                      # what happend (also see svn log)
