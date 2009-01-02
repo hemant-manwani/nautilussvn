@@ -91,6 +91,6 @@ sudo apt-get install gnome-common # Missing from the build-dep
 {{{
 ./autogen.sh
 ./configure --prefix="/usr"
-mkdir -p /tmp/nautilus-testing
-TMPDIR="/tmp/nautilus-testing/ ./src/nautilus --no-desktop
+export TMPDIR=`mktemp`
+./src/nautilus --no-desktop
 }}}
