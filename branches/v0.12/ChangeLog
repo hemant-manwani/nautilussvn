@@ -1,5 +1,10 @@
 2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Don't have to write to a file to notice this behavior.
+
+2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/dbus/status_monitor.py:
 	DBus needs to be made thread-aware using thread_init calls.
 	
