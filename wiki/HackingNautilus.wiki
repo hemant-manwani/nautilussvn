@@ -26,6 +26,8 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * The website for Nautilus can be found at http://projects.gnome.org/nautilus/ 
 
+  * The mailing list can be found at http://mail.gnome.org/archives/nautilus-list/
+
   * The wiki page for Nautilus can be found at http://live.gnome.org/Nautilus
 
   * The Nautilus team hangs out on #nautilus at irc.gnome.org.
