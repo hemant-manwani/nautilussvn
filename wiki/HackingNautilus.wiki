@@ -48,19 +48,19 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 = Nautilus internals =
 
 {{{
-|-- ChangeLog
-|-- INSTALL
-|-- MAINTAINERS
+|-- ChangeLog                      # what happend (also see svn log)
+|-- INSTALL                        # installation instructions
+|-- MAINTAINERS                    # the people working on Nautilus
 |-- docs
-|   |-- nautilus-internals.pdf # some very old documentation
-|-- libnautilus-extension # the public API, exposed to the outside world
-|   |-- nautilus-file-info.c # exposes Nautilus's private nautilus-file.c
-|-- libnautilus-private # this is Nautilus's internals, never exposed
-|   |-- nautilus-file.c # one of the most important files
-|-- po # translation files
-|-- src # main source, lots of dialogs etc.
-|   |-- nautilus-main.c # main
-|-- test # tests
+|   |-- nautilus-internals.pdf     # some very old documentation
+|-- libnautilus-extension          # the public API, exposed to the outside world
+|   |-- nautilus-file-info.c       # exposes Nautilus's private nautilus-file.c
+|-- libnautilus-private            # this is Nautilus's internals, never exposed
+|   |-- nautilus-file.c            # one of the most important files
+|-- po                             # translation files
+|-- src                            # main source, lots of dialogs etc.
+|   |-- nautilus-main.c            # main
+|-- test                           # tests
 }}}
 
 = Building Nautilus =
