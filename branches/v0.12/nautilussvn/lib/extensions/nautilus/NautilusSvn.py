@@ -23,39 +23,6 @@
 """
 
 Our module for everything related to the Nautilus extension.
-
-Known issues:
-
-  - Emblems sometimes don't update untill the selection is modified.
-  
-    This is caused by threading problems. There's a bunch of FIXME's below 
-    with more information.
-
-  - Multiple emblems are attached to a single item which leads to the one
-    obscuring the other. So if an item has "normal" status, but it changes to 
-    "modified" two emblems are applied and only the emblem "normal" is visible.
-    
-    How to reproduce:
-    
-    You need a working copy with at least 2 items (combination doesn't matter).
-    
-    Use the following working copy (do not open it in Nautilus before doing this):::
-    
-        mkdir -p /tmp/nautilussvn_testing
-        cd /tmp/nautilussvn_testing
-        svnadmin create repository
-        svn co file:///tmp/nautilussvn_testing/repository working_copy
-        touch working_copy/add-this-file
-        touch working_copy/or-this-file
-    
-    Then after adding one of the files move up the tree so you can see the 
-    status for the working_copy directory.
-  
-    Things I researched but weren't the cause (so don't look into these!):
-    
-      - One idea I had was that because of the C{nautilusVFSFile_table} we might
-        have two seperate C{NautilusVFSFile} instances (with different emblems
-        attached) pointing to the same file. But that wasn't the case.
   
 """
 
@@ -195,8 +162,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # See comment for variable: statuses
         if path in self.statuses:
             self.set_emblem_by_status(path, self.statuses[path])
-            
-        self.status_monitor.add_watch(path)
+        
+        # If we access the StatusMonitor over DBus it keeps running even though
+        # Nautilus is not. So watches will stay attached. So an initial status
+        # check won't be done.
+        if (self.status_monitor.has_watch(path) and
+                path not in self.statuses):
+            self.status_monitor.status(path)
+        else:
+            self.status_monitor.add_watch(path)
         
     def get_file_items(self, window, items):
         """
@@ -247,32 +221,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        # Begin debugging code
-        print "Debug: get_background_items() for %s" % path
-        # End debugging code
-        
         self.nautilusVFSFile_table[path] = item
-        
-        # FIXME:
-        # This is a hack to try and work around the multiple emblems on a single
-        # item bug. Since get_background_items is called once when you enter
-        # a directory we just invalidate all items immediately below it.
-        
-        # MARKER: performance 
-        parent_path = split_path(path)
-        if parent_path in self.nautilusVFSFile_table:
-            item = self.nautilusVFSFile_table[parent_path]
-            item.invalidate_extension_info()
-        
-        for child_basename in os.listdir(path):
-            child_path = os.path.join(path, child_basename)
-            if child_path in self.nautilusVFSFile_table:
-                # Begin debugging code
-                print "Debug: invalidated %s in get_background_items()" % child_basename
-                # End debugging code
-                child_item = self.nautilusVFSFile_table[child_path]
-                # FIXME: still doesn't work but committing to save
-                child_item.invalidate_extension_info()
         
         return MainContextMenu([path], self).construct_menu()
     
@@ -323,14 +272,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         print "Debug: cb_status() called for %s with status %s" % (path, status)
         # End debugging code
         
-        if not path in self.nautilusVFSFile_table: return
-        item = self.nautilusVFSFile_table[path]
-        
         # See comment for variable: statuses
         # There's no reason to do a lot of stuff if the emblem is the same
         # but since we're the only function who does a add_emblem, we have to.
-        
+        # We might not have a NautilusVFSFile yet but we can already store the
+        # status.
         self.statuses[path] = status
+        
+        if not path in self.nautilusVFSFile_table: return
+        item = self.nautilusVFSFile_table[path]
         
         # We need to invalidate the extension info for only one reason:
         #
@@ -338,13 +288,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         #   temporary emblems we applied so we don't have overlay problems
         #   (with ourselves, we'd still have some with other extensions).
         #
-        # FIXME: for some reason the invalidate_extension_info isn't always 
-        # processed and update_file_info isn't called. So as a workaround we
-        # already set the emblem, running the risk of applying multiple emblems
-        # at the same time which overlap potentially resulting in the actual 
-        # status of an item not being displayed.
+        # After invalidating update_file_info applies the correct emblem.
         #
-        self.set_emblem_by_status(path, status)
         item.invalidate_extension_info()
     
 class MainContextMenu():
@@ -391,19 +336,81 @@ class MainContextMenu():
                 "condition": (lambda: True),
                 "submenus": [
                     {
-                        "identifier": "NautilusSvn::Debug_Asynchronicity",
-                        "label": "Test Asynchronicity",
+                        "identifier": "NautilusSvn::DBus",
+                        "label": "DBus",
                         "tooltip": "",
-                        "icon": "nautilussvn-asynchronous",
+                        "icon": "nautilussvn-dbus",
                         "signals": {
                             "activate": {
-                                "callback": self.callback_debug_asynchronicity,
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
+                        "submenus": [
+                            {
+                                "identifier": "NautilusSvn::DBus_Restart",
+                                "label": "Start/Restart Service",
+                                "tooltip": "",
+                                "icon": "nautilussvn-run",
+                                "signals": {
+                                    "activate": {
+                                        "callback": None,
+                                        "args": None
+                                    }
+                                }, 
+                                "condition": (lambda: True),
+                                "submenus": [
+                                    
+                                ]
+                            },
+                            {
+                                "identifier": "NautilusSvn::DBus_Exit",
+                                "label": "Exit Service",
+                                "tooltip": "",
+                                "icon": "nautilussvn-stop",
+                                "signals": {
+                                    "activate": {
+                                        "callback": None,
+                                        "args": None
+                                    }
+                                }, 
+                                "condition": (lambda: True),
+                                "submenus": [
+                                    
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Bugs",
+                        "label": "Bugs",
+                        "tooltip": "",
+                        "icon": "nautilussvn-bug",
+                        "signals": {
+                            "activate": {
+                                "callback": None,
                                 "args": None
                             }
                         },
                         "condition": (lambda: True),
                         "submenus": [
-                            
+                            {
+                                "identifier": "NautilusSvn::Debug_Asynchronicity",
+                                "label": "Test Asynchronicity",
+                                "tooltip": "",
+                                "icon": "nautilussvn-asynchronous",
+                                "signals": {
+                                    "activate": {
+                                        "callback": self.callback_debug_asynchronicity,
+                                        "args": None
+                                    }
+                                },
+                                "condition": (lambda: True),
+                                "submenus": [
+                                    
+                                ]
+                            }
                         ]
                     },
                     {
@@ -733,7 +740,7 @@ class MainContextMenu():
                         "args": None
                     }
                 }, 
-                "condition": None,
+                "condition": (lambda: True),
                 "submenus": [
                     
                 ]

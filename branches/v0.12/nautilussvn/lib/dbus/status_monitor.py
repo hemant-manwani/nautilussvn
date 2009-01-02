@@ -50,11 +50,21 @@ class StatusMonitor(dbus.service.Object):
         self.StatusChanged(path, status)
         
     @dbus.service.method(INTERFACE)
+    def has_watch(self, path):
+        # FIXME: still doesn't return an actual boolean but 1/0.
+        return bool(self.status_monitor.has_watch(str(path)))
+        
+    @dbus.service.method(INTERFACE)
     def add_watch(self, path):
         self.status_monitor.add_watch(str(path))
         
     @dbus.service.method(INTERFACE)
     def status(self, path, invalidate=False):
+        # FIXME: this will eventually call StatusChanged even though the
+        # status might not have been changed at all. This is fine right now
+        # because only the Nautilus extension is using the DBus service but
+        # wouldn't be if other people started using it to stay up to date 
+        # about VCS events.
         self.status_monitor.status(str(path), bool(invalidate))
         
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
@@ -76,6 +86,9 @@ class StatusMonitorStub:
         except dbus.DBusException:
             traceback.print_exc()
     
+    def has_watch(self, path):
+        return self.object.has_watch(path, dbus_interface=INTERFACE)
+        
     def add_watch(self, path):
         self.object.add_watch(path, dbus_interface=INTERFACE)
     
