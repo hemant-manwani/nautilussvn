@@ -926,7 +926,6 @@ class StatusMonitor():
     def __init__(self, callback):
         self.callback = callback
         
-        self.vcs_client = SVN()
         self.watch_manager = WatchManager()
         self.notifier = ThreadedNotifier(
             self.watch_manager, self.VCSProcessEvent(self))
@@ -944,11 +943,14 @@ class StatusMonitor():
         
         """
         
+        # MARKER: remove
+        vcs_client = SVN()
+        
         if not path in self.watches:
             # We can safely ignore items that aren't inside a working_copy or
             # a working copy administration area (.svn)
             if (path.find(".svn") > 0 or 
-                    self.vcs_client.is_in_a_or_a_working_copy(path)):
+                    vcs_client.is_in_a_or_a_working_copy(path)):
                 self.watches[path] = None
                 # TODO: figure out precisely how this watch is added. Does it:
                 #
@@ -980,7 +982,7 @@ class StatusMonitor():
                     parent_path = split_path(path)
                     
                     if (parent_path.find(".svn") > 0 or 
-                            self.vcs_client.is_in_a_or_a_working_copy(parent_path)):
+                            vcs_client.is_in_a_or_a_working_copy(parent_path)):
                         path_to_be_watched = parent_path
                     else:
                         path_to_be_watched = path
@@ -1037,8 +1039,10 @@ class StatusMonitor():
         @param  invalidate: Whether or not the cache should be bypassed.
         """
         
+        vcs_client = SVN()
+        
         # If we're not a or inside a working copy we don't even have to bother.
-        if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+        if not vcs_client.is_in_a_or_a_working_copy(path): return
             
         # Subversion (pysvn? svn?) makes temporary files for some purpose which
         # are detected by inotify but are deleted shortly thereafter. So we
@@ -1053,7 +1057,7 @@ class StatusMonitor():
         
         # We need the status object for the item alone
         # MARKER: performance 
-        status = self.vcs_client.status_with_cache(
+        status = vcs_client.status_with_cache(
             path, 
             invalidate=invalidate, 
             depth=pysvn.depth.empty)[-1].data["text_status"]
@@ -1069,7 +1073,7 @@ class StatusMonitor():
             ])
             
             # MARKER: performance 
-            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
+            sub_statuses = vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
             statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
             
             if len(modified_statuses & statuses): 
@@ -1085,7 +1089,7 @@ class StatusMonitor():
                 #
                 while path != "":
                     path = split_path(path)
-                    if self.vcs_client.is_in_a_or_a_working_copy(path):
+                    if vcs_client.is_in_a_or_a_working_copy(path):
                         self.callback(path, "modified")
                         break;
                 return;
@@ -1097,7 +1101,7 @@ class StatusMonitor():
             # Now we have to invalidate the parent directories
             while path != "":
                 path = split_path(path)
-                if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+                if not vcs_client.is_in_a_or_a_working_copy(path): return
                     
                 if status in (
                     pysvn.wc_status_kind.added, 
@@ -1105,7 +1109,7 @@ class StatusMonitor():
                     pysvn.wc_status_kind.modified,
                 ):
                     # FIXME: we should probably bypass the cache here
-                    if not self.vcs_client.is_added(path):
+                    if not vcs_client.is_added(path):
                         self.callback(path, "modified")
                 elif status in (
                         pysvn.wc_status_kind.normal,

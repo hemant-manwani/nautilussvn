@@ -25,6 +25,7 @@ import traceback
 import gobject
 
 import dbus
+import dbus.glib
 import dbus.service
 import dbus.mainloop.glib
 
@@ -85,6 +86,8 @@ class StatusMonitorStub:
         self.callback(str(path), str(status))
         
 if __name__ == "__main__":
+    gobject.threads_init()
+    dbus.glib.threads_init()
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
     session_bus = dbus.SessionBus()
