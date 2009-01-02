@@ -1,3 +1,18 @@
+2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/dbus/__init__.py:
+	* nautilussvn/lib/dbus/status_monitor.py:
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Started implementing DBus to get around the threading problems, doesn't 
+	work yet but I hope I can get it to work tomorrow.
+	
+	* nautilussvn/lib/vcs/__init__.py:
+	* nautilussvn/lib/vcs/svn.py:
+	Moved the StatusMonitor to the SVN module.
+	
+	* nautilussvn/tests/dbus/status_monitor_exit.py:
+	A script to properly stop the DBus service.
+
 2009-01-01  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:

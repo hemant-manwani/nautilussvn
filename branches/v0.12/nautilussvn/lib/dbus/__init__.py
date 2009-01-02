@@ -19,26 +19,3 @@
 # You should have received a copy of the GNU General Public License
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
-
-from nautilussvn.lib.vcs.svn import SVN
-from nautilussvn.lib.decorators import deprecated
-
-class VCS:
-    pass
-    
-class VCSFactory:
-    
-    @deprecated
-    def create_vcs_instance(self):
-        """
-        @deprecated: Use create_vcs_instance() instead.
-        """
-        
-        return SVN()
-
-def create_vcs_instance():
-    """
-    
-    """
-    # TODO: we'll figure this out later by looking at the working copy.
-    return SVN()
