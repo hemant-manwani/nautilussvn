@@ -40,7 +40,10 @@ import gtk
 
 from nautilussvn.lib.vcs import create_vcs_instance
 from nautilussvn.lib.vcs.svn import SVN
+
+import nautilussvn.lib.dbus.service
 from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonitor
+
 from nautilussvn.lib.helper import split_path
 from nautilussvn.lib.decorators import timeit
 
@@ -90,16 +93,25 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     statuses = {}
     
     def __init__(self):
+        # Start up our DBus service if it's not already started, if this fails
+        # we can't really do anything.
+        self.dbus_service_available = nautilussvn.lib.dbus.service.start()
+            
         # Create a StatusMonitor and register a callback with it to notify us 
         # of any status changes.
-        self.status_monitor = StatusMonitor(self.cb_status)
+        if self.dbus_service_available:
+            self.status_monitor = StatusMonitor(self.cb_status)
+        else:
+            # Might aswell fallback on our non DBus status monitor
+            from nautilussvn.lib.vcs.svn import StatusMonitor as LocalStatusMonitor
+            self.status_monitor = LocalStatusMonitor(self.cb_status)
         
     def get_columns(self):
         """
         
         
         """
-        
+            
         pass
         
     def update_file_info(self, item):
@@ -174,7 +186,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
     def get_file_items(self, window, items):
         """
-        Menu activated with items selected.
+        Menu activated with items selected. Nautilus also calls this function
+        when rendering submenus, even though this is not needed since the entire
+        menu has already been returned.
         
         Note that calling C{nautilusVFSFile.invalidate_extension_info()} will 
         also cause get_file_items to be called.
@@ -291,6 +305,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # After invalidating update_file_info applies the correct emblem.
         #
         item.invalidate_extension_info()
+        # FIXME: for some reason when not using the DBus service C{update_file_info}
+        # isn't always called, which doesn't make sense but ok.
+        if not self.dbus_service_available:
+            self.set_emblem_by_status(path, status)
     
 class MainContextMenu():
     """
@@ -355,7 +373,7 @@ class MainContextMenu():
                                 "icon": "nautilussvn-run",
                                 "signals": {
                                     "activate": {
-                                        "callback": None,
+                                        "callback": self.callback_dbus_restart,
                                         "args": None
                                     }
                                 }, 
@@ -371,7 +389,7 @@ class MainContextMenu():
                                 "icon": "nautilussvn-stop",
                                 "signals": {
                                     "activate": {
-                                        "callback": None,
+                                        "callback": self.callback_dbus_exit,
                                         "args": None
                                     }
                                 }, 
@@ -917,6 +935,18 @@ class MainContextMenu():
     #
     
     # Begin debugging callbacks
+    def callback_dbus_restart(self, menu_item, path):
+        # FIXME: doesn't work yet
+        if self.nautilussvn_extension.dbus_service_available:
+            nautilussvn.lib.dbus.service.exit()
+            nautilussvn.lib.dbus.service.start()
+        else:
+            nautilussvn.lib.dbus.service.start()
+        
+    def callback_dbus_exit(self, menu_item, paths):
+        nautilussvn.lib.dbus.service.exit()
+        self.nautilussvn_extension.dbus_service_available = False
+    
     def callback_debug_asynchronicity(self, menu_item, paths):
         """
         This is a function to test doing things asynchronously.

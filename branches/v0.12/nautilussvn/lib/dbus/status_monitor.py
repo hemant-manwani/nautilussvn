@@ -70,42 +70,34 @@ class StatusMonitor(dbus.service.Object):
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def exit(self):
         self.status_monitor.notifier.stop()
-        loop.quit()
         
 class StatusMonitorStub:
+    """
+    This isn't something from DBus but it looked like a good idea to me to
+    make using the StatusMonitor easier.
+    """
     
     def __init__(self, callback):
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        
         self.callback = callback
-        self.bus = dbus.SessionBus()
+        self.session_bus = dbus.SessionBus()
         
         try:
-            self.object = self.bus.get_object(SERVICE, OBJECT_PATH)
-            self.object.connect_to_signal("StatusChanged", self.cb_status, dbus_interface=INTERFACE)
+            self.status_monitor = self.session_bus.get_object(SERVICE, OBJECT_PATH)
+            self.status_monitor.connect_to_signal("StatusChanged", self.cb_status, dbus_interface=INTERFACE)
         except dbus.DBusException:
             traceback.print_exc()
     
     def has_watch(self, path):
-        return self.object.has_watch(path, dbus_interface=INTERFACE)
+        return self.status_monitor.has_watch(path, dbus_interface=INTERFACE)
         
     def add_watch(self, path):
-        self.object.add_watch(path, dbus_interface=INTERFACE)
+        self.status_monitor.add_watch(path, dbus_interface=INTERFACE)
     
     def status(self, path, invalidate=False):
-        self.object.status(path, invalidate, dbus_interface=INTERFACE)
+        self.status_monitor.status(path, invalidate, dbus_interface=INTERFACE)
     
     def cb_status(self, path, status):
         self.callback(str(path), str(status))
         
-if __name__ == "__main__":
-    gobject.threads_init()
-    dbus.glib.threads_init()
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
-    session_bus = dbus.SessionBus()
-    name = dbus.service.BusName(SERVICE, session_bus)
-    status_monitor = StatusMonitor(session_bus)
-    
-    loop = gobject.MainLoop()
-    loop.run()
+    def exit(self):
+        self.status_monitor.exit()
