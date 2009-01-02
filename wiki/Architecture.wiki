@@ -4,7 +4,7 @@
 = Introduction =
 In this page we'll look at what exactly a Nautilus extension is (the interface etc.) and dive into the NautilusSvn specifics.
 
-= Details =
+= General =
 
 == The basics of a Nautilus extension ==
 NautilusSvn is a Nautilus extension written in Python using the [http://svn.gnome.org/viewvc/nautilus-python/trunk/ Python bindings for the Nautilus extension library] (nautilus-python in short). For an extensive introduction see [http://www.campd.org/stuff/docs/extending-nautilus/NautilusExtensions.html Nautilus Extensions].
@@ -22,3 +22,23 @@ Each of these providers come with their own set of functions one has to implemen
 When implementing the NautilusInfoProvider interface one has to implement the update_file_info function. 
 
   * TODO: write something about when update_file_info is exactly called and the relation with invalidate_extension_info on a GnomeVFSFileInfo. 
+
+= Specifics =
+
+== Directory structure ==
+The annoted tree below shows the most important directories (packages basically).
+
+{{{
+
+nautilussvn
+|-- lib
+|   |-- dbus             # our DBus services live here, mostly to interface with the StatusMonitor
+|   |-- extensions       # the actual Nautilus extension code lives here so NautilusSvn and MainContextMenu
+|   |-- settings.py      # our settings back-end
+|   `-- vcs              # Our VCS specific code, also includes the StatusMonitor
+`-- ui                   # the entire UI layer lives here (everything)
+}}}
+
+== Why do you use DBus? ==
+
+Mostly a workaround for not being able to use threads from within a Nautilus extension (see source code). Don't ask us why, we don't know. 
