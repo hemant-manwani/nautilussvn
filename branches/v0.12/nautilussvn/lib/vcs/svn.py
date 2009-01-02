@@ -36,6 +36,12 @@ from nautilussvn.lib.decorators import deprecated, timeit
 from nautilussvn.lib.helper import split_path
 
 class SVN:
+    """
+    Marker: performance
+    
+    FIXME: when using the DBus service (in a seperate process) two caches are
+    maintained. We should probably allow this class to be used over DBus too.
+    """
     
     STATUS = {
         "none"          : pysvn.wc_status_kind.none,

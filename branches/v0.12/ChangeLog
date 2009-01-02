@@ -1,5 +1,14 @@
 2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/dbus/service.py:
+	* nautilussvn/lib/dbus/status_monitor.py:
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	Create an actual NautilusSvn service to compliment the StatusMonitor,
+	also added code to start the DBus service when it's not running.
+
+2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-bug.s
 	vg:
 	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-dbus.
