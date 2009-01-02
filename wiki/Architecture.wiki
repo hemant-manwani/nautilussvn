@@ -22,27 +22,3 @@ Each of these providers come with their own set of functions one has to implemen
 When implementing the NautilusInfoProvider interface one has to implement the update_file_info function. 
 
   * TODO: write something about when update_file_info is exactly called and the relation with invalidate_extension_info on a GnomeVFSFileInfo. 
-
-== NautilusSvn specifics ==
-
-=== Pre v0.12 ===
-==== How NautilusSvn determines the file status ====
-Let's take a look at all the different steps NautilusSvn takes when determining the file status and applying an emblem accordingly.
-
-===== General =====
-First of all NautilusSvn uses the pysvn library for doing Subversion 'stuff', here's a tiny snippet showing how that works:
-{{{
-import pysvn
-client = pysvn.Client()
-state = client.status(path)
-}}}
-
-===== The workflow =====
-  # When recursing in a directory Nautilus calls _update_file_info_
-  # NautilusSvn adds the file to the scanStack
-  # OnIdle is called which in turn calls ScanFile until the scanStack is empty
-  # ScanFile checks the status using pysvn.status
-  # If the argument to update_file_info was a file ScanFile also adds it to monitoredFiles
-  # After every action RescanFilesAfterProcess calls invalidate_extension_info on every monitored file.
-
-=== v0.12 ===
