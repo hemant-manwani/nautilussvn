@@ -36,6 +36,9 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * The only reference (auto-generated using GTK-doc) currently available for Nautilus is [http://library.gnome.org/devel/libnautilus-extension/stable/ libnautilus-extension], which can be found in Subversion under [http://svn.gnome.org/viewvc/nautilus/trunk/docs/reference/libnautilus-extension/ docs/reference/libnautilus-extension]. Note however that at the moment Nautilus doesn't have any [http://library.gnome.org/devel/gtk-doc-manual/unstable/documenting_syntax.html.en GTK-doc documentation blocks].
 
+= Nautilus extensions =
+
+  _For the moment, see [http://code.google.com/p/nautilussvn/wiki/Architecture Architecture]_
 
 = Who's who =
 
