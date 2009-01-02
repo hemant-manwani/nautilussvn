@@ -965,7 +965,8 @@ class MainContextMenu():
             
             file.close()    
             print "Debug: asynchronous_function() finished"
-            
+        
+        gobject.threads_init()
         thread.start_new_thread(asynchronous_function, ())
         
     def callback_debug_shell(self, menu_item, paths):

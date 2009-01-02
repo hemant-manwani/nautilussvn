@@ -1,5 +1,22 @@
 2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/dbus/status_monitor.py:
+	DBus needs to be made thread-aware using thread_init calls.
+	
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	Still having some PySVN problems with threading so create a client when
+	it is going to be used, not as an instance variable. Still means we'll
+	have cache problems (two threads accesing the same cache).
+	
+	* nautilussvn/tests/dbus/dbus_threading.py:
+	* nautilussvn/tests/dbus/status_monitor_add_watch.py:
+	* nautilussvn/tests/dbus/status_monitor_listener.py:
+	Some more tests (this should be done in a single class, but it helped me 
+	enough for now).
+
+2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/dbus/__init__.py:
 	* nautilussvn/lib/dbus/status_monitor.py:
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
