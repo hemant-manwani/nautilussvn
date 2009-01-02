@@ -931,6 +931,11 @@ class StatusMonitor():
             self.watch_manager, self.VCSProcessEvent(self))
         self.notifier.start()
     
+    def has_watch(self, path):
+        if path in self.watches:
+            return True
+        return False
+        
     @timeit
     def add_watch(self, path):
         """

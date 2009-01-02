@@ -1,5 +1,21 @@
 2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-bug.s
+	vg:
+	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-dbus.
+	svg:
+	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-run.s
+	vg:
+	* nautilussvn/data/icons/hicolor/scalable/actions/nautilussvn-stop.
+	svg:
+	* nautilussvn/lib/dbus/status_monitor.py:
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	Uh.... I think I just squashed all major bugs, another logic error and
+	well we are using DBus now... so.. uh... yeah
+
+2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Don't have to write to a file to notice this behavior.
 
