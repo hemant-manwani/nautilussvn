@@ -28,11 +28,22 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 
   * The wiki page for Nautilus can be found at http://live.gnome.org/Nautilus
 
+  * The Nautilus team hangs out on #nautilus at irc.gnome.org.
+
   * The code for Nautilus can be found in the repository ([http://svn.gnome.org/viewvc/nautilus/trunk viewvc] / [http://svn.gnome.org/svn/nautilus/trunk svn]). 
 
   * Here's the [http://library.gnome.org/users/user-guide/stable/nautilus.html.en end-user documentation] (accessed through Help -> Contents), interestingly enough there's a chapter on [http://library.gnome.org/users/user-guide/stable/gosnautilus-440.html.en Extending Nautilus] (though it is limited). 
 
   * The only reference (auto-generated using GTK-doc) currently available for Nautilus is [http://library.gnome.org/devel/libnautilus-extension/stable/ libnautilus-extension], which can be found in Subversion under [http://svn.gnome.org/viewvc/nautilus/trunk/docs/reference/libnautilus-extension/ docs/reference/libnautilus-extension]. Note however that at the moment Nautilus doesn't have any [http://library.gnome.org/devel/gtk-doc-manual/unstable/documenting_syntax.html.en GTK-doc documentation blocks].
+
+
+= Who's who =
+
+|| *Full name* || *Nickname* || *Description* || *Links* ||
+|| Alex Larsson || alexl || The lead developer for Nautilus. Also works on a lot of other projects, such as GVFS and GTK+. Alex is a Red Hat employee. || [http://blogs.gnome.org/alexl/ Blog], [https://www.ohloh.net/people?query=alexl Ohloh] ||
+|| Christian Neumair || manny || || [http://blogs.gnome.org/cneumair/ Blog], [https://www.ohloh.net/people?query=cneumair Ohloh] ||
+|| Cosimo Cecchi || cosimoc || Nautilus hacker. Can be asked pretty much anything. || [http://blogs.gnome.org/cosimoc/ Blog], [https://www.ohloh.net/accounts/cosimoc Ohloh] ||
+|| Benjamin Otte || Company || Not a Nautilus hacker, but knows a lot about GVFS. Lead developer of swfdec. || [http://blogs.gnome.org/otte/ Blog], [https://www.ohloh.net/accounts/6770 Ohloh] ||
 
 = Building Nautilus =
 
