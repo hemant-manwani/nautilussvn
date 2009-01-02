@@ -30,9 +30,10 @@ import os.path
 from os.path import isdir, isfile
 
 import pysvn
+from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
-from ..decorators import deprecated
-from ..helper import split_path
+from nautilussvn.lib.decorators import deprecated, timeit
+from nautilussvn.lib.helper import split_path
 
 class SVN:
     
@@ -157,6 +158,9 @@ class SVN:
     #:        "/foo": [<PysvnStatus u'foo'>, <PysvnStatus u'bar'>, <PysvnStatus u'baz'>]
     #:     }
     #:
+    #: It is shared over all instances. Don't ask me why though, I don't 
+    #: understand how it works myself.
+    #:
     status_cache = {}
     
     def __init__(self):
@@ -173,6 +177,7 @@ class SVN:
         else:
             return self.client.status(path, recurse=recurse)
     
+    @timeit
     def status_with_cache(self, path, invalidate=False, depth=pysvn.depth.infinity):
         """
         
@@ -256,7 +261,7 @@ class SVN:
             return True
         except pysvn.ClientError, e:
             # FIXME: ClientError client in use on another thread
-            print "Debug: exception in is_working_copy(): %s" % str(e)
+            print "    Debug: EXCEPTION in is_working_copy(): %s" % str(e)
             return False
         
     def is_in_a_or_a_working_copy(self, path):
@@ -784,3 +789,346 @@ class SVN:
             return str(e)
         
         return None
+
+class StatusMonitor():
+    """
+    
+    The C{StatusMonitor} is basically a replacement for the currently limited 
+    C{update_file_info} function.
+    
+    What C{StatusMonitor} does:
+    
+      - When somebody adds a watch and if there's not already a watch for this 
+        item it will add one and do an initial status check.
+    
+      - Use inotify to keep track of modifications of any watched items
+        (we actually only care about modifications not creations and deletions)
+        
+      - Either on request, or when something interesting happens, it checks
+        the status for an item which means:
+        
+          - See working code for exactly what a status check means
+        
+          - After checking the status for an item, if there's a watch for
+            a parent directory this is what will happen:    
+        
+              - If status is (vcs) modified, (vcs) added or (vcs) deleted:
+            
+                  - For every parent the callback will be called with status 
+                    "modified" (since it cannot be any other way)
+          
+              - If vcs status is normal: 
+            
+                  - A status check is done for the parent directory since we 
+                    cannot be sure what the status for them is
+      
+    In the future we might implement a functionality which also monitors
+    versioning actions so the command-line client can be used and still have
+    the emblems update accordingly. 
+    
+    UML sequence diagram depicting how the StatusMonitor is used::
+
+        +---------------+          +-----------------+         
+        |  NautilusSVN  |          |  StatusMonitor  |         
+        +---------------+          +-----------------+         
+               |                            |                  
+               |   new(self.cb_status)      |                  
+               |--------------------------->|                  
+               |                            |                  
+               |     add_watch(path)        |                  
+               |--------------------------->|---+              
+               |                            |   |              
+               |  cb_status(path, status)   |   | status(path) 
+               |<---------------------------|<--+              
+               |                            |                  
+               |---+                        |                  
+               |   | set_emblem_by_status(path, status)      
+               |<--+                        |                  
+               |                            |                  
+
+    
+    """
+    
+    #: TODO: this is the reverse of C{STATUS} in the svn module and should probably
+    #: be moved there once I figure out what the responsibilities for the svn
+    #: module are.
+    STATUS = {
+        pysvn.wc_status_kind.none:          "none",
+        pysvn.wc_status_kind.unversioned:   "unversioned",
+        pysvn.wc_status_kind.normal:        "normal",
+        pysvn.wc_status_kind.added:         "added",
+        pysvn.wc_status_kind.missing:       "missing",
+        pysvn.wc_status_kind.deleted:       "deleted",
+        pysvn.wc_status_kind.replaced:      "replaced",
+        pysvn.wc_status_kind.modified:      "modified",
+        pysvn.wc_status_kind.merged:        "merged",
+        pysvn.wc_status_kind.conflicted:    "conflicted",
+        pysvn.wc_status_kind.ignored:       "ignored",
+        pysvn.wc_status_kind.obstructed:    "obstructed",
+        pysvn.wc_status_kind.external:      "external",
+        pysvn.wc_status_kind.incomplete:    "incomplete"
+    }
+    
+   
+    #: A dictionary to keep track of the paths we're watching.
+    #: 
+    #: It looks like:::
+    #:
+    #:     watches = {
+    #:         # Always None because we just want to check if a watch has been set
+    #:         "/foo/bar/baz": None
+    #:     }
+    #:     
+    watches = {}
+    
+    #: The mask for the inotify events we're interested in.
+    #: TODO: understand how masking works
+    #: TODO: maybe we should just analyze VCSProcessEvent and determine this 
+    #: dynamically because one might tend to forgot to update these
+    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO
+    
+    class VCSProcessEvent(ProcessEvent):
+        """
+        
+        Our processing class for inotify events.
+        
+        """
+        
+        def __init__(self, status_monitor):
+            self.status_monitor = status_monitor
+        
+        def process(self, event):
+            path = event.path
+            if event.name: path = os.path.join(path, event.name)
+            
+            # Begin debugging code
+            print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
+            # End debugging code
+            
+            # Make sure to strip any trailing slashes because that will 
+            # cause problems for the status checking
+            # TODO: not 100% sure about it causing problems
+            self.status_monitor.status(path.rstrip(os.path.sep), invalidate=True)
+    
+        def process_IN_MODIFY(self, event):
+            self.process(event)
+        
+        def process_IN_MOVED_TO(self, event):
+            # FIXME: because update_file_info isn't called when things are moved,
+            # and we can't convert a path/uri to a NautilusVFSFile we can't
+            # always update the emblems properly on items that are moved (our 
+            # nautilusVFSFile_table points to an item that no longer exists).
+            #
+            # Once get_file_items() is called on an item, we once again have the 
+            # NautilusVFSFile we need (happens whenever an item is selected).
+            self.process(event)
+    
+    def __init__(self, callback):
+        self.callback = callback
+        
+        self.vcs_client = SVN()
+        self.watch_manager = WatchManager()
+        self.notifier = ThreadedNotifier(
+            self.watch_manager, self.VCSProcessEvent(self))
+        self.notifier.start()
+    
+    @timeit
+    def add_watch(self, path):
+        """
+        
+        Request a watch to be added for path. This function will figure out
+        the best spot to add the watch (most likely a parent directory).
+        
+        TODO: refactor to remove code duplication
+        MARKER: performance 
+        
+        """
+        
+        if not path in self.watches:
+            # We can safely ignore items that aren't inside a working_copy or
+            # a working copy administration area (.svn)
+            if (path.find(".svn") > 0 or 
+                    self.vcs_client.is_in_a_or_a_working_copy(path)):
+                self.watches[path] = None
+                # TODO: figure out precisely how this watch is added. Does it:
+                #
+                #  - Recursively register watches
+                #  - Call the process method with the path argument originally used
+                #    or with the path for the specific item that was modified.
+                # 
+                # FIXME: figure out why when registering a parent directory and the 
+                # file itself the IN_MODIFY event handler is called 3 times (once 
+                # for the directory and twice for the file itself).
+                #
+                
+                # We only have to add a full recursive watch once, then we just
+                # add new watches dynamically when events are triggered. So look
+                # up to see whether there's already a watch set.
+                
+                # MARKER: performance 
+                path_to_check = path
+                watch_is_already_set = False
+                while path_to_check !="":
+                    path_to_check = split_path(path_to_check)
+                    if path_to_check in self.watches:
+                        watch_is_already_set = True
+                        break;
+                
+                # To always be able to track moves (renames are moves too) we 
+                # have to make sure we register with our parent directory
+                if not watch_is_already_set:
+                    parent_path = split_path(path)
+                    
+                    if (parent_path.find(".svn") > 0 or 
+                            self.vcs_client.is_in_a_or_a_working_copy(parent_path)):
+                        path_to_be_watched = parent_path
+                    else:
+                        path_to_be_watched = path
+                    
+                    self.watches[path_to_be_watched] = None # don't need a value
+                    self.watch_manager.add_watch(path_to_be_watched, self.mask, rec=True)
+                    # Begin debugging code
+                    print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_be_watched
+                    # End debugging code
+                
+                # Note that we don't have to set invalidate to True here to 
+                # bypass the cache because since there isn't one it will be
+                # bypassed anyways. We could add it for clarity though.
+                # Begin debugging code
+                print "Debug: StatusMonitor.add_watch() initial status check for %s" % path
+                # End debugging code
+                self.status(path)
+        
+    def status(self, path, invalidate=False):
+        """
+        
+        This function doesn't return anything but calls the callback supplied
+        to C{StatusMonitor} by the caller.
+        
+        UML sequence diagram depicting the status checks::
+        
+            +-----------------+                  +-------------+
+            |  StatusMonitor  |                  |  VCSClient  |
+            +-----------------+                  +-------------+
+                    |                                   |
+                    |    status(path, depth=empty)      |
+                    |---------------------------------->|
+                    |+-------------------+-------------+|
+                    || [if isdir(path)]  |             ||
+                    |+-------------------+             ||
+                    ||                                 ||
+                    ||          status(path)           ||
+                    ||-------------------------------->||
+                    |+---------------------------------+|
+                    |                                   |
+                    |+--------------------------+------+|
+                    || [foreach parent folder]  |      ||
+                    |+--------------------------+      ||
+                    ||                                 ||
+                    ||          status(path)           ||
+                    ||-------------------------------->||
+                    |+---------------------------------+|
+                    |                                   |
+        
+        @type   path: string
+        @param  path: The path for which to check the status.
+        
+        @type   invalidate: boolean
+        @param  invalidate: Whether or not the cache should be bypassed.
+        """
+        
+        # If we're not a or inside a working copy we don't even have to bother.
+        if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+            
+        # Subversion (pysvn? svn?) makes temporary files for some purpose which
+        # are detected by inotify but are deleted shortly thereafter. So we
+        # ignore them.
+        # TODO: this obviously doesn't account for the fact that people might
+        # version files with a .tmp extension.
+        if path.endswith(".tmp"): return
+        
+        # Begin debugging information
+        print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
+        # End debugging information
+        
+        # We need the status object for the item alone
+        # MARKER: performance 
+        status = self.vcs_client.status_with_cache(
+            path, 
+            invalidate=invalidate, 
+            depth=pysvn.depth.empty)[-1].data["text_status"]
+            
+        # A directory should have a modified status when any of its children
+        # have a certain status (see modified_statuses below). Jason thought up 
+        # of a nifty way to do this by using sets and the bitwise AND operator (&).
+        if isdir(path) and status != pysvn.wc_status_kind.added:
+            modified_statuses = set([
+                pysvn.wc_status_kind.added, 
+                pysvn.wc_status_kind.deleted, 
+                pysvn.wc_status_kind.modified
+            ])
+            
+            # MARKER: performance 
+            sub_statuses = self.vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
+            statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
+            
+            if len(modified_statuses & statuses): 
+                self.callback(path, "modified")
+                
+                #
+                # We have to change the emblems on any parent directories aswell
+                # when an item is modified this is pretty easy because we know
+                # the status for the parent has to be "modified" too.
+                #
+                # There's another section below which also takes into account
+                # the other statuses.
+                #
+                while path != "":
+                    path = split_path(path)
+                    if self.vcs_client.is_in_a_or_a_working_copy(path):
+                        self.callback(path, "modified")
+                        break;
+                return;
+        
+        # Verifiying the rest of the statuses is common for both files and directories.
+        if status in self.STATUS:
+            self.callback(path, self.STATUS[status])
+            
+            # Now we have to invalidate the parent directories
+            while path != "":
+                path = split_path(path)
+                if not self.vcs_client.is_in_a_or_a_working_copy(path): return
+                    
+                if status in (
+                    pysvn.wc_status_kind.added, 
+                    pysvn.wc_status_kind.deleted, 
+                    pysvn.wc_status_kind.modified,
+                ):
+                    # FIXME: we should probably bypass the cache here
+                    if not self.vcs_client.is_added(path):
+                        self.callback(path, "modified")
+                elif status in (
+                        pysvn.wc_status_kind.normal,
+                        pysvn.wc_status_kind.unversioned, # FIXME: but only if it was previously versioned
+                    ):
+                    
+                    # MARKER: performance 
+                    self.status(path, invalidate=invalidate)
+                    
+                    # If we don't break out here it would result in the 
+                    # recursive status checks on (^):
+                    #
+                    # /foo/bar/baz/qux
+                    #   ^   ^   ^
+                    #   ^   ^
+                    #   ^
+                    #
+                    # Instead of "just":
+                    #
+                    # /foo/bar/baz/qux
+                    #   ^   ^   ^
+                    #
+                    
+                    # FIXME: if those were just cache hits performance would
+                    # be significantly increased.
+                    break;
