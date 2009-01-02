@@ -7,6 +7,8 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 
 = General =
 
+  _(?) means that we haven't decided on this yet_
+
 == From PEP-8 ===
 
   * Use 4 spaces per indentation level.
@@ -23,6 +25,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 
   * Double quotes should be used to indicate strings, i.e. "This is a string."
   * When referring to both files and directories use the term "items" not "files". Also sometimes you want to use "paths".
+  * (?) To stay consistent with imports always use absolute imports.
 
 = Comments =
 
