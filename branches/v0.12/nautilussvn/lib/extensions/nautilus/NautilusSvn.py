@@ -948,24 +948,14 @@ class MainContextMenu():
         import time
         
         def asynchronous_function():
-            # If you do:
-            # 
-            #   tail -f /tmp/nautilussvn/counterlog
-            #
-            # You will notice that the thread is only run for a short while.
             print "Debug: inside asynchronous_function()"
-            
-            temporary_directory = "/tmp/nautilussvn"
-            if not os.path.isdir(temporary_directory): os.mkdir(temporary_directory)
-            file = open(os.path.join(temporary_directory, "counterlog"), "w")
             
             for i in range(0, 100000):
                 print i
-                file.write(str(i) + "\n")
             
-            file.close()    
             print "Debug: asynchronous_function() finished"
         
+        # Calling threads_init does not do anything.
         gobject.threads_init()
         thread.start_new_thread(asynchronous_function, ())
         
