@@ -45,6 +45,24 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 || Cosimo Cecchi || cosimoc || Nautilus hacker. Can be asked pretty much anything. || [http://blogs.gnome.org/cosimoc/ Blog], [https://www.ohloh.net/accounts/cosimoc Ohloh] ||
 || Benjamin Otte || Company || Not a Nautilus hacker, but knows a lot about GVFS. Lead developer of swfdec. || [http://blogs.gnome.org/otte/ Blog], [https://www.ohloh.net/accounts/6770 Ohloh] ||
 
+= Nautilus internals =
+
+{{{
+|-- ChangeLog
+|-- INSTALL
+|-- MAINTAINERS
+|-- docs
+|   |-- nautilus-internals.pdf # some very old documentation
+|-- libnautilus-extension # the public API, exposed to the outside world
+|   |-- nautilus-file-info.c # exposes Nautilus's private nautilus-file.c
+|-- libnautilus-private # this is Nautilus's internals, never exposed
+|   |-- nautilus-file.c # one of the most important files
+|-- po # translation files
+|-- src # main source, lots of dialogs etc.
+|   |-- nautilus-main.c # main
+|-- test # tests
+}}}
+
 = Building Nautilus =
 
 == Requirements ==
@@ -54,6 +72,9 @@ sudo apt-get install gnome-common # Missing from the build-dep
 }}}
 
 == Building ==
+
+[http://mail.gnome.org/archives/nautilus-list/2004-October/msg00194.html You don't have to make install] when building, you can simply run Nautilus from the build directory.
+
 {{{
 ./autogen.sh
 ./configure --prefix="/usr"
