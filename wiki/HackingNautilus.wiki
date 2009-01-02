@@ -63,6 +63,14 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 |-- test                           # tests
 }}}
 
+= Getting Nautilus =
+
+Subversion is the best way.
+
+{{{
+svn co http://svn.gnome.org/svn/nautilus/trunk/ nautilus
+}}}
+
 = Building Nautilus =
 
 == Requirements ==
