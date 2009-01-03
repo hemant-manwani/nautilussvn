@@ -22,12 +22,8 @@
 
 import traceback
 
-import gobject
-
 import dbus
-import dbus.glib
 import dbus.service
-import dbus.mainloop.glib
 
 from nautilussvn.lib.vcs.svn import StatusMonitor as SVNStatusMonitor
 

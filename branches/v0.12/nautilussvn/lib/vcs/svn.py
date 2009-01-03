@@ -214,7 +214,7 @@ class SVN:
         # otherwise be an inmediate cache hit.
         if (invalidate or 
                 path not in self.status_cache or
-                len(self.status_cache[path]) == 1):
+                (path in self.status_cache and len(self.status_cache[path]) == 1)):
             print "Debug: status_with_cache() invalidated %s" % path
             # FIXME: the is_ functions call us with an empty depth, that 
             # probably screws something up.
@@ -231,15 +231,25 @@ class SVN:
         #
         # To the one described in the comments for C{status_cache}.
         #
-
+        
+        # TODO: code duplication
+        
+        # First empty all the caches
         for status in statuses:
             path_bit = os.path.abspath(os.path.join(path, status.data["path"]))
             
             while path_bit != "":
                 if (invalidate or 
                         not path_bit in self.status_cache):
-                    self.status_cache[path_bit] = []
-                    
+                    self.status_cache[path_bit] = [] # FIXME: doesn't this overwrite?
+                
+                path_bit = split_path(path_bit)
+        
+        # Then fill them back up
+        for status in statuses:
+            path_bit = os.path.abspath(os.path.join(path, status.data["path"]))
+            
+            while path_bit != "":
                 self.status_cache[path_bit].append(status)
                 path_bit = split_path(path_bit)
         
