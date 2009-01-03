@@ -1,5 +1,10 @@
 2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Ignore that.... now it should though!
+
+2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/dbus/service.py:
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	DBus restart menu item now working.
