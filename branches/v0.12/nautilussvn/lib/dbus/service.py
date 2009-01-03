@@ -86,8 +86,12 @@ def exit():
     This function is used to exit a running service.
     """
     session_bus = dbus.SessionBus()
-    service = session_bus.get_object(SERVICE, OBJECT_PATH)
-    service.exit()
+    try:
+        service = session_bus.get_object(SERVICE, OBJECT_PATH)
+        service.exit()
+    except:
+        # Probably not running...
+        traceback.print_exc()
 
 if __name__ == "__main__":
     # The following calls are required to make DBus thread-aware and therefor

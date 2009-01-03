@@ -936,9 +936,10 @@ class MainContextMenu():
     
     # Begin debugging callbacks
     def callback_dbus_restart(self, menu_item, path):
-        # FIXME: doesn't work yet
+        import time
         if self.nautilussvn_extension.dbus_service_available:
             nautilussvn.lib.dbus.service.exit()
+            time.sleep(1)
             nautilussvn.lib.dbus.service.start()
         else:
             nautilussvn.lib.dbus.service.start()
