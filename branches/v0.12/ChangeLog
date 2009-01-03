@@ -1,3 +1,9 @@
+2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/dbus/status_monitor.py:
+	* nautilussvn/lib/vcs/svn.py:
+	And yet another logic error, that for some reason I didn't catch earlier.
+
 2009-01-02  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/dbus/service.py:
