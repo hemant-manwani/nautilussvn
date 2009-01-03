@@ -31,7 +31,7 @@ import re
 import time
 import shutil
 
-import nautilussvn.ui.dialog
+from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.settings
 
 def get_home_folder():
@@ -113,7 +113,7 @@ def get_previous_messages():
     
     path = get_previous_messages_path()
     if not os.path.exists(path):
-        nautilussvn.ui.dialog.MessageBox(
+        MessageBox(
             "There are no previous messages to view"
         )
         return
@@ -264,7 +264,7 @@ def launch_diff_tool(path):
         return
     
     if not os.path.exists(diff["path"]):
-        nautilussvn.ui.dialog.MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings.")
+        MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings.")
         return
 
     patch = os.popen("svn diff '%s'" % path).read()
@@ -306,7 +306,10 @@ def get_file_extension(path):
     
 def open_item(path):
     """
-    Use GNOME default opener to handle file opening
+    Use GNOME default opener to handle file opening.
+    
+    TODO: Look into the os.startfile method.  That may be a better,
+    cross-platform mechanism for opening files.
     
     @type   path: string
     @param  path: A file path.
@@ -397,3 +400,35 @@ def save_repository_path(path):
     f = open(get_repository_paths_path(), "w")
     f.write("\n".join(paths))
     f.close()
+    
+def launch_ui_window(filename, *args):
+    """
+    Launches a UI window in a new process, so that we don't have to worry about
+    nautilus and threading.
+    
+    @type   filename: string
+    @param  filename: The filename of the window, without the extension
+    
+    @type   *args: list
+    @param  *args: A list of arguments to be passed to the window.
+    
+    """
+    
+    from subprocess import Popen
+    
+    # Hackish.  Get's the helper module's path, then assumes it is in
+    # the lib folder.  Removes the /lib part of the path.
+    basedir = os.path.dirname(os.path.realpath(__file__))[0:-4]
+
+    # Puts the whole path together.
+    path = "%s/ui/%s.py" % (basedir, filename)
+
+    if not os.path.exists(path):
+        MessageBox("The window %s does not exist" % filename)
+        return
+    
+    Popen(
+        ["/usr/bin/python", path, " ".join(args)]
+    )
+
+    
