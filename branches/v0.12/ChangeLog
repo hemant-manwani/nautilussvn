@@ -1,6 +1,11 @@
 2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	I spoke too soon, really trust me I tested it this time.
+
+2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Ignore that.... now it should though!
 
 2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
