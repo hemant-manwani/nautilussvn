@@ -940,7 +940,13 @@ class MainContextMenu():
         if self.nautilussvn_extension.dbus_service_available:
             nautilussvn.lib.dbus.service.exit()
             time.sleep(1)
-            nautilussvn.lib.dbus.service.start()
+            self.nautilussvn_extension.dbus_service_available = (
+                nautilussvn.lib.dbus.service.start())
+            
+            # All references to the previous DBus will now have been invaldated
+            time.sleep(1)
+            self.nautilussvn_extension.status_monitor = (
+                StatusMonitor(self.nautilussvn_extension.cb_status))
         else:
             nautilussvn.lib.dbus.service.start()
         
