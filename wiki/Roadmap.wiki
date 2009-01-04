@@ -19,7 +19,7 @@
 = NautilusSvn v0.14 =
 
   * Complete VCS abstraction layer. Support for Git. 
-  * Implementation of a repository Browser.
+  * Implementation of a repository browser.
 
 = NautilusSvn 0.15 =
 
