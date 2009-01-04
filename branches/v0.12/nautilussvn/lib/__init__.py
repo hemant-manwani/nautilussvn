@@ -19,3 +19,56 @@
 # You should have received a copy of the GNU General Public License
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
+
+class Function:
+    """
+    Provides an interface to define and call a function.
+    
+    Usage:
+        f = Function(self.do_this, path)
+        f.run()
+    
+    """
+    
+    def __init__(self, func, *args, **kwargs):
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+    
+    def start(self):
+        self.func(*self.args, **self.kwargs)
+
+class FunctionQueue:
+    """
+    Provides an interface to generate a queue of function calls.
+    
+    """
+    
+    def __init__(self):
+        self.queue = []
+    
+    def append(self, func, *args, **kwargs):
+        """
+        Append a Function object to the FunctionQueue
+        
+        @type   func: def
+        @param  func: A method call
+        
+        @type   *args: list
+        @param  *args: A list of arguments
+        
+        @type   **kwargs: list
+        @param  **kwargs: A list of keyword arguments
+        
+        """
+        
+        self.queue.append(Function(func, *args, **kwargs))
+    
+    def start(self):
+        """
+        Runs through the queue and calls each function
+        
+        """
+        
+        for func in self.queue:
+            func.start()
