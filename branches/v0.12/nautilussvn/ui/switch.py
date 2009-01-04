@@ -25,14 +25,14 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
-import nautilussvn.ui.notification
 import nautilussvn.ui.dialog
 import nautilussvn.lib.helper
 
 class Switch:
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "switch", "Switch")
+        InterfaceView.__init__(self, "switch", "Switch")
 
         self.repositories = nautilussvn.ui.widget.ComboBox(
             self.view.get_widget("repositories"), 
@@ -47,13 +47,12 @@ class Switch:
 
     def on_ok_clicked(self, widget):
         self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
 
     def on_revision_number_focused(self, widget, data=None):
         self.view.get_widget("revision_number_opt").set_active(True)
 
     def on_show_log_clicked(self, widget, data=None):
-        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_log_closed)
+        LogDialog(ok_callback=self.on_log_closed)
     
     def on_log_closed(self, data):
         if data is not None:
