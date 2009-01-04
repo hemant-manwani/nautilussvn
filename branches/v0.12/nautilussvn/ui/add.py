@@ -82,9 +82,11 @@ class Add(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.set_action(self.vcs.add, items)        
-        self.action.set_before_message("Running Add Command...")
-        self.action.set_after_message("Completed Add")
+        
+        self.action.append(self.action.set_status, "Running Add Command...")
+        self.action.append(self.vcs.add, items)
+        self.action.append(self.action.set_status, "Completed Add")
+        self.action.append(self.action.finish)
         self.action.start()
 
     def on_select_all_toggled(self, widget):

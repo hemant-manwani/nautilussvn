@@ -26,8 +26,8 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
-import nautilussvn.ui.callback
 import nautilussvn.ui.dialog
+import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -77,19 +77,18 @@ class Checkout(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.set_action(
-            self.vcs.checkout, 
-            url, 
-            path, 
+        
+        self.action.append(self.action.set_status, "Running Checkout Command...")
+        self.action.append(
+            self.vcs.checkout,
+            url,
+            path,
             recurse=recursive,
             revision=revision,
             ignore_externals=omit_externals
-        )        
-        self.action.set_before_message("Running Checkout Command...")
-        self.action.run_after(
-            nautilussvn.lib.helper.save_repository_path,
-            url
         )
+        self.action.append(nautilussvn.lib.helper.save_repository_path, url)
+        self.action.append(self.action.finish)
         self.action.start()
 
     def on_revision_number_focused(self, widget, data=None):

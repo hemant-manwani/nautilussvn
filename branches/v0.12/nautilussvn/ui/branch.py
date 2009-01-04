@@ -25,8 +25,8 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-import nautilussvn.ui.dialog
 import nautilussvn.ui.widget
+import nautilussvn.ui.dialog
 import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
@@ -109,9 +109,15 @@ class Branch(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         self.action.set_log_message(self.message.get_text())
-        self.action.set_action(self.vcs.copy, src, dest, revision)        
-        self.action.set_before_message("Running Copy/Branch Command...")
-        self.action.set_after_message("Completed Copy/Branch")
+        
+        self.action.append(
+            nautilussvn.lib.helper.save_log_message, 
+            self.message.get_text()
+        )
+        self.action.append(self.action.set_status, "Running Copy/Branch Command...")
+        self.action.append(self.vcs.copy, src, dest, revision)
+        self.action.append(self.action.set_status, "Completed Copy/Branch")
+        self.action.append(self.action.finish)
         self.action.start()
                 
     def on_from_revision_number_focused(self, widget, data=None):

@@ -111,13 +111,11 @@ class Commit(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.set_action(
-            self.vcs.commit, 
-            items,
-            self.message.get_text()
-        )        
-        self.action.set_before_message("Running Commit Command...")
-        self.action.set_after_message("Completed Commit")
+        
+        self.action.append(self.action.set_status, "Running Commit Command...")
+        self.action.append(self.vcs.commit, items, self.message.get_text())
+        self.action.append(self.action.set_status, "Completed Commit")
+        self.action.append(self.action.finish)
         self.action.start()
         
     def on_toggle_show_all_toggled(self, widget, data=None):
