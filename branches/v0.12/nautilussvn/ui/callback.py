@@ -29,15 +29,32 @@ import gtk
 from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
+import nautilussvn.lib
 import nautilussvn.lib.vcs
 import nautilussvn.lib.helper
 
 gtk.gdk.threads_init()
 
 class Notification(InterfaceView):
-
-    def __init__(self, callback_cancel=None):
+    """
+    Provides an interface to handle the Notification UI.
+    
+    """
+    
+    def __init__(self, callback_cancel=None, visible=True):
+        """
+        @type   callback_cancel: def
+        @param  callback_cancel: A method to call when cancel button is clicked.
+        
+        @type   visible: boolean
+        @param  visible: Show the notification window.  Defaults to True.
+        
+        """
+        
         InterfaceView.__init__(self, "notification", "Notification")
+        
+        if visible:
+            self.show()
     
         self.table = nautilussvn.ui.widget.Table(
             self.get_widget("table"),
@@ -73,7 +90,6 @@ class Notification(InterfaceView):
         self.get_widget("Notification").set_title(title)
         gtk.gdk.threads_leave()
 
-
 class VCSAction(threading.Thread):
     """
     Provides a central interface to handle vcs actions & callbacks.
@@ -81,7 +97,7 @@ class VCSAction(threading.Thread):
     
     """
     
-    def __init__(self, client, register_gtk_quit=False):
+    def __init__(self, client, register_gtk_quit=False, visible=True):
         threading.Thread.__init__(self)
         
         self.message = "Empty Message"
@@ -94,16 +110,15 @@ class VCSAction(threading.Thread):
         self.client.set_callback_ssl_server_trust_prompt(self.get_ssl_trust)
         self.client.set_callback_ssl_client_cert_password_prompt(self.get_ssl_password)
         
-        self.before = None
-        self.after = None
-        self.func = None
-        self.pre_func = None
-        self.post_func = None
+        self.queue = nautilussvn.lib.FunctionQueue()
         
         self.login_tries = 0
         self.cancel = False
 
-        self.notification = Notification(callback_cancel=self.set_cancel)
+        self.notification = Notification(
+            callback_cancel=self.set_cancel,
+            visible=visible
+        )
         
         # Tells the notification window to do a gtk.main_quit() when closing
         # Is used when the script is run from a command line
@@ -326,73 +341,15 @@ class VCSAction(threading.Thread):
             self.notification.append([
                 "", message, ""
             ])
-            
-    def set_before_message(self, message):
-        """
-        Set a message to be displayed before the VCS action starts running.
-        This is generally called from the ui class.
-
-        @type   message: string
-        @param  message: A status message.
-        
-        """
-        
-        self.before = message
     
-    def set_after_message(self, message):
+    def append(self, func, *args, **kwargs):
         """
-        Set a message to be displayed before the VCS action after running.
-        This is generally called from the ui class.
-
-        @type   message: string
-        @param  message: A status message.
+        Append a function call to the action queue.
         
         """
-
-        self.after = message
+        
+        self.queue.append(func, *args, **kwargs)
     
-    def run_before(self, func, *args, **kargs):
-        """
-        Set a callback function to be run before the VCS action begins running.
-        The actual function is called from the self.run() method.
-        
-        @type   func: function
-        @param  func: The function to run before the VCS action begins running.
-        
-        """
-
-        self.pre_func = func
-        self.pre_args = args
-        self.pre_kwargs = kwargs
-    
-    def run_after(self, func, *args, **kwargs):
-        """
-        Set a callback function to be run after the VCS action has ran.
-        The actual function is called from the self.run() method.
-        
-        @type   func: function
-        @param  func: The function to run after the VCS action has ran.
-        
-        """
-        
-        self.post_func = func
-        self.post_args = args
-        self.post_kwargs = kwargs
-    
-    def set_action(self, func, *args, **kwargs):
-        """
-        Set the callback function to be run as the main VCS action.
-        The actual function is called from the self.run() method.
-        
-        @type   func: function
-        @param  func: The function to be run as the main VCS action.
-        
-        """
-
-        self._func = func
-        self._args = args
-        self._kwargs = kwargs
-     
     def run(self):
         """
         The central method that drives this class.  It runs the before and 
@@ -400,27 +357,4 @@ class VCSAction(threading.Thread):
         
         """
         
-        if self._func is None:
-            return
-    
-        self.set_status(self.before)
-        
-        # If a "run_before" callback is set, call it
-        if self.pre_func is not None:
-            self.pre_func(*self.pre_args, **self.pre_kwargs)
-        
-        # Run the main callback function
-        ret = self._func(*self._args, **self._kwargs)
-        
-        # If all went well, the callback function should return None
-        if ret == None:
-            self.finish(self.after)
-            if self.message:
-                nautilussvn.lib.helper.save_log_message(self.message)
-        else:
-            self.finish(ret)
-
-        # If a "run_after" callback is set, call it
-        if self.post_func is not None:
-            self.post_func(*self.post_args, **self.post_kwargs)
-
+        self.queue.start()
