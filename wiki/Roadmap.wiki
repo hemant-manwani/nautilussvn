@@ -1,7 +1,7 @@
 #summary The development roadmap
 #labels Phase-Requirements,Featured
 
-= NautilusSvn 0.12 =
+= !NautilusSvn 0.12 =
 
   * Complete rewrite of extension and user interface layer.
   * Improved status checking and emblem support. Manual status refresh no longer required.
@@ -11,21 +11,21 @@
   * Many UIs now have context menus.
   * Working packages and installation instructions for major distros (Ubuntu, Fedora).
 
-= NautilusSvn 0.13 = 
+= !NautilusSvn 0.13 = 
 
   * Internationalization support.
   * Implementation of a Nautilus Property Page. 
 
-= NautilusSvn v0.14 =
+= !NautilusSvn v0.14 =
 
   * Complete VCS abstraction layer. Support for Git. 
   * Implementation of a repository browser.
 
-= NautilusSvn 0.15 =
+= !NautilusSvn 0.15 =
 
   * Implementation of a plugin system. Google Code integration as an example plugin.
   * Statistics functionality (graphing).
   
-= NautilusSvn 0.16 =
+= !NautilusSvn 0.16 =
   
   * Context menu reordering support in settings manager.
