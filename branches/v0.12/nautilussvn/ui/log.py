@@ -20,21 +20,28 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import threading
+
 import pygtk
 import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.lib.helper
+import nautilussvn.lib.vcs
 
 class Log(InterfaceView):
 
     selected_rows = []
     selected_row = []
 
-    def __init__(self):
+    def __init__(self, path):
         InterfaceView.__init__(self, "log", "Log")
+        
+        self.path = path
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
         self.revisions_table = nautilussvn.ui.widget.Table(
             self.get_widget("revisions_table"),
@@ -44,15 +51,6 @@ class Log(InterfaceView):
                 "Date", "Message"]
         )
         self.revisions_table.allow_multiple()
-        
-        self.revisions = [
-            ["100", "Adam Plumb", "2008-10-20 22:12:23", "This is a message"],
-            ["97", "Adam Plumb", "2008-10-12 22:12:23", "This is another message"],
-            ["96", "Bruce", "2008-10-05 22:12:23", "Earlier log message"],
-            ["95", "Bruce", "2008-10-01 22:12:23", "did this did that"]
-        ]
-        for row in self.revisions:
-            self.revisions_table.append(row)
 
         self.paths_table = nautilussvn.ui.widget.Table(
             self.get_widget("paths_table"),
@@ -70,8 +68,9 @@ class Log(InterfaceView):
             self.get_widget("message")
         )
 
-        self.progress_bar = self.get_widget("progress_bar")
-        self.progress_bar.set_fraction(.3)
+        #self.progress_bar = self.get_widget("progress_bar")
+        #self.progress_bar.pulse()
+        #self.load()
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
@@ -80,7 +79,7 @@ class Log(InterfaceView):
         gtk.main_quit()
         
     def on_ok_clicked(self, widget, data=None):
-        print "OK"
+        self.close()
 
     def on_revisions_table_button_released(self, treeview, event):
         path = treeview.get_path_at_pos(int(event.x), int(event.y))
@@ -118,6 +117,54 @@ class Log(InterfaceView):
         else:
             return ""
 
+    def update_revisions(self, items):
+        for item in items:
+            self.revisions_table.append([
+                item["revision"].number,
+                item["author"],
+                str(item["date"]),
+                item["message"]
+            ])
+
+    def load(self):
+        self.progress_bar.pulse()
+        #loader = LogLoader(self.vcs, self.path)
+        #loader.set_handler(self.update_revisions)
+        #loader.set_progress_bar(self.progress_bar)
+        #loader.start()
+
+gtk.gdk.threads_init()
+class LogLoader(threading.Thread):
+    def __init__(self, client, path):
+        threading.Thread.__init__(self)
+        
+        self.client = client
+        self.path = path
+        self.handler = None
+        self.pb = None
+    
+    def set_handler(self, func):
+        self.handler = func
+    
+    def set_progress_bar(self, pb):
+        self.pb = pb
+    
+    def pb_stop(self):
+        if self.pb:
+            self.pb.set_fraction(1)
+            self.pb.set_text("Finished")
+    
+    def run(self):
+        items = self.client.client.log(self.path)
+        if self.handler:
+            gtk.gdk.threads_enter()
+            self.handler(items)
+            gtk.gdk.threads_leave()
+
+        gtk.gdk.threads_enter()
+        self.pb_stop()
+        gtk.gdk.threads_leave()
+
 class LogDialog(Log):
     def __init__(self, ok_callback=None, multiple=False):
         """
@@ -144,5 +191,10 @@ class LogDialog(Log):
                 self.ok_callback(self.get_selected_revision_number())
 
 if __name__ == "__main__":
-    window = Log()
+    import sys
+    args = sys.argv[1:]
+    if len(args) != 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Log(args[0])
+    window.register_gtk_quit()
     gtk.main()
