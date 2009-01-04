@@ -25,7 +25,6 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceNonView
-from nautilussvn.ui.dialog import MessageBox
 from nautilussvn.ui.callback import VCSAction
 import nautilussvn.lib.vcs
 
@@ -48,9 +47,11 @@ class Cleanup(InterfaceNonView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.set_action(self.vcs.cleanup, self.path)        
-        self.action.set_before_message("Cleaning Up...")
-        self.action.set_after_message("Completed Cleanup")
+        
+        self.action.append(self.set_status, "Cleaning Up...")
+        self.action.append(self.vcs.cleanup, self.path)
+        self.action.append(self.set_status, "Completed Cleanup")
+        self.action.append(self.action.finish)
         self.action.start()
 
         
