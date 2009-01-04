@@ -32,6 +32,12 @@ OBJECT_PATH = "/org/google/code/nautilussvn/StatusMonitor"
 SERVICE = "org.google.code.nautilussvn.NautilusSvn"
 
 class StatusMonitor(dbus.service.Object):
+    """
+    We can pretty much do all of this directly on the StatusMonitor itself,
+    we'll just have to do make sure we do the type conversion before calling
+    anything else. If you pass a dbus.String to PySVN for example it won't
+    know what to do (hence the str(path) statements).
+    """
     
     def __init__(self, connection):
         dbus.service.Object.__init__(self, connection, OBJECT_PATH)
@@ -42,20 +48,20 @@ class StatusMonitor(dbus.service.Object):
         pass
     
     @dbus.service.method(INTERFACE)
-    def change_status(self, path, status):
+    def ChangeStatus(self, path, status):
         self.StatusChanged(path, status)
         
     @dbus.service.method(INTERFACE)
-    def has_watch(self, path):
+    def HasWatch(self, path):
         # FIXME: still doesn't return an actual boolean but 1/0.
         return bool(self.status_monitor.has_watch(str(path)))
         
     @dbus.service.method(INTERFACE)
-    def add_watch(self, path):
+    def AddWatch(self, path):
         self.status_monitor.add_watch(str(path))
         
     @dbus.service.method(INTERFACE)
-    def status(self, path, invalidate=False):
+    def Status(self, path, invalidate=False):
         # FIXME: this will eventually call StatusChanged even though the
         # status might not have been changed at all. This is fine right now
         # because only the Nautilus extension is using the DBus service but
@@ -64,13 +70,14 @@ class StatusMonitor(dbus.service.Object):
         self.status_monitor.status(str(path), bool(invalidate))
         
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
-    def exit(self):
+    def Exit(self):
         self.status_monitor.notifier.stop()
         
 class StatusMonitorStub:
     """
     This isn't something from DBus but it looked like a good idea to me to
-    make using the StatusMonitor easier.
+    make using the StatusMonitor easier. We can probably do this dynamically
+    though, maybe request an object path and then get a generated stub back.
     """
     
     def __init__(self, callback):
@@ -84,16 +91,16 @@ class StatusMonitorStub:
             traceback.print_exc()
     
     def has_watch(self, path):
-        return self.status_monitor.has_watch(path, dbus_interface=INTERFACE)
+        return self.status_monitor.HasWatch(path, dbus_interface=INTERFACE)
         
     def add_watch(self, path):
-        self.status_monitor.add_watch(path, dbus_interface=INTERFACE)
+        self.status_monitor.AddWatch(path, dbus_interface=INTERFACE)
     
     def status(self, path, invalidate=False):
-        self.status_monitor.status(path, invalidate, dbus_interface=INTERFACE)
+        self.status_monitor.Status(path, invalidate, dbus_interface=INTERFACE)
     
     def cb_status(self, path, status):
         self.callback(str(path), str(status))
         
     def exit(self):
-        self.status_monitor.exit()
+        self.status_monitor.Exit()
