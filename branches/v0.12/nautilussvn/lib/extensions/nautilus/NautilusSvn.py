@@ -43,6 +43,7 @@ from nautilussvn.lib.vcs.svn import SVN
 
 import nautilussvn.lib.dbus.service
 from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonitor
+from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
 from nautilussvn.lib.helper import split_path
 from nautilussvn.lib.decorators import timeit
@@ -326,7 +327,7 @@ class MainContextMenu():
     def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
         self.nautilussvn_extension = nautilussvn_extension
-        self.vcs_client = create_vcs_instance()
+        self.vcs_client = SVNClient()
         
     def construct_menu(self):
         """
@@ -1043,7 +1044,7 @@ class MainContextMenu():
             # Super revert
             statuses = self.vcs_client.status_with_cache(path, invalidate=True)[:-1]
             for status in statuses:
-                if status == pysvn.wc_status_kind.missing:
+                if status == "missing":
                     self.callback_revert(
                         menu_item,
                         os.path.join(path, status.data["path"])

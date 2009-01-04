@@ -40,6 +40,7 @@ import dbus.service
 import dbus.mainloop.glib
 
 from nautilussvn.lib.dbus.status_monitor import StatusMonitor
+from nautilussvn.lib.dbus.svn_client import SVNClient
 
 INTERFACE = "org.google.code.nautilussvn.Service"
 OBJECT_PATH = "/org/google/code/nautilussvn/Service"
@@ -52,9 +53,10 @@ class Service(dbus.service.Object):
         
         # Register our objects with the session bus by instantiating them
         self.status_monitor = StatusMonitor(connection)
+        self.svn_client = SVNClient(connection)
     
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
-    def exit(self):
+    def Exit(self):
         self.status_monitor.exit()
         loop.quit()
 
@@ -88,7 +90,7 @@ def exit():
     session_bus = dbus.SessionBus()
     try:
         service = session_bus.get_object(SERVICE, OBJECT_PATH)
-        service.exit()
+        service.Exit()
     except:
         # Probably not running...
         traceback.print_exc()

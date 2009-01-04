@@ -1,3 +1,13 @@
+2009-01-04  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/dbus/service.py:
+	* nautilussvn/lib/dbus/status_monitor.py:
+	* nautilussvn/lib/dbus/svn_client.py:
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	Implemented a temporary hack to make the context menu use the status cache. 
+	We have to refactor the SVN class and also the DBus stuff in the near future.
+
 2009-01-03  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
