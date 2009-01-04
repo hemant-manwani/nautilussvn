@@ -39,6 +39,14 @@ nautilussvn
 `-- ui                   # the entire UI layer lives here (everything)
 }}}
 
-== Why do you use DBus? ==
+== Components ==
+
+=== Status cache ===
+
+Take the entire TortoiseSVN working copy for example (which has 6,015 items). Without a status cache an initial recursive status check using PySVN would take 4393.7271 milliseconds (4 seconds) and consecutive status checks would take 917.6600 milliseconds (around a second).
+
+
+== Frequently Asked Questions (FAQ) ==
+=== Why do you use DBus? ===
 
 Mostly a workaround for not being able to use threads from within a Nautilus extension (see source code). Don't ask us why, we don't know. 
