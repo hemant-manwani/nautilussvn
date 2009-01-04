@@ -28,16 +28,16 @@ from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
 import nautilussvn.lib.helper
 
-class Log:
+class Log(InterfaceView):
 
     selected_rows = []
     selected_row = []
 
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "log", "Log")
+        InterfaceView.__init__(self, "log", "Log")
 
         self.revisions_table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("revisions_table"),
+            self.get_widget("revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Revision", "Author", 
@@ -55,7 +55,7 @@ class Log:
             self.revisions_table.append(row)
 
         self.paths_table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("paths_table"),
+            self.get_widget("paths_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
         )
@@ -67,10 +67,10 @@ class Log:
             self.paths_table.append(row)
 
         self.message = nautilussvn.ui.widget.TextView(
-            self.view.get_widget("message")
+            self.get_widget("message")
         )
 
-        self.progress_bar = self.view.get_widget("progress_bar")
+        self.progress_bar = self.get_widget("progress_bar")
         self.progress_bar.set_fraction(.3)
 
     def on_destroy(self, widget, data=None):
@@ -117,7 +117,32 @@ class Log:
             return self.selected_row[0]
         else:
             return ""
-      
+
+class LogDialog(Log):
+    def __init__(self, ok_callback=None, multiple=False):
+        """
+        Override the normal Log class so that we can hide the window as we need.
+        Also, provide a callback for when the OK button is clicked so that we
+        can get some desired data.
+        """
+        Log.__init__(self)
+        self.ok_callback = ok_callback
+        self.multiple = multiple
+        
+    def on_destroy(self, widget):
+        pass
+    
+    def on_cancel_clicked(self, widget, data=None):
+        self.hide()
+    
+    def on_ok_clicked(self, widget, data=None):
+        self.hide()
+        if self.ok_callback is not None:
+            if self.multiple == True:
+                self.ok_callback(self.get_selected_revision_numbers())
+            else:
+                self.ok_callback(self.get_selected_revision_number())
+
 if __name__ == "__main__":
     window = Log()
     gtk.main()

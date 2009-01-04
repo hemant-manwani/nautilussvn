@@ -25,6 +25,7 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.ui.callback
@@ -101,7 +102,7 @@ class Checkout(InterfaceView):
             self.get_widget("destination").set_text(path)
 
     def on_show_log_clicked(self, widget, data=None):
-        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_log_closed)
+        LogDialog(ok_callback=self.on_log_closed)
     
     def on_log_closed(self, data):
         if data is not None:

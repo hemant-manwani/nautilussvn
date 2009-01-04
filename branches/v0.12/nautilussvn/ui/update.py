@@ -25,26 +25,26 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.notification
 
 class Update:
     """
     This class provides an interface to generate an "update".
     Pass it a path and it will start an update, running the notification dialog.  
-    There is no glade view.
+    There is no glade .
     
     """
 
     def __init__(self):
-        self.notification = nautilussvn.ui.notification.Notification()
+        pass
 
 
 class UpdateToRevision:
     """
     This class provides an interface to update a working copy to a specific
-    revision.  It has a glade view.
+    revision.  It has a glade .
     
     """
     
@@ -57,10 +57,10 @@ class UpdateToRevision:
     }
     
     def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "update", "Update")
+        InterfaceView.__init__(self, "update", "Update")
         
         self.depth = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("depth")
+            self.get_widget("depth")
         )
         for i in self.DEPTHS.values():
             self.depth.append(i)
@@ -73,19 +73,18 @@ class UpdateToRevision:
         gtk.main_quit()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        self.hide()
 
     def on_revision_number_focused(self, widget, data=None):
-        self.view.get_widget("revision_number_opt").set_active(True)
+        self.get_widget("revision_number_opt").set_active(True)
 
     def on_show_log_clicked(self, widget, data=None):
-        nautilussvn.ui.dialog.LogDialog(ok_callback=self.on_log_closed)
+        LogDialog(ok_callback=self.on_log_closed)
     
     def on_log_closed(self, data):
         if data is not None:
-            self.view.get_widget("revision_number_opt").set_active(True)
-            self.view.get_widget("revision_number").set_text(data)
+            self.get_widget("revision_number_opt").set_active(True)
+            self.get_widget("revision_number").set_text(data)
 
 if __name__ == "__main__":
     window = UpdateToRevision()
