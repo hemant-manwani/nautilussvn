@@ -34,9 +34,13 @@ class Function:
         self.func = func
         self.args = args
         self.kwargs = kwargs
+        self.result = None
     
     def start(self):
-        self.func(*self.args, **self.kwargs)
+        self.result = self.func(*self.args, **self.kwargs)
+    
+    def get_result(self):
+        return self.result
 
 class FunctionQueue:
     """
@@ -72,3 +76,15 @@ class FunctionQueue:
         
         for func in self.queue:
             func.start()
+
+    def get_result(self, index):
+        """
+        Retrieve the result of a single function call by specifying the order
+        in which the function was in the queue.
+        
+        @type   index: int
+        @param  index: The queue index
+        
+        """
+        
+        return self.queue[index].get_result()
