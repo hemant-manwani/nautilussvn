@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from __future__ import division
 import threading
 
 import pygtk
@@ -68,9 +69,8 @@ class Log(InterfaceView):
             self.get_widget("message")
         )
 
-        #self.progress_bar = self.get_widget("progress_bar")
-        #self.progress_bar.pulse()
-        #self.load()
+        self.pbar = self.get_widget("pbar")
+        self.load()
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
@@ -117,7 +117,15 @@ class Log(InterfaceView):
         else:
             return ""
 
-    def update_revisions(self, items):
+    def update_revisions(self):
+    
+        self.pbar.set_text("Loading...")
+        items = self.action.get_result(0)
+    
+        total = len(items)
+        inc = 1 / total
+        fraction = 0
+        
         for item in items:
             self.revisions_table.append([
                 item["revision"].number,
@@ -125,45 +133,35 @@ class Log(InterfaceView):
                 str(item["date"]),
                 item["message"]
             ])
+            fraction += inc
+            self.update_pb(fraction)
+        
+        self.pbar.set_text("Finished")
 
     def load(self):
-        self.progress_bar.pulse()
-        #loader = LogLoader(self.vcs, self.path)
-        #loader.set_handler(self.update_revisions)
-        #loader.set_progress_bar(self.progress_bar)
-        #loader.start()
-
-gtk.gdk.threads_init()
-class LogLoader(threading.Thread):
-    def __init__(self, client, path):
-        threading.Thread.__init__(self)
+        self.pbar.set_text("Retrieving Log Information...")
+        self.timer = gobject.timeout_add(100, self.update_pb)
         
-        self.client = client
-        self.path = path
-        self.handler = None
-        self.pb = None
-    
-    def set_handler(self, func):
-        self.handler = func
-    
-    def set_progress_bar(self, pb):
-        self.pb = pb
-    
-    def pb_stop(self):
-        if self.pb:
-            self.pb.set_fraction(1)
-            self.pb.set_text("Finished")
-    
-    def run(self):
-        items = self.client.client.log(self.path)
-        if self.handler:
-            gtk.gdk.threads_enter()
-            self.handler(items)
-            gtk.gdk.threads_leave()
-
-        gtk.gdk.threads_enter()
-        self.pb_stop()
-        gtk.gdk.threads_leave()
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set(),
+            visible=False
+        )
+        
+        self.action.append(self.vcs.client.log, self.path)
+        self.action.append(gobject.source_remove, self.timer)
+        self.action.append(self.update_revisions)
+        self.action.start()
+        
+    def update_pb(self, fraction=None):
+        if fraction:
+            if fraction > 1:
+                fraction = 1
+            self.pbar.set_fraction(fraction)
+            return False
+        else:
+            self.pbar.pulse()
+            return True
 
 class LogDialog(Log):
     def __init__(self, ok_callback=None, multiple=False):
