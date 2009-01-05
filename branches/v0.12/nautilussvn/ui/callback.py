@@ -350,6 +350,18 @@ class VCSAction(threading.Thread):
         
         self.queue.append(func, *args, **kwargs)
     
+    def get_result(self, index):
+        """
+        Retrieve the result of a single function call by specifying the order
+        in which the function was in the queue.
+        
+        @type   index: int
+        @param  index: The queue index
+        
+        """
+        
+        return self.queue.get_result(index)
+    
     def run(self):
         """
         The central method that drives this class.  It runs the before and 

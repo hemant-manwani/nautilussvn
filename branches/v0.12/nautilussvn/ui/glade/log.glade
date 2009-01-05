@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Jan  4 17:21:57 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Jan  5 09:06:12 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Log">
     <property name="width_request">800</property>
@@ -276,11 +276,10 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkProgressBar" id="progress_bar">
+          <widget class="GtkProgressBar" id="pbar">
             <property name="visible">True</property>
             <property name="activity_mode">True</property>
             <property name="show_text">True</property>
-            <property name="text" translatable="yes">Loading...</property>
             <property name="discrete_blocks">2</property>
           </widget>
           <packing>
