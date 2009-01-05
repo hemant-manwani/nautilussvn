@@ -1,6 +1,12 @@
 2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Fixed "Already under version control" for add. Offcourse we need to integrate
+	Adam's GUI stuff, but this is for my testing ;-)
+
+2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Recursive top down might be a better idea than bottom up.
 
 2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
