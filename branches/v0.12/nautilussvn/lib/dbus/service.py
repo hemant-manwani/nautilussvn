@@ -57,7 +57,7 @@ class Service(dbus.service.Object):
     
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
-        self.status_monitor.exit()
+        self.status_monitor.Exit()
         loop.quit()
 
 def start():

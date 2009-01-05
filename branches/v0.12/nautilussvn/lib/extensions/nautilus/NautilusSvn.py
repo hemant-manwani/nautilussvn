@@ -456,7 +456,8 @@ class MainContextMenu():
                         "signals": {
                             "activate": {
                                 "callback": self.callback_refresh_status,
-                                "args": None
+                                "args": None,
+                                "kwargs": {"recurse": True}
                             }
                         },
                         "condition": (lambda: True),
@@ -785,7 +786,11 @@ class MainContextMenu():
                 
                 for signal, value in definition_item["signals"].items():
                     if value["callback"] != None:
-                        menu_item.connect(signal, value["callback"], self.paths)
+                        # FIXME: the adding of arguments need to be done properly
+                        if "kwargs" in value:
+                            menu_item.connect(signal, value["callback"], self.paths, value["kwargs"])    
+                        else:
+                            menu_item.connect(signal, value["callback"], self.paths)
                 
                 menu.append(menu_item)
                 
@@ -1031,18 +1036,26 @@ class MainContextMenu():
         window.add(scrolled_window)
         window.show()
     
-    def callback_refresh_status(self, menu_item, paths):
+    def callback_refresh_status(self, menu_item, paths, recurse=False):
         nautilussvn_extension = self.nautilussvn_extension
         status_monitor = nautilussvn_extension.status_monitor
         for path in paths:
             status_monitor.status(path, invalidate=True)
+            
+            # Recursive (that means downwards too, instead of just upwards.
+            if recurse:
+                for root, dirs, files in os.walk(path, topdown=False):
+                    for name in dirs:
+                        status_monitor.status(os.path.join(root, name))
+                    for name in files:
+                        status_monitor.status(os.path.join(root, name))
     
     def callback_debug_revert(self, menu_item, paths):
         for path in paths:
             # Normal revert
             self.callback_revert(menu_item, paths)
             # Super revert
-            statuses = self.vcs_client.status_with_cache(path, invalidate=True)[:-1]
+            statuses = self.vcs_client.status(path, invalidate=True)[:-1]
             for status in statuses:
                 if status == "missing":
                     self.callback_revert(
@@ -1091,7 +1104,7 @@ class MainContextMenu():
             
             client = pysvn.Client()
             client.checkin(paths, log_message)
-            self.callback_refresh_status(menu_item, paths)
+            self.callback_refresh_status(menu_item, paths, recurse=True)
             
             return False
         
@@ -1116,7 +1129,7 @@ class MainContextMenu():
         client = pysvn.Client()
         for path in paths:
             client.add(path)
-        self.callback_refresh_status(menu_item, paths)
+        self.callback_refresh_status(menu_item, paths, recurse=True)
 
     def callback_delete(self, menu_item, paths):
         # FIXME: 
@@ -1134,5 +1147,5 @@ class MainContextMenu():
         # callback_debug_revert.
         client = pysvn.Client()
         for path in paths:
-            client.revert(path)
-        self.callback_refresh_status(menu_item, paths)
+            client.revert(path, depth=pysvn.depth.infinity)
+        self.callback_refresh_status(menu_item, paths, recurse=True)
