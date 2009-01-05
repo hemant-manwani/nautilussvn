@@ -41,7 +41,7 @@ Git support is on [http://code.google.com/p/nautilussvn/wiki/Roadmap our roadmap
 
 = Can we use this under Thunar? =
 
-Not yet, but this is definitely something on our minds. We've abstracted the versioning and Nautilus extensions bits so much that this'll be a cakewalk in the near future. This won't be in v0.12 though.
+Not yet, but this is definitely something on our minds. We've abstracted the versioning and Nautilus extension bits so much that this'll be a cakewalk in the near future. This won't be in v0.12 though.
 
 = Does this run on FreeBSD? =
 
