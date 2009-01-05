@@ -1128,7 +1128,8 @@ class MainContextMenu():
         
         client = pysvn.Client()
         for path in paths:
-            client.add(path)
+            if not self.vcs_client.is_versioned(path):
+                client.add(path)
         self.callback_refresh_status(menu_item, paths, recurse=True)
 
     def callback_delete(self, menu_item, paths):
