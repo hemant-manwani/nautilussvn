@@ -34,6 +34,8 @@ import shutil
 from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.settings
 
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 def get_home_folder():
     """ 
     Returns the location of the hidden folder we use in the home dir.
