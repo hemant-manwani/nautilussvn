@@ -1,5 +1,10 @@
 2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	Recursive top down might be a better idea than bottom up.
+
+2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/dbus/service.py:
 	Forgot to update exit call to match DBus style.
 	

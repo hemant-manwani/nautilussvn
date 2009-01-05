@@ -1044,7 +1044,7 @@ class MainContextMenu():
             
             # Recursive (that means downwards too, instead of just upwards.
             if recurse:
-                for root, dirs, files in os.walk(path, topdown=False):
+                for root, dirs, files in os.walk(path):
                     for name in dirs:
                         status_monitor.status(os.path.join(root, name))
                     for name in files:
