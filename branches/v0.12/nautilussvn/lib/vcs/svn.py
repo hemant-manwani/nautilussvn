@@ -938,7 +938,7 @@ class StatusMonitor():
         vcs_client = SVN()
 
         path_to_check = path
-        path_to_attach = path
+        path_to_attach = None
         watch_is_already_set = False
         
         while path_to_check != "":
@@ -955,7 +955,7 @@ class StatusMonitor():
                 
             path_to_check = split_path(path_to_check)
         
-        if not watch_is_already_set:
+        if not watch_is_already_set and path_to_attach:
             self.watches[path_to_attach] = None # don't need a value
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True)
 

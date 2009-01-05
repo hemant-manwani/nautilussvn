@@ -1,3 +1,8 @@
+2009-01-06  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/vcs/svn.py:
+	Whoops, that just resulted in attaching watches everywhere.
+
 2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
