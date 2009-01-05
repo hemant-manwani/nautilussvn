@@ -37,15 +37,29 @@ import nautilussvn.lib.vcs
 DATETIME_FORMAT = nautilussvn.lib.helper.DATETIME_FORMAT
 
 class Log(InterfaceView):
+    """
+    Provides an interface to the Log UI
+    
+    """
 
     selected_rows = []
     selected_row = []
+    
+    LIMIT = 100
 
     def __init__(self, path):
+        """
+        @type   path: string
+        @param  path: A path for which to get log items
+        
+        """
+        
         InterfaceView.__init__(self, "log", "Log")
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        self.rev_start = self.vcs.revision("head")
 
         self.revisions_table = nautilussvn.ui.widget.Table(
             self.get_widget("revisions_table"),
@@ -61,19 +75,37 @@ class Log(InterfaceView):
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Action", "Path"]
         )
-        self.paths = [
-            ["Added", "test.html"],
-            ["Committed", "index.html"]
-        ]
-        for row in self.paths:
-            self.paths_table.append(row)
 
         self.message = nautilussvn.ui.widget.TextView(
             self.get_widget("message")
         )
 
         self.pbar = self.get_widget("pbar")
-        self.load()
+        self.pbar.set_text("Retrieving Log Information...")
+        
+        # Set up an interval to make the progress bar pulse
+        # The timeout is removed after the log action finishes
+        self.timer = gobject.timeout_add(100, self.update_pb)
+        
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set(),
+            visible=False
+        )
+        
+        self.action.append(
+            self.vcs.log, 
+            self.path,
+            revision_start=self.rev_start,
+            limit=self.LIMIT
+        )
+        self.action.append(gobject.source_remove, self.timer)
+        self.action.append(self.refresh)
+        self.action.start()
+
+    #
+    # UI Signal Callback Methods
+    #
 
     def on_destroy(self, widget, data=None):
         gtk.main_quit()
@@ -98,7 +130,11 @@ class Log(InterfaceView):
                 self.message.set_text(self.selected_row[3])
             else:
                 self.message.set_text("")
-                
+    
+    #
+    # Helper methods
+    #
+          
     def get_selected_revision_numbers(self):
         if len(self.selected_rows) == 0:
             return ""
@@ -119,6 +155,10 @@ class Log(InterfaceView):
             return self.selected_row[0]
         else:
             return ""
+
+    #
+    # Log-loading callback methods
+    #
 
     def refresh(self):
         """
@@ -148,21 +188,6 @@ class Log(InterfaceView):
             self.update_pb(fraction)
         
         self.pbar.set_text("Finished")
-
-    def load(self):
-        self.pbar.set_text("Retrieving Log Information...")
-        self.timer = gobject.timeout_add(100, self.update_pb)
-        
-        self.action = VCSAction(
-            self.vcs,
-            register_gtk_quit=self.gtk_quit_is_set(),
-            visible=False
-        )
-        
-        self.action.append(self.vcs.client.log, self.path)
-        self.action.append(gobject.source_remove, self.timer)
-        self.action.append(self.refresh)
-        self.action.start()
         
     def update_pb(self, fraction=None):
         if fraction:
