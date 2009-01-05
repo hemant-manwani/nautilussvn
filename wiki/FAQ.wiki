@@ -5,7 +5,7 @@
 
 This FAQ applies to the upcoming release, v0.12, and not the current (legacy) release v0.11.
 
-= You're not a hax0r if you don't use $ svn! GUIs sucks, so you suck! =
+= You're not a hax0r if you don't use $ svn! The GUI sucks, so you suck! =
 
 Yeah.. uhh... look, don't get us wrong, we love the command line! We use it all the time ourselves, we do a lot finding, grepping, sedding, xarging, piping, redirecting and all that. We've got some real mean one-liners stashed away in our ~/.bash_aliases file. 
 
