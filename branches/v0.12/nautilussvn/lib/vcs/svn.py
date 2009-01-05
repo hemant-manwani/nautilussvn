@@ -788,6 +788,26 @@ class SVN:
         
         return self.action(self.client.checkin, *args, **kwargs)
     
+    def log(self, *args, **kwargs):
+        """
+        Retrieve log items for a given path in the repository
+        
+        @type   url_or_path: string
+        @param  url_or_path: Path for which to get log items for
+        
+        @type   revision_start: pysvn.Revision
+        @param  revision_start: Most recent revision.  Defaults to HEAD
+        
+        @type   revision_end: pysvn.Revision
+        @param  revision_end: Oldest revision.  Defaults to rev 0.
+        
+        @type   limit: int
+        @param  limit: The maximum number of items to return.  Defaults to 0.
+        
+        """
+        
+        return self.action(self.client.log, *args, **kwargs)
+    
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
@@ -798,7 +818,7 @@ class SVN:
         """
         
         try:
-            func(*args, **kwargs)
+            return func(*args, **kwargs)
         except pysvn.ClientError, e:
             return str(e)
         except TypeError, e:
