@@ -1,6 +1,15 @@
 2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
+	There were a whole lot of bugs with the status checking code, so I 
+	rewrote all the status checking methods. This seems to work better, however
+	now I don't understand how the cache can be used to its full extent in
+	this situation.
+
+2009-01-05  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Fixed "Already under version control" for add. Offcourse we need to integrate
 	Adam's GUI stuff, but this is for my testing ;-)
 

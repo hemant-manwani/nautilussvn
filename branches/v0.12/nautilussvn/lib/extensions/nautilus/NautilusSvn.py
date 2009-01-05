@@ -179,11 +179,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # If we access the StatusMonitor over DBus it keeps running even though
         # Nautilus is not. So watches will stay attached. So an initial status
         # check won't be done.
-        if (self.status_monitor.has_watch(path) and
-                path not in self.statuses):
-            self.status_monitor.status(path)
-        else:
+        if not self.status_monitor.has_watch(path):
             self.status_monitor.add_watch(path)
+        elif path not in self.statuses:
+            # TODO: is there a chance we won't have the latest status?
+            self.status_monitor.status(path)
+            
         
     def get_file_items(self, window, items):
         """
@@ -306,6 +307,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # After invalidating update_file_info applies the correct emblem.
         #
         item.invalidate_extension_info()
+        
         # FIXME: for some reason when not using the DBus service C{update_file_info}
         # isn't always called, which doesn't make sense but ok.
         if not self.dbus_service_available:
@@ -1133,13 +1135,9 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths, recurse=True)
 
     def callback_delete(self, menu_item, paths):
-        # FIXME: 
-        #   - ClientError has local modifications
-        #   - ClientError is not under version control
-        #   - ClientERror has local modifications
         client = pysvn.Client()
         for path in paths:
-            client.remove(path)
+            client.remove(path, force=True)
         self.callback_refresh_status(menu_item, paths)
 
     def callback_revert(self, menu_item, paths):
