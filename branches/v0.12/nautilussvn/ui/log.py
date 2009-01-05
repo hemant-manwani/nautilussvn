@@ -22,6 +22,7 @@
 
 from __future__ import division
 import threading
+from datetime import datetime
 
 import pygtk
 import gobject
@@ -32,6 +33,8 @@ from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
+
+DATETIME_FORMAT = nautilussvn.lib.helper.DATETIME_FORMAT
 
 class Log(InterfaceView):
 
@@ -117,21 +120,29 @@ class Log(InterfaceView):
         else:
             return ""
 
-    def update_revisions(self):
-    
+    def refresh(self):
+        """
+        Refresh the items in the main log table that shows Revision/Author/etc.
+        
+        """
+        
         self.pbar.set_text("Loading...")
         items = self.action.get_result(0)
-    
+
         total = len(items)
         inc = 1 / total
         fraction = 0
         
         for item in items:
+            msg = item["message"]
+            if len(msg) > 80:
+                msg = "%s..." % msg[0:80]
+        
             self.revisions_table.append([
                 item["revision"].number,
                 item["author"],
-                str(item["date"]),
-                item["message"]
+                datetime.fromtimestamp(item["date"]).strftime(DATETIME_FORMAT),
+                msg
             ])
             fraction += inc
             self.update_pb(fraction)
@@ -150,7 +161,7 @@ class Log(InterfaceView):
         
         self.action.append(self.vcs.client.log, self.path)
         self.action.append(gobject.source_remove, self.timer)
-        self.action.append(self.update_revisions)
+        self.action.append(self.refresh)
         self.action.start()
         
     def update_pb(self, fraction=None):
