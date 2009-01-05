@@ -8,9 +8,8 @@
 There are a couple of pages in the wiki relevant for developers:
 
   * [http://code.google.com/p/nautilussvn/wiki/CodingStyle CodingStyle] serves as an introduction to the style we use for our code (also see [http://www.python.org/dev/peps/pep-0008/ PEP 8]).
-  * [http://code.google.com/p/nautilussvn/wiki/Future Future] is used for discussion and decisions related mostly to the architecture of NautilusSvn. Also see pages labeled [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Design Phase-Design].
   * [http://code.google.com/p/nautilussvn/wiki/Packaging Packaging] describes how NautilusSvn should be packages for a number of distros.
-  * [http://code.google.com/p/nautilussvn/wiki/Architecture Architecture] for a more detailed explination of !NautilusSvn's internals. Also see pages labeled [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Implementation Phase-Implementation].
+  * [http://code.google.com/p/nautilussvn/wiki/Architecture Architecture] is used for discussion and decisions related mostly to the architecture of NautilusSvn. For a more detailed explanation of !NautilusSvn's internals see this page. Also see pages labeled [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Implementation Phase-Implementation] and [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Design Phase-Design].
 
 = Tips =
 When modifying !NautilusSvn you'll have to restart Nautilus quite often. Before Nautilus 2.24.1 one was able to run two Nautilus instances next to each other by changing the TMPDIR. It seems that starting with 2.24.1 you have to quit nautilus (nautilus -q) for this to work. 
