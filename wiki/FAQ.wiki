@@ -13,7 +13,7 @@ But we're really into this visual paradigm towards file management thing. Let's 
 
   * Quickly giving you a sense of the state of a working copy. svn status either shows too much, or you get RSI in the process. With NautilusSvn you can just browse like you always do and the statuses will be displayed as pretty emblems.
 
-  * Quickly doing something with the output of a command. I personally can do 596CPM but it's things like this that just kill me. Here's a typical example:
+  * Quickly doing something with the output of a command. I personally can do [http://speedtest.aoeu.nl/ 596CPM] but it's things like this that just kill me. Here's a typical example:
 {{{
 $ svn status
 ?      a_file
