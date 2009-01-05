@@ -4,6 +4,13 @@
 = Introduction =
 In this page we'll look at what exactly a Nautilus extension is (the interface etc.) and dive into the NautilusSvn specifics.
 
+The main concerns for NautilusSvn are:
+
+  * Separation of actual version control logic and UI logic
+    * Eventually we'll want to be able to support multiple version control systems, but at the moment we'll just focus on Subversion
+  * Separation from the actual implementation (e.g. Nautilus, Thunar, Dolphin, PCManFM etc.)
+  * Minimizing repetition (repeating statements, logic etc.)
+
 = General =
 
 == The basics of a Nautilus extension ==
@@ -25,6 +32,36 @@ When implementing the NautilusInfoProvider interface one has to implement the up
 
 = Specifics =
 
+= Directory structure =
+
+A list of projects to borrow ideas from: [http://dev.deluge-torrent.org/browser/trunk Deluge], [http://pida.co.uk/trac/browser PIDA], [http://www.exaile.org/downloads Exaile], [http://musicbrainz.org/doc/PicardDownload MusicBrainz Picard] and [http://svn.gnome.org/viewvc/gnome-games/trunk/gnome-sudoku/ GNOME Sudoku] (also [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus Actions] and [http://svn.gnome.org/viewvc/nautilus/trunk/ Nautilus])
+
+Here's a possible directory structure to keep the files organized:
+
+{{{
+|-- COPYING
+|-- README
+|-- nautilussvn
+|   |-- data
+|   |   `-- icons
+|   |-- docs
+|   |-- lib
+|   |   |-- extensions
+|   |   |   `-- nautilus
+|   |   `-- vcs
+|   |       `-- svn.py
+|   |-- po
+|   |-- tests
+|   `-- ui
+|       `-- glade
+|       `-- component
+|-- packages
+}}}
+
+  _generated using the tree command_
+
+_`__init__.py files left out for clarity`_
+
 == Directory structure ==
 The annoted tree below shows the most important directories (packages basically).
 
@@ -38,6 +75,20 @@ nautilussvn
 |   `-- vcs              # Our VCS specific code, also includes the StatusMonitor
 `-- ui                   # the entire UI layer lives here (everything)
 }}}
+
+== High level ==
+
+=== Modularity ===
+  _How will we achieve the separation (loose coupling) we want?_
+
+=== Abstracting the specific VCS (version control) implementation ===
+I think we'll be able to abstract the VCS implementation by implementing the factory pattern. Then in the extension itself we'll be working against an interface. Here are some UML diagrams that model the factory pattern: 
+
+  * `http://www.vico.org/pages/PatronsDisseny/Pattern%20Abstract%20Factory/AbstractFactory.jpg`
+  * `http://best-practice-software-engineering.ifs.tuwien.ac.at/patterns/images/FactoryMethod.jpg` 
+  * `http://www.dotnetheaven.com/Uploadfile/rajeshvs/AbstractFactoryPatternsinCS02012006041329AM/Images/AbstractFactPat.gif`.
+
+There's also a page with [http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/ simple examples of several patterns from the GoF book in Python] (including the factory pattern).
 
 == Components ==
 
