@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Jan  5 20:36:00 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Jan  5 21:51:10 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Log">
     <property name="width_request">800</property>
@@ -102,48 +102,35 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="rev_refresh">
+                          <widget class="GtkButton" id="next">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">gtk-refresh</property>
-                            <property name="use_stock">True</property>
-                            <property name="response_id">0</property>
-                          </widget>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label5">
-                            <property name="visible">True</property>
-                          </widget>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="button1">
-                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">Next 100 &gt;</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_next_clicked"/>
                           </widget>
                           <packing>
-                            <property name="position">4</property>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkButton" id="button2">
+                          <widget class="GtkButton" id="previous">
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">&lt; Previous 100</property>
                             <property name="response_id">0</property>
+                            <signal name="clicked" handler="on_previous_clicked"/>
                           </widget>
                           <packing>
-                            <property name="position">5</property>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </widget>
@@ -270,7 +257,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkProgressBar" id="progress_bar">
+          <widget class="GtkProgressBar" id="pbar">
             <property name="visible">True</property>
             <property name="text" translatable="yes">Loading...</property>
           </widget>
