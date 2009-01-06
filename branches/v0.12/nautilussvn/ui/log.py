@@ -89,6 +89,7 @@ class Log(InterfaceView):
         )
 
         self.pbar = self.get_widget("pbar")
+        self.loading = True
         self.load()
 
     #
@@ -96,16 +97,16 @@ class Log(InterfaceView):
     #
 
     def on_destroy(self, widget, data=None):
-        gtk.main_quit()
+        self.close()
 
     def on_cancel_clicked(self, widget, data=None):
-        #
-        # TODO: Make the cancel button stop the VCSAction when in progress
-        #
-        
-        gtk.main_quit()
+        if self.loading:
+            self.action.set_cancel(True)
+        self.close()
         
     def on_ok_clicked(self, widget, data=None):
+        if self.loading:
+            self.action.set_cancel(True)    
         self.close()
 
     def on_revisions_table_button_released(self, treeview, event):
@@ -217,19 +218,23 @@ class Log(InterfaceView):
         # Make sure the int passed is the order the log call was made
         self.revision_items = self.action.get_result(1)
 
+        if self.action.cancel == True:
+            self.pbar.set_text("Cancelled")
+            return
+
         total = len(self.revision_items)
         inc = 1 / total
         fraction = 0
         
         for item in self.revision_items:
-            msg = item["message"].replace("\n", " ")
+            msg = item.message.replace("\n", " ")
             if len(msg) > 80:
                 msg = "%s..." % msg[0:80]
         
             self.revisions_table.append([
-                item["revision"].number,
-                item["author"],
-                datetime.fromtimestamp(item["date"]).strftime(DATETIME_FORMAT),
+                item.revision.number,
+                item.author,
+                datetime.fromtimestamp(item.date).strftime(DATETIME_FORMAT),
                 msg
             ])
             fraction += inc
@@ -253,6 +258,7 @@ class Log(InterfaceView):
         self.revisions_table.clear()
         self.message.set_text("")
         self.paths_table.clear()
+        self.set_loading(True)
     
         self.pbar.set_text("Retrieving Log Information...")
 
@@ -281,7 +287,11 @@ class Log(InterfaceView):
         self.action.append(self.check_next_sensitive)
         self.action.append(self.set_start_revision, self.rev_start)
         self.action.append(self.set_end_revision, self.rev_end)
+        self.action.append(self.set_loading, False)
         self.action.start()
+
+    def set_loading(self, loading):
+        self.loading = loading
 
 class LogDialog(Log):
     def __init__(self, ok_callback=None, multiple=False):
