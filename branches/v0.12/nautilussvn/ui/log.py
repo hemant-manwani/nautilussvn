@@ -30,6 +30,7 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.ui.widget
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
@@ -59,6 +60,11 @@ class Log(InterfaceView):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
+        
+        if not self.vcs.is_in_a_or_a_working_copy(self.path):
+            MessageBox("The given path is not a working copy.")
+            self.close()
+            return
         
         self.rev_start = None
         self.rev_max = 1
