@@ -90,6 +90,8 @@ class Log(InterfaceView):
         )
 
         self.pbar = self.get_widget("pbar")
+        
+        self.stop_on_copy = False
         self.loading = True
         self.load()
 
@@ -162,6 +164,11 @@ class Log(InterfaceView):
 
         self.load()
     
+    def on_stop_on_copy_toggled(self, widget):
+        self.stop_on_copy = self.get_widget("stop_on_copy").get_active()
+        if not self.loading:
+            self.refresh()
+    
     #
     # Helper methods
     #
@@ -191,6 +198,8 @@ class Log(InterfaceView):
         sensitive = True
         if self.rev_start >= (self.rev_max - self.LIMIT):
             sensitive = False
+        if len(self.revision_items) < self.LIMIT:
+            sensitive = False
 
         self.get_widget("previous").set_sensitive(sensitive)
 
@@ -198,7 +207,9 @@ class Log(InterfaceView):
         sensitive = True
         if self.rev_end == 1:
             sensitive = False
-
+        if len(self.revision_items) < self.LIMIT:
+            sensitive = False
+            
         self.get_widget("next").set_sensitive(sensitive)
     
     def set_start_revision(self, rev):
@@ -221,14 +232,14 @@ class Log(InterfaceView):
         
         """
         
+        self.revision_items = []
+        self.revisions_table.clear()
+        self.message.set_text("")
+        self.paths_table.clear()        
         self.pbar.set_text("Loading...")
         
         # Make sure the int passed is the order the log call was made
         self.revision_items = self.action.get_result(1)
-
-        if self.action.cancel == True:
-            self.pbar.set_text("Cancelled")
-            return
 
         total = len(self.revision_items)
         inc = 1 / total
@@ -245,9 +256,18 @@ class Log(InterfaceView):
                 datetime.fromtimestamp(item.date).strftime(DATETIME_FORMAT),
                 msg
             ])
+
+            # Stop on copy after adding the item to the table
+            # so the user can look at the item that was copied
+            if self.stop_on_copy:
+                for path in item.changed_paths:
+                    if path.copyfrom_path is not None:
+                        self.update_pb(1)
+                        return
+
             fraction += inc
             self.update_pb(fraction)
-        
+
         self.pbar.set_text("Finished")
         
     def update_pb(self, fraction=None):
@@ -262,10 +282,6 @@ class Log(InterfaceView):
 
     def load(self):
     
-        self.revision_items = []
-        self.revisions_table.clear()
-        self.message.set_text("")
-        self.paths_table.clear()
         self.set_loading(True)
     
         self.pbar.set_text("Retrieving Log Information...")
