@@ -57,10 +57,11 @@ class Log(InterfaceView):
         InterfaceView.__init__(self, "log", "Log")
         
         self.path = path
+        
+        self.get_widget("Log").set_title("Log - %s" % self.path)
+        
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-        
-        self.revision = self.vcs.get_revision(self.path)
-        
+        self.revision = self.vcs.get_revision(self.path)        
         self.rev_start = self.revision
         self.rev_end = self.rev_start - self.LIMIT
         if self.rev_end < 1:
