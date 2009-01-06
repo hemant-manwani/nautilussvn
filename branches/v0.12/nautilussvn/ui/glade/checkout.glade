@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Dec 26 21:31:27 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Jan  6 12:22:52 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Checkout">
     <property name="width_request">550</property>
@@ -61,6 +61,7 @@
                               <widget class="GtkEntry" id="url">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <signal name="changed" handler="on_url_changed"/>
                               </widget>
                             </child>
                           </widget>
@@ -272,6 +273,7 @@
                           <widget class="GtkButton" id="show_log">
                             <property name="width_request">100</property>
                             <property name="visible">True</property>
+                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="label" translatable="yes">Show Log</property>
