@@ -25,34 +25,76 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-import nautilussvn.ui.callback
-
+from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.dialog import MessageBox
+import nautilussvn.lib.vcs
 import nautilussvn.lib.helper
 
-class Relocate:
+class Relocate(InterfaceView):
     """
-    Interface to relocate your working copy's repository
+    Interface to relocate your working copy's repository location.
     
     """
 
-    def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "relocate", "Relocate")
+    def __init__(self, path):
+        """
+        @type   path: string
+        @param  path: A path to a local working copy
+        
+        """
+        
+        InterfaceView.__init__(self, "relocate", "Relocate")
 
+        self.path = path
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        repo = self.vcs.get_repo_url(self.path)
+        self.get_widget("from_url").set_text(repo)
+        self.get_widget("to_url").set_text(repo)
+        
         self.repositories = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("to_urls"), 
+            self.get_widget("to_urls"), 
             nautilussvn.lib.helper.get_repository_paths()
         )
 
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+    
+        from_url = self.get_widget("from_url").get_text()
+        to_url = self.get_widget("to_url").get_text()
+    
+        if not from_url or not to_url:
+            MessageBox("Both the From and To URLs are required.")
+            return
+    
+        self.hide()
+
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Relocate Command...")
+        self.action.append(
+            self.vcs.relocate, 
+            from_url,
+            to_url,
+            self.path
+        )
+        self.action.append(self.action.set_status, "Completed Relocate")
+        self.action.append(self.action.finish)
+        self.action.start()
 
 if __name__ == "__main__":
-    window = Relocate()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Relocate(args[0])
+    window.register_gtk_quit()
     gtk.main()
