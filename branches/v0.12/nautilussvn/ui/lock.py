@@ -25,46 +25,93 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.notification
+import nautilussvn.lib.vcs
+import nautilussvn.lib.helper
 
-class Lock:
+class Lock(InterfaceView):
+    """
+    Provides an interface to lock any number of files in a working copy.
+    
+    """
 
     TOGGLE_ALL = False
 
-    def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "lock", "Lock")
+    def __init__(self, paths):
+        """
+        @type:  paths: list
+        @param: paths: A list of paths to search for versioned files
+        
+        """
+        
+        InterfaceView.__init__(self, "lock", "Lock")
+
+        self.paths = paths
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
         self.files_table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("files_table"),
+            self.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
-                gobject.TYPE_STRING, gobject.TYPE_STRING], 
+                gobject.TYPE_STRING], 
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension", 
-                "Lock", "Needs lock"],
+                "Locked"],
         )
+        self.last_row_clicked = None
         
-        self.files = [
-            [True, "init/test.php", ".php", "", ""],
-            [False, "added.php", ".php", "", ""]
-        ]
-        self.files_table.clear()
-        for row in self.files:
-            self.files_table.append(row)
+        self.files = self.vcs.get_items(self.paths)
+        for item in self.files:
+        
+            locked = ""
+            if self.vcs.is_locked(item.path):
+                locked = "Yes"
+        
+            self.files_table.append([
+                False, 
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path),
+                locked
+            ])
         
         self.message = nautilussvn.ui.widget.TextView(
-            self.view.get_widget("message")
+            self.get_widget("message")
         )
     
+    #
+    # UI Signal Callbacks
+    #
+    
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
         
     def on_cancel_clicked(self, widget, data=None):
-        gtk.main_quit()
+        self.close()
         
     def on_ok_clicked(self, widget, data=None):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        steal_locks = self.get_widget("steal_locks").get_active()
+        items = self.files_table.get_activated_rows(1)
+        message = self.message.get_text()
+        
+        self.hide()
+
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Lock Command...")
+        self.action.append(nautilussvn.lib.helper.save_log_message, message)
+        for path in items:
+            self.action.append(
+                self.vcs.lock, 
+                path,
+                message,
+                force=steal_locks
+            )
+        self.action.append(self.action.set_status, "Completed Lock")
+        self.action.append(self.action.finish)
+        self.action.start()
     
     def on_select_all_toggled(self, widget, data=None):
         self.TOGGLE_ALL = not self.TOGGLE_ALL
@@ -81,54 +128,67 @@ class Lock:
             fileinfo = treeview_model[path]
             
             if event.button == 3:
-                context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        'label': 'Compare with base',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_diff_activated, 
-                                'args':fileinfo
+                self.last_row_clicked = path
+                context_menu = nautilussvn.ui.widget.ContextMenu([
+                    {
+                        "label": "Remove Lock",
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_remove_lock_activated, 
+                                "args": fileinfo
                             }
-                        }
-                    },{
-                        'label': 'Show log',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_show_log_activated, 
-                                'args':fileinfo
+                        },
+                        "condition": self.condition_remove_lock
+                    },
+                    {
+                        "label": "View Diff",
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_diff_activated, 
+                                "args": fileinfo
                             }
-                        }
-                    },{
-                        'label': 'Open',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_open_activated, 
-                                'args':fileinfo
+                        },
+                        "condition": (lambda: True)
+                    },
+                    {
+                        "label": "Show log",
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_log_activated, 
+                                "args": fileinfo
                             }
-                        }
-                    },{
-                        'label': 'Browse',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_browse_activated, 
-                                'args':fileinfo
+                        },
+                        "condition": (lambda: True)
+                    },
+                    {
+                        "label": "Open",
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_open_activated, 
+                                "args": fileinfo
                             }
-                        }
-                    },{
-                        'label': 'Delete',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_delete_activated, 
-                                'args':fileinfo
+                        },
+                        "condition": (lambda: True)
+                    },
+                    {
+                        "label": "Browse to",
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_browse_activated, 
+                                "args": fileinfo
                             }
-                        }
-                    },{
-                        'label': 'Properties',
-                        'signals': {
-                            'activate': {
-                                'callback':self.on_context_properties_activated, 
-                                'args':fileinfo
+                        },
+                        "condition": (lambda: True)
+                    },
+                    {
+                        "label": "Delete",
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_delete_activated, 
+                                "args": fileinfo
                             }
-                        }
+                        },
+                        "condition": (lambda: True)
                     }
                 ])
                 context_menu.show(event)
@@ -138,10 +198,19 @@ class Lock:
         treeview.set_cursor(event[0], col, 0)
         treeview_model = treeview.get_model()
         fileinfo = treeview_model[event[0]]
-        
         print "Row Double-clicked"
 
-    def on_context_show_log_activated(self, widget, data=None):
+    def on_previous_messages_clicked(self, widget, data=None):
+        dialog = nautilussvn.ui.dialog.PreviousMessages()
+        message = dialog.run()
+        if message is not None:
+            self.message.set_text(message)
+
+    #
+    # Context menu signal callbacks
+    #
+
+    def on_context_log_activated(self, widget, data=None):
         print "Show log Item"
 
     def on_context_diff_activated(self, widget, Data=None):
@@ -155,16 +224,23 @@ class Lock:
 
     def on_context_delete_activated(self, widget, data=None):
         print "Delete Item"
-        
-    def on_context_properties_activated(self, widget, data=None):
-        print "Properties Item"
-        
-    def on_previous_messages_clicked(self, widget, data=None):
-        dialog = nautilussvn.ui.dialog.PreviousMessages()
-        message = dialog.run()
-        if message is not None:
-            self.message.set_text(message)
-        
+
+    def on_context_remove_lock_activated(self, widget, data=None):
+        print "Remove lock"    
+
+    #
+    # Context menu conditions
+    #
+    
+    def condition_remove_lock(self):
+        path = self.files_table.get_row(self.last_row_clicked)[1]
+        return self.vcs.is_locked(path)
+    
 if __name__ == "__main__":
-    window = Lock()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
+    window = Lock(args)
+    window.register_gtk_quit()
     gtk.main()
