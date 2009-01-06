@@ -25,22 +25,66 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-import nautilussvn.ui.notification
+from nautilussvn.ui.checkout import Checkout
+from nautilussvn.ui.dialog import MessageBox
+from nautilussvn.ui.callback import VCSAction
+import nautilussvn.lib.helper
 
-class Export:
-    def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "export", "Export")
-
-    def on_destroy(self, widget):
-        gtk.main_quit()
-
-    def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+class Export(Checkout):
+    def __init__(self, path):
+        Checkout.__init__(self, path)
+        self.get_widget("Checkout").set_title("Export - %s" % path)
+        
+        self.get_widget("url").set_text(path)
+        self.get_widget("destination").set_text("")
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        url = self.get_widget("url").get_text()
+        path = self.get_widget("destination").get_text()
+        omit_externals = self.get_widget("omit_externals").get_active()
+        recursive = self.get_widget("recursive").get_active()
+
+        if not url or not path:
+            MessageBox("You must fill in both the URL and Destination fields.")
+            return
+        
+        if url.startswith("file://"):
+            url = url[7:]
+        if path.startswith("file://"):
+            path = path[7:]
+        
+        revision = self.vcs.revision("head")
+        if self.get_widget("revision_number_opt").get_active():
+            revision = self.vcs.revision(
+                "number",
+                number=int(self.get_widget("revision_number").get_text())
+            )
+    
+        self.hide()
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Export Command...")
+        self.action.append(nautilussvn.lib.helper.save_repository_path, url)
+        self.action.append(
+            self.vcs.export,
+            url,
+            path,
+            force=True,
+            recurse=recursive,
+            revision=revision,
+            ignore_externals=omit_externals
+        )
+        self.action.append(self.action.finish)
+        self.action.start()
         
 if __name__ == "__main__":
-    window = Export()
+    import sys
+    args = sys.argv[1:]
+    if len(args) != 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Export(args[0])
+    window.register_gtk_quit()
     gtk.main()
