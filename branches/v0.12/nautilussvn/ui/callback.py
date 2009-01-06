@@ -144,6 +144,7 @@ class VCSAction(threading.Thread):
         """
         
         self.cancel = cancel
+        self.queue.cancel_queue()
     
     def notify(self, data):
         """
