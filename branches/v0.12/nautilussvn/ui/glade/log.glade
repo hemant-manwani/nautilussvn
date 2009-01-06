@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Jan  5 21:51:10 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan  6 08:53:11 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Log">
     <property name="width_request">800</property>
@@ -131,6 +131,22 @@
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkCheckButton" id="stop_on_copy">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="label" translatable="yes">Stop on copy</property>
+                            <property name="response_id">0</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_stop_on_copy_toggled"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="pack_type">GTK_PACK_END</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                       </widget>
