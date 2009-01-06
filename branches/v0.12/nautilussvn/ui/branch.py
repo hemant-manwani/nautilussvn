@@ -134,7 +134,7 @@ class Branch(InterfaceView):
             self.message.set_text(message)
             
     def on_show_log_clicked(self, widget, data=None):
-        LogDialog(ok_callback=self.on_log_closed)
+        LogDialog(self.path, ok_callback=self.on_log_closed)
     
     def on_log_closed(self, data):
         if data is not None:
