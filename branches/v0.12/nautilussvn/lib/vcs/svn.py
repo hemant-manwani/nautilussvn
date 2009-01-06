@@ -817,6 +817,27 @@ class SVN:
         
         return self.action(self.client.export, *args, **kwargs)
 
+    def import_(self, *args, **kwargs):
+        
+        """
+        Import an unversioned file or directory structure into a repository.
+        
+        @type   path: string
+        @param  path: An unversioned file or directory structure
+        
+        @type   url: string
+        @param  url: A repository location to put the imported files
+        
+        @type   log_message: string
+        @param  log_message: Log message to use for commit
+        
+        @type   ignore: boolean
+        @param  ignore: Disregard svn:ignore props
+        
+        """
+        
+        return self.action(self.client.import_, *args, **kwargs)
+
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
