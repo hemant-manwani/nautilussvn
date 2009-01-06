@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan  6 11:39:39 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan  6 12:58:32 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Log">
     <property name="width_request">800</property>
@@ -107,7 +107,8 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Next 100 &gt;</property>
+                            <property name="label" translatable="yes">gtk-go-forward</property>
+                            <property name="use_stock">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_next_clicked"/>
                           </widget>
@@ -123,7 +124,8 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">&lt; Previous 100</property>
+                            <property name="label" translatable="yes">gtk-go-back</property>
+                            <property name="use_stock">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_previous_clicked"/>
                           </widget>
@@ -131,6 +133,60 @@
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkHBox" id="hbox2">
+                            <property name="visible">True</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <widget class="GtkLabel" id="label5">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Limit:</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="limit">
+                                <property name="width_request">75</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="text" translatable="yes">100</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkButton" id="refresh">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="clicked" handler="on_refresh_clicked"/>
+                                <child>
+                                  <widget class="GtkImage" id="image1">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-refresh</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
