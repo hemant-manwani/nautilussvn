@@ -25,34 +25,64 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.notification
-
 import nautilussvn.lib.helper
 
-class Import:
-    def __init__(self):
-        self.view = nautilussvn.ui.InterfaceView(self, "import", "Import")
-
+class Import(InterfaceView):
+    def __init__(self, path):
+        InterfaceView.__init__(self, "import", "Import")
+        self.get_widget("Import").set_title("Import - %s" % path)
+        
+        self.path = path
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        if self.vcs.is_in_a_or_a_working_copy(path):
+            self.get_widget("repository").set_text(self.vcs.get_repo_url(path))
+        
         self.repositories = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("repositories"), 
+            self.get_widget("repositories"), 
             nautilussvn.lib.helper.get_repository_paths()
         )
         
         self.message = nautilussvn.ui.widget.TextView(
-            self.view.get_widget("message")
+            self.get_widget("message")
         )
 
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        
+        url = self.get_widget("repository").get_text()
+        if not url:
+            nautilussvn.ui.dialog.MessageBox("Repository location to import to is required.")
+            return
+            
+        ignore = not self.get_widget("include_ignored").get_active()
+        
+        self.hide()
+
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Import Command...")
+        self.action.append(
+            self.vcs.import_, 
+            self.path,
+            url,
+            self.message.get_text(),
+            ignore=ignore
+        )
+        self.action.append(self.action.set_status, "Completed Import")
+        self.action.append(self.action.finish)
+        self.action.start()
 
     def on_previous_messages_clicked(self, widget, data=None):
         dialog = nautilussvn.ui.dialog.PreviousMessages()
@@ -60,7 +90,11 @@ class Import:
         if message is not None:
             self.message.set_text(message)
 
-
 if __name__ == "__main__":
-    window = Import()
+    import sys
+    args = sys.argv[1:]
+    if len(args) != 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Import(args[0])
+    window.register_gtk_quit()
     gtk.main()
