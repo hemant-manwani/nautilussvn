@@ -183,3 +183,37 @@ class ContextMenu:
         
     def get_widget(self):
         return self.view
+
+class ProgressBar:
+    def __init__(self, pbar):
+        if pbar is None:
+            self.view = gtk.ProgressBar()
+        else:
+            self.view = pbar
+        
+        self.timer = None
+        
+    def start_pulsate(self):
+        # Set up an interval to make the progress bar pulse
+        # The timeout is removed after the log action finishes
+        self.timer = gobject.timeout_add(100, self.update)
+    
+    def stop_pulsate(self):
+        gobject.source_remove(self.timer)
+        self.timer = None
+
+    def update(self, fraction=None):
+        if fraction:
+            if self.timer is not None:
+                self.stop_pulsate()
+                 
+            if fraction > 1:
+                fraction = 1
+            self.view.set_fraction(fraction)
+            return False
+        else:
+            self.view.pulse()
+            return True
+
+    def set_text(self, text):
+        self.view.set_text(text)
