@@ -59,8 +59,16 @@ class Log(InterfaceView):
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
-        self.rev_start = self.vcs.revision("head")
-
+        self.revision = self.vcs.get_revision(self.path)
+        
+        self.rev_start = self.revision
+        self.rev_end = self.rev_start - self.LIMIT
+        if self.rev_end < 1:
+            self.rev_end = 1
+            
+        self.rev_max = self.rev_start
+        self.rev_min = 1
+        
         self.revisions_table = nautilussvn.ui.widget.Table(
             self.get_widget("revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
@@ -81,27 +89,7 @@ class Log(InterfaceView):
         )
 
         self.pbar = self.get_widget("pbar")
-        self.pbar.set_text("Retrieving Log Information...")
-        
-        # Set up an interval to make the progress bar pulse
-        # The timeout is removed after the log action finishes
-        self.timer = gobject.timeout_add(100, self.update_pb)
-        
-        self.action = VCSAction(
-            self.vcs,
-            register_gtk_quit=self.gtk_quit_is_set(),
-            visible=False
-        )
-        
-        self.action.append(
-            self.vcs.log, 
-            self.path,
-            revision_start=self.rev_start,
-            limit=self.LIMIT
-        )
-        self.action.append(gobject.source_remove, self.timer)
-        self.action.append(self.refresh)
-        self.action.start()
+        self.load()
 
     #
     # UI Signal Callback Methods
@@ -111,6 +99,10 @@ class Log(InterfaceView):
         gtk.main_quit()
 
     def on_cancel_clicked(self, widget, data=None):
+        #
+        # TODO: Make the cancel button stop the VCSAction when in progress
+        #
+        
         gtk.main_quit()
         
     def on_ok_clicked(self, widget, data=None):
@@ -125,11 +117,41 @@ class Log(InterfaceView):
             selection = treeview.get_selection()
             self.selected_rows = selection.get_selected_rows()
             self.selected_row = self.selected_rows[0][path[0]]
+            item = self.revision_items[path[0][0]]
 
+            self.paths_table.clear()
             if selection.count_selected_rows() == 1:
-                self.message.set_text(self.selected_row[3])
+                self.message.set_text(item.message)
+                
+                if item.changed_paths is not None:
+                    for subitem in item.changed_paths:
+                        self.paths_table.append([
+                            subitem.action,
+                            subitem.path
+                        ])    
+                
             else:
                 self.message.set_text("")
+    
+    def on_previous_clicked(self, widget):
+        self.rev_start += self.LIMIT
+        self.rev_end += self.LIMIT
+        if self.rev_start > self.rev_max:
+            self.rev_start = self.rev_max
+            self.rev_end = self.rev_start - self.LIMIT
+            if self.rev_end < 1:
+                self.rev_end = 1
+        
+        self.load()
+            
+    def on_next_clicked(self, widget):
+        self.rev_start -= self.LIMIT
+        self.rev_end -= self.LIMIT
+        if self.rev_start < self.LIMIT:
+            self.rev_start = self.LIMIT
+            self.rev_end = 1
+
+        self.load()
     
     #
     # Helper methods
@@ -156,6 +178,30 @@ class Log(InterfaceView):
         else:
             return ""
 
+    def check_previous_sensitive(self):
+        sensitive = True
+        if self.rev_start >= (self.rev_max - self.LIMIT):
+            sensitive = False
+
+        self.get_widget("previous").set_sensitive(sensitive)
+
+    def check_next_sensitive(self):
+        sensitive = True
+        if self.rev_end == 1:
+            sensitive = False
+
+        self.get_widget("next").set_sensitive(sensitive)
+    
+    def set_start_revision(self, rev):
+        self.get_widget("start").set_text(str(rev))
+
+    def set_end_revision(self, rev):
+        self.get_widget("end").set_text(str(rev))
+
+    def initialize_revision_labels(self):
+        self.set_start_revision("N/A")
+        self.set_end_revision("N/A")
+
     #
     # Log-loading callback methods
     #
@@ -167,14 +213,16 @@ class Log(InterfaceView):
         """
         
         self.pbar.set_text("Loading...")
-        items = self.action.get_result(0)
+        
+        # Make sure the int passed is the order the log call was made
+        self.revision_items = self.action.get_result(1)
 
-        total = len(items)
+        total = len(self.revision_items)
         inc = 1 / total
         fraction = 0
         
-        for item in items:
-            msg = item["message"]
+        for item in self.revision_items:
+            msg = item["message"].replace("\n", " ")
             if len(msg) > 80:
                 msg = "%s..." % msg[0:80]
         
@@ -198,6 +246,42 @@ class Log(InterfaceView):
         else:
             self.pbar.pulse()
             return True
+
+    def load(self):
+    
+        self.revision_items = []
+        self.revisions_table.clear()
+        self.message.set_text("")
+        self.paths_table.clear()
+    
+        self.pbar.set_text("Retrieving Log Information...")
+
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set(),
+            visible=False
+        )        
+
+        # Set up an interval to make the progress bar pulse
+        # The timeout is removed after the log action finishes
+        self.timer = gobject.timeout_add(100, self.update_pb)
+
+        self.action.append(self.initialize_revision_labels)
+        self.action.append(
+            self.vcs.log, 
+            self.path,
+            revision_start=self.vcs.revision("number", number=self.rev_start),
+            revision_end=self.vcs.revision("number", number=self.rev_end),
+            discover_changed_paths=True
+        )
+
+        self.action.append(gobject.source_remove, self.timer)
+        self.action.append(self.refresh)
+        self.action.append(self.check_previous_sensitive)
+        self.action.append(self.check_next_sensitive)
+        self.action.append(self.set_start_revision, self.rev_start)
+        self.action.append(self.set_end_revision, self.rev_end)
+        self.action.start()
 
 class LogDialog(Log):
     def __init__(self, ok_callback=None, multiple=False):
