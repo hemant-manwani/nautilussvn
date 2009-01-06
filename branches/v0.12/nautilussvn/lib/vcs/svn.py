@@ -875,6 +875,24 @@ class SVN:
         """
         
         return self.action(self.client.relocate, *args, **kwargs)
+        
+    def move(self, *args, **kwargs):
+        
+        """
+        Move or rename a file.
+        
+        @type   src_url_or_path: string
+        @param  src_url_or_path: A url/path to move from
+        
+        @type   dest_url_or_path: string
+        @param  dest_url_or_path: A url/path to move to
+
+        @type   force: boolean
+        @param  force: Force renaming, despite conflicts. Defaults to false.
+        
+        """
+        
+        return self.action(self.client.move, *args, **kwargs)
 
     def action(self, func, *args, **kwargs):
         """

@@ -20,28 +20,65 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os.path
+
 import pygtk
 import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-import nautilussvn.ui.callback
+from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.dialog import MessageBox
+import nautilussvn.lib.vcs
 
-class Rename:
-    def __init__(self, filename=""):
-        self.view = nautilussvn.ui.InterfaceView(self, "rename", "Rename")
-        self.view.get_widget("new_name").set_text(filename)
+class Rename(InterfaceView):
+    def __init__(self, path):
+        InterfaceView.__init__(self, "rename", "Rename")
+        
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        self.path = path
+        (self.dir, self.filename) = os.path.split(self.path)
+        
+        self.get_widget("new_name").set_text(self.filename)
         
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
-        self.notification = nautilussvn.ui.notification.Notification()
+        
+        new_name = self.get_widget("new_name").get_text()
+        if not new_name:
+            MessageBox("The Name field is required")
+            return
+        
+        new_path = os.path.join(self.dir, new_name)
+        
+        self.hide()
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Rename Command...")
+        self.action.append(
+            self.vcs.move, 
+            self.path,
+            new_path,
+            force=True
+        )
+        self.action.append(self.action.set_status, "Completed Rename")
+        self.action.append(self.action.finish)
+        self.action.start()
         
 if __name__ == "__main__":
-    window = Rename("test.txt")
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Rename(args[0])
+    window.register_gtk_quit()
     gtk.main()
