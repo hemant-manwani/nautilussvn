@@ -80,8 +80,9 @@ class Log(InterfaceView):
 
         self.paths_table = nautilussvn.ui.widget.Table(
             self.get_widget("paths_table"),
-            [gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Action", "Path"]
+            [gobject.TYPE_STRING, gobject.TYPE_STRING, 
+                gobject.TYPE_STRING, gobject.TYPE_STRING], 
+            ["Action", "Path", "Copy From Path", "Copy From Revision"]
         )
 
         self.message = nautilussvn.ui.widget.TextView(
@@ -126,9 +127,16 @@ class Log(InterfaceView):
                 
                 if item.changed_paths is not None:
                     for subitem in item.changed_paths:
+                        
+                        copyfrom_rev = ""
+                        if hasattr(subitem.copyfrom_revision, "number"):
+                            copyfrom_rev = subitem.copyfrom_revision.number
+                        
                         self.paths_table.append([
                             subitem.action,
-                            subitem.path
+                            subitem.path,
+                            subitem.copyfrom_path,
+                            copyfrom_rev
                         ])    
                 
             else:
