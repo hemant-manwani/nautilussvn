@@ -26,6 +26,7 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.vcs
@@ -148,7 +149,7 @@ class Lock(InterfaceView):
                                 "args": fileinfo
                             }
                         },
-                        "condition": (lambda: True)
+                        "condition": self.condition_diff
                     },
                     {
                         "label": "Show log",
@@ -211,16 +212,16 @@ class Lock(InterfaceView):
     #
 
     def on_context_log_activated(self, widget, data=None):
-        print "Show log Item"
+        LogDialog(data[1])
 
-    def on_context_diff_activated(self, widget, Data=None):
-        print "Diff Item"
+    def on_context_diff_activated(self, widget, data=None):
+        nautilussvn.lib.helper.launch_diff_tool(data[1])
 
     def on_context_open_activated(self, widget, data=None):
-        print "Open Item"
+        nautilussvn.lib.helper.open_item(data[1])
         
     def on_context_browse_activated(self, widget, data=None):
-        print "Browse Item"
+        nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_delete_activated(self, widget, data=None):
         print "Delete Item"
@@ -231,6 +232,10 @@ class Lock(InterfaceView):
     #
     # Context menu conditions
     #
+
+    def condition_diff(self):
+        path = self.files_table.get_row(self.last_row_clicked)[1]
+        return self.vcs.is_modified(path)
     
     def condition_remove_lock(self):
         path = self.files_table.get_row(self.last_row_clicked)[1]
