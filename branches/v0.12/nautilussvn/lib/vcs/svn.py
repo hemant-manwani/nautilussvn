@@ -858,6 +858,24 @@ class SVN:
         
         return self.action(self.client.lock, *args, **kwargs)
 
+    def relocate(self, *args, **kwargs):
+        
+        """
+        Relocate the working copy from from_url to to_url for path
+        
+        @type   from_url: string
+        @param  from_url: A url to relocate from
+        
+        @type   to_url: string
+        @param  to_url: A url to relocate to
+
+        @type   path: string
+        @param  path: The path of the local working copy
+        
+        """
+        
+        return self.action(self.client.relocate, *args, **kwargs)
+
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
