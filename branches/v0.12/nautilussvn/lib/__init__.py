@@ -50,6 +50,10 @@ class FunctionQueue:
     
     def __init__(self):
         self.queue = []
+        self.cancel = False
+    
+    def cancel_queue(self):
+        self.cancel = True
     
     def append(self, func, *args, **kwargs):
         """
@@ -75,6 +79,9 @@ class FunctionQueue:
         """
         
         for func in self.queue:
+            if self.cancel == True:
+                return
+                
             func.start()
 
     def get_result(self, index):
