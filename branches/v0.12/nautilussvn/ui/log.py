@@ -45,7 +45,7 @@ class Log(InterfaceView):
     selected_rows = []
     selected_row = []
     
-    LIMIT = 100
+    limit = 100
 
     def __init__(self, path):
         """
@@ -66,6 +66,8 @@ class Log(InterfaceView):
         self.initialize_revision_labels()
         self.cached = {}
         
+        self.get_widget("limit").set_text(str(self.limit))
+        
         self.revisions_table = nautilussvn.ui.widget.Table(
             self.get_widget("revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
@@ -85,9 +87,6 @@ class Log(InterfaceView):
         self.message = nautilussvn.ui.widget.TextView(
             self.get_widget("message")
         )
-
-        self.get_widget("next").set_label("Next %s >" % self.LIMIT)
-        self.get_widget("previous").set_label("< Previous %s" % self.LIMIT)
 
         self.pbar = nautilussvn.ui.widget.ProgressBar(self.get_widget("pbar"))
         
@@ -154,6 +153,7 @@ class Log(InterfaceView):
             self.load()
             
     def on_next_clicked(self, widget):
+        self.override_limit = True
         self.previous_starts.append(self.rev_start)
         self.rev_start = self.rev_end - 1
 
@@ -169,6 +169,11 @@ class Log(InterfaceView):
         self.stop_on_copy = self.get_widget("stop_on_copy").get_active()
         if not self.is_loading:
             self.refresh()
+    
+    def on_refresh_clicked(self, widget):
+        self.limit = int(self.get_widget("limit").get_text())
+        self.cached = {}
+        self.load()
     
     #
     # Helper methods
@@ -197,9 +202,9 @@ class Log(InterfaceView):
 
     def check_previous_sensitive(self):
         sensitive = True
-        if self.rev_start >= (self.rev_max - self.LIMIT):
+        if self.rev_start >= (self.rev_max - self.limit):
             sensitive = False
-        if len(self.revision_items) < self.LIMIT:
+        if len(self.revision_items) < self.limit:
             sensitive = False
 
         self.get_widget("previous").set_sensitive(sensitive)
@@ -208,7 +213,7 @@ class Log(InterfaceView):
         sensitive = True
         if self.rev_end == 1:
             sensitive = False
-        if len(self.revision_items) < self.LIMIT:
+        if len(self.revision_items) < self.limit:
             sensitive = False
             
         self.get_widget("next").set_sensitive(sensitive)
@@ -310,7 +315,7 @@ class Log(InterfaceView):
             self.vcs.log, 
             self.path,
             revision_start=start,
-            limit=self.LIMIT,
+            limit=self.limit,
             discover_changed_paths=True
         )
         self.action.append(self.pbar.stop_pulsate)
