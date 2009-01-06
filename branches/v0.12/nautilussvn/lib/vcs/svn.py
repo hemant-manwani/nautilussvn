@@ -313,7 +313,9 @@ class SVN:
             return True
         
         return False
-        
+    
+    def is_locked(self, path):
+        return self.client.info2(path)[0][1].lock is not None
         
     #
     # has
@@ -837,6 +839,24 @@ class SVN:
         """
         
         return self.action(self.client.import_, *args, **kwargs)
+
+    def lock(self, *args, **kwargs):
+        
+        """
+        Lock a url or path.
+        
+        @type   url_or_path: string
+        @param  url_or_path: A url or path to lock
+        
+        @type   lock_comment: string
+        @param  lock_comment: A log message to go along with the lock.
+
+        @type   force: boolean
+        @param  force: Steal the locks of others if they exist.
+        
+        """
+        
+        return self.action(self.client.lock, *args, **kwargs)
 
     def action(self, func, *args, **kwargs):
         """
