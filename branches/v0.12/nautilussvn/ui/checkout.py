@@ -42,6 +42,7 @@ class Checkout(InterfaceView):
 
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
+        self.get_widget("Checkout").set_title("Checkout - %s" % path)
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
@@ -65,11 +66,19 @@ class Checkout(InterfaceView):
         self.close()
 
     def on_ok_clicked(self, widget):
-        
         url = self.get_widget("url").get_text()
         path = self.get_widget("destination").get_text()
         omit_externals = self.get_widget("omit_externals").get_active()
         recursive = self.get_widget("recursive").get_active()
+        
+        if not url or not path:
+            nautilussvn.ui.dialog.MessageBox("You must fill in both the URL and Destination fields.")
+            return
+        
+        if url.startswith("file://"):
+            url = url[7:]
+        if path.startswith("file://"):
+            path = path[7:]        
         
         revision = self.vcs.revision("head")
         if self.get_widget("revision_number_opt").get_active():
@@ -85,6 +94,7 @@ class Checkout(InterfaceView):
         )
         
         self.action.append(self.action.set_status, "Running Checkout Command...")
+        self.action.append(nautilussvn.lib.helper.save_repository_path, url)
         self.action.append(
             self.vcs.checkout,
             url,
@@ -93,7 +103,6 @@ class Checkout(InterfaceView):
             revision=revision,
             ignore_externals=omit_externals
         )
-        self.action.append(nautilussvn.lib.helper.save_repository_path, url)
         self.action.append(self.action.finish)
         self.action.start()
 
