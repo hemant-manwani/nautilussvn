@@ -105,6 +105,7 @@ class Log(InterfaceView):
             self.action.set_cancel(True)
             self.pbar.set_text("Cancelled")
             self.pbar.update(1)
+            self.set_loading(False)
         else:
             self.close()
         
