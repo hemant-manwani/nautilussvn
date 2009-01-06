@@ -791,7 +791,32 @@ class SVN:
         """
         
         return self.action(self.client.log, *args, **kwargs)
-    
+
+    def export(self, *args, **kwargs):
+        
+        """
+        Export files from either a working copy or repository into a local
+        path without versioning information.
+        
+        @type   src_url_or_path: string
+        @param  src_url_or_path: A repository url.
+        
+        @type   dest_path: string
+        @param  dest_path: A local destination for the working copy.
+        
+        @type   revision: pysvn.Revision
+        @param  revision: The revision to retrieve from the repository.
+        
+        @type   recurse: boolean
+        @param  recurse: Whether or not to run a recursive checkout.
+        
+        @type   ignore_externals: boolean
+        @param  ignore_externals: Whether or not to ignore externals.
+        
+        """
+        
+        return self.action(self.client.export, *args, **kwargs)
+
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
@@ -801,14 +826,15 @@ class SVN:
         
         """
         
+        returner = None
         try:
-            return func(*args, **kwargs)
+            returner = func(*args, **kwargs)
         except pysvn.ClientError, e:
             return str(e)
         except TypeError, e:
             return str(e)
         
-        return None
+        return returner
 
 class StatusMonitor():
     """
