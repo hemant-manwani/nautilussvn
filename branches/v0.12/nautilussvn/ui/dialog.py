@@ -46,7 +46,7 @@ class PreviousMessages(InterfaceView):
         self.entries = nautilussvn.lib.helper.get_previous_messages()
         if self.entries is None:
             return None
-            
+        
         for entry in self.entries:
             tmp = entry[1]
             if len(tmp) > 80:
@@ -58,6 +58,10 @@ class PreviousMessages(InterfaceView):
             self.message.set_text(self.entries[0][1])
         
     def run(self):
+    
+        if self.entries is None:
+            return None
+    
         returner = None
         self.dialog = self.get_widget("PreviousMessages")
         result = self.dialog.run()
