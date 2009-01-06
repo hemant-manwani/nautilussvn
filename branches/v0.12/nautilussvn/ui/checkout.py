@@ -52,6 +52,11 @@ class Checkout(InterfaceView):
         )
         
         self.get_widget("destination").set_text(path)
+        self.allow_rev = False
+
+    #
+    # UI Signal Callback Methods
+    #
 
     def on_destroy(self, widget):
         self.close()
@@ -93,7 +98,8 @@ class Checkout(InterfaceView):
         self.action.start()
 
     def on_revision_number_focused(self, widget, data=None):
-        self.get_widget("revision_number_opt").set_active(True)
+        if self.allow_rev:
+            self.get_widget("revision_number_opt").set_active(True)
 
     def on_file_chooser_clicked(self, widget, data=None):
         chooser = nautilussvn.ui.dialog.FolderChooser()
@@ -102,12 +108,22 @@ class Checkout(InterfaceView):
             self.get_widget("destination").set_text(path)
 
     def on_show_log_clicked(self, widget, data=None):
-        LogDialog(ok_callback=self.on_log_closed)
+        LogDialog(
+            self.get_widget("url").get_text(), 
+            ok_callback=self.on_log_closed
+        )
     
     def on_log_closed(self, data):
         if data is not None:
             self.get_widget("revision_number_opt").set_active(True)
             self.get_widget("revision_number").set_text(data)
+    
+    def on_url_changed(self, widget, data=None):
+        self.allow_rev = False
+        if self.get_widget("url").get_text() != "":
+            self.allow_rev = True
+        
+        self.get_widget("show_log").set_sensitive(self.allow_rev)
 
 if __name__ == "__main__":
     import sys
