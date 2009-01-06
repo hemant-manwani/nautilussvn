@@ -55,20 +55,16 @@ class Log(InterfaceView):
         """
         
         InterfaceView.__init__(self, "log", "Log")
+        self.get_widget("Log").set_title("Log - %s" % path)
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
         
-        self.get_widget("Log").set_title("Log - %s" % self.path)
-        
-        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-        self.revision = self.vcs.get_revision(self.path)        
-        self.rev_start = self.revision
-        self.rev_end = self.rev_start - self.LIMIT
-        if self.rev_end < 1:
-            self.rev_end = 1
-            
-        self.rev_max = self.rev_start
-        self.rev_min = 1
+        self.rev_start = None
+        self.rev_max = 1
+        self.previous_starts = []
+        self.initialize_revision_labels()
+        self.cached = {}
         
         self.revisions_table = nautilussvn.ui.widget.Table(
             self.get_widget("revisions_table"),
@@ -90,10 +86,12 @@ class Log(InterfaceView):
             self.get_widget("message")
         )
 
-        self.pbar = self.get_widget("pbar")
+        self.get_widget("next").set_label("Next %s >" % self.LIMIT)
+        self.get_widget("previous").set_label("< Previous %s" % self.LIMIT)
+
+        self.pbar = nautilussvn.ui.widget.ProgressBar(self.get_widget("pbar"))
         
         self.stop_on_copy = False
-        self.loading = True
         self.load()
 
     #
@@ -104,12 +102,15 @@ class Log(InterfaceView):
         self.close()
 
     def on_cancel_clicked(self, widget, data=None):
-        if self.loading:
+        if self.is_loading:
             self.action.set_cancel(True)
-        self.close()
+            self.pbar.set_text("Cancelled")
+            self.pbar.update(1)
+        else:
+            self.close()
         
     def on_ok_clicked(self, widget, data=None):
-        if self.loading:
+        if self.is_loading:
             self.action.set_cancel(True)    
         self.close()
 
@@ -146,28 +147,27 @@ class Log(InterfaceView):
                 self.message.set_text("")
     
     def on_previous_clicked(self, widget):
-        self.rev_start += self.LIMIT
-        self.rev_end += self.LIMIT
-        if self.rev_start > self.rev_max:
-            self.rev_start = self.rev_max
-            self.rev_end = self.rev_start - self.LIMIT
-            if self.rev_end < 1:
-                self.rev_end = 1
-        
-        self.load()
+        self.rev_start = self.previous_starts.pop()
+        if self.rev_start in self.cached:
+            self.refresh()
+        else:
+            self.load()
             
     def on_next_clicked(self, widget):
-        self.rev_start -= self.LIMIT
-        self.rev_end -= self.LIMIT
-        if self.rev_start < self.LIMIT:
-            self.rev_start = self.LIMIT
-            self.rev_end = 1
+        self.previous_starts.append(self.rev_start)
+        self.rev_start = self.rev_end - 1
 
-        self.load()
+        if self.rev_start < 1:
+            self.rev_start = 1
+
+        if self.rev_start in self.cached:
+            self.refresh()
+        else:
+            self.load()
     
     def on_stop_on_copy_toggled(self, widget):
         self.stop_on_copy = self.get_widget("stop_on_copy").get_active()
-        if not self.loading:
+        if not self.is_loading:
             self.refresh()
     
     #
@@ -239,8 +239,25 @@ class Log(InterfaceView):
         self.paths_table.clear()        
         self.pbar.set_text("Loading...")
         
-        # Make sure the int passed is the order the log call was made
-        self.revision_items = self.action.get_result(1)
+        if self.rev_start and self.rev_start in self.cached:
+            self.revision_items = self.cached[self.rev_start]
+        else:
+            # Make sure the int passed is the order the log call was made
+            self.revision_items = self.action.get_result(0)
+        
+        # Get the starting/ending point from the actual returned revisions
+        self.rev_start = self.revision_items[0].revision.number
+        self.rev_end = self.revision_items[-1].revision.number
+        
+        self.cached[self.rev_start] = self.revision_items
+        
+        # The first time the log items return, the rev_start will be as large
+        # as it will ever be.  So set this to our maximum revision.
+        if self.rev_start > self.rev_max:
+            self.rev_max = self.rev_start
+        
+        self.set_start_revision(self.rev_start)
+        self.set_end_revision(self.rev_end)
 
         total = len(self.revision_items)
         inc = 1 / total
@@ -263,69 +280,54 @@ class Log(InterfaceView):
             if self.stop_on_copy:
                 for path in item.changed_paths:
                     if path.copyfrom_path is not None:
-                        self.update_pb(1)
+                        self.pbar.update(1)
                         return
 
             fraction += inc
-            self.update_pb(fraction)
-
+            self.pbar.update(fraction)
+            
+        self.check_previous_sensitive()
+        self.check_next_sensitive()
+        self.set_loading(False)
         self.pbar.set_text("Finished")
-        
-    def update_pb(self, fraction=None):
-        if fraction:
-            if fraction > 1:
-                fraction = 1
-            self.pbar.set_fraction(fraction)
-            return False
-        else:
-            self.pbar.pulse()
-            return True
 
     def load(self):
-    
         self.set_loading(True)
-    
         self.pbar.set_text("Retrieving Log Information...")
-
+        self.pbar.start_pulsate()
+        
         self.action = VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set(),
             visible=False
         )        
 
-        # Set up an interval to make the progress bar pulse
-        # The timeout is removed after the log action finishes
-        self.timer = gobject.timeout_add(100, self.update_pb)
+        start = self.vcs.revision("head")
+        if self.rev_start:
+            start = self.vcs.revision("number", number=self.rev_start)
 
-        self.action.append(self.initialize_revision_labels)
         self.action.append(
             self.vcs.log, 
             self.path,
-            revision_start=self.vcs.revision("number", number=self.rev_start),
-            revision_end=self.vcs.revision("number", number=self.rev_end),
+            revision_start=start,
+            limit=self.LIMIT,
             discover_changed_paths=True
         )
-
-        self.action.append(gobject.source_remove, self.timer)
+        self.action.append(self.pbar.stop_pulsate)
         self.action.append(self.refresh)
-        self.action.append(self.check_previous_sensitive)
-        self.action.append(self.check_next_sensitive)
-        self.action.append(self.set_start_revision, self.rev_start)
-        self.action.append(self.set_end_revision, self.rev_end)
-        self.action.append(self.set_loading, False)
         self.action.start()
 
     def set_loading(self, loading):
-        self.loading = loading
+        self.is_loading = loading
 
 class LogDialog(Log):
-    def __init__(self, ok_callback=None, multiple=False):
+    def __init__(self, path, ok_callback=None, multiple=False):
         """
         Override the normal Log class so that we can hide the window as we need.
         Also, provide a callback for when the OK button is clicked so that we
         can get some desired data.
         """
-        Log.__init__(self)
+        Log.__init__(self, path)
         self.ok_callback = ok_callback
         self.multiple = multiple
         
