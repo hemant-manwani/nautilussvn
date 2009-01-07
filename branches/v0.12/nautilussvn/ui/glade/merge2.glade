@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--Generated with glade3 3.4.5 on Wed Jan  7 15:01:35 2009 -->
+<glade-interface>
+  <widget class="GtkAssistant" id="Merge">
+    <property name="width_request">550</property>
+    <property name="visible">True</property>
+    <property name="border_width">12</property>
+    <property name="title" translatable="yes">Merge Assistant</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="gravity">GDK_GRAVITY_CENTER</property>
+    <signal name="close" handler="on_close_clicked"/>
+    <signal name="destroy" handler="on_destroy"/>
+    <signal name="cancel" handler="on_cancel_clicked"/>
+    <child>
+      <widget class="GtkVBox" id="page1">
+        <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
+        <child>
+          <widget class="GtkVBox" id="vbox3">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkRadioButton" id="mergetype_range_opt">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="label" translatable="yes">Merge a range of revisions</property>
+                <property name="response_id">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label47">
+                <property name="width_request">475</property>
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xpad">30</property>
+                <property name="label" translatable="yes">Choose this method if you have made some changes to a branch and wish to merge your changes with another branch.</property>
+                <property name="wrap">True</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkVBox" id="vbox4">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkRadioButton" id="mergetype_reintegrate_opt">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="label" translatable="yes">Reintegrate a branch</property>
+                <property name="response_id">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">mergetype_range_opt</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label49">
+                <property name="width_request">475</property>
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xpad">30</property>
+                <property name="label" translatable="yes">Choose this method if you have created a new branch and wish to merge it back to trunk.</property>
+                <property name="wrap">True</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkVBox" id="vbox5">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkRadioButton" id="mergetype_tree_opt">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="label" translatable="yes">Merge two different trees</property>
+                <property name="response_id">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">mergetype_range_opt</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label51">
+                <property name="width_request">475</property>
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xpad">30</property>
+                <property name="label" translatable="yes">Choose this method if you wish to merge two different branches into your working copy.</property>
+                <property name="wrap">True</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </widget>
+      <packing>
+        <property name="page_type">GTK_ASSISTANT_PAGE_INTRO</property>
+        <property name="title">Step 1: Merge Type</property>
+      </packing>
+    </child>
+    <child>
+      <widget class="GtkVBox" id="page2a">
+        <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
+        <child>
+          <widget class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">label</property>
+          </widget>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">label</property>
+          </widget>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </widget>
+      <packing>
+        <property name="title">Step 2: Merge a Range of Revisions</property>
+      </packing>
+    </child>
+    <child>
+      <widget class="GtkVBox" id="page2b">
+        <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </widget>
+      <packing>
+        <property name="title">Step 2: Reintegrate by Branch</property>
+      </packing>
+    </child>
+    <child>
+      <widget class="GtkVBox" id="page2c">
+        <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </widget>
+      <packing>
+        <property name="title">Step 2: Merge two different trees</property>
+      </packing>
+    </child>
+    <child>
+      <widget class="GtkVBox" id="page3">
+        <property name="visible">True</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </widget>
+      <packing>
+        <property name="page_type">GTK_ASSISTANT_PAGE_CONFIRM</property>
+        <property name="title">Step 3: Final Options</property>
+      </packing>
+    </child>
+  </widget>
+</glade-interface>
