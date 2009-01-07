@@ -58,7 +58,7 @@ class Add(InterfaceView):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.files = self.vcs.get_items(
             paths, 
-            self.vcs.STATUSES_FOR_ADD
+            [self.vcs.STATUS["unversioned"]]
         )
         
         for item in self.files:
@@ -133,7 +133,7 @@ class Add(InterfaceView):
                                 "args": fileinfo
                             }
                         },
-                        "condition": (lambda: True)
+                        "condition": self.condition_delete
                     },{
                         "label": "Add to ignore list",
                         'submenu': [{
@@ -157,7 +157,7 @@ class Add(InterfaceView):
                                 "condition": (lambda: True)
                             }
                         ],
-                        "condition": (lambda: True)
+                        "condition": self.condition_ignore_submenu
                     }
                 ])
                 context_menu.show(event)
@@ -190,6 +190,16 @@ class Add(InterfaceView):
         
         if self.vcs.propset("", prop_name, prop_value):
             self.files_table.remove(self.last_row_clicked)
+
+    #
+    # Context Menu Conditions
+    #
+    
+    def condition_delete(self):
+        return True
+    
+    def condition_ignore_submenu(self):
+        return True
         
 if __name__ == "__main__":
     import sys
