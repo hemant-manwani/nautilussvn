@@ -32,45 +32,45 @@ import nautilussvn.ui.dialog
 import nautilussvn.lib.settings
 import nautilussvn.lib.helper
 
-class Settings:
+class Settings(InterfaceView):
     def __init__(self):
         """
         Provides an interface to the settings library.
         """
     
-        self.view = nautilussvn.ui.InterfaceView(self, "settings", "Settings")
+        InterfaceView.__init__(self, "settings", "Settings")
 
         self.settings = nautilussvn.lib.settings.SettingsManager()
         
         self.language = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("language"), 
+            self.get_widget("language"), 
             ['English']
         )
         self.language.set_active_from_value(
             self.settings.get("general", "language")
         )
-        self.view.get_widget("enable_attributes").set_active(
+        self.get_widget("enable_attributes").set_active(
             int(self.settings.get("general", "enable_attributes"))
         )
-        self.view.get_widget("enable_emblems").set_active(
+        self.get_widget("enable_emblems").set_active(
             int(self.settings.get("general", "enable_emblems"))
         )
-        self.view.get_widget("enable_recursive").set_active(
+        self.get_widget("enable_recursive").set_active(
             int(self.settings.get("general", "enable_recursive"))
         )
-        self.view.get_widget("diff_tool").set_text(
+        self.get_widget("diff_tool").set_text(
             self.settings.get("external", "diff_tool")
         )
-        self.view.get_widget("diff_tool_swap").set_active(
+        self.get_widget("diff_tool_swap").set_active(
             int(self.settings.get("external", "diff_tool_swap"))
         )
-        self.view.get_widget("repo_browser").set_text(
+        self.get_widget("repo_browser").set_text(
             self.settings.get("external", "repo_browser")
         )
-        self.view.get_widget("cache_number_repositories").set_text(
+        self.get_widget("cache_number_repositories").set_text(
             self.settings.get("cache", "number_repositories")
         )
-        self.view.get_widget("cache_number_messages").set_text(
+        self.get_widget("cache_number_messages").set_text(
             self.settings.get("cache", "number_messages")
         )
         
@@ -90,35 +90,35 @@ class Settings:
     def save(self):
         self.settings.set(
             "general", "language", 
-            self.view.get_widget("language").get_active_text()
+            self.get_widget("language").get_active_text()
         )
         self.settings.set(
             "general", "enable_attributes",
-            self.view.get_widget("enable_attributes").get_active()
+            self.get_widget("enable_attributes").get_active()
         )
         self.settings.set(
             "general", "enable_emblems",
-            self.view.get_widget("enable_emblems").get_active()
+            self.get_widget("enable_emblems").get_active()
         )
         self.settings.set(
             "general", "enable_recursive",
-            self.view.get_widget("enable_recursive").get_active()
+            self.get_widget("enable_recursive").get_active()
         )
         self.settings.set(
             "external", "diff_tool",
-            self.view.get_widget("diff_tool").get_text()
+            self.get_widget("diff_tool").get_text()
         )
         self.settings.set(
             "external", "diff_tool_swap",
-            self.view.get_widget("diff_tool_swap").get_active()
+            self.get_widget("diff_tool_swap").get_active()
         )
         self.settings.set(
             "cache", "number_repositories",
-            self.view.get_widget("cache_number_repositories").get_text()
+            self.get_widget("cache_number_repositories").get_text()
         )
         self.settings.set(
             "cache", "number_messages",
-            self.view.get_widget("cache_number_messages").get_text()
+            self.get_widget("cache_number_messages").get_text()
         )
         self.settings.write()
 
@@ -129,7 +129,7 @@ class Settings:
         path = chooser.run()
         path = path.replace("file://", "")
         if path is not None:
-            self.view.get_widget("diff_tool").set_text(path)
+            self.get_widget("diff_tool").set_text(path)
 
     def on_external_repo_browser_browse_clicked(self, widget):
         chooser = nautilussvn.ui.dialog.FileChooser(
@@ -138,7 +138,7 @@ class Settings:
         path = chooser.run()
         path = path.replace("file://", "")
         if path is not None:
-            self.view.get_widget("repo_browser").set_text(path)
+            self.get_widget("repo_browser").set_text(path)
 
     def on_cache_clear_repositories_clicked(self, widget):
         confirmation = nautilussvn.ui.dialog.Confirmation(
@@ -186,4 +186,5 @@ class Settings:
 
 if __name__ == "__main__":
     window = Settings()
+    window.register_gtk_quit()
     gtk.main()
