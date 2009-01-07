@@ -43,9 +43,14 @@ class Merge(InterfaceView):
     def on_close_clicked(self, widget):
         self.close()
 
+    def on_apply_clicked(self, widget):
+        self.close()
+
+    def on_prepare(self, widget, page):
+        self.assistant.set_page_complete(page, True)
+
     def on_forward_clicked(self, widget):
         current = self.assistant.get_current_page()
-        next = current + 1
         if current == 0:
             if self.get_widget("mergetype_range_opt").get_active():
                 next = 1
@@ -53,8 +58,9 @@ class Merge(InterfaceView):
                 next = 2
             elif self.get_widget("mergetype_tree_opt").get_active():
                 next = 3
-
-        self.assistant.set_current_page(4)
+        else:
+            next = 4
+        return next
         
 if __name__ == "__main__":
     import sys
