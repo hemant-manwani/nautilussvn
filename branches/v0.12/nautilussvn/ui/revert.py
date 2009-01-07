@@ -50,7 +50,7 @@ class Revert(Add):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.files = self.vcs.get_items(
             paths, 
-            self.vcs.STATUSES_FOR_REVERT
+            [self.vcs.STATUS["added"]]
         )
         
         for item in self.files:
@@ -74,6 +74,16 @@ class Revert(Add):
         self.action.append(self.action.set_status, "Completed Revert")
         self.action.append(self.action.finish)
         self.action.start()
+
+    #
+    # Context Menu Conditions
+    #
+    
+    def condition_delete(self):
+        return False
+
+    def condition_ignore_submenu(self):
+        return False
 
 if __name__ == "__main__":
     import sys
