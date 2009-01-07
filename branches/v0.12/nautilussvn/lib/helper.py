@@ -374,12 +374,26 @@ def save_log_message(message):
     
     """
     
-    t = time.strftime("%Y-%m-%d %H:%M:%S")
-    f = open(get_previous_messages_path(), "a+")
-    s = """\
--- %(t)s --
-%(message)s
-"""%(locals())
+    messages = []
+    path = get_previous_messages_path()
+    if os.path.exists(path):
+        limit = get_log_messages_limit()
+        messages = get_previous_messages()
+        if len(messages) == limit:
+            messages.pop()
+
+    t = time.strftime(DATETIME_FORMAT)
+    messages.insert(0, (t, message))    
+    
+    f = open(get_previous_messages_path(), "w")
+    s = ""
+    for m in messages:
+        s = """\
+-- %s --
+%s
+%s
+"""%(m[0], m[1], s)
+
     f.write(s)
     f.close()
 
@@ -398,6 +412,10 @@ def save_repository_path(path):
     if path in paths:
         paths.pop(paths.index(path))
     paths.insert(0, path)
+    
+    limit = get_repository_paths_limit()
+    if len(paths) > limit:
+        paths.pop()
     
     f = open(get_repository_paths_path(), "w")
     f.write("\n".join(paths))
@@ -433,4 +451,10 @@ def launch_ui_window(filename, *args):
         ["/usr/bin/python", path, " ".join(args)]
     )
 
-    
+def get_log_messages_limit():
+    sm = nautilussvn.lib.settings.SettingsManager()
+    return sm.get("cache", "number_messages")    
+
+def get_repository_paths_limit():
+    sm = nautilussvn.lib.settings.SettingsManager()
+    return sm.get("cache", "number_repositories")
