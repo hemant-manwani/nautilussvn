@@ -113,6 +113,10 @@ class Commit(InterfaceView):
         )
         
         self.action.append(self.action.set_status, "Running Commit Command...")
+        self.action.append(
+            nautilussvn.lib.helper.save_log_message, 
+            self.message.get_text()
+        )
         self.action.append(self.vcs.commit, items, self.message.get_text())
         self.action.append(self.action.set_status, "Completed Commit")
         self.action.append(self.action.finish)
