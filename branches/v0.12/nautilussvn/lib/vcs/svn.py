@@ -925,6 +925,19 @@ class SVN:
         
         return self.action(self.client.revert, *args, **kwargs)
 
+    def resolve(self, *args, **kwargs):
+        """
+        Mark conflicted files as resolved
+        
+        @type   path: list
+        @param  path: A list of files/directories.
+        
+        @type   recurse: boolean
+        @param  recurse: Recursively add a directory's children
+        
+        """
+        
+        return self.action(self.client.resolve, *args, **kwargs)
 
     def action(self, func, *args, **kwargs):
         """
