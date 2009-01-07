@@ -266,7 +266,7 @@ def launch_diff_tool(path):
         return
     
     if not os.path.exists(diff["path"]):
-        MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings.")
+        MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings." % diff["path"])
         return
 
     patch = os.popen("svn diff '%s'" % path).read()
