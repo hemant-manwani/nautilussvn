@@ -11,7 +11,7 @@ This software requires the following packages to be installed:
   * python-nautilus
   * python-wxgtk2.6
   * python-svn
-  * meld (Optional - see 'Options' below.)
+  * meld (Optional - see [http://code.google.com/p/nautilussvn/wiki/Configuration Configuration].)
 
 == Ubuntu ==
 {{{
