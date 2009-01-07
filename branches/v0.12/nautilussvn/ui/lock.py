@@ -180,16 +180,6 @@ class Lock(InterfaceView):
                             }
                         },
                         "condition": (lambda: True)
-                    },
-                    {
-                        "label": "Delete",
-                        "signals": {
-                            "activate": {
-                                "callback": self.on_context_delete_activated, 
-                                "args": fileinfo
-                            }
-                        },
-                        "condition": (lambda: True)
                     }
                 ])
                 context_menu.show(event)
@@ -222,9 +212,6 @@ class Lock(InterfaceView):
         
     def on_context_browse_activated(self, widget, data=None):
         nautilussvn.lib.helper.browse_to_item(data[1])
-
-    def on_context_delete_activated(self, widget, data=None):
-        print "Delete Item"
 
     def on_context_remove_lock_activated(self, widget, data=None):
         print "Remove lock"    
