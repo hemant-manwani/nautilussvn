@@ -24,15 +24,20 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui.add
+from nautilussvn.ui.add import Add
 
-class Resolve(nautilussvn.ui.add.Add):
-    def __init__(self):
-        nautilussvn.ui.add.Add.__init__(self)
+class Resolve(Add):
+    def __init__(self, paths):
+        Add.__init__(self, paths)
         
-        self.window = self.view.get_widget("Add")
+        self.window = self.get_widget("Add")
         self.window.set_title("Resolve")
 
 if __name__ == "__main__":
-    window = Resolve()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
+    window = Resolve(args)
+    window.register_gtk_quit()
     gtk.main()
