@@ -283,7 +283,10 @@ class Commit(InterfaceView):
         )
         
         if confirm.run():
-            nautilussvn.lib.helper.delete_item(data[1])
+            if self.vcs.is_versioned(data[1]):
+                self.vcs.remove(data[1], force=True)
+            else:
+                nautilussvn.lib.helper.delete_item(data[1])
             self.files_table.remove(self.last_row_clicked)
         
     def on_subcontext_ignore_by_filename_activated(self, widget, data=None):

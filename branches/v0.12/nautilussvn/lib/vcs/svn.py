@@ -879,7 +879,7 @@ class SVN:
     def move(self, *args, **kwargs):
         
         """
-        Move or rename a file.
+        Schedule a file to be moved around the repository
         
         @type   src_url_or_path: string
         @param  src_url_or_path: A url/path to move from
@@ -893,6 +893,24 @@ class SVN:
         """
         
         return self.action(self.client.move, *args, **kwargs)
+
+    def remove(self, *args, **kwargs):
+        
+        """
+        Schedule a file to be removed from the repository
+        
+        @type   url_or_path: string
+        @param  url_or_path: A url/path to remove
+
+        @type   force: boolean
+        @param  force: Force renaming, despite conflicts. Defaults to false.
+
+        @type   keep_local: boolean
+        @param  keep_local: Keep the local copy (don't just delete it)        
+                
+        """
+        
+        return self.action(self.client.remove, *args, **kwargs)
 
     def action(self, func, *args, **kwargs):
         """
