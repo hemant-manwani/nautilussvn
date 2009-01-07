@@ -937,7 +937,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.resolve, *args, **kwargs)
+        return self.action(self.client.resolved, *args, **kwargs)
 
     def action(self, func, *args, **kwargs):
         """
