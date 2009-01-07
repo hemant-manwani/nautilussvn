@@ -72,6 +72,10 @@ class SVN:
         STATUS["unversioned"]
     ]
     
+    STATUSES_FOR_REVERT = [
+        STATUS["added"]
+    ]
+    
     PROPERTIES = {
         "executable":   "svn:executable",
         "mime-type":    "svn:mime-type",
@@ -689,6 +693,9 @@ class SVN:
         @type   paths: list
         @param  paths: A list of files/directories.
         
+        @type   recurse: boolean
+        @param  recurse: Recursively add a directory's children
+        
         """
         
         return self.action(self.client.add, *args, **kwargs)
@@ -911,6 +918,21 @@ class SVN:
         """
         
         return self.action(self.client.remove, *args, **kwargs)
+
+    def revert(self, *args, **kwargs):
+        """
+        Revert files or directories from the repository
+        
+        @type   paths: list
+        @param  paths: A list of files/directories.
+        
+        @type   recurse: boolean
+        @param  recurse: Recursively add a directory's children
+        
+        """
+        
+        return self.action(self.client.revert, *args, **kwargs)
+
 
     def action(self, func, *args, **kwargs):
         """

@@ -24,15 +24,62 @@ import pygtk
 import gobject
 import gtk
 
-import nautilussvn.ui.add
+from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.add import Add
+from nautilussvn.ui.callback import VCSAction
+import nautilussvn.ui.widget
+import nautilussvn.ui.dialog
+import nautilussvn.ui.callback
+import nautilussvn.lib.helper
 
-class Revert(nautilussvn.ui.add.Add):
-    def __init__(self):
-        nautilussvn.ui.add.Add.__init__(self)
-        
-        self.window = self.view.get_widget("Add")
+class Revert(Add):
+    def __init__(self, paths):
+        InterfaceView.__init__(self, "add", "Add")
+
+        self.window = self.get_widget("Add")
         self.window.set_title("Revert")
+
+        self.last_row_clicked = None
+
+        self.files_table = nautilussvn.ui.widget.Table(
+            self.get_widget("files_table"), 
+            [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
+        )
+
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        self.files = self.vcs.get_items(
+            paths, 
+            self.vcs.STATUSES_FOR_REVERT
+        )
         
+        for item in self.files:
+            self.files_table.append([
+                True, 
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path)
+            ])
+                    
+    def on_ok_clicked(self, widget):
+        items = self.files_table.get_activated_rows(1)
+        self.hide()
+
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Revert Command...")
+        self.action.append(self.vcs.revert, items, recurse=True)
+        self.action.append(self.action.set_status, "Completed Revert")
+        self.action.append(self.action.finish)
+        self.action.start()
+
 if __name__ == "__main__":
-    window = Revert()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
+    window = Revert(args)
+    window.register_gtk_quit()
     gtk.main()
