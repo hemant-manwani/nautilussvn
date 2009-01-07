@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Jan  7 15:01:35 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan  7 15:24:06 2009 -->
 <glade-interface>
   <widget class="GtkAssistant" id="Merge">
     <property name="width_request">550</property>
@@ -12,6 +12,8 @@
     <signal name="close" handler="on_close_clicked"/>
     <signal name="destroy" handler="on_destroy"/>
     <signal name="cancel" handler="on_cancel_clicked"/>
+    <signal name="apply" handler="on_apply_clicked"/>
+    <signal name="prepare" handler="on_prepare"/>
     <child>
       <widget class="GtkVBox" id="page1">
         <property name="visible">True</property>
