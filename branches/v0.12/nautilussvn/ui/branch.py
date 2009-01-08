@@ -145,7 +145,7 @@ if __name__ == "__main__":
     import sys
     args = sys.argv[1:]
     if len(args) != 1:
-        raise SystemExit("Usage: python branch.py [path]")
+        raise SystemExit("Usage: python %s [path]" % __file__)
     window = Branch(args[0])
     window.register_gtk_quit()
     gtk.main()
