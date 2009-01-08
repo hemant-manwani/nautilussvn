@@ -26,40 +26,83 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
+from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.helper
 
-class Switch:
-    def __init__(self):
+class Switch(InterfaceView):
+    def __init__(self, path):
         InterfaceView.__init__(self, "switch", "Switch")
-
+        
+        self.path = path
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        self.get_widget("path").set_text(self.path)
+        self.get_widget("repository").set_text(
+            self.vcs.get_repo_url(self.path)
+        )
+        
         self.repositories = nautilussvn.ui.widget.ComboBox(
-            self.view.get_widget("repositories"), 
+            self.get_widget("repositories"), 
             nautilussvn.lib.helper.get_repository_paths()
         )
 
     def on_destroy(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_cancel_clicked(self, widget):
-        gtk.main_quit()
+        self.close()
 
     def on_ok_clicked(self, widget):
-        self.view.hide()
+        url = self.get_widget("repository").get_text()
+        
+        if not url or not self.path:
+            nautilussvn.ui.dialog.MessageBox("The repository location is a required field.")
+            return
+
+        revision = self.vcs.revision("head")
+        if self.get_widget("revision_number_opt").get_active():
+            revision = self.vcs.revision(
+                "number",
+                number=int(self.get_widget("revision_number").get_text())
+            )
+    
+        self.hide()
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Switch Command...")
+        self.action.append(nautilussvn.lib.helper.save_repository_path, url)
+        self.action.append(
+            self.vcs.switch,
+            self.path,
+            url,
+            revision=revision
+        )
+        self.action.append(self.action.set_status, "Completed Switch")
+        self.action.append(self.action.finish)
+        self.action.start()
 
     def on_revision_number_focused(self, widget, data=None):
-        self.view.get_widget("revision_number_opt").set_active(True)
+        self.get_widget("revision_number_opt").set_active(True)
 
     def on_show_log_clicked(self, widget, data=None):
-        LogDialog(ok_callback=self.on_log_closed)
+        LogDialog(self.path, ok_callback=self.on_log_closed)
     
     def on_log_closed(self, data):
         if data is not None:
-            self.view.get_widget("revision_number_opt").set_active(True)
-            self.view.get_widget("revision_number").set_text(data)
+            self.get_widget("revision_number_opt").set_active(True)
+            self.get_widget("revision_number").set_text(data)
 
 
 if __name__ == "__main__":
-    window = Switch()
+    import sys
+    args = sys.argv[1:]
+    if len(args) != 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Switch(args[0])
+    window.register_gtk_quit()
     gtk.main()
