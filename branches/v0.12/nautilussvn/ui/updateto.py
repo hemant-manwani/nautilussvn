@@ -24,42 +24,74 @@ import pygtk
 import gobject
 import gtk
 
-from nautilussvn.ui import InterfaceNonView
+from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
 from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 
-class Update(InterfaceNonView):
+class UpdateToRevision(InterfaceView):
     """
-    This class provides an interface to generate an "update".
-    Pass it a path and it will start an update, running the notification dialog.  
-    There is no glade .
+    This class provides an interface to update a working copy to a specific
+    revision.  It has a glade .
     
     """
 
     def __init__(self, path):
+        InterfaceView.__init__(self, "update", "Update")
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
-    def start(self):
+    def on_destroy(self, widget):
+        self.close()
+
+    def on_cancel_clicked(self, widget):
+        self.close()
+
+    def on_ok_clicked(self, widget):
+
+        revision = self.vcs.revision("head")
+        if self.get_widget("revision_number_opt").get_active():
+            revision = self.vcs.revision(
+                "number",
+                number=int(self.get_widget("revision_number").get_text())
+            )
+        recursive = self.get_widget("recursive").get_active()
+        omit_externals = self.get_widget("omit_externals").get_active()
+
         self.action = VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
         self.action.append(self.action.set_status, "Updating...")
-        self.action.append(self.vcs.update, self.path)
+        self.action.append(
+            self.vcs.update, 
+            self.path,
+            revision=revision,
+            recurse=recursive,
+            ignore_externals=omit_externals
+        )
         self.action.append(self.action.set_status, "Completed Update")
         self.action.append(self.action.finish)
         self.action.start()
+
+    def on_revision_number_focused(self, widget, data=None):
+        self.get_widget("revision_number_opt").set_active(True)
+
+    def on_show_log_clicked(self, widget, data=None):
+        LogDialog(self.path, ok_callback=self.on_log_closed)
+    
+    def on_log_closed(self, data):
+        if data is not None:
+            self.get_widget("revision_number_opt").set_active(True)
+            self.get_widget("revision_number").set_text(data)
 
 if __name__ == "__main__":
     import sys
     args = sys.argv[1:]
     if len(args) != 1:
         raise SystemExit("Usage: python %s [path]" % __file__)
-    window = Update(args[0])
+    window = UpdateToRevision(args[0])
     window.register_gtk_quit()
-    window.start()
     gtk.main()
