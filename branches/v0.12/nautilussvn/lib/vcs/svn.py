@@ -970,6 +970,26 @@ class SVN:
         
         return self.action(self.client.unlock, *args, **kwargs)
 
+    def update(self, *args, **kwargs):
+        """
+        Update a working copy.
+        
+        @type   path: string
+        @param  path: A local path to update
+        
+        @type   recurse: boolean
+        @param  recurse: Update child folders recursively
+        
+        @type   revision: pysvn.Revision
+        @param  revision: Revision to update to (Def: HEAD)
+        
+        @type   ignore_externals: boolean
+        @param  ignore_externals: Ignore external items
+        
+        """
+        
+        return self.action(self.client.update, *args, **kwargs)
+
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
