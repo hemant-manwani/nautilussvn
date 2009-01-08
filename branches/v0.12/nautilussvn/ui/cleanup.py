@@ -48,9 +48,9 @@ class Cleanup(InterfaceNonView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.set_status, "Cleaning Up...")
+        self.action.append(self.action.set_status, "Cleaning Up...")
         self.action.append(self.vcs.cleanup, self.path)
-        self.action.append(self.set_status, "Completed Cleanup")
+        self.action.append(self.action.set_status, "Completed Cleanup")
         self.action.append(self.action.finish)
         self.action.start()
 
