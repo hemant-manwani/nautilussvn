@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan  8 09:15:20 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Jan  8 13:32:18 2009 -->
 <glade-interface>
   <widget class="GtkAssistant" id="Merge">
     <property name="width_request">550</property>
@@ -56,44 +56,6 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkVBox" id="vbox4">
-            <property name="visible">True</property>
-            <child>
-              <widget class="GtkRadioButton" id="mergetype_reintegrate_opt">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="label" translatable="yes">Reintegrate a branch</property>
-                <property name="response_id">0</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">mergetype_range_opt</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label49">
-                <property name="width_request">475</property>
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="xpad">30</property>
-                <property name="label" translatable="yes">Choose this method if you have created a new branch and wish to merge it back to trunk.</property>
-                <property name="wrap">True</property>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
           <widget class="GtkVBox" id="vbox5">
             <property name="visible">True</property>
             <child>
@@ -128,6 +90,19 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Note: Branch reintegration will be added in a future release.</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -245,20 +220,6 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkCheckButton" id="mergerange_reverse_opt">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Reverse merge</property>
-                        <property name="response_id">0</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <widget class="GtkLabel" id="label56">
                         <property name="width_request">500</property>
                         <property name="visible">True</property>
@@ -274,7 +235,7 @@ To merge all revisions, leave the box empty.</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </widget>
@@ -851,6 +812,7 @@ To merge all revisions, leave the box empty.</property>
         <child>
           <widget class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
+            <property name="spacing">6</property>
             <child>
               <widget class="GtkLabel" id="label1">
                 <property name="visible">True</property>
@@ -870,126 +832,32 @@ To merge all revisions, leave the box empty.</property>
                 <child>
                   <widget class="GtkVBox" id="vbox41">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox25">
+                      <widget class="GtkCheckButton" id="mergeoptions_recursive">
                         <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkLabel" id="label64">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Merge Depth:</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkComboBox" id="mergeoptions_depth">
-                            <property name="visible">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="pack_type">GTK_PACK_END</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes">Recursive</property>
+                        <property name="response_id">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="mergeoptions_ignore_ancestry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes">Ignore ancestry</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkVBox" id="vbox2">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkCheckButton" id="mergeoptions_ignore_ancestry">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Ignore ancestry</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkCheckButton" id="mergeoptions_ignore_line_endings">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Ignore line endings</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkVBox" id="vbox1">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkRadioButton" id="mergeoptions_whitespace_compare">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Compare whitespaces</property>
-                            <property name="response_id">0</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkRadioButton" id="mergeoptions_whitespace_ignore_changes">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Ignore whitespace changes</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">mergeoptions_whitespace_compare</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkRadioButton" id="mergeoptions_whitespace_ignore_all">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Ignore all whitespaces</property>
-                            <property name="response_id">0</property>
-                            <property name="draw_indicator">True</property>
-                            <property name="group">mergeoptions_whitespace_compare</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckButton" id="mergeoptions_only_record_merge">
+                      <widget class="GtkCheckButton" id="mergeoptions_only_record">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="label" translatable="yes">Only record the merge</property>
@@ -997,7 +865,7 @@ To merge all revisions, leave the box empty.</property>
                         <property name="draw_indicator">True</property>
                       </widget>
                       <packing>
-                        <property name="position">3</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </widget>
@@ -1026,6 +894,7 @@ To merge all revisions, leave the box empty.</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">Test merge</property>
                 <property name="response_id">0</property>
+                <signal name="clicked" handler="on_test_clicked"/>
               </widget>
             </child>
           </widget>

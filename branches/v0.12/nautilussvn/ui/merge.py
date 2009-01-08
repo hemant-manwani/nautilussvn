@@ -26,12 +26,14 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
+from nautilussvn.ui.callback import VCSAction
+import nautilussvn.lib.vcs
 import nautilussvn.ui.widget
 import nautilussvn.lib.helper
 
 class Merge(InterfaceView):
     def __init__(self, path):
-        InterfaceView.__init__(self, "merge2", "Merge")
+        InterfaceView.__init__(self, "merge", "Merge")
         self.assistant = self.get_widget("Merge")
         
         self.path = path
@@ -43,14 +45,10 @@ class Merge(InterfaceView):
         
         self.repo_paths = nautilussvn.lib.helper.get_repository_paths()
         
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
         # Keeps track of which stages should be marked as complete
-        self.stages = {
-            0: True,
-            1: False,
-            2: False,
-            3: False,
-            4: False
-        }
+        self.type = None
     #
     # Assistant UI Signal Callbacks
     #
@@ -65,7 +63,92 @@ class Merge(InterfaceView):
         self.close()
 
     def on_apply_clicked(self, widget):
-        self.close()
+        self.merge()
+    
+    def on_test_clicked(self, widget):
+        self.merge(test=True)            
+
+    def merge(self, test=False):
+        if self.type is None:
+            return
+        
+        if test:
+            startcmd = "Running Merge Test"
+            endcmd = "Completed Merge Test"
+        else:
+            startcmd = "Running Merge Command"
+            endcmd = "Completed Merge"
+            self.hide()
+        
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        self.action.append(self.action.set_status, startcmd)
+        
+        recursive = self.get_widget("mergeoptions_recursive").get_active()
+        notice_ancestry = not self.get_widget("mergeoptions_ignore_ancestry").get_active()
+        record_only = self.get_widget("mergeoptions_only_record").get_active()
+        
+        if self.type == "range":
+            url = self.get_widget("mergerange_from_url").get_text()
+            headrev = self.vcs.get_revision(self.path)
+            revisions = self.get_widget("mergerange_revisions").get_text()
+            revisions = revisions.lower().replace("head", str(headrev))
+
+            ranges = []
+            for r in revisions.split(","):
+                if r.find("-") != -1:
+                    (low, high) = r.split("-")
+                else:
+                    low = r
+                    high = r
+                
+                ranges.append((int(low),int(high)))
+                
+            self.action.append(
+                self.vcs.merge_ranges,
+                [url],
+                revisions,
+                self.vcs.revision("head"),
+                self.path,
+                notice_ancestry=notice_ancestry,
+                dry_run=test,
+                record_only=record_only,
+                force=True
+            )
+            
+        elif self.type == "tree":
+            from_url = self.get_widget("mergetree_from_url").get_text()
+            from_revision = self.vcs.revision("head")
+            if self.get_widget("mergetree_from_revision_number_opt").get_active():
+                from_revision = self.vcs.revision(
+                    "number",
+                    number=int(self.get_widget("mergetree_from_revision_number").get_text())
+                )
+            to_url = self.get_widget("mergetree_to_url").get_text()
+            to_revision = self.vcs.revision("head")
+            if self.get_widget("mergetree_to_revision_number_opt").get_active():
+                to_revision = self.vcs.revision(
+                    "number",
+                    number=int(self.get_widget("mergetree_to_revision_number").get_text())
+                )
+            
+            self.action.append(
+                self.vcs.merge_trees,
+                from_url,
+                from_revision,
+                to_url,
+                to_revision,
+                self.path,
+                force=True,
+                recurse=recursive,
+                record_only=record_only
+            )
+                
+        self.action.append(self.action.set_status, endcmd)
+        self.action.append(self.action.finish)
+        self.action.start()
 
     def on_prepare(self, widget, page):
         self.page = page
@@ -85,10 +168,10 @@ class Merge(InterfaceView):
         if current == 0:
             if self.get_widget("mergetype_range_opt").get_active():
                 next = 1
-            elif self.get_widget("mergetype_reintegrate_opt").get_active():
-                next = 2
+                self.type = "range"
             elif self.get_widget("mergetype_tree_opt").get_active():
                 next = 3
+                self.type = "tree"
         else:
             next = 4
         
@@ -99,11 +182,12 @@ class Merge(InterfaceView):
     #
     
     def on_mergerange_prepare(self):
-        self.mergerange_repos = nautilussvn.ui.widget.ComboBox(
-            self.get_widget("mergerange_from_urls"), 
-            self.repo_paths
-        )
-        self.get_widget("mergerange_working_copy").set_text(self.path)
+        if not hasattr(self, "mergerange_repos"):
+            self.mergerange_repos = nautilussvn.ui.widget.ComboBox(
+                self.get_widget("mergerange_from_urls"), 
+                self.repo_paths
+            )
+            self.get_widget("mergerange_working_copy").set_text(self.path)
         
     def on_mergerange_show_log1_clicked(self, widget):
         LogDialog(
@@ -138,11 +222,12 @@ class Merge(InterfaceView):
     #
 
     def on_mergebranch_prepare(self):
-        self.mergebranch_repos = nautilussvn.ui.widget.ComboBox(
-            self.get_widget("mergebranch_from_urls"), 
-            self.repo_paths
-        )
-        self.get_widget("mergebranch_working_copy").set_text(self.path)
+        if not hasattr(self, "mergebranch_repos"):
+            self.mergebranch_repos = nautilussvn.ui.widget.ComboBox(
+                self.get_widget("mergebranch_from_urls"), 
+                self.repo_paths
+            )
+            self.get_widget("mergebranch_working_copy").set_text(self.path)
 
     def on_mergebranch_show_log1_clicked(self, widget):
         LogDialog(self.path)
@@ -165,15 +250,16 @@ class Merge(InterfaceView):
     #
     
     def on_mergetree_prepare(self):
-        self.mergetree_from_repos = nautilussvn.ui.widget.ComboBox(
-            self.get_widget("mergetree_from_urls"), 
-            self.repo_paths
-        )
-        self.mergetree_to_repos = nautilussvn.ui.widget.ComboBox(
-            self.get_widget("mergetree_to_urls"), 
-            self.repo_paths
-        )
-        self.get_widget("mergetree_working_copy").set_text(self.path)
+        if not hasattr(self, "mergetree_from_repos"):
+            self.mergetree_from_repos = nautilussvn.ui.widget.ComboBox(
+                self.get_widget("mergetree_from_urls"), 
+                self.repo_paths
+            )
+            self.mergetree_to_repos = nautilussvn.ui.widget.ComboBox(
+                self.get_widget("mergetree_to_urls"), 
+                self.repo_paths
+            )
+            self.get_widget("mergetree_working_copy").set_text(self.path)
 
     def on_mergetree_from_show_log_clicked(self, widget):
         LogDialog(
@@ -226,19 +312,12 @@ class Merge(InterfaceView):
     #
     
     def on_mergeoptions_prepare(self):
-        DEPTHS = {
-            'a': 'Working Copy',
-            'b': 'Fully recursive',
-            'c': 'Immediate children, including folders',
-            'd': 'Only file children',
-            'e': 'Only this item'
-        }
-        self.depth = nautilussvn.ui.widget.ComboBox(
-            self.get_widget("mergeoptions_depth")
-        )
-        for i in DEPTHS.values():
-            self.depth.append(i)
-        self.depth.set_active(0)
+        allowtest = True
+        if self.type == "tree":
+            allowtest = False
+        self.get_widget("mergeoptions_test_merge").set_sensitive(allowtest)
+            
+        self.assistant.set_page_complete(self.page, True)
 
     def on_mergeoptions_test_merge_clicked(self, widget):
         print "Test Merge"
