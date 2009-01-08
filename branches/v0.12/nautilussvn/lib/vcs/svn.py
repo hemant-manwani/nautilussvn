@@ -956,6 +956,20 @@ class SVN:
         
         return self.action(self.client.switch, *args, **kwargs)
 
+    def unlock(self, *args, **kwargs):
+        """
+        Unlock locked files.
+        
+        @type   path: string
+        @param  path: A local path to resolve
+        
+        @type   force: boolean
+        @param  force: If locked by another user, unlock it anyway.
+        
+        """
+        
+        return self.action(self.client.unlock, *args, **kwargs)
+
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
