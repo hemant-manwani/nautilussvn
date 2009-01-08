@@ -266,6 +266,7 @@ class Commit(InterfaceView):
 
     def on_context_add_activated(self, widget, data=None):
         self.vcs.add(data[1])
+        self.files_table.get_row(self.last_row_clicked)[0] = True
         self.refresh_row_status()
 
     def on_context_revert_activated(self, widget, data=None):
