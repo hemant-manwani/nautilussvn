@@ -24,16 +24,76 @@ import pygtk
 import gobject
 import gtk
 
-# FIXME: Error: SyntaxError: invalid syntax (unlock.py, line 27)
-from nautilussvn.ui import InterfaceView.add
+from nautilussvn.ui import InterfaceView
+from nautilussvn.ui.add import Add
+from nautilussvn.ui.callback import VCSAction
+import nautilussvn.ui.widget
+import nautilussvn.ui.dialog
+import nautilussvn.ui.callback
+import nautilussvn.lib.helper
 
-class Unlock(nautilussvn.ui.add.Add):
-    def __init__(self):
-        nautilussvn.ui.add.Add.__init__(self)
-        
-        self.window = self.view.get_widget("Add")
+class Unlock(Add):
+    def __init__(self, paths):
+        InterfaceView.__init__(self, "add", "Add")
+
+        self.window = self.get_widget("Add")
         self.window.set_title("Unlock")
 
+        self.last_row_clicked = None
+
+        self.files_table = nautilussvn.ui.widget.Table(
+            self.get_widget("files_table"), 
+            [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
+        )
+
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        self.files = self.vcs.get_items(paths)
+        
+        for item in self.files:
+            if item.text_status in (self.vcs.STATUS["unversioned"], self.vcs.STATUS["ignored"]):
+                continue
+                
+            if not self.vcs.is_locked(item.path):
+                continue
+        
+            self.files_table.append([
+                True, 
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path)
+            ])
+                    
+    def on_ok_clicked(self, widget):
+        items = self.files_table.get_activated_rows(1)
+        self.hide()
+
+        self.action = nautilussvn.ui.callback.VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set()
+        )
+        
+        self.action.append(self.action.set_status, "Running Unlock Command...")
+        for item in items:
+            self.action.append(self.vcs.unlock, item, force=True)
+        self.action.append(self.action.set_status, "Completed Unlock")
+        self.action.append(self.action.finish)
+        self.action.start()
+
+    #
+    # Context Menu Conditions
+    #
+    
+    def condition_delete(self):
+        return False
+
+    def condition_ignore_submenu(self):
+        return False
+        
 if __name__ == "__main__":
-    window = Unlock()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
+    window = Unlock(args)
+    window.register_gtk_quit()
     gtk.main()
