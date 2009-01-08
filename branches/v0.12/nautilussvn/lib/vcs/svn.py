@@ -929,8 +929,8 @@ class SVN:
         """
         Mark conflicted files as resolved
         
-        @type   path: list
-        @param  path: A list of files/directories.
+        @type   path: string
+        @param  path: A local path to resolve
         
         @type   recurse: boolean
         @param  recurse: Recursively add a directory's children
@@ -938,6 +938,23 @@ class SVN:
         """
         
         return self.action(self.client.resolved, *args, **kwargs)
+
+    def switch(self, *args, **kwargs):
+        """
+        Switch the working copy to another repository source.
+        
+        @type   path: string
+        @param  path: A local path to a working copy
+        
+        @type   url: string
+        @param  url: The repository location to switch to
+        
+        @type   revision: pysvn.Revision
+        @param  revision: The revision of the repository to switch to (Def:HEAD)
+        
+        """
+        
+        return self.action(self.client.switch, *args, **kwargs)
 
     def action(self, func, *args, **kwargs):
         """
