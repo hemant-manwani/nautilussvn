@@ -990,6 +990,74 @@ class SVN:
         
         return self.action(self.client.update, *args, **kwargs)
 
+    def merge_ranges(self, *args, **kwargs):
+        """
+        Merge a range of revisions.
+        
+        @type   sources: list
+        @param  sources: A repository location (unsure)
+        
+        @type   ranges_to_merge: list of tuples
+        @param  ranges_to_merge: A list of revision ranges to merge
+        
+        @type   peg_revision: pysvn.Revision
+        @param  peg_revision: Indicates which revision in sources is valid.
+        
+        @type   target_wcpath: string
+        @param  target_wcpath: Target working copy path
+        
+        @type   notice_ancestry: boolean
+        @param  notice_ancestry: unsure
+        
+        @type   force: boolean
+        @param  force: unsure
+        
+        @type   dry_run: boolean
+        @param  dry_run: Do a test/dry run or not
+        
+        @type   record_only: boolean
+        @param  record_only: unsure
+        
+        TODO: Will firm up the parameter documentation later
+        
+        """
+        
+        return self.action(self.client.merge_peg2, *args, **kwargs)
+
+    def merge_trees(self, *args, **kwargs):
+        """
+        Merge two trees into one.
+
+        @type   url_or_path1: string
+        @param  url_or_path1: From WC/URL location
+
+        @type   revision1: pysvn.Revision
+        @param  revision1: Indicates the revision of the URL/Path
+
+        @type   url_or_path2: string
+        @param  url_or_path2: To WC/URL location
+
+        @type   revision2: pysvn.Revision
+        @param  revision2: Indicates the revision of the URL/Path
+        
+        @type   local_path: string
+        @param  local_path: Target working copy path
+        
+        @type   force: boolean
+        @param  force: unsure
+        
+        @type   recurse: boolean
+        @param  recurse: Merge children recursively
+        
+        @type   record_only: boolean
+        @param  record_only: unsure
+        
+        TODO: Will firm up the parameter documentation later
+        
+        """
+        
+        return self.action(self.client.merge, *args, **kwargs)
+
     def action(self, func, *args, **kwargs):
         """
         Perform a vcs action.
