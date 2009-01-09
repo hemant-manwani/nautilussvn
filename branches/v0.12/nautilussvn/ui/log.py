@@ -66,11 +66,12 @@ class Log(InterfaceView):
             self.close()
             return
         
+        self.cache = LogCache()
+
         self.rev_start = None
         self.rev_max = 1
         self.previous_starts = []
         self.initialize_revision_labels()
-        self.cached = {}
         
         self.get_widget("limit").set_text(str(self.limit))
         
@@ -97,7 +98,7 @@ class Log(InterfaceView):
         self.pbar = nautilussvn.ui.widget.ProgressBar(self.get_widget("pbar"))
         
         self.stop_on_copy = False
-        self.load()
+        self.load_or_refresh()
 
     #
     # UI Signal Callback Methods
@@ -154,11 +155,8 @@ class Log(InterfaceView):
     
     def on_previous_clicked(self, widget):
         self.rev_start = self.previous_starts.pop()
-        if self.rev_start in self.cached:
-            self.refresh()
-        else:
-            self.load()
-            
+        self.load_or_refresh()
+                    
     def on_next_clicked(self, widget):
         self.override_limit = True
         self.previous_starts.append(self.rev_start)
@@ -167,7 +165,10 @@ class Log(InterfaceView):
         if self.rev_start < 1:
             self.rev_start = 1
 
-        if self.rev_start in self.cached:
+        self.load_or_refresh()
+    
+    def load_or_refresh(self):
+        if self.cache.has(self.rev_start):
             self.refresh()
         else:
             self.load()
@@ -179,7 +180,7 @@ class Log(InterfaceView):
     
     def on_refresh_clicked(self, widget):
         self.limit = int(self.get_widget("limit").get_text())
-        self.cached = {}
+        self.cache.empty()
         self.load()
     
     #
@@ -251,8 +252,8 @@ class Log(InterfaceView):
         self.paths_table.clear()        
         self.pbar.set_text("Loading...")
         
-        if self.rev_start and self.rev_start in self.cached:
-            self.revision_items = self.cached[self.rev_start]
+        if self.rev_start and self.cache.has(self.rev_start):
+            self.revision_items = self.cache.get(self.rev_start)
         else:
             # Make sure the int passed is the order the log call was made
             self.revision_items = self.action.get_result(0)
@@ -261,7 +262,7 @@ class Log(InterfaceView):
         self.rev_start = self.revision_items[0].revision.number
         self.rev_end = self.revision_items[-1].revision.number
         
-        self.cached[self.rev_start] = self.revision_items
+        self.cache.set(self.rev_start, self.revision_items)
         
         # The first time the log items return, the rev_start will be as large
         # as it will ever be.  So set this to our maximum revision.
@@ -356,6 +357,22 @@ class LogDialog(Log):
                 self.ok_callback(self.get_selected_revision_numbers())
             else:
                 self.ok_callback(self.get_selected_revision_number())
+
+class LogCache:
+    def __init__(self, cache={}):
+        self.cache = cache
+    
+    def set(self, key, val):
+        self.cache[key] = val
+    
+    def get(self, key):
+        return self.cache[key]
+    
+    def has(self, key):
+        return (key in self.cache)
+    
+    def empty(self):
+        self.cache = {}
 
 if __name__ == "__main__":
     import sys
