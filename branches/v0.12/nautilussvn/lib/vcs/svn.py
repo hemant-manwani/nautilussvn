@@ -529,7 +529,13 @@ class SVN:
         
         """
         
-        return self.client.proplist(path)[0][1]
+        returner = self.client.proplist(path)
+        if returner:
+            returner = returner[0][1]
+        else:
+            returner = {}
+            
+        return returner
         
     def propget(self, path, prop_name):
         """
