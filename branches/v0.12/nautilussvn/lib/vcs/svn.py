@@ -1196,7 +1196,6 @@ class StatusMonitor():
             # keep an eye on it (for when it is added).
             if vcs_client.is_in_a_or_a_working_copy(path_to_check):
                 path_to_attach = path_to_check
-                self.watches[path_to_attach] = None # don't need a value
             
             if path_to_check in self.watches:
                 watch_is_already_set = True
@@ -1206,8 +1205,13 @@ class StatusMonitor():
         
         if not watch_is_already_set and path_to_attach:
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True)
-
+            self.watches[path_to_attach] = None # don't need a value
             print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
+            
+        # Make sure we also attach watches for the path itself
+        if (not path in self.watches and
+                vcs_client.is_in_a_or_a_working_copy(path)):
+            self.watches[path] = None
         
     def status(self, path, invalidate=False):
         """

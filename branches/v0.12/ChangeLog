@@ -1,5 +1,10 @@
 2009-01-11  Bruce van der Kooij  <brucevdkooij@gmail.com>
 
+	* nautilussvn/lib/vcs/svn.py:
+	A little error in the status checking code.
+
+2009-01-11  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	Changed condition for commit to be more like TortoiseSVN's.
 
