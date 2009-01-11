@@ -1076,7 +1076,7 @@ class StatusMonitor():
     What C{StatusMonitor} does:
     
       - When somebody adds a watch and if there's not already a watch for this 
-        item it will add one and do an initial status check.
+        item it will add one.
     
       - Use inotify to keep track of modifications of any watched items
         (we actually only care about modifications not creations and deletions)
@@ -1091,20 +1091,23 @@ class StatusMonitor():
         +---------------+          +-----------------+         
         |  NautilusSVN  |          |  StatusMonitor  |         
         +---------------+          +-----------------+         
-               |                            |                  
-               |   new(self.cb_status)      |                  
-               |--------------------------->|                  
-               |                            |                  
-               |     add_watch(path)        |                  
-               |--------------------------->|---+              
-               |                            |   |              
-               |  cb_status(path, status)   |   | status(path) 
-               |<---------------------------|<--+              
-               |                            |                  
-               |---+                        |                  
-               |   | set_emblem_by_status(path, status)      
-               |<--+                        |                  
-               |                            |                  
+               |                            |
+               |   new(self.cb_status)      |
+               |--------------------------->|
+               |                            |
+               |     add_watch(path)        |
+               |--------------------------->|
+               |                            |
+               |        status(path)        |
+               |--------------------------->|
+               |                            |
+               |  cb_status(path, status)   |
+               |<---------------------------|
+               |                            |
+               |---+                        |
+               |   | set_emblem_by_status(path, status)
+               |<--+                        |
+               |                            |
 
     
     """
@@ -1172,24 +1175,12 @@ class StatusMonitor():
     
     def has_watch(self, path):
         return (path in self.watches)
-        
+    
     @timeit
     def add_watch(self, path):
         """
-        
         Request a watch to be added for path. This function will figure out
         the best spot to add the watch (most likely a parent directory).
-        MARKER: performance 
-        
-        Pseudocode:
-        
-          - Is there already a watch set on a parent? Then don't do anything.
-          
-          - If not, add a watch to the highest directory that still belongs
-            to the working copy.
-          
-          - Do a status check.
-        
         """
         
         vcs_client = SVN()
@@ -1205,6 +1196,7 @@ class StatusMonitor():
             # keep an eye on it (for when it is added).
             if vcs_client.is_in_a_or_a_working_copy(path_to_check):
                 path_to_attach = path_to_check
+                self.watches[path_to_attach] = None # don't need a value
             
             if path_to_check in self.watches:
                 watch_is_already_set = True
@@ -1213,16 +1205,9 @@ class StatusMonitor():
             path_to_check = split_path(path_to_check)
         
         if not watch_is_already_set and path_to_attach:
-            self.watches[path_to_attach] = None # don't need a value
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True)
 
             print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
-        
-        # We just do this for very fast has_watch lookups.
-        if path not in self.watches:
-            self.watches[path] = None
-        
-        self.status(path)
         
     def status(self, path, invalidate=False):
         """
