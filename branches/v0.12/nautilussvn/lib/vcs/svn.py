@@ -37,8 +37,6 @@ from nautilussvn.lib.helper import split_path
 
 class SVN:
     """
-    Marker: performance
-    
     FIXME: when using the DBus service (in a seperate process) two caches are
     maintained. We should probably allow this class to be used over DBus too.
     """
@@ -148,12 +146,11 @@ class SVN:
         "Only this item":                           DEPTHS["empty"]
     }
     
-    #: FIXME: comment outdated
     #: This variable is used to maintain a status cache. Paths function as keys
     #: and every item in the cache has all the statuses for all the items below
     #: it, though the last item is always the status for the path. 
     #: 
-    #: It looks like:::
+    #: It might look like:::
     #:  
     #:     status_cache = {
     #:        "/foo/bar/baz": [<PysvnStatus u'baz'>]
@@ -183,28 +180,11 @@ class SVN:
     def status_with_cache(self, path, invalidate=False, depth=pysvn.depth.infinity):
         """
         
-        FIXME: comment outdated
-        
         Look up the status for path.
         
         If invalidate is set to False this function will look to see if a 
         status for the requested path is available in the cache and if so
         return that. Otherwise it will bypass the cache entirely.
-        
-        Converts a list of PysvnStatus returned by pysvn.Client.status() from:::
-        
-            [<PysvnStatus u'foo/bar/baz'>, 
-             <PysvnStatus u'foo/bar'>, 
-             <PysvnStatus u'foo'>]
-        
-        To the one described in the comments for C{status_cache}.
-        
-        Pseudocode:
-        
-          - If a cache bypass was requested, or the path is not already in the
-            cache do a status check. Else, grab the statuses from the cache.
-            
-          - 
         
         @type   path: string
         @param  path: A path pointing to an item (file or directory).
@@ -216,14 +196,18 @@ class SVN:
         @param  depth: Defines how deep the status check should go.
         
         @rtype:        list of PysvnStatus
-        @return:       A list of statuses for the given path, with the status 
+        @return:       A list of statuses for the given path, with the status
                        for the path being the first item in the list.
         
         """
-        
         try:
             if (invalidate or 
-                    path not in self.status_cache):
+                    path not in self.status_cache or
+                    # The following condition is used to bypass the cache when
+                    # an infinity check is requesting and it's most likely
+                    # that only an empty check was done before.
+                    (depth == pysvn.depth.infinity and
+                        len(self.status_cache[path]) == 1)):
                 print "Debug: status_with_cache() invalidated %s" % path
                 statuses = self.client.status(path, depth=depth)
             else:
@@ -318,7 +302,7 @@ class SVN:
     #
     
     def has_unversioned(self, path):
-        statuses = self.status_with_cache(path)[:-1]
+        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
@@ -327,7 +311,7 @@ class SVN:
         return False
     
     def has_added(self, path):
-        statuses = self.status_with_cache(path)[:-1]
+        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -336,7 +320,7 @@ class SVN:
         return False
         
     def has_modified(self, path):
-        statuses = self.status_with_cache(path)[:-1]
+        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -345,7 +329,7 @@ class SVN:
         return False
 
     def has_deleted(self, path):
-        statuses = self.status_with_cache(path)[:-1]
+        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.deleted:
@@ -1315,7 +1299,6 @@ class StatusMonitor():
                 self.callback(path, "modified")
             elif (isdir(path) and
                     status == pysvn.wc_status_kind.normal):
-                    # MARKER: performance 
                     sub_statuses = vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
                     statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
                         
@@ -1331,7 +1314,7 @@ class StatusMonitor():
 class PySVN():
     """
     Used to convert all sorts of PySVN objects to primitives which can be 
-    submitted over the DBus. 
+    submitted over the DBus.
     """
     
     #: TODO: this is the reverse of C{STATUS} in the svn module and should probably
