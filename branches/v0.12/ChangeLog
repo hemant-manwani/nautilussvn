@@ -2,6 +2,13 @@
 
 	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
 	* nautilussvn/lib/vcs/svn.py:
+	No longer add_watch's responsiblity to also do the status check, it should
+	never have been and it made things more complicated.
+
+2009-01-11  Bruce van der Kooij  <brucevdkooij@gmail.com>
+
+	* nautilussvn/lib/extensions/nautilus/NautilusSvn.py:
+	* nautilussvn/lib/vcs/svn.py:
 	Committing some local modifications, not done yet.
 
 2009-01-06  Bruce van der Kooij  <brucevdkooij@gmail.com>

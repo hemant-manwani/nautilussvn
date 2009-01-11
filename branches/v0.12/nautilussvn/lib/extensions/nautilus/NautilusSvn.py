@@ -173,11 +173,23 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if path in self.statuses:
             self.set_emblem_by_status(path, self.statuses[path])
         
-        # FIXME: If we access the StatusMonitor over DBus it keeps running even 
-        # though Nautilus is not. So watches will stay attached. So an initial 
-        # status check won't be done.
-        if not self.status_monitor.has_watch(path):
+        vcs_client = SVNClient()
+        has_watch = self.status_monitor.has_watch(path)
+        is_in_a_or_a_working_copy = vcs_client.is_in_a_or_a_working_copy(path)
+        
+        if not has_watch and is_in_a_or_a_working_copy:
             self.status_monitor.add_watch(path)
+            self.status_monitor.status(path)
+            
+        # If we access the StatusMonitor over DBus it keeps running even though 
+        # Nautilus is not. So watches will stay attached. So an initial status 
+        # check won't be done. Though there are other situations where there is
+        # a watch but we don't have a status yet.
+        if (has_watch and
+                not path in self.statuses and
+                is_in_a_or_a_working_copy):
+            self.status_monitor.status(path)
+        
         
     def get_file_items(self, window, items):
         """
@@ -1048,17 +1060,9 @@ class MainContextMenu():
             status_monitor.status(path, invalidate=True)
     
     def callback_debug_revert(self, menu_item, paths):
+        client = pysvn.Client()
         for path in paths:
-            # Normal revert
-            self.callback_revert(menu_item, paths)
-            # Super revert
-            statuses = self.vcs_client.status(path, invalidate=True)[:-1]
-            for status in statuses:
-                if status == "missing":
-                    self.callback_revert(
-                        menu_item,
-                        os.path.join(path, status.data["path"])
-                    )
+            client.revert(path, recurse=True)
         
     def callback_debug_invalidate(self, menu_item, paths):
         nautilussvn_extension = self.nautilussvn_extension
