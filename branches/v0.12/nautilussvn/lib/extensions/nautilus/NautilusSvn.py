@@ -26,9 +26,6 @@ Our module for everything related to the Nautilus extension.
   
 """
 
-# TODO: right before releasing move the commentary above to an actual issue 
-# report on the tracker and just refer to the Bug #.
-
 import os.path
 from os.path import isdir, isfile
 
@@ -176,15 +173,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if path in self.statuses:
             self.set_emblem_by_status(path, self.statuses[path])
         
-        # If we access the StatusMonitor over DBus it keeps running even though
-        # Nautilus is not. So watches will stay attached. So an initial status
-        # check won't be done.
+        # FIXME: If we access the StatusMonitor over DBus it keeps running even 
+        # though Nautilus is not. So watches will stay attached. So an initial 
+        # status check won't be done.
         if not self.status_monitor.has_watch(path):
             self.status_monitor.add_watch(path)
-        elif path not in self.statuses:
-            # TODO: is there a chance we won't have the latest status?
-            self.status_monitor.status(path)
-            
         
     def get_file_items(self, window, items):
         """
@@ -1039,18 +1032,20 @@ class MainContextMenu():
         window.show()
     
     def callback_refresh_status(self, menu_item, paths, recurse=False):
+        """
+        Refreshes an item status, so it will always bypass the cache.
+        
+        TODO:
+        Add should only go downwards. Lower is added, up is modified. 
+        Revert should go downwards. Check on highest folder?
+        Commit should go downwards. Check on highest folder?
+        Update should go downwards. Only conflicts matter?
+        """
+        
         nautilussvn_extension = self.nautilussvn_extension
         status_monitor = nautilussvn_extension.status_monitor
         for path in paths:
             status_monitor.status(path, invalidate=True)
-            
-            # Recursive (that means downwards too, instead of just upwards.
-            if recurse:
-                for root, dirs, files in os.walk(path):
-                    for name in dirs:
-                        status_monitor.status(os.path.join(root, name))
-                    for name in files:
-                        status_monitor.status(os.path.join(root, name))
     
     def callback_debug_revert(self, menu_item, paths):
         for path in paths:
@@ -1088,7 +1083,7 @@ class MainContextMenu():
                     nautilusVFSFile_table[path].add_emblem(emblem)
             return False
             
-        gobject.idle_add(add_emblem_dialog)        
+        gobject.idle_add(add_emblem_dialog)
     
     # End debugging callbacks
 
@@ -1102,32 +1097,7 @@ class MainContextMenu():
         launch_ui_window("commit", " ".join(paths))
 
     def callback_add(self, menu_item, paths):
-        """
-        Put files and directories under version control, scheduling
-        them for addition to repository. They will be added in next commit.
-        
-        If paths only contains files then the files are added directly, 
-        otherwise an Add dialog is instantiated.
-        
-        @type   menu_item: nautilus.MenuItem
-        @param  menu_item: The menu item that was selected.
-        
-        @type   paths: list
-        @param  paths: A list of paths to add.
-        """
-
-        ui = False        
-        for path in paths:
-            if not isfile(path) or self.vcs_client.is_versioned(path):
-                ui = True
-        
-        if ui:
-            launch_ui_window("add", " ".join(paths))
-        else:
-            # TODO: Abstract this away from pysvn
-            client = pysvn.Client()
-            client.add(paths)
-            self.callback_refresh_status(menu_item, paths, recurse=True)
+        launch_ui_window("add", " ".join(paths))
 
     def callback_delete(self, menu_item, paths):
         # This really needs to go thgou
@@ -1138,22 +1108,7 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths)
 
     def callback_revert(self, menu_item, paths):
-        # TODO: if called on a directory should revert also revert items that
-        # were svn added, but then manually deleted (resulting in missing)? See
-        # callback_debug_revert.
-
-        ui = False        
-        for path in paths:
-            if not isfile(path) or not self.vcs_client.is_versioned(path):
-                ui = True
-        
-        if ui:
-            launch_ui_window("revert", " ".join(paths))
-        else:
-            # TODO: Abstract this away from pysvn
-            client = pysvn.Client()
-            client.revert(paths)
-            self.callback_refresh_status(menu_item, paths, recurse=True)
+        launch_ui_window("revert", " ".join(paths))
 
     def callback_diff(self, menu_item, paths):
         launch_diff_tool(paths[0])
