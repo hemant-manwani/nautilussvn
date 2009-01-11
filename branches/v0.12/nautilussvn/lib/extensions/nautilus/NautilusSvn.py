@@ -45,7 +45,7 @@ import nautilussvn.lib.dbus.service
 from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonitor
 from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
-from nautilussvn.lib.helper import split_path
+from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool
 from nautilussvn.lib.decorators import timeit
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
@@ -524,7 +524,7 @@ class MainContextMenu():
                 "icon": "nautilussvn-checkout",
                 "signals": {
                     "activate": {
-                        "callback": None,
+                        "callback": self.callback_checkout,
                         "args": None
                     }
                 }, 
@@ -585,7 +585,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-diff",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_diff,
                                 "args": None
                             }
                         }, 
@@ -601,7 +601,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-show_log",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_show_log,
                                 "args": None
                             }
                         }, 
@@ -633,7 +633,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-rename",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_rename,
                                 "args": None
                             }
                         }, 
@@ -681,7 +681,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-properties",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_properties,
                                 "args": None
                             }
                         }, 
@@ -701,7 +701,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: True),
+                        "condition": (lambda: False),
                         "submenus": [
                             
                         ]
@@ -713,7 +713,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-settings",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_settings,
                                 "args": None
                             }
                         }, 
@@ -729,7 +729,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-about",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_about,
                                 "args": None
                             }
                         }, 
@@ -1091,27 +1091,15 @@ class MainContextMenu():
         gobject.idle_add(add_emblem_dialog)        
     
     # End debugging callbacks
+
+    def callback_checkout(self, menu_item, paths):
+        launch_ui_window("checkout", paths[0])
     
     def callback_update(self, menu_item, paths):
-        client = pysvn.Client()
-        for path in paths:
-            client.update(path)
-        self.callback_refresh_status(menu_item, paths)
+        launch_ui_window("update", " ".join(paths))
 
     def callback_commit(self, menu_item, paths):
-        def commit_dialog():
-            from subprocess import Popen, PIPE
-            command = ["zenity", "--entry", "--title=NautilusSVN", "--text=Log message:"]
-            log_message = Popen(command, stdout=PIPE).communicate()[0]
-            
-            client = pysvn.Client()
-            client.checkin(paths, log_message)
-            self.callback_refresh_status(menu_item, paths, recurse=True)
-            
-            return False
-        
-        gobject.idle_add(commit_dialog)
-        
+        launch_ui_window("commit", " ".join(paths))
 
     def callback_add(self, menu_item, paths):
         """
@@ -1127,16 +1115,25 @@ class MainContextMenu():
         @type   paths: list
         @param  paths: A list of paths to add.
         """
-        
-        client = pysvn.Client()
+
+        ui = False        
         for path in paths:
-            if not self.vcs_client.is_versioned(path):
-                client.add(path)
-        self.callback_refresh_status(menu_item, paths, recurse=True)
+            if not isfile(path) or self.vcs_client.is_versioned(path):
+                ui = True
+        
+        if ui:
+            launch_ui_window("add", " ".join(paths))
+        else:
+            # TODO: Abstract this away from pysvn
+            client = pysvn.Client()
+            client.add(paths)
+            self.callback_refresh_status(menu_item, paths, recurse=True)
 
     def callback_delete(self, menu_item, paths):
+        # This really needs to go thgou
         client = pysvn.Client()
         for path in paths:
+            # TODO: Abstract this away from pysvn
             client.remove(path, force=True)
         self.callback_refresh_status(menu_item, paths)
 
@@ -1144,7 +1141,34 @@ class MainContextMenu():
         # TODO: if called on a directory should revert also revert items that
         # were svn added, but then manually deleted (resulting in missing)? See
         # callback_debug_revert.
-        client = pysvn.Client()
+
+        ui = False        
         for path in paths:
-            client.revert(path, depth=pysvn.depth.infinity)
-        self.callback_refresh_status(menu_item, paths, recurse=True)
+            if not isfile(path) or not self.vcs_client.is_versioned(path):
+                ui = True
+        
+        if ui:
+            launch_ui_window("revert", " ".join(paths))
+        else:
+            # TODO: Abstract this away from pysvn
+            client = pysvn.Client()
+            client.revert(paths)
+            self.callback_refresh_status(menu_item, paths, recurse=True)
+
+    def callback_diff(self, menu_item, paths):
+        launch_diff_tool(paths[0])
+    
+    def callback_show_log(self, menu_item, paths):
+        launch_ui_window("log", paths[0])
+
+    def callback_rename(self, menu_item, paths):
+        launch_ui_window("rename", paths[0])
+
+    def callback_properties(self, menu_item, paths):
+        launch_ui_window("properties", paths[0])
+
+    def callback_about(self, menu_item, paths):
+        launch_ui_window("about")
+        
+    def callback_settings(self, menu_item, paths):
+        launch_ui_window("settings")
