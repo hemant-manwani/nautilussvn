@@ -29,7 +29,7 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.vcs
 
-class Properties:
+class Properties(InterfaceView):
     """
     Provides an interface to add/edit/delete properties on versioned
     items in the working copy.
@@ -39,24 +39,24 @@ class Properties:
     SELECTED_ROW = None
 
     def __init__(self, path):
-        self.view = nautilussvn.ui.InterfaceView(self, "properties", "Properties")
-        
+        InterfaceView.__init__(self, "properties", "Properties")
+
         self.path = path
         self.delete_stack = []
         
-        self.view.get_widget("Properties").set_title(
+        self.get_widget("Properties").set_title(
             "Properties - %s" % path
         )
         
-        self.view.get_widget("path").set_text(path)
+        self.get_widget("path").set_text(path)
         
         self.table = nautilussvn.ui.widget.Table(
-            self.view.get_widget("table"),
+            self.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Name", "Value"]
         )
         
-        self.vcs = nautilussvn.lib.vcs.VCSFactory().create_vcs_instance()
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.proplist = self.vcs.proplist(path)
         
         for key,val in self.proplist.items():
@@ -113,13 +113,18 @@ class Properties:
             treeview.grab_focus()
             treeview.set_cursor(path, col, 0)
             self.SELECTED_ROW = path
-            self.view.get_widget("edit").set_sensitive(True)
-            self.view.get_widget("delete").set_sensitive(True)
+            self.get_widget("edit").set_sensitive(True)
+            self.get_widget("delete").set_sensitive(True)
         else:
             self.SELECTED_ROW = None
-            self.view.get_widget("edit").set_sensitive(False)
-            self.view.get_widget("delete").set_sensitive(False)
+            self.get_widget("edit").set_sensitive(False)
+            self.get_widget("delete").set_sensitive(False)
 
 if __name__ == "__main__":
-    window = Properties("log.py")
+    import sys
+    args = sys.argv[1:]
+    if len(args) != 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    window = Properties(args[0])
+    window.register_gtk_quit()
     gtk.main()
