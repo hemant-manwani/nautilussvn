@@ -842,13 +842,15 @@ class MainContextMenu():
             if self.vcs_client.is_in_a_or_a_working_copy(path): 
                 if (self.vcs_client.is_added(path) or 
                         self.vcs_client.is_modified(path) or
-                        self.vcs_client.is_deleted(path)):
+                        self.vcs_client.is_deleted(path) or
+                        not self.vcs_client.is_versioned(path)):
                     return True
                 else:
                     if (isdir(path) and
                             (self.vcs_client.has_added(path) or 
                             self.vcs_client.has_modified(path) or
-                            self.vcs_client.has_deleted(path))):
+                            self.vcs_client.has_deleted(path)) or
+                            self.vcs_client.has_unversioned(path)):
                         return True
         
         return False
