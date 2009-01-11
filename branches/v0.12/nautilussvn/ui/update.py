@@ -38,8 +38,8 @@ class Update(InterfaceNonView):
     
     """
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, paths):
+        self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
     def start(self):
@@ -49,7 +49,8 @@ class Update(InterfaceNonView):
         )
         
         self.action.append(self.action.set_status, "Updating...")
-        self.action.append(self.vcs.update, self.path)
+        for item in self.paths:
+            self.action.append(self.vcs.update, item)
         self.action.append(self.action.set_status, "Completed Update")
         self.action.append(self.action.finish)
         self.action.start()
@@ -58,8 +59,8 @@ if __name__ == "__main__":
     import sys
     args = sys.argv[1:]
     if len(args) != 1:
-        raise SystemExit("Usage: python %s [path]" % __file__)
-    window = Update(args[0])
+        raise SystemExit("Usage: python %s [path1] [path2]" % __file__)
+    window = Update(args)
     window.register_gtk_quit()
     window.start()
     gtk.main()
