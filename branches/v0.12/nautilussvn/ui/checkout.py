@@ -53,8 +53,8 @@ class Checkout(InterfaceView):
         )
         
         self.get_widget("destination").set_text(path)
-        self.allow_rev = False
-
+        self.complete = False
+        
     #
     # UI Signal Callback Methods
     #
@@ -128,11 +128,12 @@ class Checkout(InterfaceView):
             self.get_widget("revision_number").set_text(data)
     
     def on_url_changed(self, widget, data=None):
-        self.allow_rev = False
-        if self.get_widget("url").get_text() != "":
-            self.allow_rev = True
+        complete = False
+        if self.get_widget("url").get_text():
+            complete = True
         
-        self.get_widget("show_log").set_sensitive(self.allow_rev)
+        self.get_widget("show_log").set_sensitive(complete)
+        self.get_widget("ok").set_sensitive(complete)
 
 if __name__ == "__main__":
     import sys
