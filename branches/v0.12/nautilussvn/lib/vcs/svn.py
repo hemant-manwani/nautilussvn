@@ -66,6 +66,12 @@ class SVN:
         STATUS["modified"],
     ]
 
+    STATUSES_FOR_REVERT = [
+        STATUS["missing"],
+        STATUS["added"],
+        STATUS["deleted"]
+    ]
+
     PROPERTIES = {
         "executable":   "svn:executable",
         "mime-type":    "svn:mime-type",
