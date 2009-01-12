@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
+import os
 
 import pygtk
 import gobject
@@ -43,6 +44,9 @@ class Checkout(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
         self.get_widget("Checkout").set_title("Checkout - %s" % path)
+        
+        if path == ".":
+            path = os.getcwd()
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
