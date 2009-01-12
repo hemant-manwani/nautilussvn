@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Jan 12 16:37:23 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Jan 12 17:47:05 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Notification">
     <property name="width_request">740</property>
@@ -48,7 +48,7 @@
         </child>
         <child>
           <widget class="GtkScrolledWindow" id="scrolledwindow10">
-            <property name="height_request">200</property>
+            <property name="height_request">225</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -123,6 +123,7 @@
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="pack_type">GTK_PACK_END</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </widget>
