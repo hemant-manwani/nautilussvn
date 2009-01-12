@@ -115,9 +115,11 @@ class Branch(InterfaceView):
             nautilussvn.lib.helper.save_log_message, 
             self.message.get_text()
         )
-        self.action.append(self.action.set_status, "Running Copy/Branch Command...")
+        
+        self.action.append(self.action.set_title, "Branch/tag")
+        self.action.append(self.action.set_status, "Running Branch/tag Command...")
         self.action.append(self.vcs.copy, src, dest, revision)
-        self.action.append(self.action.set_status, "Completed Copy/Branch")
+        self.action.append(self.action.set_status, "Completed Branch/tag")
         self.action.append(self.action.finish)
         self.action.start()
                 

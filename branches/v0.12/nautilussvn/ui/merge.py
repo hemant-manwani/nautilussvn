@@ -84,6 +84,7 @@ class Merge(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
+        self.action.append(self.action.set_title, "Merge")
         self.action.append(self.action.set_status, startcmd)
         
         recursive = self.get_widget("mergeoptions_recursive").get_active()

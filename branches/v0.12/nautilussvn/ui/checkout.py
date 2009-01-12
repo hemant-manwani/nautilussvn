@@ -94,7 +94,7 @@ class Checkout(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        
+        self.action.append(self.action.set_title, "Checkout")
         self.action.append(self.action.set_status, "Running Checkout Command...")
         self.action.append(nautilussvn.lib.helper.save_repository_path, url)
         self.action.append(

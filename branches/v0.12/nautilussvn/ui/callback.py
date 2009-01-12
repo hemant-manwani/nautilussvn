@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from __future__ import division
 import threading
 
 import pygtk
@@ -93,6 +94,9 @@ class Notification(InterfaceView):
     def set_title(self, title):
         gtk.gdk.threads_enter()
         self.get_widget("Notification").set_title(title)
+        self.get_widget("action").set_markup(
+            "<span font_size=\"xx-large\"><b>%s</b></span>" % title
+        )
         gtk.gdk.threads_leave()
 
 class VCSAction(threading.Thread):
@@ -125,10 +129,28 @@ class VCSAction(threading.Thread):
             visible=visible
         )
         
+        self.pbar_ticks = None
+        self.pbar_ticks_current = 0
+        
         # Tells the notification window to do a gtk.main_quit() when closing
         # Is used when the script is run from a command line
         if register_gtk_quit:
             self.notification.register_gtk_quit()
+
+    def set_pbar_ticks(self, num):
+        """
+        Set the total number of ticks to represent in the progress bar.
+        Each time the notify method is called, update the pbar fraction.
+        If this function isn't called, the progress bar just pulsates.
+        
+        @type   num: integer
+        @param  num: The number of ticks in the progress bar.
+        """
+        
+        self.pbar_ticks = num
+    
+    def set_title(self, title):
+        self.notification.set_title(title)
     
     def cancel(self):
         """
@@ -164,6 +186,16 @@ class VCSAction(threading.Thread):
         
         """
         
+        if self.pbar_ticks is not None:
+            self.pbar_ticks_current += 1
+            frac = self.pbar_ticks_current / self.pbar_ticks
+            if frac > 1:
+                frac = 1
+            self.notification.pbar.update(frac)
+            
+            # In case I want to show the percentage in the pbar
+            #self.notification.pbar.set_text("%s%%" % str(frac*100))
+        
         self.notification.append([
             self.client.NOTIFY_ACTIONS[data["action"]],
             data["path"],
@@ -172,7 +204,7 @@ class VCSAction(threading.Thread):
         
         if data["action"] in self.client.NOTIFY_ACTIONS_COMPLETE:
             self.notification.append(
-                ["Revision %s" % data["revision"].number,"", ""]
+                ["", "Revision %s" % data["revision"].number, ""]
             )
     
     def finish(self, message=None):
@@ -187,7 +219,10 @@ class VCSAction(threading.Thread):
         @param  message: A message to show the user.
         
         """
-        
+
+        self.notification.append(
+            ["", "Finished", ""]
+        )        
         self.set_status(message)
         self.notification.pbar.stop_pulsate()
         self.notification.pbar.update(1)
@@ -348,7 +383,7 @@ class VCSAction(threading.Thread):
         """
         
         if message is not None:
-            self.notification.pbar.set_text(message)
+            self.notification.get_widget("status").set_text(message)
         #    self.notification.append([
         #        "", message, ""
         #    ])
