@@ -72,6 +72,7 @@ class Import(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
+        self.action.append(self.action.set_title, "Import")
         self.action.append(self.action.set_status, "Running Import Command...")
         self.action.append(
             self.vcs.import_, 

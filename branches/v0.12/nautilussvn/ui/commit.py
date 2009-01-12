@@ -120,7 +120,8 @@ class Commit(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        
+        self.action.set_pbar_ticks(len(items))
+        self.action.append(self.action.set_title, "Commit")
         self.action.append(self.action.set_status, "Running Commit Command...")
         self.action.append(
             nautilussvn.lib.helper.save_log_message, 
