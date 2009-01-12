@@ -325,13 +325,13 @@ class VCSAction(threading.Thread):
 
         if result == 0:
             #Deny
-            return (False, ACCEPTED_FAILURES, False)
+            return (False, 0, False)
         elif result == 1:
             #Accept Once
-            return (True, ACCEPTED_FAILURES, False)
+            return (True, 0x8, False)
         elif result == 2:
             #Accept Forever
-            return (True, ACCEPTED_FAILURES, True)
+            return (True, 0x8, True)
 
     def get_ssl_password(self, realm, may_save):
         """
