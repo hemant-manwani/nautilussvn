@@ -74,9 +74,7 @@ class Checkout(InterfaceView):
         if not url or not path:
             nautilussvn.ui.dialog.MessageBox("You must fill in both the URL and Destination fields.")
             return
-        
-        if url.startswith("file://"):
-            url = url[7:]
+
         if path.startswith("file://"):
             path = path[7:]        
         
