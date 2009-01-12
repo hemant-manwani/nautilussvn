@@ -20,7 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
+import os.path
 
 import pygtk
 import gobject
@@ -52,6 +52,17 @@ class Commit(InterfaceView):
     
         InterfaceView.__init__(self, "commit", "Commit")
 
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        
+        common = os.path.commonprefix(paths)
+        if os.path.isfile(common):
+            common = os.path.dirname(common)
+            
+        if not self.vcs.is_in_a_or_a_working_copy(common):
+            nautilussvn.ui.dialog.MessageBox("The specified path is not a working copy")
+            self.close()
+            return
+
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
@@ -61,10 +72,8 @@ class Commit(InterfaceView):
         )
         self.last_row_clicked = None
         
-        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-        
         self.get_widget("to").set_text(
-            self.vcs.get_repo_url(os.path.commonprefix(paths))
+            self.vcs.get_repo_url(common)
         )
         
         self.items = self.vcs.get_items(
