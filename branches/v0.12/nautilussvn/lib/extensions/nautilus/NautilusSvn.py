@@ -42,7 +42,7 @@ import nautilussvn.lib.dbus.service
 from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonitor
 from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
-from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool
+from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension
 from nautilussvn.lib.decorators import timeit
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
@@ -352,7 +352,7 @@ class MainContextMenu():
                 "identifier": "NautilusSvn::Debug",
                 "label": "Debug",
                 "tooltip": "",
-                "icon": "nautilussvn-monkey",
+                "icon": None,
                 "signals": {
                     "activate": {
                         "callback": None,
@@ -632,8 +632,64 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::AddToIgnoreList",
+                        "label": "Add to ignore list",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": self.condition_add_to_ignore_list,
+                        "submenus": [
+                            {
+                                "identifier": "NautilusSvn::AddToIgnoreFile",
+                                "label": os.path.basename(self.paths[0]),
+                                "tooltip": "",
+                                "icon": None,
+                                "signals": {
+                                    "activate": {
+                                        "callback": self.callback_ignore_filename,
+                                        "args": None
+                                    }
+                                }, 
+                                "condition": (lambda: True),
+                                "submenus": [
+                                ]
+                            },
+                            {
+                                "identifier": "NautilusSvn::AddToIgnoreExt",
+                                "label": "*.%s"%get_file_extension(self.paths[0]),
+                                "tooltip": "",
+                                "icon": None,
+                                "signals": {
+                                    "activate": {
+                                        "callback": self.callback_ignore_ext,
+                                        "args": None
+                                    }
+                                }, 
+                                "condition": self.condition_ignore_ext,
+                                "submenus": [
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::UpdateToRevision",
+                        "label": "Update to revision...",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_updateto,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_updateto,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::Rename",
-                        "label": "Rename",
+                        "label": "Rename...",
                         "tooltip": "",
                         "icon": "nautilussvn-rename",
                         "signals": {
@@ -680,6 +736,150 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Resolve",
+                        "label": "Resolve",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_resolve,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_resolve,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::GetLock",
+                        "label": "Get Lock...",
+                        "tooltip": "",
+                        "icon": "nautilussvn-lock",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_lock,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_lock,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Export",
+                        "label": "Export",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_export,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_export,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Create",
+                        "label": "Create repository here...",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_create,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Import",
+                        "label": "Import",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_import,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_import,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::BranchTag",
+                        "label": "Branch/tag...",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_branch,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_branch,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Switch",
+                        "label": "Switch...",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_switch,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_switch,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Merge",
+                        "label": "Merge...",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_merge,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_merge,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Blame",
+                        "label": "Blame...",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_blame,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::Properties",
                         "label": "Properties",
                         "tooltip": "",
@@ -691,6 +891,22 @@ class MainContextMenu():
                             }
                         }, 
                         "condition": self.condition_properties,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::SeparatorEnd",
+                        "label": "-----------------------------",
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {
+                            "activate": {
+                                "callback": None,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: True),
                         "submenus": [
                             
                         ]
@@ -890,7 +1106,7 @@ class MainContextMenu():
     def condition_add_to_ignore_list(self):
         for path in self.paths:
             if (self.vcs_client.is_in_a_or_a_working_copy(path) and
-                    self.vcs_client.is_versioned(path)):
+                    not self.vcs_client.is_versioned(path)):
                 return False
                 
         return True
@@ -930,7 +1146,7 @@ class MainContextMenu():
         
     def condition_blame(self):
         if (len(self.paths) == 1 and
-                self.vcs_client.is_in_a_or_a_working_copy(path) and
+                self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]) and
                 self.vcs_client.is_versioned(self.paths[0]) and
                 not self.vcs_client.is_added(self.paths[0])):
             return True
@@ -944,7 +1160,67 @@ class MainContextMenu():
                 return True
         
         return False
-        
+    
+    def condition_add_to_ignore_list(self):
+        return (len(self.paths) == 1 and 
+                self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]) and
+                not self.vcs_client.is_versioned(self.paths[0]))
+    
+    def condition_ignore_ext(self):
+        return isfile(self.paths[0])
+
+    def condition_lock(self):
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
+
+    def condition_branch(self):
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
+
+    def condition_switch(self):
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
+
+    def condition_merge(self):
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
+
+    def condition_import(self):
+        return (len(self.paths) == 1 and
+                not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
+
+    def condition_export(self):
+        return (len(self.paths) == 1 and
+                not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
+    
+    def condition_updateto(self):
+        return (len(self.paths) == 1 and 
+                self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
+    
+    def condition_resolve(self):
+        # TODO: Implement has_conflicted/is_conflicted methods
+        return False
+    
+    def condition_create(self):
+        return (len(self.paths) == 1 and
+                not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
+    
     #
     # Callbacks
     #
@@ -1133,3 +1409,33 @@ class MainContextMenu():
         
     def callback_settings(self, menu_item, paths):
         launch_ui_window("settings")
+    
+    def callback_ignore_filename(self, menu_item, paths):
+        pass
+
+    def callback_ignore_ext(self, menu_item, paths):
+        pass
+
+    def callback_lock(self, menu_item, paths):
+        launch_ui_window("lock", " ".join(paths))
+
+    def callback_branch(self, menu_item, paths):
+        launch_ui_window("branch", paths[0])
+
+    def callback_switch(self, menu_item, paths):
+        launch_ui_window("switch", paths[0])
+
+    def callback_merge(self, menu_item, paths):
+        launch_ui_window("merge", paths[0])
+
+    def callback_import(self, menu_item, paths):
+        launch_ui_window("import", paths[0])
+
+    def callback_export(self, menu_item, paths):
+        launch_ui_window("export", paths[0])
+
+    def callback_updateto(self, menu_item, paths):
+        launch_ui_window("updateto", paths[0])
+    
+    def callback_resolve(self, menu_item, paths):
+        launch_ui_window("resolve", " ".join(paths))
