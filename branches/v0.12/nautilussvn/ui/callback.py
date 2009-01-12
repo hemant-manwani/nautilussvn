@@ -62,6 +62,11 @@ class Notification(InterfaceView):
             ["Action", "Path", "Mime Type"]
         )
         
+        self.pbar = nautilussvn.ui.widget.ProgressBar(
+            self.get_widget("pbar")
+        )
+        self.pbar.start_pulsate()
+        
         self.callback_cancel = callback_cancel
             
     def on_destroy(self, widget):
@@ -166,7 +171,9 @@ class VCSAction(threading.Thread):
         ])
         
         if data["action"] in self.client.NOTIFY_ACTIONS_COMPLETE:
-            self.finish("Revision %s" % data["revision"].number)
+            self.notification.append(
+                ["Revision %s" % data["revision"].number,"", ""]
+            )
     
     def finish(self, message=None):
         """
@@ -182,6 +189,8 @@ class VCSAction(threading.Thread):
         """
         
         self.set_status(message)
+        self.notification.pbar.stop_pulsate()
+        self.notification.pbar.update(1)
         self.notification.toggle_ok_button(True)
     
     def get_log_message(self):
@@ -339,9 +348,10 @@ class VCSAction(threading.Thread):
         """
         
         if message is not None:
-            self.notification.append([
-                "", message, ""
-            ])
+            self.notification.pbar.set_text(message)
+        #    self.notification.append([
+        #        "", message, ""
+        #    ])
     
     def append(self, func, *args, **kwargs):
         """
