@@ -42,3 +42,6 @@
 
 === Context menu with multiple files selected ===
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/context_menu_multiple_files.png]
+
+=== Context menu for an unversioned folder ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/context_menu_unversioned_folder.png]
