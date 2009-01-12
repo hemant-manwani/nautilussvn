@@ -130,7 +130,7 @@ class VCSAction(threading.Thread):
         )
         
         self.pbar_ticks = None
-        self.pbar_ticks_current = 0
+        self.pbar_ticks_current = -1
         
         # Tells the notification window to do a gtk.main_quit() when closing
         # Is used when the script is run from a command line
