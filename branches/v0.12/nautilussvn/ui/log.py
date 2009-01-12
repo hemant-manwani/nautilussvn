@@ -212,7 +212,7 @@ class Log(InterfaceView):
         sensitive = True
         if self.rev_start >= (self.rev_max - self.limit):
             sensitive = False
-        if len(self.revision_items) < self.limit:
+        if len(self.revision_items) <= self.limit:
             sensitive = False
 
         self.get_widget("previous").set_sensitive(sensitive)
@@ -221,7 +221,7 @@ class Log(InterfaceView):
         sensitive = True
         if self.rev_end == 1:
             sensitive = False
-        if len(self.revision_items) < self.limit:
+        if len(self.revision_items) <= self.limit:
             sensitive = False
             
         self.get_widget("next").set_sensitive(sensitive)
