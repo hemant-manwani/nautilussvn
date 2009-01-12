@@ -50,7 +50,7 @@ class Revert(Add):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.files = self.vcs.get_items(
             paths, 
-            [self.vcs.STATUS["added"]]
+            self.vcs.STATUSES_FOR_REVERT
         )
         
         for item in self.files:

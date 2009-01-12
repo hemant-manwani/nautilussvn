@@ -68,8 +68,7 @@ class SVN:
 
     STATUSES_FOR_REVERT = [
         STATUS["missing"],
-        STATUS["added"],
-        STATUS["deleted"]
+        STATUS["added"]
     ]
 
     PROPERTIES = {
