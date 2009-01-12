@@ -112,15 +112,19 @@ class Commit(InterfaceView):
             self.close()
             return
 
+        added = 0
         for item in items:
             if self.vcs.status(item, recurse=False)[0].text_status == self.vcs.STATUS["unversioned"]:
                 self.vcs.add(item)
+                added += 1
+        
+        ticks = added + len(items)*2
         
         self.action = nautilussvn.ui.callback.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.set_pbar_ticks(len(items))
+        self.action.set_pbar_ticks(ticks)
         self.action.append(self.action.set_title, "Commit")
         self.action.append(self.action.set_status, "Running Commit Command...")
         self.action.append(
