@@ -104,7 +104,7 @@ class Certificate(InterfaceView):
     """
     
     def __init__(self, realm="", host="", 
-            issuer="", valid_from="", valid_to="", fingerprint=""):
+            issuer="", valid_from="", valid_until="", fingerprint=""):
             
         InterfaceView.__init__(self, GLADE, "Certificate")
         
@@ -112,7 +112,7 @@ class Certificate(InterfaceView):
         self.get_widget("cert_host").set_label(host)
         self.get_widget("cert_issuer").set_label(issuer)
         self.get_widget("cert_valid").set_label(
-            "%s to %s" % (valid_from, valid_to)
+            "%s to %s" % (valid_from, valid_until)
         )
         self.get_widget("cert_fingerprint").set_label(fingerprint)
         

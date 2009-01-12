@@ -308,12 +308,16 @@ class VCSAction(threading.Thread):
         ACCEPTED_FAILURES = 3
     
         gtk.gdk.threads_enter()
-        dialog = nautilissvn.ui.dialog.Certificate(
+
+        if not data:
+            return (False, 0, False)
+
+        dialog = nautilussvn.ui.dialog.Certificate(
             data["realm"],
             data["hostname"],
             data["issuer_dname"],
             data["valid_from"],
-            data["valid_to"],
+            data["valid_until"],
             data["finger_print"]
         )
         result = dialog.run()
