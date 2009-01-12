@@ -199,7 +199,8 @@ class ProgressBar:
         self.timer = gobject.timeout_add(100, self.update)
     
     def stop_pulsate(self):
-        gobject.source_remove(self.timer)
+        if self.timer:
+            gobject.source_remove(self.timer)
         self.timer = None
 
     def update(self, fraction=None):
