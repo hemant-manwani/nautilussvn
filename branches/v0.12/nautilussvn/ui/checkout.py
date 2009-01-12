@@ -105,7 +105,7 @@ class Checkout(InterfaceView):
         self.action.start()
 
     def on_revision_number_focused(self, widget, data=None):
-        if self.allow_rev:
+        if self.complete:
             self.get_widget("revision_number_opt").set_active(True)
 
     def on_file_chooser_clicked(self, widget, data=None):
