@@ -105,6 +105,7 @@ class Checkout(InterfaceView):
             revision=revision,
             ignore_externals=omit_externals
         )
+        self.action.append(self.action.set_status, "Completed Checkout")
         self.action.append(self.action.finish)
         self.action.start()
 
