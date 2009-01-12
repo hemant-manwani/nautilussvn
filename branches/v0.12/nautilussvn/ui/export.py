@@ -35,8 +35,14 @@ class Export(Checkout):
         Checkout.__init__(self, path)
         self.get_widget("Checkout").set_title("Export - %s" % path)
         
-        self.get_widget("url").set_text(path)
-        self.get_widget("destination").set_text("")
+        # If the given path is a working copy, then export FROM the path
+        # Otherwise export TO the path
+        if self.vcs.is_in_a_or_a_working_copy(path):
+            self.get_widget("url").set_text(path)
+            self.get_widget("destination").set_text("")
+        else:
+            self.get_widget("url").set_text("")
+            self.get_widget("destination").set_text(path)
 
     def on_ok_clicked(self, widget):
         url = self.get_widget("url").get_text()
