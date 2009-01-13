@@ -61,8 +61,9 @@ class Log(InterfaceView):
         
         self.path = path
         
-        if not self.vcs.is_in_a_or_a_working_copy(self.path):
-            MessageBox("The given path is not a working copy.")
+        if (not self.vcs.is_in_a_or_a_working_copy(self.path)
+                or not self.vcs.is_versioned(self.path)):
+            MessageBox("The given path is not part of a working copy.")
             self.close()
             return
         
