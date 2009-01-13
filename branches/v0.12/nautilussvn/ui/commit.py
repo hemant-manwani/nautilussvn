@@ -91,9 +91,34 @@ class Commit(InterfaceView):
     # 
     
     def refresh_row_status(self):
-        path = self.files_table.get_row(self.last_row_clicked)[1]
-        self.files_table.get_row(self.last_row_clicked)[3] =  self.vcs.status(path)[0].text_status
+        status = self.get_last_status()
+        self.files_table.get_row(self.last_row_clicked)[3] =  status
         
+        # Files newly marked as deleted should be checked off
+        if status == self.vcs.STATUS["deleted"]:
+            self.files_table.get_row(self.last_row_clicked)[0] = True
+        
+        # Ignored/Normal files should not be shown
+        if status in [
+                    self.vcs.STATUS["normal"], 
+                    self.vcs.STATUS["ignored"],
+                    self.vcs.STATUS["none"],
+                    None
+                ]:
+            self.files_table.remove(self.last_row_clicked)
+    
+    def get_last_path(self):
+        return self.files_table.get_row(self.last_row_clicked)[1]
+    
+    def get_last_status(self):
+        path = self.get_last_path()
+        
+        text_status = None
+        st = self.vcs.status(path)
+        if st:
+            text_status = st[0].text_status
+
+        return text_status
     #
     # Event handlers
     #
@@ -158,7 +183,10 @@ class Commit(InterfaceView):
 
         for item in self.items:
             checked = True
-            if not item.is_versioned:
+            
+            # Some types of files should not be checked off
+            if (not item.is_versioned 
+                    or item.text_status == self.vcs.STATUS["missing"]):
                 checked = False
             
             self.files_table.append([
@@ -219,7 +247,7 @@ class Commit(InterfaceView):
                                 "args": fileinfo
                             }
                         },
-                        "condition": (lambda: True)
+                        "condition": self.condition_delete
                     },
                     {
                         "label": "Add",
@@ -297,30 +325,33 @@ class Commit(InterfaceView):
         nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_delete_activated(self, widget, data=None):
-        confirm = nautilussvn.ui.dialog.Confirmation(
-            "Are you sure you want to send this file to the trash?"
-        )
-        
-        if confirm.run():
-            if self.vcs.is_versioned(data[1]):
-                self.vcs.remove(data[1], force=True)
-            else:
+        if self.vcs.is_versioned(data[1]):
+            self.vcs.remove(data[1], force=True)
+            self.refresh_row_status()
+        else:
+            confirm = nautilussvn.ui.dialog.Confirmation(
+                "Are you sure you want to send this file to the trash?"
+            )
+            
+            if confirm.run():
                 nautilussvn.lib.helper.delete_item(data[1])
-            self.files_table.remove(self.last_row_clicked)
-        
+                self.files_table.remove(self.last_row_clicked)
+            
     def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
         prop_name = self.vcs.PROPERTIES["ignore"]
         prop_value = os.path.basename(data[1])
         
-        if self.vcs.propset("", prop_name, prop_value):
-            self.files_table.remove(self.last_row_clicked)
+        if self.vcs.propset(data[1], prop_name, prop_value):
+            #self.files_table.remove(self.last_row_clicked)
+            self.refresh_row_status()
         
     def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
         prop_name = self.vcs.PROPERTIES["ignore"]
         prop_value = "*%s" % data[2]
         
-        if self.vcs.propset("", prop_name, prop_value):
-            self.files_table.remove(self.last_row_clicked)
+        if self.vcs.propset(data[1], prop_name, prop_value):
+            #self.files_table.remove(self.last_row_clicked)
+            self.refresh_row_status()
         
     def on_previous_messages_clicked(self, widget, data=None):
         dialog = nautilussvn.ui.dialog.PreviousMessages()
@@ -342,9 +373,12 @@ class Commit(InterfaceView):
         @return:    Whether or not to show the add context menu item.
         
         """
-        
-        path = self.files_table.get_row(self.last_row_clicked)[1]
-        return not self.vcs.is_versioned(path)
+
+        return (
+            self.get_last_status() in [
+                self.vcs.STATUS["unversioned"]
+            ]
+        )
     
     def condition_revert(self):
         """
@@ -356,8 +390,14 @@ class Commit(InterfaceView):
         
         """
 
-        path = self.files_table.get_row(self.last_row_clicked)[1]
-        return self.vcs.is_added(path)
+        return (
+            self.get_last_status() in [
+                self.vcs.STATUS["added"],
+                self.vcs.STATUS["deleted"],
+                self.vcs.STATUS["modified"],
+                self.vcs.STATUS["missing"]
+            ]
+        )
 
     def condition_view_diff(self):
         """
@@ -369,8 +409,27 @@ class Commit(InterfaceView):
         
         """
 
-        path = self.files_table.get_row(self.last_row_clicked)[1]
-        return self.vcs.is_modified(path)
+        return (
+            self.get_last_status() in [
+                self.vcs.STATUS["modified"]
+            ]
+        )
+
+    def condition_delete(self):
+        """
+        Show the Revert item when the file has been added but not committed
+        to the repository.
+        
+        @rtype:     boolean
+        @return:    Whether or not to show the revert context menu item.
+        
+        """
+
+        return (
+            self.get_last_status() not in [
+                self.vcs.STATUS["deleted"]
+            ]
+        )
         
 if __name__ == "__main__":
     import sys
