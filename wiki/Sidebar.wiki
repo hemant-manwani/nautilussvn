@@ -1,0 +1,7 @@
+#summary Our side-bar.
+
+  * [Development]
+  * [FAQ]
+  * [Installation]
+  * [Roadmap]
+  * [Screenshots]
