@@ -897,7 +897,7 @@ class MainContextMenu():
                     },
                     {
                         "identifier": "NautilusSvn::SeparatorEnd",
-                        "label": "-----------------------------",
+                        "label": "==============",
                         "tooltip": "",
                         "icon": None,
                         "signals": {
