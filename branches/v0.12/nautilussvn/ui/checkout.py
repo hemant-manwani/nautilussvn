@@ -55,7 +55,7 @@ class Checkout(InterfaceView):
             self.get_widget("repositories"), 
             nautilussvn.lib.helper.get_repository_paths()
         )
-        
+        self.destination = path
         self.get_widget("destination").set_text(path)
         self.complete = False
         
@@ -131,8 +131,27 @@ class Checkout(InterfaceView):
             self.get_widget("revision_number").set_text(data)
     
     def on_url_changed(self, widget, data=None):
+    
+        url = self.get_widget("url").get_text()
+        tmp = url.replace("//", "/").split("/")[1:]
+        append = ""
+        prev = ""
+        while len(tmp):
+            prev = append
+            append = tmp.pop()
+            if append not in ("trunk", "branches", "tags"):
+                break
+                
+            if append in ("http:", "https:", "file:", "svn:", "svn+ssh:"):
+                append = ""
+                break
+                
+        self.get_widget("destination").set_text(
+            os.path.join(self.destination, append)
+        )
+    
         self.complete = False
-        if self.get_widget("url").get_text():
+        if url:
             self.complete = True
         
         self.get_widget("show_log").set_sensitive(self.complete)
