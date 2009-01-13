@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec 18 08:57:33 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Jan 13 11:08:18 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="About">
-    <property name="width_request">400</property>
+    <property name="width_request">740</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">About</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="gravity">GDK_GRAVITY_CENTER</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
@@ -56,13 +57,15 @@
                     </child>
                     <child>
                       <widget class="GtkLabel" id="authors">
+                        <property name="width_request">600</property>
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Bruce Van Der Kooij
-Jason Field
-Adam Plumb</property>
+                        <property name="wrap">True</property>
+                        <property name="selectable">True</property>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -73,15 +76,15 @@ Adam Plumb</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkHBox" id="hbox2">
+                  <widget class="GtkHBox" id="hbox3">
                     <property name="visible">True</property>
                     <child>
-                      <widget class="GtkLabel" id="label3">
+                      <widget class="GtkLabel" id="label6">
                         <property name="width_request">100</property>
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="label" translatable="yes">Credits:</property>
+                        <property name="label" translatable="yes">Thanks:</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -89,20 +92,22 @@ Adam Plumb</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="credits">
+                      <widget class="GtkLabel" id="thanks">
+                        <property name="width_request">600</property>
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Patches: Santa Claus
-Security: Bruce Willis</property>
+                        <property name="yalign">0</property>
+                        <property name="wrap">True</property>
+                        <property name="selectable">True</property>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </widget>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -139,9 +144,6 @@ Security: Bruce Willis</property>
                   <widget class="GtkLabel" id="versions">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">NautilusSvn v0.12
-Subversion 1.5.3
-ConfigObj 4.5.3</property>
                     <property name="use_markup">True</property>
                   </widget>
                 </child>
@@ -184,6 +186,7 @@ ConfigObj 4.5.3</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">http://code.googlecode.com/p/nautilussvn
 http://subversion.tigris.org
+http://pysvn.tigris.org/
 http://voidspace.org.uk/python/configobj.html</property>
                     <property name="use_markup">True</property>
                   </widget>
