@@ -131,12 +131,12 @@ class Checkout(InterfaceView):
             self.get_widget("revision_number").set_text(data)
     
     def on_url_changed(self, widget, data=None):
-        complete = False
+        self.complete = False
         if self.get_widget("url").get_text():
-            complete = True
+            self.complete = True
         
-        self.get_widget("show_log").set_sensitive(complete)
-        self.get_widget("ok").set_sensitive(complete)
+        self.get_widget("show_log").set_sensitive(self.complete)
+        self.get_widget("ok").set_sensitive(self.complete)
 
 if __name__ == "__main__":
     import sys
