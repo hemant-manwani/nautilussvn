@@ -20,11 +20,17 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os.path
+import string
+
 import pygtk
 import gobject
 import gtk
 
+import nautilussvn
 from nautilussvn.ui import InterfaceView
+import pysvn
+import configobj
 
 class About(InterfaceView):
     """
@@ -40,6 +46,31 @@ class About(InterfaceView):
 
     def __init__(self):
         InterfaceView.__init__(self, "about", "About")
+        
+        basepath = os.path.dirname(os.path.realpath(__file__)).split("/")
+        basepath.pop()
+        basepath.pop()
+        basepath = "/".join(basepath)
+        
+        authors_path = os.path.join(basepath, "AUTHORS")
+        #credits_path = os.path.join(basepath, "CREDITS")
+        thanks_path = os.path.join(basepath, "THANKS")
+        
+        authors = open(authors_path, "r").read()
+        #credits = open(credits_path, "r").read()
+        thanks = open(thanks_path, "r").read()
+        
+        self.get_widget("authors").set_text(authors)
+        #self.get_widget("credits").set_text(credits)
+        self.get_widget("thanks").set_text(thanks)
+        
+        versions = []
+        versions.append("NautilusSvn - %s" % str(nautilussvn.version))
+        versions.append("Subversion - %s" % string.join(map(str,pysvn.svn_version), "."))
+        versions.append("Pysvn - %s" % string.join(map(str,pysvn.version), "."))
+        versions.append("ConfigObj - %s" % str(configobj.__version__))
+        
+        self.get_widget("versions").set_text("\n".join(versions))
 
     def on_destroy(self, widget):
         self.close()
