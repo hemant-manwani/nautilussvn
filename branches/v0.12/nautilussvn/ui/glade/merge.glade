@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan  8 13:32:18 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 14 09:30:28 2009 -->
 <glade-interface>
   <widget class="GtkAssistant" id="Merge">
     <property name="width_request">550</property>
@@ -189,7 +189,7 @@
                     <child>
                       <widget class="GtkHBox" id="hbox18">
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkEntry" id="mergerange_revisions">
                             <property name="visible">True</property>
@@ -199,13 +199,18 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="mergerange_show_log1">
-                            <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_mergerange_show_log1_clicked"/>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="pixel_size">24</property>
+                                <property name="icon_name">nautilussvn-show_log</property>
+                              </widget>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -284,22 +289,6 @@ To merge all revisions, leave the box empty.</property>
                         <property name="xalign">0</property>
                       </widget>
                     </child>
-                    <child>
-                      <widget class="GtkButton" id="mergerange_show_log2">
-                        <property name="width_request">100</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Show log</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_mergerange_show_log2_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
                   </widget>
                 </child>
               </widget>
@@ -347,7 +336,7 @@ To merge all revisions, leave the box empty.</property>
                 <property name="visible">True</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkVBox" id="vbox36">
+                  <widget class="GtkHBox" id="hbox1">
                     <property name="visible">True</property>
                     <property name="spacing">6</property>
                     <child>
@@ -357,7 +346,7 @@ To merge all revisions, leave the box empty.</property>
                           <widget class="GtkComboBoxEntry" id="mergebranch_from_urls">
                             <property name="visible">True</property>
                             <child internal-child="entry">
-                              <widget class="GtkEntry" id="mergebranch_from_url">
+                              <widget class="GtkEntry" id="comboboxentry-entry5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <signal name="changed" handler="on_mergebranch_from_url_changed"/>
@@ -366,33 +355,26 @@ To merge all revisions, leave the box empty.</property>
                           </widget>
                         </child>
                       </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                      </packing>
                     </child>
                     <child>
-                      <widget class="GtkHButtonBox" id="hbuttonbox21">
+                      <widget class="GtkButton" id="mergebranch_show_log1">
                         <property name="visible">True</property>
-                        <property name="spacing">5</property>
-                        <property name="layout_style">GTK_BUTTONBOX_END</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_mergebranch_show_log1_clicked"/>
                         <child>
-                          <widget class="GtkButton" id="mergebranch_show_log1">
-                            <property name="width_request">100</property>
+                          <widget class="GtkImage" id="image2">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_mergebranch_show_log1_clicked"/>
+                            <property name="pixel_size">24</property>
+                            <property name="icon_name">nautilussvn-show_log</property>
                           </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
                         </child>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="pack_type">GTK_PACK_END</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -440,33 +422,6 @@ To merge all revisions, leave the box empty.</property>
                         <property name="xalign">0</property>
                         <property name="wrap">True</property>
                       </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkHButtonBox" id="hbuttonbox22">
-                        <property name="visible">True</property>
-                        <property name="layout_style">GTK_BUTTONBOX_END</property>
-                        <child>
-                          <widget class="GtkButton" id="mergebranch_show_log2">
-                            <property name="width_request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_mergebranch_show_log2_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="pack_type">GTK_PACK_END</property>
-                          </packing>
-                        </child>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </widget>
                 </child>
@@ -535,41 +490,71 @@ To merge all revisions, leave the box empty.</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkRadioButton" id="mergetree_from_revision_head_opt">
+                      <widget class="GtkVBox" id="vbox2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">HEAD Revision</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="hbox22">
-                        <property name="visible">True</property>
-                        <property name="spacing">12</property>
                         <child>
-                          <widget class="GtkRadioButton" id="mergetree_from_revision_number_opt">
-                            <property name="width_request">140</property>
+                          <widget class="GtkRadioButton" id="mergetree_from_revision_head_opt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Revision</property>
+                            <property name="label" translatable="yes">HEAD Revision</property>
                             <property name="response_id">0</property>
+                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">mergetree_from_revision_head_opt</property>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
                         </child>
                         <child>
-                          <widget class="GtkEntry" id="mergetree_from_revision_number">
-                            <property name="width_request">75</property>
+                          <widget class="GtkHBox" id="hbox22">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <signal name="focus_in_event" handler="on_mergetree_from_revision_number_focused"/>
+                            <property name="spacing">6</property>
+                            <child>
+                              <widget class="GtkRadioButton" id="mergetree_from_revision_number_opt">
+                                <property name="width_request">140</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">Revision</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">mergetree_from_revision_head_opt</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="mergetree_from_revision_number">
+                                <property name="width_request">75</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <signal name="focus_in_event" handler="on_mergetree_from_revision_number_focused"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkButton" id="mergetree_from_show_log">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="clicked" handler="on_mergetree_from_show_log_clicked"/>
+                                <child>
+                                  <widget class="GtkImage" id="image3">
+                                    <property name="visible">True</property>
+                                    <property name="pixel_size">24</property>
+                                    <property name="icon_name">nautilussvn-show_log</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -577,27 +562,11 @@ To merge all revisions, leave the box empty.</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <widget class="GtkButton" id="mergetree_from_show_log">
-                            <property name="width_request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_mergetree_from_show_log_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </widget>
@@ -656,41 +625,71 @@ To merge all revisions, leave the box empty.</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkRadioButton" id="mergetree_to_revision_head_opt">
+                      <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">HEAD Revision</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="hbox23">
-                        <property name="visible">True</property>
-                        <property name="spacing">12</property>
                         <child>
-                          <widget class="GtkRadioButton" id="mergetree_to_revision_number_opt">
-                            <property name="width_request">140</property>
+                          <widget class="GtkRadioButton" id="mergetree_to_revision_head_opt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Revision</property>
+                            <property name="label" translatable="yes">HEAD Revision</property>
                             <property name="response_id">0</property>
+                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">mergetree_to_revision_head_opt</property>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
                         </child>
                         <child>
-                          <widget class="GtkEntry" id="mergetree_to_revision_number">
-                            <property name="width_request">75</property>
+                          <widget class="GtkHBox" id="hbox23">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <signal name="focus_in_event" handler="on_mergetree_to_revision_number_focused"/>
+                            <property name="spacing">6</property>
+                            <child>
+                              <widget class="GtkRadioButton" id="mergetree_to_revision_number_opt">
+                                <property name="width_request">140</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">Revision</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">mergetree_to_revision_head_opt</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="mergetree_to_revision_number">
+                                <property name="width_request">75</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <signal name="focus_in_event" handler="on_mergetree_to_revision_number_focused"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkButton" id="mergetree_to_show_log">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="response_id">0</property>
+                                <signal name="clicked" handler="on_mergetree_to_show_log_clicked"/>
+                                <child>
+                                  <widget class="GtkImage" id="image4">
+                                    <property name="visible">True</property>
+                                    <property name="pixel_size">24</property>
+                                    <property name="icon_name">nautilussvn-show_log</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -698,27 +697,11 @@ To merge all revisions, leave the box empty.</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <widget class="GtkButton" id="mergetree_to_show_log">
-                            <property name="width_request">100</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
-                            <property name="response_id">0</property>
-                            <signal name="clicked" handler="on_mergetree_to_show_log_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </widget>
@@ -766,22 +749,6 @@ To merge all revisions, leave the box empty.</property>
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                       </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="mergetree_working_copy_show_log">
-                        <property name="width_request">100</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="label" translatable="yes">Show log</property>
-                        <property name="response_id">0</property>
-                        <signal name="clicked" handler="on_mergetree_working_copy_show_log_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </widget>
                 </child>
@@ -892,9 +859,28 @@ To merge all revisions, leave the box empty.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">Test merge</property>
                 <property name="response_id">0</property>
                 <signal name="clicked" handler="on_test_clicked"/>
+                <child>
+                  <widget class="GtkHBox" id="hbox2">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkImage" id="image5">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-execute</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label11">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Test Merge</property>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
               </widget>
             </child>
           </widget>

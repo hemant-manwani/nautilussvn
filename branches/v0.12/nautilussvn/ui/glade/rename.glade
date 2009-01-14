@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Dec 18 09:08:53 2008 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 14 09:32:46 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Rename">
     <property name="width_request">400</property>
@@ -16,6 +16,7 @@
         <child>
           <widget class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
+            <property name="spacing">6</property>
             <child>
               <widget class="GtkLabel" id="label1">
                 <property name="width_request">100</property>
