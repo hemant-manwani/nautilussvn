@@ -870,7 +870,7 @@ class MainContextMenu():
                         "icon": None,
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_blame,
                                 "args": None
                             }
                         }, 
@@ -1439,3 +1439,6 @@ class MainContextMenu():
     
     def callback_resolve(self, menu_item, paths):
         launch_ui_window("resolve", " ".join(paths))
+        
+    def callback_blame(self, menu_item, paths):
+        launch_ui_window("blame", paths[0])
