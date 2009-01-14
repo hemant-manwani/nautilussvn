@@ -986,6 +986,23 @@ class SVN:
         
         return self.action(self.client.update, *args, **kwargs)
 
+    def annotate(self, *args, **kwargs):
+        """
+        Get the annotate results for the given file and revision range.
+        
+        @type   url_or_path: string
+        @param  url_or_path: A url or local path
+                
+        @type   from_revision: pysvn.Revision
+        @param  from_revision: Revision from (def: 1)
+        
+        @type   to_revision: pysvn.Revision
+        @param  to_revision: Revision to (def: HEAD)
+                
+        """
+        
+        return self.action(self.client.annotate, *args, **kwargs)
+
     def merge_ranges(self, *args, **kwargs):
         """
         Merge a range of revisions.
