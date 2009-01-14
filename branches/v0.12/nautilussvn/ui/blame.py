@@ -26,9 +26,9 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
+from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -47,17 +47,69 @@ class Blame(InterfaceView):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
+        self.pbar = nautilussvn.ui.widget.ProgressBar(self.get_widget("pbar"))
+        self.is_loading = False
+        self.action = None
         
-        self.get_widget("path").set_text(self.path)
-
     def on_destroy(self, widget):
         self.close()
 
     def on_cancel_clicked(self, widget):
-        self.close()
+        if self.is_loading:
+            self.action.set_cancel(True)
+            self.pbar.set_text("Cancelled")
+            self.pbar.update(1)
+            self.set_loading(False)
+        else:
+            self.close()
 
     def on_ok_clicked(self, widget):
-        self.close()
+    
+        if self.action is not None:
+            self.close()
+            return
+    
+        self.set_loading(True)
+        self.pbar.set_text("Retrieving Blame Information...")
+        self.pbar.start_pulsate()
+        
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set(),
+            visible=False
+        )        
+
+        from_rev_num = int(self.get_widget("from_revision").get_text())
+        if not from_rev_num:
+            nautilussvn.ui.dialog.MessageBox("You must specify a FROM revision.")
+            return
+            
+        from_rev = self.vcs.revision("number", number=from_rev_num)
+        
+        to_rev = None
+        if self.get_widget("revision_head_opt").get_active():
+            to_rev = self.vcs.revision("head")
+        elif self.get_widget("revision_number_opt").get_active():
+            rev_num = self.get_widget("revision_number").get_text()
+            
+            if rev_num == "":
+                nautilussvn.ui.dialog.MessageBox("You must specify a TO revision.")
+                return
+                
+            to_rev = self.vcs.revision("number", number=rev_num)
+
+        
+        self.action.append(
+            self.vcs.annotate, 
+            self.path,
+            from_rev,
+            to_rev
+        )
+        self.action.append(self.pbar.update, 1)
+        self.action.append(self.pbar.set_text, "Completed")
+        self.action.append(self.launch_blame)
+        self.action.start()
+
     
     def on_revision_number_focused(self, widget, data=None):
         self.set_revision_number_opt_active()
@@ -72,6 +124,30 @@ class Blame(InterfaceView):
         if data is not None:
             self.set_revision_number_opt_active()
             self.get_widget("revision_number").set_text(data)
+
+    #
+    # Helper methods
+    #
+
+    def launch_blame(self):
+        blame = self.action.get_result(0)
+        message = ""
+        for item in blame:
+            message = "%s%s\t\t%s\t\t%s\t\t%s\t\t%s\n" % (
+                message,
+                item["number"],
+                item["date"],
+                item["revision"].number,
+                item["author"],
+                item["line"]
+            )
+        
+        open("/tmp/blame.tmp", "w").write(message)
+        nautilussvn.lib.helper.open_item("/tmp/blame.tmp")
+        self.close()
+    
+    def set_loading(self, loading=True):
+        self.is_loading = loading
 
 if __name__ == "__main__":
     import sys

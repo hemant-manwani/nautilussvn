@@ -1,51 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 13 16:40:51 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan 13 20:57:15 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Blame">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Blame</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="gravity">GDK_GRAVITY_CENTER</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">12</property>
         <property name="spacing">18</property>
-        <child>
-          <widget class="GtkHBox" id="hbox1">
-            <property name="visible">True</property>
-            <child>
-              <widget class="GtkLabel" id="label1">
-                <property name="width_request">100</property>
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="label" translatable="yes">Path:</property>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="path">
-                <property name="width_request">400</property>
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="wrap">True</property>
-                <property name="wrap_mode">PANGO_WRAP_CHAR</property>
-              </widget>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-          </packing>
-        </child>
         <child>
           <widget class="GtkVBox" id="vbox4">
             <property name="visible">True</property>
@@ -67,10 +34,20 @@
                 <property name="visible">True</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkEntry" id="entry1">
-                    <property name="width_request">150</property>
+                  <widget class="GtkHBox" id="hbox1">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <child>
+                      <widget class="GtkEntry" id="from_revision">
+                        <property name="width_request">150</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">1</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                      </packing>
+                    </child>
                   </widget>
                 </child>
               </widget>
@@ -84,7 +61,6 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -181,7 +157,16 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkProgressBar" id="pbar">
+            <property name="visible">True</property>
+            <property name="text" translatable="yes"> </property>
+          </widget>
+          <packing>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -219,7 +204,7 @@
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="pack_type">GTK_PACK_END</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </widget>
