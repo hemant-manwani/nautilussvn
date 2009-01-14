@@ -69,16 +69,6 @@ class Blame(InterfaceView):
             self.close()
             return
     
-        self.set_loading(True)
-        self.pbar.set_text("Retrieving Blame Information...")
-        self.pbar.start_pulsate()
-        
-        self.action = VCSAction(
-            self.vcs,
-            register_gtk_quit=self.gtk_quit_is_set(),
-            visible=False
-        )        
-
         from_rev_num = int(self.get_widget("from_revision").get_text())
         if not from_rev_num:
             nautilussvn.ui.dialog.MessageBox("You must specify a FROM revision.")
@@ -94,10 +84,21 @@ class Blame(InterfaceView):
             
             if rev_num == "":
                 nautilussvn.ui.dialog.MessageBox("You must specify a TO revision.")
+                
                 return
                 
             to_rev = self.vcs.revision("number", number=rev_num)
 
+
+        self.set_loading(True)
+        self.pbar.set_text("Retrieving Blame Information...")
+        self.pbar.start_pulsate()
+        
+        self.action = VCSAction(
+            self.vcs,
+            register_gtk_quit=self.gtk_quit_is_set(),
+            visible=False
+        )    
         
         self.action.append(
             self.vcs.annotate, 

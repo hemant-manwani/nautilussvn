@@ -60,13 +60,13 @@ class Log(InterfaceView):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
-        
+        """
         if (not self.vcs.is_in_a_or_a_working_copy(self.path)
                 or not self.vcs.is_versioned(self.path)):
             MessageBox("The given path is not part of a working copy.")
             self.close()
             return
-        
+        """
         self.cache = LogCache()
 
         self.rev_start = None

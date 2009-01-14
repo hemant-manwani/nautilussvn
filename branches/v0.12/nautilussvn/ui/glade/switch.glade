@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan  8 10:14:02 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 14 09:35:59 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Switch">
     <property name="width_request">500</property>
@@ -135,7 +135,6 @@
                 <child>
                   <widget class="GtkVBox" id="vbox21">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkHBox" id="hbox7">
                         <property name="visible">True</property>
@@ -163,7 +162,7 @@
                     <child>
                       <widget class="GtkHBox" id="hbox8">
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="revision_number_opt">
                             <property name="width_request">140</property>
@@ -190,13 +189,18 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="show_log">
-                            <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_show_log_clicked"/>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="pixel_size">24</property>
+                                <property name="icon_name">nautilussvn-show_log</property>
+                              </widget>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

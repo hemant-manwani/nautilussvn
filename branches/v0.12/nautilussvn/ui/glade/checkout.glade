@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 13 09:26:19 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 14 09:40:17 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Checkout">
     <property name="width_request">550</property>
@@ -41,7 +41,7 @@
                     <child>
                       <widget class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkLabel" id="label3">
                             <property name="width_request">90</property>
@@ -74,7 +74,7 @@
                     <child>
                       <widget class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkLabel" id="label4">
                             <property name="width_request">90</property>
@@ -99,14 +99,18 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="file_chooser">
-                            <property name="width_request">85</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">gtk-find</property>
-                            <property name="use_stock">True</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_file_chooser_clicked"/>
+                            <child>
+                              <widget class="GtkImage" id="image2">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-harddisk</property>
+                                <property name="icon_size">2</property>
+                              </widget>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -153,7 +157,6 @@
                 <child>
                   <widget class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkCheckButton" id="recursive">
                         <property name="visible">True</property>
@@ -168,14 +171,11 @@
                       <widget class="GtkCheckButton" id="omit_externals">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="border_width">2</property>
                         <property name="label" translatable="yes">Omit Externals</property>
                         <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>
                       </widget>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -218,7 +218,6 @@
                 <child>
                   <widget class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkHBox" id="hbox17">
                         <property name="visible">True</property>
@@ -241,7 +240,7 @@
                     <child>
                       <widget class="GtkHBox" id="hbox4">
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="revision_number_opt">
                             <property name="visible">True</property>
@@ -280,10 +279,10 @@
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_show_log_clicked"/>
                             <child>
-                              <widget class="GtkLabel" id="label6">
-                                <property name="width_request">100</property>
+                              <widget class="GtkImage" id="image1">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Show log</property>
+                                <property name="pixel_size">24</property>
+                                <property name="icon_name">nautilussvn-show_log</property>
                               </widget>
                             </child>
                           </widget>
@@ -352,6 +351,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
             <property name="position">3</property>
           </packing>
         </child>

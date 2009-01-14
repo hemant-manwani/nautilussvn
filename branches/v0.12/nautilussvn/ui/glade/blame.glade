@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 13 20:57:15 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 14 09:30:34 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Blame">
+    <property name="width_request">400</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Blame</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
@@ -86,7 +87,6 @@
                 <child>
                   <widget class="GtkVBox" id="vbox6">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkRadioButton" id="revision_head_opt">
                         <property name="visible">True</property>
@@ -100,7 +100,7 @@
                     <child>
                       <widget class="GtkHBox" id="hbox2">
                         <property name="visible">True</property>
-                        <property name="spacing">12</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="revision_number_opt">
                             <property name="visible">True</property>
@@ -125,13 +125,18 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="show_log">
-                            <property name="width_request">100</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_show_log_clicked"/>
+                            <child>
+                              <widget class="GtkImage" id="image1">
+                                <property name="visible">True</property>
+                                <property name="pixel_size">24</property>
+                                <property name="icon_name">nautilussvn-show_log</property>
+                              </widget>
+                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
