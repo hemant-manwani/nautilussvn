@@ -107,6 +107,7 @@ class Blame(InterfaceView):
         )
         self.action.append(self.pbar.update, 1)
         self.action.append(self.pbar.set_text, "Completed")
+        self.action.append(self.set_loading, False)
         self.action.append(self.launch_blame)
         self.action.start()
 
@@ -130,21 +131,11 @@ class Blame(InterfaceView):
     #
 
     def launch_blame(self):
-        blame = self.action.get_result(0)
-        message = ""
-        for item in blame:
-            message = "%s%s\t\t%s\t\t%s\t\t%s\t\t%s\n" % (
-                message,
-                item["number"],
-                item["date"],
-                item["revision"].number,
-                item["author"],
-                item["line"]
-            )
+        self.get_widget("ok").set_sensitive(False)
+        blamedict = self.action.get_result(0)
         
-        open("/tmp/blame.tmp", "w").write(message)
-        nautilussvn.lib.helper.open_item("/tmp/blame.tmp")
-        self.close()
+        from nautilussvn.ui.blameui import BlameUI
+        BlameUI(blamedict)
     
     def set_loading(self, loading=True):
         self.is_loading = loading
