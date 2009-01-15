@@ -190,7 +190,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 is_in_a_or_a_working_copy):
             self.status_monitor.status(path)
         
-        
     def get_file_items(self, window, items):
         """
         Menu activated with items selected. Nautilus also calls this function
@@ -352,7 +351,7 @@ class MainContextMenu():
                 "identifier": "NautilusSvn::Debug",
                 "label": "Debug",
                 "tooltip": "",
-                "icon": None,
+                "icon": "nautilussvn-monkey",
                 "signals": {
                     "activate": {
                         "callback": None,
