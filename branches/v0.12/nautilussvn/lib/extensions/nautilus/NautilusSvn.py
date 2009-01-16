@@ -330,7 +330,7 @@ class MainContextMenu():
     
     """
     
-    SEPARATOR = "- - - - - - - - - - - - - - - - -"
+    SEPARATOR = "- - - - - - - - - - - - - - -"
     
     def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
@@ -685,7 +685,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::UpdateToRevision",
                         "label": "Update to revision...",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-update",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_updateto,
@@ -749,7 +749,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Resolve",
                         "label": "Resolve",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-resolve",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_resolve,
@@ -778,6 +778,22 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Unlock",
+                        "label": "Release Lock...",
+                        "tooltip": "",
+                        "icon": "nautilussvn-unlock",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_unlock,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_unlock,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::Separator2",
                         "label": self.SEPARATOR,
                         "tooltip": "",
@@ -790,7 +806,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Export",
                         "label": "Export",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-export",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_export,
@@ -804,9 +820,9 @@ class MainContextMenu():
                     },
                     {
                         "identifier": "NautilusSvn::Create",
-                        "label": "Create repository here...",
+                        "label": "Create Repository...",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-run",
                         "signals": {
                             "activate": {
                                 "callback": None,
@@ -822,7 +838,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Import",
                         "label": "Import",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-import",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_import,
@@ -847,7 +863,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::BranchTag",
                         "label": "Branch/tag...",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-branch",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_branch,
@@ -863,7 +879,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Switch",
                         "label": "Switch...",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-switch",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_switch,
@@ -879,7 +895,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Merge",
                         "label": "Merge...",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-merge",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_merge,
@@ -904,7 +920,7 @@ class MainContextMenu():
                         "identifier": "NautilusSvn::Blame",
                         "label": "Blame...",
                         "tooltip": "",
-                        "icon": None,
+                        "icon": "nautilussvn-blame",
                         "signals": {
                             "activate": {
                                 "callback": self.callback_blame,
@@ -1283,12 +1299,21 @@ class MainContextMenu():
     
     def condition_resolve(self):
         # TODO: Implement has_conflicted/is_conflicted methods
-        return False
+        return True
     
     def condition_create(self):
         return (len(self.paths) == 1 and
                 not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
-    
+
+    def condition_unlock(self):
+        # TODO: Implement is_locked/has_locked methods
+        # TODO: Should show if path is directory
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
     #
     # Callbacks
     #
@@ -1510,3 +1535,6 @@ class MainContextMenu():
         
     def callback_blame(self, menu_item, paths):
         launch_ui_window("blame", paths[0])
+
+    def callback_unlock(self, menu_item, paths):
+        launch_ui_window("unlock", " ".join(paths))
