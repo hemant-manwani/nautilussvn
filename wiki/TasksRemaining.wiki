@@ -7,3 +7,4 @@
   * Get UIs to refresh file manager status -- brucevdkooij
   * add is_conflicted/has_conflicted methods -- brucevdkooij
   * add is_locked/has_locked methods -- brucevdkooij
+  * Add the NautilusSvn icons to the UI window titlebars
