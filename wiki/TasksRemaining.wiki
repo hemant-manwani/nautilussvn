@@ -6,8 +6,9 @@
   * Get UIs to refresh file manager status -- brucevdkooij
   * add is_conflicted/has_conflicted methods -- brucevdkooij
   * add is_locked/has_locked methods -- brucevdkooij
+  * Create a delete ui script, with no visible interface -- adamplumb
 
 = Tasks remaining for v0.12 Final =
 
   * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
-  * Add the NautilusSvn icons to the UI window titlebars - adamplumb
+  * Add the NautilusSvn icons to the UI window titlebars -- adamplumb
