@@ -1052,12 +1052,12 @@ class MainContextMenu():
             is_last = (index+1 == length)
             if definition_item["condition"]():
 
-                # If the item is a separator, don't show if this is the first
-                # or last item in the list, or if the last item was a separator
-                if definition_item["label"] == self.SEPARATOR:
-                    if is_first or is_last or (prevlabel == self.SEPARATOR):
-                        index += 1
-                        continue
+                # If the item is a separator, don't show it if this is the first
+                # or last item, or if the previous item was a separator
+                if (definition_item["label"] == self.SEPARATOR and
+                        (is_first or is_last or prevlabel == self.SEPARATOR)):
+                    index += 1
+                    continue
             
                 menu_item = nautilus.MenuItem(
                     definition_item["identifier"],
@@ -1076,8 +1076,10 @@ class MainContextMenu():
                 
                 menu.append(menu_item)
                 
-                # If a menu item has been added, it is not the first item
-                # And it needs to be remembered as the previous item
+                # The menu item above as just been added, so we can note that
+                # we're no longer on the first menu item.  And we'll keep
+                # track of this item so the next iteration can test if it should
+                # show a separator or not
                 is_first = False
                 prevlabel = definition_item["label"]
                 
