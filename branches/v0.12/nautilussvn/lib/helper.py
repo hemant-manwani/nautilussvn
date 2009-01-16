@@ -421,7 +421,7 @@ def save_repository_path(path):
     f.write("\n".join(paths))
     f.close()
     
-def launch_ui_window(filename, *args):
+def launch_ui_window(filename, args):
     """
     Launches a UI window in a new process, so that we don't have to worry about
     nautilus and threading.
@@ -429,8 +429,8 @@ def launch_ui_window(filename, *args):
     @type   filename: string
     @param  filename: The filename of the window, without the extension
     
-    @type   *args: list
-    @param  *args: A list of arguments to be passed to the window.
+    @type   args: list
+    @param  args: A list of arguments to be passed to the window.
     
     """
     
@@ -446,10 +446,11 @@ def launch_ui_window(filename, *args):
     if not os.path.exists(path):
         MessageBox("The window %s does not exist" % filename)
         return
-    
-    Popen(
-        ["/usr/bin/python", path, " ".join(args)]
-    )
+        
+    popen_args = ["/usr/bin/python", path]
+    for arg in args:
+        popen_args.append(arg)
+    Popen(popen_args)
 
 def get_log_messages_limit():
     sm = nautilussvn.lib.settings.SettingsManager()

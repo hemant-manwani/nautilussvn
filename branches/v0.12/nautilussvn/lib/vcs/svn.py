@@ -368,7 +368,10 @@ class SVN:
             return []
  
         if len(paths) > 1:
-            path = os.path.commonprefix(paths)
+            dirs = []
+            for i in paths:
+                dirs.append(os.path.dirname(i))
+            path = os.path.commonprefix(dirs)
         else:
             path = paths[0]
         

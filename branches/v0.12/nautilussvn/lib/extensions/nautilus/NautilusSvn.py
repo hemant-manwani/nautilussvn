@@ -682,6 +682,15 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::SeparatorAdd",
+                        "label": self.SEPARATOR,
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
                         "identifier": "NautilusSvn::UpdateToRevision",
                         "label": "Update to revision...",
                         "tooltip": "",
@@ -1466,13 +1475,13 @@ class MainContextMenu():
         launch_ui_window("checkout", paths[0])
     
     def callback_update(self, menu_item, paths):
-        launch_ui_window("update", " ".join(paths))
+        launch_ui_window("update", paths)
 
     def callback_commit(self, menu_item, paths):
-        launch_ui_window("commit", " ".join(paths))
+        launch_ui_window("commit", paths)
 
     def callback_add(self, menu_item, paths):
-        launch_ui_window("add", " ".join(paths))
+        launch_ui_window("add", paths)
 
     def callback_delete(self, menu_item, paths):
         # This really needs to go thgou
@@ -1483,7 +1492,7 @@ class MainContextMenu():
         self.callback_refresh_status(menu_item, paths)
 
     def callback_revert(self, menu_item, paths):
-        launch_ui_window("revert", " ".join(paths))
+        launch_ui_window("revert", paths)
 
     def callback_diff(self, menu_item, paths):
         launch_diff_tool(paths[0])
@@ -1510,7 +1519,7 @@ class MainContextMenu():
         pass
 
     def callback_lock(self, menu_item, paths):
-        launch_ui_window("lock", " ".join(paths))
+        launch_ui_window("lock", paths)
 
     def callback_branch(self, menu_item, paths):
         launch_ui_window("branch", paths[0])
@@ -1531,10 +1540,10 @@ class MainContextMenu():
         launch_ui_window("updateto", paths[0])
     
     def callback_resolve(self, menu_item, paths):
-        launch_ui_window("resolve", " ".join(paths))
+        launch_ui_window("resolve", paths)
         
     def callback_blame(self, menu_item, paths):
         launch_ui_window("blame", paths[0])
 
     def callback_unlock(self, menu_item, paths):
-        launch_ui_window("unlock", " ".join(paths))
+        launch_ui_window("unlock", paths)
