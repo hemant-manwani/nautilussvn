@@ -6,8 +6,9 @@
   * Get UIs to refresh file manager status -- brucevdkooij
   * add is_conflicted/has_conflicted methods -- brucevdkooij
   * add is_locked/has_locked methods -- brucevdkooij
-  * Create a delete ui script, with no visible interface -- adamplumb
+  * Create invisible interface for deleting -- adamplumb
   * Add missing merge options to the final page of the merge wizard -- adamplumb
+  * Create invisible interface for ignoring -- adamplumb
 
 = Tasks remaining for v0.12 Final =
 
