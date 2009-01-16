@@ -330,6 +330,8 @@ class MainContextMenu():
     
     """
     
+    SEPARATOR = "- - - - - - - - - - - - - - - - -"
+    
     def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
         self.nautilussvn_extension = nautilussvn_extension
@@ -615,6 +617,15 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Separator1",
+                        "label": self.SEPARATOR,
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
                         "identifier": "NautilusSvn::Add",
                         "label": "Add",
                         "tooltip": "",
@@ -767,6 +778,15 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Separator2",
+                        "label": self.SEPARATOR,
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
                         "identifier": "NautilusSvn::Export",
                         "label": "Export",
                         "tooltip": "",
@@ -813,6 +833,15 @@ class MainContextMenu():
                         "submenus": [
                             
                         ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator3",
+                        "label": self.SEPARATOR,
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
                         "identifier": "NautilusSvn::BranchTag",
@@ -863,6 +892,15 @@ class MainContextMenu():
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Separator4",
+                        "label": self.SEPARATOR,
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
                         "identifier": "NautilusSvn::Blame",
                         "label": "Blame...",
                         "tooltip": "",
@@ -877,6 +915,15 @@ class MainContextMenu():
                         "submenus": [
                             
                         ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator5",
+                        "label": self.SEPARATOR,
+                        "tooltip": "",
+                        "icon": None,
+                        "signals": {}, 
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
                         "identifier": "NautilusSvn::Properties",
@@ -895,8 +942,8 @@ class MainContextMenu():
                         ]
                     },
                     {
-                        "identifier": "NautilusSvn::SeparatorEnd",
-                        "label": "==============",
+                        "identifier": "NautilusSvn::Separator6",
+                        "label": self.SEPARATOR,
                         "tooltip": "",
                         "icon": None,
                         "signals": {
@@ -997,8 +1044,21 @@ class MainContextMenu():
         """
         
         menu = []
+        prevlabel = None
+        is_first = True
+        index = 0
+        length = len(menu_definition)
         for definition_item in menu_definition:
+            is_last = (index+1 == length)
             if definition_item["condition"]():
+
+                # If the item is a separator, don't show if this is the first
+                # or last item in the list, or if the last item was a separator
+                if definition_item["label"] == self.SEPARATOR:
+                    if is_first or is_last or (prevlabel == self.SEPARATOR):
+                        index += 1
+                        continue
+            
                 menu_item = nautilus.MenuItem(
                     definition_item["identifier"],
                     definition_item["label"],
@@ -1016,6 +1076,11 @@ class MainContextMenu():
                 
                 menu.append(menu_item)
                 
+                # If a menu item has been added, it is not the first item
+                # And it needs to be remembered as the previous item
+                is_first = False
+                prevlabel = definition_item["label"]
+                
                 # Since we can't just call set_submenu and run the risk of not
                 # having any submenu items later (which would result in the 
                 # menu item not being displayed) we have to check first.
@@ -1029,7 +1094,9 @@ class MainContextMenu():
                     
                     for submenu_item in submenu:
                         nautilus_submenu.append_item(submenu_item)
-        
+
+            index += 1
+            
         return menu
     #
     # Conditions
