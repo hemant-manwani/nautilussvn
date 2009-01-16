@@ -53,6 +53,7 @@ A few words of advice. Don't start off by using Google to locate GNOME documenta
 || Christian Neumair || manny || || [http://blogs.gnome.org/cneumair/ Blog], [https://www.ohloh.net/people?query=cneumair Ohloh] ||
 || Cosimo Cecchi || cosimoc || Nautilus hacker. Can be asked pretty much anything. || [http://blogs.gnome.org/cosimoc/ Blog], [https://www.ohloh.net/accounts/cosimoc Ohloh] ||
 || Benjamin Otte || Company || Not a Nautilus hacker, but knows a lot about GVFS. Lead developer of swfdec. || [http://blogs.gnome.org/otte/ Blog], [https://www.ohloh.net/accounts/6770 Ohloh] ||
+|| Andrew Walton || awalton__ ||  `<awalton__>` well I'm a nautilus guy, so that makes me a nautilus extension guy by extension... || [http://blogs.gnome.org/awalton/ Blog], [https://www.ohloh.net/search?q=awalton Ohloh] ||
 
 = Nautilus internals =
 
