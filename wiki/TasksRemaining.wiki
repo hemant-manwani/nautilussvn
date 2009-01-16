@@ -7,6 +7,7 @@
   * add is_conflicted/has_conflicted methods -- brucevdkooij
   * add is_locked/has_locked methods -- brucevdkooij
   * Create a delete ui script, with no visible interface -- adamplumb
+  * Add missing merge options to the final page of the merge wizard -- adamplumb
 
 = Tasks remaining for v0.12 Final =
 
