@@ -3,11 +3,11 @@
 
 = Tasks remaining for v0.12 Beta =
 
-  * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
   * Get UIs to refresh file manager status -- brucevdkooij
   * add is_conflicted/has_conflicted methods -- brucevdkooij
   * add is_locked/has_locked methods -- brucevdkooij
 
 = Tasks remaining for v0.12 Final =
 
+  * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
   * Add the NautilusSvn icons to the UI window titlebars - adamplumb
