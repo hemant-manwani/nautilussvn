@@ -45,6 +45,8 @@ from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension
 from nautilussvn.lib.decorators import timeit
 
+SEPARATOR = "- - - - - - - - - - - - - - - - -"
+
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
     This is the main class that implements all of our awesome features.
@@ -329,7 +331,7 @@ class MainContextMenu():
     would be returned it might end up as C{[<NautilusSvn>, <Update>, <Commit>]}.
     
     """
-    
+
     def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
         self.nautilussvn_extension = nautilussvn_extension
@@ -345,216 +347,38 @@ class MainContextMenu():
         @return:    A list of MenuItems representing the context menu.
         """
         
-        # The following dictionary defines the complete contextmenu
-        menu_definition = [
-            {
-                "identifier": "NautilusSvn::Debug",
-                "label": "Debug",
+        self.menu_dictionary = {
+            "NautilusSvn::Separator1": {
+                "label": SEPARATOR,
                 "tooltip": "",
-                "icon": "nautilussvn-monkey",
-                "signals": {
-                    "activate": {
-                        "callback": None,
-                        "args": None
-                    }
-                },
-                "condition": (lambda: True),
-                "submenus": [
-                    {
-                        "identifier": "NautilusSvn::DBus",
-                        "label": "DBus",
-                        "tooltip": "",
-                        "icon": "nautilussvn-dbus",
-                        "signals": {
-                            "activate": {
-                                "callback": None,
-                                "args": None
-                            }
-                        }, 
-                        "condition": (lambda: True),
-                        "submenus": [
-                            {
-                                "identifier": "NautilusSvn::DBus_Restart",
-                                "label": "Start/Restart Service",
-                                "tooltip": "",
-                                "icon": "nautilussvn-run",
-                                "signals": {
-                                    "activate": {
-                                        "callback": self.callback_dbus_restart,
-                                        "args": None
-                                    }
-                                }, 
-                                "condition": (lambda: True),
-                                "submenus": [
-                                    
-                                ]
-                            },
-                            {
-                                "identifier": "NautilusSvn::DBus_Exit",
-                                "label": "Exit Service",
-                                "tooltip": "",
-                                "icon": "nautilussvn-stop",
-                                "signals": {
-                                    "activate": {
-                                        "callback": self.callback_dbus_exit,
-                                        "args": None
-                                    }
-                                }, 
-                                "condition": (lambda: True),
-                                "submenus": [
-                                    
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Bugs",
-                        "label": "Bugs",
-                        "tooltip": "",
-                        "icon": "nautilussvn-bug",
-                        "signals": {
-                            "activate": {
-                                "callback": None,
-                                "args": None
-                            }
-                        },
-                        "condition": (lambda: True),
-                        "submenus": [
-                            {
-                                "identifier": "NautilusSvn::Debug_Asynchronicity",
-                                "label": "Test Asynchronicity",
-                                "tooltip": "",
-                                "icon": "nautilussvn-asynchronous",
-                                "signals": {
-                                    "activate": {
-                                        "callback": self.callback_debug_asynchronicity,
-                                        "args": None
-                                    }
-                                },
-                                "condition": (lambda: True),
-                                "submenus": [
-                                    
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Debug_Shell",
-                        "label": "Open Shell",
-                        "tooltip": "",
-                        "icon": "gnome-terminal",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_debug_shell,
-                                "args": None
-                            }
-                        },
-                        "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Refresh_Status",
-                        "label": "Refresh Status",
-                        "tooltip": "",
-                        "icon": "nautilussvn-refresh",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_refresh_status,
-                                "args": None,
-                                "kwargs": {"recurse": True}
-                            }
-                        },
-                        "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Debug_Revert",
-                        "label": "Debug Revert",
-                        "tooltip": "Reverts everything it sees",
-                        "icon": "nautilussvn-revert",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_debug_revert,
-                                "args": None
-                            }
-                        },
-                        "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Debug_Invalidate",
-                        "label": "Invalidate",
-                        "tooltip": "Force a invalidate_extension_info() call",
-                        "icon": "nautilussvn-clear",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_debug_invalidate,
-                                "args": None
-                            }
-                        },
-                        "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Debug_Add_Emblem",
-                        "label": "Add Emblem",
-                        "tooltip": "Add an emblem",
-                        "icon": "nautilussvn-emblems",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_debug_add_emblem,
-                                "args": None
-                            }
-                        },
-                        "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    }
-                ]
+                "icon": None,
+                "signals": {}
             },
-            {
-                "identifier": "NautilusSvn::Checkout",
-                "label": "Checkout",
+            "NautilusSvn::Separator2": {
+                "label": SEPARATOR,
                 "tooltip": "",
-                "icon": "nautilussvn-checkout",
-                "signals": {
-                    "activate": {
-                        "callback": self.callback_checkout,
-                        "args": None
-                    }
-                }, 
-                "condition": self.condition_checkout,
-                "submenus": [
-                    
-                ]
+                "icon": None,
+                "signals": {}
             },
-            {
-                "identifier": "NautilusSvn::Update",
-                "label": "Update",
+            "NautilusSvn::Separator3": {
+                "label": SEPARATOR,
                 "tooltip": "",
-                "icon": "nautilussvn-update",
-                "signals": {
-                    "activate": {
-                        "callback": self.callback_update,
-                        "args": None
-                    }
-                }, 
-                "condition": self.condition_update,
-                "submenus": [
-                    
-                ]
+                "icon": None,
+                "signals": {}
             },
-            {
-                "identifier": "NautilusSvn::Commit",
+            "NautilusSvn::Separator4": {
+                "label": SEPARATOR,
+                "tooltip": "",
+                "icon": None,
+                "signals": {}
+            },
+            "NautilusSvn::Separator5": {
+                "label": SEPARATOR,
+                "tooltip": "",
+                "icon": None,
+                "signals": {}
+            },
+            "NautilusSvn::Commit": {
                 "label": "Commit",
                 "tooltip": "",
                 "icon": "nautilussvn-commit",
@@ -563,14 +387,31 @@ class MainContextMenu():
                         "callback": self.callback_commit,
                         "args": None
                     }
-                }, 
-                "condition": self.condition_commit,
-                "submenus": [
-                    
-                ]
+                }
             },
-            {
-                "identifier": "NautilusSvn::NautilusSvn",
+            "NautilusSvn::Update": {
+                "label": "Update",
+                "tooltip": "",
+                "icon": "nautilussvn-update",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_update,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Checkout": {
+                "label": "Checkout",
+                "tooltip": "",
+                "icon": "nautilussvn-checkout",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_checkout,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::NautilusSvn": {
                 "label": "NautilusSvn",
                 "tooltip": "",
                 "icon": "nautilussvn",
@@ -579,395 +420,918 @@ class MainContextMenu():
                         "callback": None,
                         "args": None
                     }
-                }, 
+                }
+            },
+            "NautilusSvn::Diff": {
+                "label": "Diff",
+                "tooltip": "",
+                "icon": "nautilussvn-diff",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_diff,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Show_Log": {
+                "label": "Show log",
+                "tooltip": "",
+                "icon": "nautilussvn-show_log",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_show_log,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Add": {
+                "label": "Add",
+                "tooltip": "",
+                "icon": "nautilussvn-add",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_add,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::AddToIgnore": {
+                "label": "Add to ignore list",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::AddToIgnoreFile": {
+                "label": os.path.basename(self.paths[0]),
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_ignore_filename,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::AddToIgnoreExt": {
+                "label": "*%s"%get_file_extension(self.paths[0]),
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_ignore_ext,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::UpdateToRevision": {
+                "label": "Update To Revision",
+                "tooltip": "",
+                "icon": "nautilussvn-update",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_updateto,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Rename": {
+                "label": "Rename",
+                "tooltip": "",
+                "icon": "nautilussvn-rename",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_rename,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Delete": {
+                "label": "Delete",
+                "tooltip": "",
+                "icon": "nautilussvn-delete",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_delete,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Revert": {
+                "label": "Revert",
+                "tooltip": "",
+                "icon": "nautilussvn-revert",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_revert,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Resolve": {
+                "label": "Resolve",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_resolve,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::GetLock": {
+                "label": "Get Lock",
+                "tooltip": "",
+                "icon": "nautilussvn-lock",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_lock,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Export": {
+                "label": "Export",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_export,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Create": {
+                "label": "Create repository here...",
+                "tooltip": "",
+                "icon": "nautilussvn-run",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Import": {
+                "label": "Import",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_import,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::BranchTag": {
+                "label": "Branch/tag",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_branch,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Switch": {
+                "label": "Switch",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_switch,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Merge": {
+                "label": "Merge",
+                "tooltip": "",
+                "icon": "nautilussvn-asynchronous",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_merge,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Blame": {
+                "label": "Blame",
+                "tooltip": "",
+                "icon": None,
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_blame,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Properties": {
+                "label": "Properties",
+                "tooltip": "",
+                "icon": "nautilussvn-properties",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_properties,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Settings": {
+                "label": "Settings",
+                "tooltip": "",
+                "icon": "nautilussvn-settings",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_settings,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::About": {
+                "label": "About",
+                "tooltip": "",
+                "icon": "nautilussvn-about",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_about,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Debug": {
+                "label": "Debug",
+                "tooltip": "",
+                "icon": "nautilussvn-monkey",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::DBus": {
+                "label": "DBus",
+                "tooltip": "",
+                "icon": "nautilussvn-dbus",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::DBus_Restart": {
+                "label": "Start/Restart Service",
+                "tooltip": "",
+                "icon": "nautilussvn-run",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_dbus_restart,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::DBus_Exit": {
+                "label": "Exit Service",
+                "tooltip": "",
+                "icon": "nautilussvn-stop",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_dbus_exit,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Bugs": {
+                "label": "Bugs",
+                "tooltip": "",
+                "icon": "nautilussvn-bug",
+                "signals": {
+                    "activate": {
+                        "callback": None,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Debug_Asynchronicity": {
+                "label": "Test Asynchronicity",
+                "tooltip": "",
+                "icon": "nautilussvn-asynchronous",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_debug_asynchronicity,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Debug_Shell": {
+                "label": "Open Shell",
+                "tooltip": "",
+                "icon": "gnome-terminal",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_debug_shell,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Refresh_Status": {
+                "label": "Refresh Status",
+                "tooltip": "",
+                "icon": "nautilussvn-refresh",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_refresh_status,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Debug_Revert": {
+                "label": "Debug Revert",
+                "tooltip": "",
+                "icon": "nautilussvn-revert",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_debug_revert,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Debug_Invalidate": {
+                "label": "Invalidate",
+                "tooltip": "",
+                "icon": "nautilussvn-clear",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_debug_invalidate,
+                        "args": None
+                    }
+                }
+            },
+            "NautilusSvn::Debug_Add_Emblem": {
+                "label": "Add Emblem",
+                "tooltip": "",
+                "icon": "nautilussvn-add",
+                "signals": {
+                    "activate": {
+                        "callback": self.callback_debug_add_emblem,
+                        "args": None
+                    }
+                }
+            },
+        }
+
+        menu_debug = [
+            {
+                "identifier": "NautilusSvn::DBus",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::DBus_Restart",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::DBus_Exit",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                ]
+            },
+            {
+                "identifier": "NautilusSvn::Bugs",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Debug_Asynchronicity",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    }
+                ]
+            },
+            {
+                "identifier": "NautilusSvn::Debug_Shell",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Refresh_Status",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug_Revert",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug_Invalidate",
+                "condition": (lambda: True),
+                "submenus": []
+            }
+        ]
+        
+        menu_unversioned_file_in_wc = [
+            {
+                "identifier": "NautilusSvn::Debug",
+                "condition": (lambda: True),
+                "submenus": menu_debug
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Add",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::AddToIgnore",
+                        "condition": (lambda: True),
+                        "submenus": [
+                            {
+                                "identifier": "NautilusSvn::AddToIgnoreFile",
+                                "condition": (lambda: True),
+                                "submenus": []
+                            },
+                            {
+                                "identifier": "NautilusSvn::AddToIgnoreExt",
+                                "condition": self.condition_ignore_ext,
+                                "submenus": []
+                            }
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator1",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Settings",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::About",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                ]
+            }
+        ]
+
+        menu_added_file_in_wc = [
+            {
+                "identifier": "NautilusSvn::Commit",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug",
+                "condition": (lambda: True),
+                "submenus": menu_debug
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
                 "condition": (lambda: True),
                 "submenus": [
                     {
                         "identifier": "NautilusSvn::Diff",
-                        "label": "Diff",
-                        "tooltip": "",
-                        "icon": "nautilussvn-diff",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_diff,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_diff,
-                        "submenus": [
-                            
-                        ]
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
-                        "identifier": "NautilusSvn::Show_Log",
-                        "label": "Show Log",
-                        "tooltip": "",
-                        "icon": "nautilussvn-show_log",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_show_log,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_show_log,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Add",
-                        "label": "Add",
-                        "tooltip": "",
-                        "icon": "nautilussvn-add",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_add,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_add,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::AddToIgnoreList",
-                        "label": "Add to ignore list",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {}, 
-                        "condition": self.condition_add_to_ignore_list,
-                        "submenus": [
-                            {
-                                "identifier": "NautilusSvn::AddToIgnoreFile",
-                                "label": os.path.basename(self.paths[0]),
-                                "tooltip": "",
-                                "icon": None,
-                                "signals": {
-                                    "activate": {
-                                        "callback": self.callback_ignore_filename,
-                                        "args": None
-                                    }
-                                }, 
-                                "condition": (lambda: True),
-                                "submenus": [
-                                ]
-                            },
-                            {
-                                "identifier": "NautilusSvn::AddToIgnoreExt",
-                                "label": "*.%s"%get_file_extension(self.paths[0]),
-                                "tooltip": "",
-                                "icon": None,
-                                "signals": {
-                                    "activate": {
-                                        "callback": self.callback_ignore_ext,
-                                        "args": None
-                                    }
-                                }, 
-                                "condition": self.condition_ignore_ext,
-                                "submenus": [
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::UpdateToRevision",
-                        "label": "Update to revision...",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_updateto,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_updateto,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Rename",
-                        "label": "Rename...",
-                        "tooltip": "",
-                        "icon": "nautilussvn-rename",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_rename,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_rename,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Delete",
-                        "label": "Delete",
-                        "tooltip": "",
-                        "icon": "nautilussvn-delete",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_delete,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_delete,
-                        "submenus": [
-                            
-                        ]
+                        "identifier": "NautilusSvn::Separator1",
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
                         "identifier": "NautilusSvn::Revert",
-                        "label": "Revert",
-                        "tooltip": "",
-                        "icon": "nautilussvn-revert",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_revert,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_revert,
-                        "submenus": [
-                            
-                        ]
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
-                        "identifier": "NautilusSvn::Resolve",
-                        "label": "Resolve",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_resolve,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_resolve,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::GetLock",
-                        "label": "Get Lock...",
-                        "tooltip": "",
-                        "icon": "nautilussvn-lock",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_lock,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_lock,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Export",
-                        "label": "Export",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_export,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_export,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Create",
-                        "label": "Create repository here...",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": None,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_create,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Import",
-                        "label": "Import",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_import,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_import,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::BranchTag",
-                        "label": "Branch/tag...",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_branch,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_branch,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Switch",
-                        "label": "Switch...",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_switch,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_switch,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Merge",
-                        "label": "Merge...",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_merge,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_merge,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::Blame",
-                        "label": "Blame...",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_blame,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_blame,
-                        "submenus": [
-                            
-                        ]
+                        "identifier": "NautilusSvn::Separator2",
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
                         "identifier": "NautilusSvn::Properties",
-                        "label": "Properties",
-                        "tooltip": "",
-                        "icon": "nautilussvn-properties",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_properties,
-                                "args": None
-                            }
-                        }, 
-                        "condition": self.condition_properties,
-                        "submenus": [
-                            
-                        ]
-                    },
-                    {
-                        "identifier": "NautilusSvn::SeparatorEnd",
-                        "label": "==============",
-                        "tooltip": "",
-                        "icon": None,
-                        "signals": {
-                            "activate": {
-                                "callback": None,
-                                "args": None
-                            }
-                        }, 
                         "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
+                        "submenus": []
                     },
                     {
-                        "identifier": "NautilusSvn::Help",
-                        "label": "Help",
-                        "tooltip": "",
-                        "icon": "nautilussvn-help",
-                        "signals": {
-                            "activate": {
-                                "callback": None,
-                                "args": None
-                            }
-                        }, 
-                        "condition": (lambda: False),
-                        "submenus": [
-                            
-                        ]
+                        "identifier": "NautilusSvn::Separator3",
+                        "condition": (lambda: True),
+                        "submenus": []
                     },
                     {
                         "identifier": "NautilusSvn::Settings",
-                        "label": "Settings",
-                        "tooltip": "",
-                        "icon": "nautilussvn-settings",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_settings,
-                                "args": None
-                            }
-                        }, 
                         "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
+                        "submenus": []
                     },
                     {
                         "identifier": "NautilusSvn::About",
-                        "label": "About",
-                        "tooltip": "",
-                        "icon": "nautilussvn-about",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_about,
-                                "args": None
-                            }
-                        }, 
                         "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    }
+                        "submenus": []
+                    },
                 ]
-            },
+            }
         ]
+
+        menu_normal_file_in_wc = [
+            {
+                "identifier": "NautilusSvn::Update",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Commit",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug",
+                "condition": (lambda: True),
+                "submenus": menu_debug
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Show_Log",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator1",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::UpdateToRevision",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Rename",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Delete",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::GetLock",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator2",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::BranchTag",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Switch",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Merge",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator3",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Blame",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator4",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Properties",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator5",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Settings",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::About",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                ]
+            }
+        ]
+
+        menu_modified_file_in_wc = [
+            {
+                "identifier": "NautilusSvn::Update",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Commit",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug",
+                "condition": (lambda: True),
+                "submenus": menu_debug
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Diff",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Show_Log",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator1",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::UpdateToRevision",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Rename",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Delete",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Revert",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::GetLock",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator2",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::BranchTag",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Switch",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Merge",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator3",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Blame",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator4",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Properties",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator5",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Settings",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::About",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                ]
+            }
+        ]
+
+        menu_multiple_files_in_wc = [
+            {
+                "identifier": "NautilusSvn::Update",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Commit",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug",
+                "condition": (lambda: True),
+                "submenus": menu_debug
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Diff",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator1",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::UpdateToRevision",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Delete",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::GetLock",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator2",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Properties",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator3",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Settings",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::About",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                ]
+            }
+        ]
+
+        menu_not_in_wc = [
+            {
+                "identifier": "NautilusSvn::Checkout",
+                "condition": (lambda: True),
+                "submenus": []
+            },
+            {
+                "identifier": "NautilusSvn::Debug",
+                "condition": (lambda: True),
+                "submenus": menu_debug
+            },
+            {
+                "identifier": "NautilusSvn::NautilusSvn",
+                "condition": (lambda: True),
+                "submenus": [
+                    {
+                        "identifier": "NautilusSvn::Export",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator1",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Create",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Import",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Separator2",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::Settings",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                    {
+                        "identifier": "NautilusSvn::About",
+                        "condition": (lambda: True),
+                        "submenus": []
+                    },
+                ]
+            }
+        ]
+
+        multiple = (len(self.paths) > 1)
+        wc = self.vcs_client.is_working_copy(self.paths[0])
         
-        return self.create_menu_from_definition(menu_definition)
+        # PROTOTYPE CODE
+        # TODO: Figure out the menus for the other states 
+        #       (deleted, conflicted, ignored, locked, read-only)
+        # TODO: Figure out how the menu changes for multiple selected files.
+        #       Are there different menu if both files are the same state?
+        menu = menu_not_in_wc
+        if wc:
+            if multiple:
+                menu = menu_multiple_files_in_wc
+            else:
+                if not self.vcs_client.is_versioned(self.paths[0]):
+                    menu = menu_unversioned_file_in_wc
+                else:
+                    if self.vcs_client.is_added(self.paths[0]):
+                        menu = menu_added_file_in_wc
+                    elif self.vcs_client.is_normal(self.paths[0]):
+                        menu = menu_normal_file_in_wc
+                    elif self.vcs_client.is_modified(self.paths[0]):
+                        menu = menu_modified_file_in_wc
+                    
+                    
+        return self.create_menu_from_definition(menu)
     
-    def create_menu_from_definition(self, menu_definition):
+    def create_menu_from_definition(self, menu_list):
         """
         
-        Create the actual menu from a menu definiton.
+        Create the actual menu from a menu list.
         
         A single menu item definition looks like::
         
@@ -997,16 +1361,17 @@ class MainContextMenu():
         """
         
         menu = []
-        for definition_item in menu_definition:
-            if definition_item["condition"]():
+        for list_item in menu_list:
+            definition = self.menu_dictionary[list_item["identifier"]]
+            if list_item["condition"]():
                 menu_item = nautilus.MenuItem(
-                    definition_item["identifier"],
-                    definition_item["label"],
-                    definition_item["tooltip"],
-                    definition_item["icon"]
+                    list_item["identifier"],
+                    definition["label"],
+                    definition["tooltip"],
+                    definition["icon"]
                 )
-                
-                for signal, value in definition_item["signals"].items():
+
+                for signal, value in definition["signals"].items():
                     if value["callback"] != None:
                         # FIXME: the adding of arguments need to be done properly
                         if "kwargs" in value:
@@ -1020,7 +1385,7 @@ class MainContextMenu():
                 # having any submenu items later (which would result in the 
                 # menu item not being displayed) we have to check first.
                 submenu = self.create_menu_from_definition(
-                    definition_item["submenus"]
+                    list_item["submenus"]
                 )
                 
                 if len(submenu) > 0:
@@ -1219,6 +1584,12 @@ class MainContextMenu():
     def condition_create(self):
         return (len(self.paths) == 1 and
                 not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
+    
+    def condition_sep_difflog(self):
+        return (
+            self.condition_diff()
+            or self.condition_show_log()
+        )
     
     #
     # Callbacks
