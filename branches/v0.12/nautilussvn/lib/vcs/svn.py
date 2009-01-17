@@ -1160,11 +1160,15 @@ class StatusMonitor():
     #:     
     watches = {}
     
+    #: 
+    #:
+    status_cache = {}
+    
     #: The mask for the inotify events we're interested in.
     #: TODO: understand how masking works
     #: TODO: maybe we should just analyze VCSProcessEvent and determine this 
     #: dynamically because one might tend to forgot to update these
-    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO | EventsCodes.IN_CREATE | EventsCodes.IN_DELETE
+    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO | EventsCodes.IN_CREATE
     
     class VCSProcessEvent(ProcessEvent):
         """
@@ -1180,10 +1184,9 @@ class StatusMonitor():
             path = event.path
             if event.name: path = os.path.join(path, event.name)
             
-            # Ignore a bunch of files that we don't really need to pay attention
-            # to, but would generate a whole lot of events.
-            if path.endswith(".svn/lock"): return
-            if path.find(".svn/tmp") != -1: return
+            # We're only interested in the entries file from the Subversion
+            # working copy administration area (.svn) not locks, etc.
+            if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
             
             # Begin debugging code
             print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
@@ -1208,9 +1211,7 @@ class StatusMonitor():
             self.process(event)
             
         def process_IN_CREATE(self, event):
-            self.process(event)
-            
-        def process_IN_DELETE(self, event):
+            # FIXME: we shouldn't be attaching watches, auto_add should handle this
             self.process(event)
     
     def __init__(self, callback):
@@ -1251,7 +1252,7 @@ class StatusMonitor():
             path_to_check = split_path(path_to_check)
         
         if not watch_is_already_set and path_to_attach:
-            self.watch_manager.add_watch(path_to_attach, self.mask, rec=True)
+            self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
             self.watches[path_to_attach] = None # don't need a value
             #~ print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
             
@@ -1277,12 +1278,23 @@ class StatusMonitor():
         
         vcs_client = SVN()
         
+        # Handle changes to an entries file a little bit differently 
+        # TODO: if we could find out what was changed in the entries file that
+        # would probably help
+        if path.endswith(".svn/entries"):
+            path = path[0:path.find(".svn")].rstrip("/")
+            for item_basename in os.listdir(path):
+                item_path = os.path.join(path, item_basename)
+                self.status(item_path, invalidate=invalidate)
+            return
+            
+        # Directories and all other files
         priority_status = None 
         while path != "":
-            print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
+            #~ print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
             # Some statuses take precedence in relation to other statuses
             if priority_status == "conflicted":
-                self.callback(path, "conflicted")
+                self.do_callback(path, "conflicted")
             else:
                 try:
                     status = vcs_client.status_with_cache(
@@ -1296,15 +1308,15 @@ class StatusMonitor():
                     continue
                     
                 # Do a quick callback and then figure out the actual status
-                self.callback(path, PySVN.STATUS[status])
+                self.do_callback(path, PySVN.STATUS[status])
                 
                 if isfile(path):
                     if status == SVN.STATUS["conflicted"]:
                         priority_status = "conflicted"
-                        self.callback(path, "conflicted")
+                        self.do_callback(path, "conflicted")
                     else:
                         if status in self.MODIFIED_STATUSES:
-                            self.callback(path, PySVN.STATUS[status])
+                            self.do_callback(path, PySVN.STATUS[status])
                 elif isdir(path):
                     sub_statuses = vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
                     statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
@@ -1312,21 +1324,39 @@ class StatusMonitor():
                     # Let's figure out if we have any priority statuses
                     if SVN.STATUS["conflicted"] in statuses:
                         priority_status = "conflicted"
-                        self.callback(path, "conflicted")
+                        self.do_callback(path, "conflicted")
                     # No priority status, let's find out what we do have
                     else:
                         # An item it's own modified status takes precedence over the statuses of children.
                         if status in self.MODIFIED_STATUSES:
-                            self.callback(path, PySVN.STATUS[status])
+                            self.do_callback(path, PySVN.STATUS[status])
                         else:
                             # A directory should have a modified status when any of its children
                             # have a certain status (see modified_statuses below). Jason thought up 
                             # of a nifty way to do this by using sets and the bitwise AND operator (&).
                             if len(set(self.MODIFIED_STATUSES) & statuses):
-                                self.callback(path, "modified")
+                                self.do_callback(path, "modified")
                                 
             path = split_path(path)
-
+            
+    def do_callback(self, path, status):
+        """
+        Figure out whether or not we should do a callback (if we do too many
+        callbacks the extension will hang).
+        """
+        
+        if path not in self.status_cache: 
+            self.status_cache[path] = {
+                "current_status": None,
+                "previous_status": None
+            }
+            
+        self.status_cache[path]["previous_status"] = self.status_cache[path]["current_status"]
+        self.status_cache[path]["current_status"] = status
+        
+        if self.status_cache[path]["current_status"] != self.status_cache[path]["previous_status"]:
+            self.callback(path, status)
+        
 class PySVN():
     """
     Used to convert all sorts of PySVN objects to primitives which can be 
