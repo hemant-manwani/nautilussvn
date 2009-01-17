@@ -826,7 +826,7 @@ class MainContextMenu():
                         "icon": "nautilussvn-run",
                         "signals": {
                             "activate": {
-                                "callback": None,
+                                "callback": self.callback_create,
                                 "args": None
                             }
                         }, 
@@ -1540,3 +1540,6 @@ class MainContextMenu():
 
     def callback_unlock(self, menu_item, paths):
         launch_ui_window("unlock", paths)
+        
+    def callback_create(self, menu_item, paths):
+        launch_ui_window("create", paths)
