@@ -1472,7 +1472,7 @@ class MainContextMenu():
     # End debugging callbacks
 
     def callback_checkout(self, menu_item, paths):
-        launch_ui_window("checkout", paths[0])
+        launch_ui_window("checkout", paths)
     
     def callback_update(self, menu_item, paths):
         launch_ui_window("update", paths)
@@ -1490,16 +1490,16 @@ class MainContextMenu():
         launch_ui_window("revert", paths)
 
     def callback_diff(self, menu_item, paths):
-        launch_diff_tool(paths[0])
+        launch_diff_tool(paths)
     
     def callback_show_log(self, menu_item, paths):
-        launch_ui_window("log", paths[0])
+        launch_ui_window("log", paths)
 
     def callback_rename(self, menu_item, paths):
-        launch_ui_window("rename", paths[0])
+        launch_ui_window("rename", paths)
 
     def callback_properties(self, menu_item, paths):
-        launch_ui_window("properties", paths[0])
+        launch_ui_window("properties", paths)
 
     def callback_about(self, menu_item, paths):
         launch_ui_window("about")
@@ -1508,37 +1508,41 @@ class MainContextMenu():
         launch_ui_window("settings")
     
     def callback_ignore_filename(self, menu_item, paths):
-        pass
+        from nautilussvn.ui.ignore import Ignore
+        ignore = Ignore(paths[0], os.path.basename(paths[0]))
+        ignore.start()
 
     def callback_ignore_ext(self, menu_item, paths):
-        pass
+        from nautilussvn.ui.ignore import Ignore
+        ignore = Ignore(paths[0], "*%s" % get_file_extension(paths[0]))
+        ignore.start()
 
     def callback_lock(self, menu_item, paths):
         launch_ui_window("lock", paths)
 
     def callback_branch(self, menu_item, paths):
-        launch_ui_window("branch", paths[0])
+        launch_ui_window("branch", paths)
 
     def callback_switch(self, menu_item, paths):
-        launch_ui_window("switch", paths[0])
+        launch_ui_window("switch", paths)
 
     def callback_merge(self, menu_item, paths):
-        launch_ui_window("merge", paths[0])
+        launch_ui_window("merge", paths)
 
     def callback_import(self, menu_item, paths):
-        launch_ui_window("import", paths[0])
+        launch_ui_window("import", paths)
 
     def callback_export(self, menu_item, paths):
-        launch_ui_window("export", paths[0])
+        launch_ui_window("export", paths)
 
     def callback_updateto(self, menu_item, paths):
-        launch_ui_window("updateto", paths[0])
+        launch_ui_window("updateto", paths)
     
     def callback_resolve(self, menu_item, paths):
         launch_ui_window("resolve", paths)
         
     def callback_blame(self, menu_item, paths):
-        launch_ui_window("blame", paths[0])
+        launch_ui_window("blame", paths)
 
     def callback_unlock(self, menu_item, paths):
         launch_ui_window("unlock", paths)
