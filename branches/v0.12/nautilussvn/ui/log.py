@@ -313,7 +313,7 @@ class Log(InterfaceView):
         self.action = VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set(),
-            visible=False
+            notification=False
         )        
 
         start = self.vcs.revision("head")

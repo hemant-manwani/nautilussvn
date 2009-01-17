@@ -106,7 +106,7 @@ class VCSAction(threading.Thread):
     
     """
     
-    def __init__(self, client, register_gtk_quit=False, visible=True):
+    def __init__(self, client, register_gtk_quit=False, notification=True):
         threading.Thread.__init__(self)
         
         self.message = "Empty Message"
@@ -126,7 +126,7 @@ class VCSAction(threading.Thread):
 
         self.notification = Notification(
             callback_cancel=self.set_cancel,
-            visible=visible
+            visible=notification
         )
         
         self.pbar_ticks = None
