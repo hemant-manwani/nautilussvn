@@ -342,7 +342,6 @@ class Commit(InterfaceView):
         prop_value = os.path.basename(data[1])
         
         if self.vcs.propset(data[1], prop_name, prop_value):
-            #self.files_table.remove(self.last_row_clicked)
             self.refresh_row_status()
         
     def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
@@ -350,7 +349,6 @@ class Commit(InterfaceView):
         prop_value = "*%s" % data[2]
         
         if self.vcs.propset(data[1], prop_name, prop_value):
-            #self.files_table.remove(self.last_row_clicked)
             self.refresh_row_status()
         
     def on_previous_messages_clicked(self, widget, data=None):
