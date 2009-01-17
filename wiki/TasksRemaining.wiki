@@ -14,4 +14,9 @@
 = Tasks remaining for v0.12 Final =
 
   * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
+  * Do a code review for the entire code base and refactor based on the results, with the goal of making the code more elegant, flexible, maintainable, robust etc.. Subtasks include: 
+    * Eliminate all redundancy (e.g. context menu generation)
+    * Logically organize helper functions (for example helper.path, helper.string etc.)
+    * Make all functionality more robust (e.g. defensive coding, handling exceptions properly without "crashing" the extension)
+    * Refactor DBus code since it is not up to DBus standards. -- brucevdkooij
   * Add the NautilusSvn icons to the UI window titlebars -- adamplumb
