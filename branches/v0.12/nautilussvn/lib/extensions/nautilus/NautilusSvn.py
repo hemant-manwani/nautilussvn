@@ -1484,12 +1484,7 @@ class MainContextMenu():
         launch_ui_window("add", paths)
 
     def callback_delete(self, menu_item, paths):
-        # This really needs to go thgou
-        client = pysvn.Client()
-        for path in paths:
-            # TODO: Abstract this away from pysvn
-            client.remove(path, force=True)
-        self.callback_refresh_status(menu_item, paths)
+        launch_ui_window("delete", paths)
 
     def callback_revert(self, menu_item, paths):
         launch_ui_window("revert", paths)
