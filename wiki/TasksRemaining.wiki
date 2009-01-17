@@ -23,3 +23,7 @@
     * Refactor DBus code since it is not up to DBus standards. -- brucevdkooij
   * Add the NautilusSvn icons to the UI window titlebars -- adamplumb
   * Allow resizing of table columns -- adamplumb
+
+= Future =
+
+  * Dialogs should always be centered relative to their parent (in our case Nautilus). These dialogs are transient (see set_transient_for, which we cannot use). -- adamplumb
