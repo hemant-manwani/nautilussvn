@@ -9,7 +9,7 @@
   * add is_locked/has_locked methods -- brucevdkooij
   * ~~Create invisible interface for deleting -- adamplumb~~
   * Add missing merge options to the final page of the merge wizard -- adamplumb
-  * Create invisible interface for ignoring -- adamplumb
+  * ~~Create invisible interface for ignoring -- adamplumb~~
   * Allow multiple selection for properties -- adamplumb
   * Create invisible interface for "Create Repository" -- adamplumb
 
