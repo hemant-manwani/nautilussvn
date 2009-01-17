@@ -6,13 +6,17 @@
   * Get UIs to refresh file manager status -- brucevdkooij
   * Call status functions asynchronously -- brucevdkooij
   * add is_conflicted/has_conflicted methods -- brucevdkooij
+    * implement the condition_resolve method -- adamplumb
   * add is_locked/has_locked methods -- brucevdkooij
+    * implement the condition_unlock method -- adamplumb
   * ~~Create invisible interface for deleting -- adamplumb~~
   * ~~Create invisible interface for ignoring -- adamplumb~~
   * ~~Create invisible interface for "Create Repository" -- adamplumb~~
 
 = Tasks remaining for v0.12 Final =
 
+  * Create packages for Ubuntu and Fedora
+  * Document installation process for Ubuntu, Fedora, OpenSUSE, maybe others.
   * Allow multiple selection for properties -- adamplumb
   * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
   * Do a code review for the entire code base and refactor based on the results, with the goal of making the code more elegant, flexible, maintainable, robust etc.. Subtasks include: 
