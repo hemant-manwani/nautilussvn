@@ -11,7 +11,7 @@
   * Add missing merge options to the final page of the merge wizard -- adamplumb
   * ~~Create invisible interface for ignoring -- adamplumb~~
   * Allow multiple selection for properties -- adamplumb
-  * Create invisible interface for "Create Repository" -- adamplumb
+  * ~~Create invisible interface for "Create Repository" -- adamplumb~~
 
 = Tasks remaining for v0.12 Final =
 
