@@ -1180,6 +1180,11 @@ class StatusMonitor():
             path = event.path
             if event.name: path = os.path.join(path, event.name)
             
+            # Ignore a bunch of files that we don't really need to pay attention
+            # to, but would generate a whole lot of events.
+            if path.endswith(".svn/lock"): return
+            if path.find(".svn/tmp") != -1: return
+            
             # Begin debugging code
             print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
             # End debugging code
