@@ -213,7 +213,7 @@ class SVN:
                     # that only an empty check was done before.
                     (depth == pysvn.depth.infinity and
                         len(self.status_cache[path]) == 1)):
-                print "Debug: status_with_cache() invalidated %s" % path
+                #~ print "Debug: status_with_cache() invalidated %s" % path
                 statuses = self.client.status(path, depth=depth)
             else:
                 return self.status_cache[path]
@@ -1164,7 +1164,7 @@ class StatusMonitor():
     #: TODO: understand how masking works
     #: TODO: maybe we should just analyze VCSProcessEvent and determine this 
     #: dynamically because one might tend to forgot to update these
-    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO
+    mask = EventsCodes.IN_MODIFY | EventsCodes.IN_MOVED_TO | EventsCodes.IN_CREATE | EventsCodes.IN_DELETE
     
     class VCSProcessEvent(ProcessEvent):
         """
@@ -1200,6 +1200,12 @@ class StatusMonitor():
             #
             # Once get_file_items() is called on an item, we once again have the 
             # NautilusVFSFile we need (happens whenever an item is selected).
+            self.process(event)
+            
+        def process_IN_CREATE(self, event):
+            self.process(event)
+            
+        def process_IN_DELETE(self, event):
             self.process(event)
     
     def __init__(self, callback):
@@ -1264,20 +1270,25 @@ class StatusMonitor():
         @param  invalidate: Whether or not the cache should be bypassed.
         """
         
-        print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
-        
         vcs_client = SVN()
         
         priority_status = None 
         while path != "":
+            print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
             # Some statuses take precedence in relation to other statuses
             if priority_status == "conflicted":
                 self.callback(path, "conflicted")
             else:
-                status = vcs_client.status_with_cache(
-                    path, 
-                    invalidate=invalidate, 
-                    depth=pysvn.depth.empty)[-1].data["text_status"]
+                try:
+                    status = vcs_client.status_with_cache(
+                        path, 
+                        invalidate=invalidate, 
+                        depth=pysvn.depth.empty)[-1].data["text_status"]
+                except IndexError, e:
+                    # TODO: This probably has to do with temporary files
+                    print "    DEBUG: EXCEPTION in StatusMonitor.status(): %s" % str(e)
+                    path = split_path(path)
+                    continue
                     
                 # Do a quick callback and then figure out the actual status
                 self.callback(path, PySVN.STATUS[status])
