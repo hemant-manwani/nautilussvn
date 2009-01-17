@@ -10,11 +10,11 @@
   * ~~Create invisible interface for deleting -- adamplumb~~
   * Add missing merge options to the final page of the merge wizard -- adamplumb
   * ~~Create invisible interface for ignoring -- adamplumb~~
-  * Allow multiple selection for properties -- adamplumb
   * ~~Create invisible interface for "Create Repository" -- adamplumb~~
 
 = Tasks remaining for v0.12 Final =
 
+  * Allow multiple selection for properties -- adamplumb
   * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
   * Do a code review for the entire code base and refactor based on the results, with the goal of making the code more elegant, flexible, maintainable, robust etc.. Subtasks include: 
     * Eliminate all redundancy (e.g. context menu generation)
