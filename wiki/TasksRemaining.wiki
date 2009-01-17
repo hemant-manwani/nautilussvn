@@ -4,6 +4,7 @@
 = Tasks remaining for v0.12 Beta =
 
   * Get UIs to refresh file manager status -- brucevdkooij
+  * Call status functions asynchronously -- brucevdkooij
   * add is_conflicted/has_conflicted methods -- brucevdkooij
   * add is_locked/has_locked methods -- brucevdkooij
   * ~~Create invisible interface for deleting -- adamplumb~~
