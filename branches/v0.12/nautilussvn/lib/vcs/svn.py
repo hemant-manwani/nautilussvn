@@ -37,8 +37,7 @@ from nautilussvn.lib.helper import split_path
 
 class SVN:
     """
-    FIXME: when using the DBus service (in a seperate process) two caches are
-    maintained. We should probably allow this class to be used over DBus too.
+    
     """
     
     STATUS = {
@@ -183,7 +182,6 @@ class SVN:
         else:
             return self.client.status(path, recurse=recurse)
     
-    @timeit
     def status_with_cache(self, path, invalidate=False, depth=pysvn.depth.infinity):
         """
         
@@ -1102,7 +1100,7 @@ class StatusMonitor():
     """
     
     The C{StatusMonitor} is basically a replacement for the currently limited 
-    C{update_file_info} function.
+    C{update_file_info} function. 
     
     What C{StatusMonitor} does:
     
@@ -1142,7 +1140,15 @@ class StatusMonitor():
 
     
     """
-   
+    
+    #: A set of statuses which count as modified in TortoiseSVN emblem speak.
+    MODIFIED_STATUSES = [
+        pysvn.wc_status_kind.added,
+        pysvn.wc_status_kind.deleted,
+        pysvn.wc_status_kind.replaced,
+        pysvn.wc_status_kind.modified
+    ]
+    
     #: A dictionary to keep track of the paths we're watching.
     #: 
     #: It looks like:::
@@ -1207,7 +1213,6 @@ class StatusMonitor():
     def has_watch(self, path):
         return (path in self.watches)
     
-    @timeit
     def add_watch(self, path):
         """
         Request a watch to be added for path. This function will figure out
@@ -1237,7 +1242,7 @@ class StatusMonitor():
         if not watch_is_already_set and path_to_attach:
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True)
             self.watches[path_to_attach] = None # don't need a value
-            print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
+            #~ print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
             
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and
@@ -1247,42 +1252,10 @@ class StatusMonitor():
     def status(self, path, invalidate=False):
         """
         
+        TODO: This function is really quite unmaintainable.
+        
         This function doesn't return anything but calls the callback supplied
         to C{StatusMonitor} by the caller.
-        
-        Pseudocode:
-        
-          - If the item is added, deleted, replaced or modified then this is the
-            status else if the item is a directory and is itself normal but a 
-            path below it is added, deleted, replaced or modified then the status 
-            is modified.
-            
-          - Every parent is modified aswell, unless it is added, deleted, replaced.
-        
-        UML sequence diagram depicting the status checks::
-        
-            +-----------------+                  +-------------+
-            |  StatusMonitor  |                  |  VCSClient  |
-            +-----------------+                  +-------------+
-                    |                                   |
-                    |    status(path, depth=empty)      |
-                    |---------------------------------->|
-                    |+-------------------+-------------+|
-                    || [if isdir(path)]  |             ||
-                    |+-------------------+             ||
-                    ||                                 ||
-                    ||          status(path)           ||
-                    ||-------------------------------->||
-                    |+---------------------------------+|
-                    |                                   |
-                    |+--------------------------+------+|
-                    || [foreach parent folder]  |      ||
-                    |+--------------------------+      ||
-                    ||                                 ||
-                    ||          status(path)           ||
-                    ||-------------------------------->||
-                    |+---------------------------------+|
-                    |                                   |
         
         @type   path: string
         @param  path: The path for which to check the status.
@@ -1295,40 +1268,47 @@ class StatusMonitor():
         
         vcs_client = SVN()
         
-        modified_statuses = set([
-            pysvn.wc_status_kind.added,
-            pysvn.wc_status_kind.deleted,
-            pysvn.wc_status_kind.replaced,
-            pysvn.wc_status_kind.modified
-        ])
-                    
-        child_status = ""
+        priority_status = None 
         while path != "":
-            status = vcs_client.status_with_cache(
-                path, 
-                invalidate=invalidate, 
-                depth=pysvn.depth.empty)[-1].data["text_status"]
-                
-            # Do a quick callback and then figure out the actual status
-            self.callback(path, PySVN.STATUS[status])
-            
-            if status in modified_statuses:
+            # Some statuses take precedence in relation to other statuses
+            if priority_status == "conflicted":
+                self.callback(path, "conflicted")
+            else:
+                status = vcs_client.status_with_cache(
+                    path, 
+                    invalidate=invalidate, 
+                    depth=pysvn.depth.empty)[-1].data["text_status"]
+                    
+                # Do a quick callback and then figure out the actual status
                 self.callback(path, PySVN.STATUS[status])
-                child_status = "modified"
-            elif child_status == "modified":
-                self.callback(path, "modified")
-            elif (isdir(path) and
-                    status == pysvn.wc_status_kind.normal):
+                
+                if isfile(path):
+                    if status == SVN.STATUS["conflicted"]:
+                        priority_status = "conflicted"
+                        self.callback(path, "conflicted")
+                    else:
+                        if status in self.MODIFIED_STATUSES:
+                            self.callback(path, PySVN.STATUS[status])
+                elif isdir(path):
                     sub_statuses = vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
                     statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
-                        
-                    # A directory should have a modified status when any of its children
-                    # have a certain status (see modified_statuses below). Jason thought up 
-                    # of a nifty way to do this by using sets and the bitwise AND operator (&).
-                    if len(modified_statuses & statuses):
-                        self.callback(path, "modified")
-                        child_status = "modified"
-            
+                    
+                    # Let's figure out if we have any priority statuses
+                    if SVN.STATUS["conflicted"] in statuses:
+                        priority_status = "conflicted"
+                        self.callback(path, "conflicted")
+                    # No priority status, let's find out what we do have
+                    else:
+                        # An item it's own modified status takes precedence over the statuses of children.
+                        if status in self.MODIFIED_STATUSES:
+                            self.callback(path, PySVN.STATUS[status])
+                        else:
+                            # A directory should have a modified status when any of its children
+                            # have a certain status (see modified_statuses below). Jason thought up 
+                            # of a nifty way to do this by using sets and the bitwise AND operator (&).
+                            if len(set(self.MODIFIED_STATUSES) & statuses):
+                                self.callback(path, "modified")
+                                
             path = split_path(path)
 
 class PySVN():

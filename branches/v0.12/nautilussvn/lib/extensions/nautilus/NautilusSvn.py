@@ -99,10 +99,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # of any status changes.
         if self.dbus_service_available:
             self.status_monitor = StatusMonitor(self.cb_status)
-        else:
-            # Might aswell fallback on our non DBus status monitor
-            from nautilussvn.lib.vcs.svn import StatusMonitor as LocalStatusMonitor
-            self.status_monitor = LocalStatusMonitor(self.cb_status)
         
     def get_columns(self):
         """
@@ -137,11 +133,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
           - Add a watch for this item to the C{StatusMonitor} (it's 
             C{StatusMonitor}'s responsibility to check whether this is needed)
         
-        What we do to stay up-to-date is:
-        
-          - We'll notify C{StatusMonitor} of versioning actions (add, commit, lock, 
-            unlock etc.), we register callbacks with dialogs for this
-        
         When C{StatusMonitor} calls us back we just look the C{NautilusVFSFile} up in
         the look up table using the path and apply an emblem according to the 
         status we've been given.
@@ -161,7 +152,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        print "Debug: update_file_info() called for %s" % path
+        #~ print "Debug: update_file_info() called for %s" % path
         # End debugging code
         
         # Always replace the item in the table with the one we receive, because
@@ -173,6 +164,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if path in self.statuses:
             self.set_emblem_by_status(path, self.statuses[path])
         
+        # Figure out whether or not we should do a status check
         vcs_client = SVNClient()
         has_watch = self.status_monitor.has_watch(path)
         is_in_a_or_a_working_copy = vcs_client.is_in_a_or_a_working_copy(path)
@@ -180,12 +172,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not has_watch and is_in_a_or_a_working_copy:
             self.status_monitor.add_watch(path)
             self.status_monitor.status(path)
-            
+        
         # If we access the StatusMonitor over DBus it keeps running even though 
         # Nautilus is not. So watches will stay attached. So an initial status 
         # check won't be done. Though there are other situations where there is
         # a watch but we don't have a status yet.
-        if (has_watch and
+        elif (has_watch and
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
             self.status_monitor.status(path)
@@ -701,7 +693,7 @@ class MainContextMenu():
                                 "args": None
                             }
                         }, 
-                        "condition": self.condition_updateto,
+                        "condition": self.condition_update_to,
                         "submenus": [
                             
                         ]
@@ -1069,18 +1061,19 @@ class MainContextMenu():
         """
         
         menu = []
-        prevlabel = None
+        previous_label = None
         is_first = True
         index = 0
         length = len(menu_definition)
+        
         for definition_item in menu_definition:
-            is_last = (index+1 == length)
+            is_last = (index + 1 == length)
             if definition_item["condition"]():
 
                 # If the item is a separator, don't show it if this is the first
                 # or last item, or if the previous item was a separator
                 if (definition_item["label"] == self.SEPARATOR and
-                        (is_first or is_last or prevlabel == self.SEPARATOR)):
+                        (is_first or is_last or previous_label == self.SEPARATOR)):
                     index += 1
                     continue
             
@@ -1101,12 +1094,12 @@ class MainContextMenu():
                 
                 menu.append(menu_item)
                 
-                # The menu item above as just been added, so we can note that
+                # The menu item above has just been added, so we can note that
                 # we're no longer on the first menu item.  And we'll keep
                 # track of this item so the next iteration can test if it should
                 # show a separator or not
                 is_first = False
-                prevlabel = definition_item["label"]
+                previous_label = definition_item["label"]
                 
                 # Since we can't just call set_submenu and run the risk of not
                 # having any submenu items later (which would result in the 
@@ -1239,6 +1232,7 @@ class MainContextMenu():
         
     def condition_blame(self):
         if (len(self.paths) == 1 and
+                not isdir(self.paths[0]) and
                 self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]) and
                 self.vcs_client.is_versioned(self.paths[0]) and
                 not self.vcs_client.is_added(self.paths[0])):
@@ -1302,7 +1296,7 @@ class MainContextMenu():
         return (len(self.paths) == 1 and
                 not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
     
-    def condition_updateto(self):
+    def condition_update_to(self):
         return (len(self.paths) == 1 and 
                 self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
     
