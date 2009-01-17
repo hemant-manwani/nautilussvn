@@ -24,7 +24,7 @@ import pygtk
 import gobject
 import gtk
 
-from nautilussvn.ui import InterfaceView
+from nautilussvn.ui import InterfaceView, InterfaceNonView
 from nautilussvn.ui.add import Add
 from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
@@ -89,6 +89,20 @@ class Unlock(Add):
 
     def condition_ignore_submenu(self):
         return False
+
+class UnlockQuick(InterfaceNonView):
+    """
+    This class provides a handler to unlock functionality.
+    
+    """
+
+    def __init__(self, path):
+        InterfaceNonView.__init__(self)
+        self.path = path
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+
+    def start(self):
+        self.vcs.unlock(self.path, force=True)
         
 if __name__ == "__main__":
     import sys
