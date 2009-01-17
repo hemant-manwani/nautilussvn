@@ -31,7 +31,6 @@ import re
 import time
 import shutil
 
-from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.settings
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
@@ -115,9 +114,6 @@ def get_previous_messages():
     
     path = get_previous_messages_path()
     if not os.path.exists(path):
-        MessageBox(
-            "There are no previous messages to view"
-        )
         return
         
     lines = open(path, "r").readlines()
@@ -266,7 +262,6 @@ def launch_diff_tool(path):
         return
     
     if not os.path.exists(diff["path"]):
-        MessageBox("The diff tool %s was not found on your system.  Please either install this application or update your settings." % diff["path"])
         return
 
     patch = os.popen("svn diff '%s'" % path).read()
@@ -444,7 +439,6 @@ def launch_ui_window(filename, args):
     path = "%s/ui/%s.py" % (basedir, filename)
 
     if not os.path.exists(path):
-        MessageBox("The window %s does not exist" % filename)
         return
         
     popen_args = ["/usr/bin/python", path]
