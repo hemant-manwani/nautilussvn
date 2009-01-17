@@ -302,8 +302,13 @@ class SVN:
         return False
     
     def is_locked(self, path):
-        return self.client.info2(path)[0][1].lock is not None
-        
+        is_locked = False
+        try:
+            is_locked = self.client.info2(path)[0][1].lock is not None
+        except pysvn.ClientError, e:
+            print str(e)
+            
+        return is_locked
     #
     # has
     #
