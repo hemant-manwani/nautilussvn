@@ -67,6 +67,8 @@ class Lock(InterfaceView):
             locked = ""
             if self.vcs.is_locked(item.path):
                 locked = "Yes"
+            if not self.vcs.is_versioned(item.path):
+                continue
         
             self.files_table.append([
                 False, 
@@ -78,7 +80,20 @@ class Lock(InterfaceView):
         self.message = nautilussvn.ui.widget.TextView(
             self.get_widget("message")
         )
+
+    #
+    # Helper functions
+    # 
     
+    def refresh_row_status(self):
+        row = self.files_table.get_row(self.last_row_clicked)
+        
+        locked = ""
+        if self.vcs.is_locked(row[1]):
+            locked = "Yes"
+
+        row[3] = locked
+
     #
     # UI Signal Callbacks
     #
@@ -186,11 +201,7 @@ class Lock(InterfaceView):
                 context_menu.show(event)
 
     def on_files_table_row_doubleclicked(self, treeview, event, col):
-        treeview.grab_focus()
-        treeview.set_cursor(event[0], col, 0)
-        treeview_model = treeview.get_model()
-        fileinfo = treeview_model[event[0]]
-        print "Row Double-clicked"
+        pass
 
     def on_previous_messages_clicked(self, widget, data=None):
         dialog = nautilussvn.ui.dialog.PreviousMessages()
@@ -215,7 +226,10 @@ class Lock(InterfaceView):
         nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_remove_lock_activated(self, widget, data=None):
-        print "Remove lock"    
+        from nautilussvn.ui.unlock import UnlockQuick
+        unlock = UnlockQuick(data[1])
+        unlock.start()
+        self.refresh_row_status()
 
     #
     # Context menu conditions
