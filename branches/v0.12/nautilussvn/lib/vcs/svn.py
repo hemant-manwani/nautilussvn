@@ -463,8 +463,7 @@ class SVN:
 
         """
 
-        st = self.client.status(path)
-        if st[0].text_status == self.STATUS["unversioned"]:
+        if not self.is_versioned(path) and os.path.isfile(path):
             path = os.path.dirname(path)
         
         return path
@@ -549,7 +548,7 @@ class SVN:
         """
 
         path = self.proppath(path)
-        
+
         try:
             returner = self.client.propget(
                 prop_name,
