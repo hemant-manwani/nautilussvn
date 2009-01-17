@@ -20,6 +20,9 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+import subprocess
+
 import nautilussvn.ui.dialog
 
 class Create:
@@ -27,9 +30,23 @@ class Create:
     Provides an interface to create a vcs repository
     """
     
-    def __init__(self):
-        #Do stuff to create repository        
-        nautilussvn.ui.dialog.MessageBox("Repository successfully created")
+    # TODO: This class in massively Subversion-biased.  In the future, we'll
+    # need to refactor to make it platform-agnostic
+    def __init__(self, path):
+    
+        if not os.path.isdir(path):
+            os.makedirs(path)
+        
+        # Let svnadmin return a bad value if a repo already exists there
+        ret = subprocess.call(["/usr/bin/svnadmin", "create", path])
+        if ret == 0:
+            nautilussvn.ui.dialog.MessageBox("Repository successfully created")
+        else:
+            nautilussvn.ui.dialog.MessageBox("There was an error creating the repository -- Error code: %s" % ret)
         
 if __name__ == "__main__":
-    window = Create()
+    import sys
+    args = sys.argv[1:]
+    if len(args) < 1:
+        raise SystemExit("Usage: python %s [path]" % __file__)
+    Create(args[0])
