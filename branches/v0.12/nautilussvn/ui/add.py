@@ -177,20 +177,21 @@ class Add(InterfaceView):
         if confirm.run():
             nautilussvn.lib.helper.delete_item(data[1])
             self.files_table.remove(self.last_row_clicked)
-        
+
     def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
         prop_name = self.vcs.PROPERTIES["ignore"]
         prop_value = os.path.basename(data[1])
         
-        if self.vcs.propset("", prop_name, prop_value):
+        if self.vcs.propset(data[1], prop_name, prop_value):
             self.files_table.remove(self.last_row_clicked)
         
     def on_subcontext_ignore_by_fileext_activated(self, widget, data=None):
         prop_name = self.vcs.PROPERTIES["ignore"]
         prop_value = "*%s" % data[2]
         
-        if self.vcs.propset("", prop_name, prop_value):
+        if self.vcs.propset(data[1], prop_name, prop_value):
             self.files_table.remove(self.last_row_clicked)
+            
 
     #
     # Context Menu Conditions
