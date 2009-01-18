@@ -1306,17 +1306,13 @@ class StatusMonitor():
                     print "    DEBUG: EXCEPTION in StatusMonitor.status(): %s" % str(e)
                     path = split_path(path)
                     continue
-                    
-                # Do a quick callback and then figure out the actual status
-                self.do_callback(path, PySVN.STATUS[status])
                 
                 if isfile(path):
                     if status == SVN.STATUS["conflicted"]:
                         priority_status = "conflicted"
                         self.do_callback(path, "conflicted")
                     else:
-                        if status in self.MODIFIED_STATUSES:
-                            self.do_callback(path, PySVN.STATUS[status])
+                        self.do_callback(path, PySVN.STATUS[status])
                 elif isdir(path):
                     sub_statuses = vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
                     statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
@@ -1336,6 +1332,8 @@ class StatusMonitor():
                             # of a nifty way to do this by using sets and the bitwise AND operator (&).
                             if len(set(self.MODIFIED_STATUSES) & statuses):
                                 self.do_callback(path, "modified")
+                            else:
+                                self.do_callback(path, PySVN.STATUS[status])
                                 
             path = split_path(path)
             
