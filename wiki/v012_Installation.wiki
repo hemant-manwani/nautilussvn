@@ -7,7 +7,7 @@
 
 1. Install the following packages through your package manager.
 {{{
-sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade python-dbus python-svn
+sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade python-dbus python-svn subversion
 }}}
 
 == OpenSUSE 11.1 ==
@@ -15,14 +15,9 @@ sudo apt-get install python-nautilus python-configobj python-pyinotify python-gt
 1. In Yast -> Software Repositories.  Add the GNOME:STABLE and GNOME:Community repositories.
 
 2. Install packages:
-
-  * python-nautilus
-  * dbus-1-python
-  * dbus-1-python-devel
-  * python-gtk
-  * python-gtk-devel
-  * python-pysvn
-  * gcc
+{{{
+zypper install python-nautilus dbus-1-python dbus-1-python-devel python-gtk python-gtk-devel python-pysvn gcc
+}}}
 
 3. Get python-pyinotify http://pyinotify.sourceforge.net/
     * Must get v0.7.1, as 0.8.x doesn't work atm
@@ -46,7 +41,16 @@ elif maj_min == (2,6):
 
 == Fedora 10 ==
 
-Coming Soon...
+1. Install Packages:
+{{{
+yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-devel subversion
+}}}
+
+2. Get python-pyinotify http://pyinotify.sourceforge.net/
+  a. Must get v0.7.1, as 0.8.x doesn't work atm
+  b. Can get a Fedora 9 RPM from here: http://rpmfind.net/linux/rpm2html/search.php?query=python-inotify
+
+  Note: I couldn't get the bz2 file from the pyinotify site to install, but the Fedora 9 0.7.1 RPMs linked to above will install and work for F10.
 
 = NautilusSvn =
 
