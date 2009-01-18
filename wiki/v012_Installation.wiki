@@ -16,7 +16,7 @@ sudo apt-get install python-nautilus python-configobj python-pyinotify python-gt
 
 2. Install packages:
 {{{
-zypper install python-nautilus dbus-1-python dbus-1-python-devel python-gtk python-gtk-devel python-pysvn gcc
+zypper install python-nautilus dbus-1-python dbus-1-python-devel python-gtk python-gtk-devel python-pysvn gcc subversion
 }}}
 
 3. Get python-pyinotify http://pyinotify.sourceforge.net/
