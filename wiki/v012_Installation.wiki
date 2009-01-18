@@ -1,5 +1,5 @@
 #summary Distro-specific installation instructions for NautilusSvn v0.12
-#labels Featured,Phase-Deploy
+#labels Phase-Deploy
 
 <wiki:toc max_depth="2" />
 
