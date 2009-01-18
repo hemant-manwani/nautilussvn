@@ -1184,6 +1184,8 @@ class StatusMonitor():
             path = event.path
             if event.name: path = os.path.join(path, event.name)
             
+            if not path.endswidth(".svn/entries"): return
+            
             # Begin debugging code
             print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
             # End debugging code
