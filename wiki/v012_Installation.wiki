@@ -6,14 +6,9 @@
 == Ubuntu 8.10 ==
 
 1. Install the following packages through your package manager.
-
-  * python-nautilus
-  * python-configobj
-  * python-pyinotify
-  * python-gtk2
-  * python-glade
-  * python-dbus
-  * python-svn
+{{{
+sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade python-dbus python-svn
+}}}
 
 == OpenSUSE 11.1 ==
 
