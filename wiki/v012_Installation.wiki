@@ -1,0 +1,35 @@
+#summary Distro-specific installation instructions for NautilusSvn v0.12
+#labels Featured,Phase-Deploy
+
+== Ubuntu 8 ==
+
+== OpenSUSE ==
+
+ # In Yast -> Software Repositories.  Add the GNOME:STABLE and GNOME:Community repositories.
+ # Install packages:
+        python-nautilus
+        dbus-1-python
+        dbus-1-python-devel
+        python-gtk
+        python-gtk-devel
+        python-pysvn
+        gcc
+    
+ # Get python-pyinotify http://pyinotify.sourceforge.net/
+       * Must get v0.7.1, as 0.8.x doesn't work atm
+       * Uncompress the bz2 file and in the pyinotify folder type: sudo python setup.py install
+       
+
+ # Get python-configobj at http://www.voidspace.org.uk/python/configobj.html#files
+       * Copy configobj.py to /usr/lib/python2.6/site-packages/
+        
+ # Edit the file /usr/lib/python2.6/site-packages/pysvn/__init__.py
+        There is a place where it says:
+            elif maj_min == (2,5):
+                ....
+        
+        Add another elif block, like this...
+        
+            elif maj_min == (2,6):
+                import _pysvn_2_6
+                _pysvn = _pysvn_2_6
