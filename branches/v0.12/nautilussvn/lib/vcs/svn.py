@@ -1184,10 +1184,6 @@ class StatusMonitor():
             path = event.path
             if event.name: path = os.path.join(path, event.name)
             
-            # We're only interested in the entries file from the Subversion
-            # working copy administration area (.svn) not locks, etc.
-            if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
-            
             # Begin debugging code
             print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
             # End debugging code
@@ -1278,15 +1274,7 @@ class StatusMonitor():
         
         vcs_client = SVN()
         
-        # Handle changes to an entries file a little bit differently 
-        # TODO: if we could find out what was changed in the entries file that
-        # would probably help
-        if path.endswith(".svn/entries"):
-            path = path[0:path.find(".svn")].rstrip("/")
-            for item_basename in os.listdir(path):
-                item_path = os.path.join(path, item_basename)
-                self.status(item_path, invalidate=invalidate)
-            return
+        if path.find(".svn") != -1: return
             
         # Directories and all other files
         priority_status = None 
