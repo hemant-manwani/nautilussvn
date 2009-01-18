@@ -5,23 +5,29 @@
 
 == Ubuntu 8.10 ==
 
-Coming Soon
+1. Install the following packages through your package manager.
+
+  * python-nautilus
+  * python-configobj
+  * python-pyinotify
+  * python-gtk2
+  * python-glade
+  * python-dbus
+  * python-svn
 
 == OpenSUSE 11.1 ==
 
 1. In Yast -> Software Repositories.  Add the GNOME:STABLE and GNOME:Community repositories.
 
-2. Install packages: 
+2. Install packages:
 
-{{{
-    python-nautilus
-    dbus-1-python
-    dbus-1-python-devel
-    python-gtk
-    python-gtk-devel
-    python-pysvn
-    gcc
-}}}
+  * python-nautilus
+  * dbus-1-python
+  * dbus-1-python-devel
+  * python-gtk
+  * python-gtk-devel
+  * python-pysvn
+  * gcc
 
 3. Get python-pyinotify http://pyinotify.sourceforge.net/
     * Must get v0.7.1, as 0.8.x doesn't work atm
@@ -44,6 +50,8 @@ elif maj_min == (2,6):
 }}}
 
 == Fedora 10 ==
+
+Coming Soon...
 
 = NautilusSvn =
 
