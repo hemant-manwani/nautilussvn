@@ -25,11 +25,12 @@
         
  # Edit the file /usr/lib/python2.6/site-packages/pysvn/__init__.py
         There is a place where it says:
-            elif maj_min == (2,5):
-                ....
-        
+
+ 'elif maj_min == (2,5):
+ '    ....  
+      
         Add another elif block, like this...
         
-            elif maj_min == (2,6):
-                import _pysvn_2_6
-                _pysvn = _pysvn_2_6
+ 'elif maj_min == (2,6):
+ '    import _pysvn_2_6 \\
+ '    _pysvn = _pysvn_2_6
