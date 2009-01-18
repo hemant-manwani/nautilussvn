@@ -1274,8 +1274,6 @@ class StatusMonitor():
         
         vcs_client = SVN()
         
-        if path.find(".svn") != -1: return
-            
         # Directories and all other files
         priority_status = None 
         while path != "":
