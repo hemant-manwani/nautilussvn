@@ -9,7 +9,7 @@
 
 1. Install the following packages through your package manager.
 {{{
-sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade python-dbus python-svn subversion
+sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade python-dbus python-svn subversion meld
 }}}
 
 == OpenSUSE 11.1 ==
@@ -18,7 +18,7 @@ sudo apt-get install python-nautilus python-configobj python-pyinotify python-gt
 
 2. Install packages:
 {{{
-zypper install python-nautilus dbus-1-python dbus-1-python-devel python-gtk python-gtk-devel python-pysvn gcc subversion
+zypper install python-nautilus dbus-1-python dbus-1-python-devel python-gtk python-gtk-devel python-pysvn gcc subversion meld
 }}}
 
 3. Get python-pyinotify http://pyinotify.sourceforge.net/
@@ -45,7 +45,7 @@ elif maj_min == (2,6):
 
 1. Install Packages:
 {{{
-yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-devel subversion
+yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-devel subversion meld
 }}}
 
 2. Get python-pyinotify http://pyinotify.sourceforge.net/
