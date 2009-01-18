@@ -1,9 +1,13 @@
 #summary Distro-specific installation instructions for NautilusSvn v0.12
 #labels Featured,Phase-Deploy
 
-== Ubuntu 8 ==
+= Dependencies =
 
-== OpenSUSE ==
+== Ubuntu 8.10 ==
+
+Coming Soon
+
+== OpenSUSE 11.1 ==
 
 1. In Yast -> Software Repositories.  Add the GNOME:STABLE and GNOME:Community repositories.
 
@@ -38,3 +42,9 @@ elif maj_min == (2,6):
     import _pysvn_2_6
     _pysvn = _pysvn_2_6
 }}}
+
+== Fedora 10 ==
+
+= NautilusSvn =
+
+Instructions currently at: http://code.google.com/p/nautilussvn/wiki/Miscellaneous
