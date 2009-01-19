@@ -54,6 +54,38 @@ yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-dev
 
   Note: I couldn't get the bz2 file from the pyinotify site to install, but the Fedora 9 0.7.1 RPMs linked to above will install and work for F10.
 
+== CentOS 5.2 ==
+
+*Note: Does not yet work due to issues with dbus-python.*
+
+1. Add the RPMForge Repositories.  Instructions are at http://wiki.centos.org/AdditionalResources/Repositories/RPMForge
+
+2. Install Packages:
+{{{
+yum install pygtk2 dbus-python subversion subversion-devel gcc gcc-c++ neon-devel python-devel pygtk2-devel eel2 eel2-devel python-configobj nautilus-devel
+}}}
+
+3. Download nautilus-python bindings at http://ftp.acc.umu.se/pub/GNOME/sources/nautilus-python
+ * Make sure you get v0.5.0
+ * Build/install with: su -c './configure ; make ; make install'
+
+4. Get python-pyinotify at http://pyinotify.sourceforge.net/
+ * Don't install the version in rpmforge.  It's too old.
+ * Must get v0.7.1, as 0.8.x doesn't work atm
+ * Uncompress the bz2 file and in the pyinotify folder type: su -c 'python setup.py install'
+
+5. Download and build the pysvn extension source kit.
+ * http://pysvn.tigris.org/project_downloads.html
+ * Uncompress the pysvn tar.gz file then run the following commands:
+{{{
+cd Source
+python setup.py configure
+make
+mkdir /usr/lib/python2.4/site-packages/pysvn
+cp pysvn/__init__.py /usr/lib/python2.4/site-packages/pysvn
+cp pysvn/_pysvn_2_4.so /usr/lib/python2.4/site-packages/pysvn
+}}}
+
 = NautilusSvn =
 
 Instructions currently at: http://code.google.com/p/nautilussvn/wiki/Miscellaneous
