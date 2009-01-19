@@ -1178,14 +1178,13 @@ class MainContextMenu:
         
     def condition_add(self):
         for path in self.paths:
-            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+            if (isfile(path) and
+                    self.vcs_client.is_in_a_or_a_working_copy(path) and
                     not self.vcs_client.is_versioned(path)):
                 return True
-            else:
-                if (isdir(path) and
-                        self.vcs_client.is_in_a_or_a_working_copy(path) and
-                        self.vcs_client.has_unversioned(path)):
-                    return True
+            elif (isdir(path) and
+                    self.vcs_client.is_in_a_or_a_working_copy(path)):
+                return True
             
         return False
         
