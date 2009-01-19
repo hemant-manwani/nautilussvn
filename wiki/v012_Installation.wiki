@@ -1,4 +1,4 @@
-#summary Distro-specific installation instructions for NautilusSvn v0.12
+#summary Installation instructions for NautilusSvn v0.12
 #labels Phase-Deploy
 
 <wiki:toc max_depth="2" />
@@ -6,7 +6,7 @@
 = Dependencies =
 
 Here is a basic set of dependencies that you will need to install before you can install NautilusSvn.  The actual package names are different for each distribution.  For now, NautilusSvn is Linux only, because we rely on the pyinotify module, which uses inotify, a linux kernel feature.  In the future, we hope to use GIO to watch for file changes.
-[nautilus-python http://svn.gnome.org/viewvc/nautilus-python]
+
 || *Program* || *Description* ||
 || [http://svn.gnome.org/viewvc/nautilus-python/ nautilus-python] || Nautilus extension python bindings ||
 || [http://www.voidspace.org.uk/python/configobj.html configobj] || Python configuration module ||
@@ -16,6 +16,8 @@ Here is a basic set of dependencies that you will need to install before you can
 || [http://pysvn.tigris.org/ pysvn] || Subversion python bindings ||
 || [http://subversion.tigris.org/ subversion] || Subversion, duh! ||
 || [http://meld.sourceforge.net/ meld] || A GTK+ diff tool ||
+
+= Distro-specific instructions =
 
 == Ubuntu 8.10 ==
 
