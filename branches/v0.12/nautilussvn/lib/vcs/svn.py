@@ -135,23 +135,28 @@ class SVN:
         "working":          pysvn.opt_revision_kind.working,
         "head":             pysvn.opt_revision_kind.head
     }
-    
-    DEPTHS = {
-        "empty":        pysvn.depth.empty,
-        "exclude":      pysvn.depth.exclude,
-        "files":        pysvn.depth.files,
-        "immediates":   pysvn.depth.immediates,
-        "infinity":     pysvn.depth.infinity,
-        "unknown":      pysvn.depth.unknown
-    }
-    
-    DEPTHS_FOR_CHECKOUT = {
-        "Fully Recursive":                          DEPTHS["infinity"],
-        "Immediate children, including folders":    DEPTHS["immediates"],
-        "Only file children":                       DEPTHS["files"],
-        "Only this item":                           DEPTHS["empty"]
-    }
-    
+
+    try:
+        DEPTHS = {
+            "empty":        pysvn.depth.empty,
+            "exclude":      pysvn.depth.exclude,
+            "files":        pysvn.depth.files,
+            "immediates":   pysvn.depth.immediates,
+            "infinity":     pysvn.depth.infinity,
+            "unknown":      pysvn.depth.unknown
+        }
+
+        DEPTHS_FOR_CHECKOUT = {
+            "Fully Recursive":                          DEPTHS["infinity"],
+            "Immediate children, including folders":    DEPTHS["immediates"],
+            "Only file children":                       DEPTHS["files"],
+            "Only this item":                           DEPTHS["empty"]
+        }
+    except:
+        #~ print "Debug: pysvn.depth object not supported in this version of subversion."
+        DEPTHS = {}
+        DEPTHS_FOR_CHECKOUT = {"Recursive": True, "Not Recursive": False}
+        
     #: This variable is used to maintain a status cache. Paths function as keys
     #: and every item in the cache has all the statuses for all the items below
     #: it, though the last item is always the status for the path. 
@@ -177,12 +182,13 @@ class SVN:
         This function will eventually be deprecated for status_with_cache.
         
         """
+        
         if depth:
             return self.client.status(path, depth=depth)
-        else:
-            return self.client.status(path, recurse=recurse)
+
+        return self.client.status(path, recurse=recurse)
     
-    def status_with_cache(self, path, invalidate=False, depth=pysvn.depth.infinity):
+    def status_with_cache(self, path, invalidate=False, recurse=True, depth=None):
         """
         
         Look up the status for path.
@@ -196,6 +202,9 @@ class SVN:
         
         @type   invalidate: boolean
         @param  invalidate: Whether or not the cache should be bypassed.
+
+        @type   recurse: boolean
+        @param  recurse: Should status recurse or not
         
         @type   depth: one of pysvn.depth
         @param  depth: Defines how deep the status check should go.
@@ -211,10 +220,13 @@ class SVN:
                     # The following condition is used to bypass the cache when
                     # an infinity check is requesting and it's most likely
                     # that only an empty check was done before.
-                    (depth == pysvn.depth.infinity and
+                    (depth is not None and
                         len(self.status_cache[path]) == 1)):
                 #~ print "Debug: status_with_cache() invalidated %s" % path
-                statuses = self.client.status(path, depth=depth)
+                if depth is not None:
+                    statuses = self.client.status(path, depth=depth)
+                else:
+                    statuses = self.client.status(path, recurse=recurse)
             else:
                 return self.status_cache[path]
         except pysvn.ClientError:
@@ -260,7 +272,7 @@ class SVN:
         return False
     
     def is_normal(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
+        status = self.status_with_cache(path, recurse=False)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.normal:
             return True
@@ -268,7 +280,7 @@ class SVN:
         return False
     
     def is_added(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
+        status = self.status_with_cache(path, recurse=False)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.added:
             return True
@@ -276,7 +288,7 @@ class SVN:
         return False
         
     def is_modified(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
+        status = self.status_with_cache(path, recurse=False)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.modified:
             return True
@@ -284,7 +296,7 @@ class SVN:
         return False
     
     def is_deleted(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
+        status = self.status_with_cache(path, recurse=False)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.deleted:
             return True
@@ -292,7 +304,7 @@ class SVN:
         return False
         
     def is_ignored(self, path):
-        status = self.status_with_cache(path, depth=pysvn.depth.empty)[-1]
+        status = self.status_with_cache(path, recurse=False)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.ignored:
             return True
@@ -312,7 +324,7 @@ class SVN:
     #
     
     def has_unversioned(self, path):
-        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.unversioned:
@@ -321,7 +333,7 @@ class SVN:
         return False
     
     def has_added(self, path):
-        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.added:
@@ -330,7 +342,7 @@ class SVN:
         return False
         
     def has_modified(self, path):
-        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.modified:
@@ -339,7 +351,7 @@ class SVN:
         return False
 
     def has_deleted(self, path):
-        statuses = self.status_with_cache(path, depth=pysvn.depth.infinity)[:-1]
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
         
         for status in statuses:
             if status.data["text_status"] == pysvn.wc_status_kind.deleted:
@@ -1288,7 +1300,7 @@ class StatusMonitor:
                     status = vcs_client.status_with_cache(
                         path, 
                         invalidate=invalidate, 
-                        depth=pysvn.depth.empty)[-1].data["text_status"]
+                        recurse=False)[-1].data["text_status"]
                 except IndexError, e:
                     # TODO: This probably has to do with temporary files
                     print "    DEBUG: EXCEPTION in StatusMonitor.status(): %s" % str(e)
@@ -1379,15 +1391,19 @@ class PySVN:
         pysvn.opt_revision_kind.head:           "head"
     }
     
-    DEPTHS = {
-        pysvn.depth.empty:      "empty",
-        pysvn.depth.exclude:    "exclude",
-        pysvn.depth.files:      "files",
-        pysvn.depth.immediates: "immediates",
-        pysvn.depth.infinity:   "infinity",
-        pysvn.depth.unknown:    "unknown"
-    }
-    
+    try:
+        DEPTHS = {
+            pysvn.depth.empty:      "empty",
+            pysvn.depth.exclude:    "exclude",
+            pysvn.depth.files:      "files",
+            pysvn.depth.immediates: "immediates",
+            pysvn.depth.infinity:   "infinity",
+            pysvn.depth.unknown:    "unknown"
+        }
+    except:
+        #~ print "Debug: pysvn.depth object not supported in this version of subversion."
+        DEPTHS = {}
+        
     def convert_pysvn_statuses(self, pysvn_statuses):
         """
         Converts a list of C{PysvnStatus}es to a dictionary:::
