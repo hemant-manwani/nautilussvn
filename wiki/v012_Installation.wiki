@@ -1,7 +1,7 @@
 #summary Installation instructions for NautilusSvn v0.12
 #labels Phase-Deploy
 
-<wiki:toc max_depth="2" />
+<wiki:toc max_depth="3" />
 
 = Dependencies =
 
@@ -110,6 +110,15 @@ Coming Soon...
 Coming Soon...
 
 
-= NautilusSvn =
+= Installing NautilusSvn =
+{{{
+svn checkout http://nautilussvn.googlecode.com/svn/branches/v0.12/ ~/nautilussvn
 
-Instructions currently at: http://code.google.com/p/nautilussvn/wiki/Miscellaneous
+mkdir -p ~/.nautilus/python-extensions
+ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
+mkdir -p ~/.icons
+ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
+
+export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
+nautilus -q &&nautilus --no-desktop .
+}}}
