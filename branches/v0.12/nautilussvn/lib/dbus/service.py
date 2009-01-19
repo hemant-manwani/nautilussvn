@@ -37,7 +37,6 @@ import gobject
 import dbus
 import dbus.glib
 import dbus.service
-import dbus.mainloop.glib
 
 from nautilussvn.lib.dbus.status_monitor import StatusMonitor
 from nautilussvn.lib.dbus.svn_client import SVNClient
@@ -100,7 +99,6 @@ if __name__ == "__main__":
     # support the ability run threads.
     gobject.threads_init()
     dbus.glib.threads_init()
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     
     # This registers our service name with the bus
     session_bus = dbus.SessionBus()
