@@ -66,7 +66,7 @@ yum install pygtk2 dbus-python subversion subversion-devel gcc gcc-c++ neon-deve
 }}}
 
 3. Download nautilus-python bindings at http://ftp.acc.umu.se/pub/GNOME/sources/nautilus-python
- * Make sure you get v0.5.0
+ * Make sure you get v0.5.0, NOT v0.5.1
  * Build/install with: su -c './configure ; make ; make install'
 
 4. Get python-pyinotify at http://pyinotify.sourceforge.net/
