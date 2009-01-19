@@ -1096,7 +1096,7 @@ class SVN:
         
         return returner
 
-class StatusMonitor():
+class StatusMonitor:
     """
     
     The C{StatusMonitor} is basically a replacement for the currently limited 
@@ -1343,7 +1343,7 @@ class StatusMonitor():
         if self.status_cache[path]["current_status"] != self.status_cache[path]["previous_status"]:
             self.callback(path, status)
         
-class PySVN():
+class PySVN:
     """
     Used to convert all sorts of PySVN objects to primitives which can be 
     submitted over the DBus.

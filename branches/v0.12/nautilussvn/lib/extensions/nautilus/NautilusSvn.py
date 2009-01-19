@@ -309,7 +309,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not self.dbus_service_available:
             self.set_emblem_by_status(path, status)
     
-class MainContextMenu():
+class MainContextMenu:
     """
     
     A class that represents our context menu.
