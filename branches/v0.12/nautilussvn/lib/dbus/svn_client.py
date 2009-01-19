@@ -38,7 +38,11 @@ class SVNClient(dbus.service.Object):
     """
     
     def __init__(self, connection):
-        dbus.service.Object.__init__(self, connection, OBJECT_PATH)
+        try:
+            dbus.service.Object.__init__(self, connection, OBJECT_PATH)
+        except AttributeError:
+            bus_name = dbus.service.BusName(SERVICE)
+            dbus.service.Object.__init__(self, bus_name, OBJECT_PATH)
         self.pysvn = PySVN()
         self.svn_client = SVN()
     
