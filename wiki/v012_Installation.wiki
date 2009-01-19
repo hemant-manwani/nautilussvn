@@ -110,7 +110,7 @@ Coming Soon...
 Coming Soon...
 
 
-= Installing NautilusSvn =
+= Installing The Extension =
 {{{
 svn checkout http://nautilussvn.googlecode.com/svn/branches/v0.12/ ~/nautilussvn
 
