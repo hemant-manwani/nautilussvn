@@ -48,7 +48,11 @@ SERVICE = "org.google.code.nautilussvn.NautilusSvn"
 class Service(dbus.service.Object):
     
     def __init__(self, connection):
-        dbus.service.Object.__init__(self, connection, OBJECT_PATH)
+        try:
+            dbus.service.Object.__init__(self, connection, OBJECT_PATH)
+        except AttributeError:
+            bus_name = dbus.service.BusName(SERVICE)
+            dbus.service.Object.__init__(self, bus_name, OBJECT_PATH)
         
         # Register our objects with the session bus by instantiating them
         self.status_monitor = StatusMonitor(connection)
