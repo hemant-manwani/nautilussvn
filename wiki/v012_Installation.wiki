@@ -17,6 +17,7 @@ Here is a basic set of dependencies that you will need to install before you can
 || [http://subversion.tigris.org/ subversion] || Subversion, duh! ||
 || [http://meld.sourceforge.net/ meld] || A GTK+ diff tool ||
 
+
 = Distro-specific instructions =
 
 == Ubuntu 8.10 ==
@@ -107,6 +108,7 @@ Coming Soon...
 == Arch Linux ==
 
 Coming Soon...
+
 
 = NautilusSvn =
 
