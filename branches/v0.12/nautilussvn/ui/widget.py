@@ -55,6 +55,8 @@ class Table:
 
             self.treeview.append_column(col)
             i += 1
+    
+        self.set_resizable()
 
     def toggled_cb(self, cell, path, column):
         model = self.treeview.get_model()
@@ -99,6 +101,10 @@ class Table:
     def scroll_to_bottom(self):
         bottom = len(self.get_items()) - 1
         self.treeview.scroll_to_cell(bottom)
+
+    def set_resizable(self, resizable=True):
+        for col in self.treeview.get_columns():
+            col.set_resizable(resizable)
 
 class ComboBox:
     def __init__(self, cb, items=None):
