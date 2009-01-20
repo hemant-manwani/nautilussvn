@@ -63,7 +63,8 @@ class SVN:
         STATUS["deleted"],
         STATUS["replaced"],
         STATUS["modified"],
-        STATUS["missing"]
+        STATUS["missing"],
+        STATUS["obstructed"]
     ]
 
     STATUSES_FOR_REVERT = [
