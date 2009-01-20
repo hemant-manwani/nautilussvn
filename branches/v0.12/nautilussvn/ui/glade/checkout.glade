@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed Jan 14 09:40:17 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan 20 15:57:08 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Checkout">
     <property name="width_request">550</property>
@@ -8,6 +8,7 @@
     <property name="title" translatable="yes">Checkout</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="default_width">450</property>
+    <property name="icon_name">nautilussvn</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox2">
