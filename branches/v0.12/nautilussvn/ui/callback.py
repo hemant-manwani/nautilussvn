@@ -220,13 +220,8 @@ class VCSAction(threading.Thread):
         
         """
 
-        msg = "Finished"
-        if self.pbar_ticks is not None:
-            if self.pbar_ticks_current + 1 < self.pbar_ticks:
-                msg = "Unable to finish.  There was an error."
-            
         self.notification.append(
-            ["", msg, ""]
+            ["", "Finished", ""]
         )        
         self.set_status(message)
         self.notification.pbar.stop_pulsate()
