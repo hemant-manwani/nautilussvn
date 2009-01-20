@@ -416,7 +416,7 @@ def save_repository_path(path):
     f.write("\n".join(paths))
     f.close()
     
-def launch_ui_window(filename, args):
+def launch_ui_window(filename, args, return_immmediately=True):
     """
     Launches a UI window in a new process, so that we don't have to worry about
     nautilus and threading.
@@ -429,7 +429,7 @@ def launch_ui_window(filename, args):
     
     """
     
-    from subprocess import Popen
+    from subprocess import Popen, call
     
     # Hackish.  Get's the helper module's path, then assumes it is in
     # the lib folder.  Removes the /lib part of the path.
@@ -444,7 +444,11 @@ def launch_ui_window(filename, args):
     popen_args = ["/usr/bin/python", path]
     for arg in args:
         popen_args.append(arg)
-    Popen(popen_args)
+        
+    if return_immmediately:
+        Popen(popen_args)
+    else:
+        print call(popen_args)
 
 def get_log_messages_limit():
     sm = nautilussvn.lib.settings.SettingsManager()

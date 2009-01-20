@@ -31,9 +31,4 @@ if len(sys.argv) < 2:
 args = sys.argv[1:]   
 module = args.pop(0)
 
-try:
-    launch_ui_window(module, args)
-except Exception, e:
-    raise SystemExit(str(e))
-finally:
-    raise SystemExit()
+launch_ui_window(module, args, return_immmediately=False)
