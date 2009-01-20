@@ -416,7 +416,7 @@ def save_repository_path(path):
     f.write("\n".join(paths))
     f.close()
     
-def launch_ui_window(filename, args, return_immmediately=True):
+def launch_ui_window(filename, args=[], return_immmediately=True):
     """
     Launches a UI window in a new process, so that we don't have to worry about
     nautilus and threading.
@@ -448,7 +448,7 @@ def launch_ui_window(filename, args, return_immmediately=True):
     if return_immmediately:
         Popen(popen_args)
     else:
-        print call(popen_args)
+        call(popen_args)
 
 def get_log_messages_limit():
     sm = nautilussvn.lib.settings.SettingsManager()
