@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 15:59:33 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan 20 16:21:00 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Switch">
-    <property name="width_request">500</property>
+    <property name="width_request">550</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Switch</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="icon_name">nautilussvn</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox19">
