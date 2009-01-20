@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 15:58:57 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan 20 16:19:33 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Notification">
     <property name="width_request">740</property>
     <property name="title" translatable="yes">Notification Messages</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="icon_name">nautilussvn</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="gravity">GDK_GRAVITY_CENTER</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>

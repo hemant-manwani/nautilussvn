@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 15:57:39 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Jan 20 16:17:18 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="BlameUI">
     <property name="width_request">800</property>
     <property name="height_request">600</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Blame</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="icon_name">nautilussvn</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="destroy" handler="on_destroy"/>
     <child>
       <widget class="GtkVBox" id="vbox1">

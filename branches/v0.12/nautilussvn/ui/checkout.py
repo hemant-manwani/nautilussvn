@@ -43,10 +43,11 @@ class Checkout(InterfaceView):
 
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
-        self.get_widget("Checkout").set_title("Checkout - %s" % path)
         
         if path == ".":
             path = os.getcwd()
+
+        self.get_widget("Checkout").set_title("Checkout - %s" % path)
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
