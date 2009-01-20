@@ -110,14 +110,6 @@ cp pysvn/_pysvn_2_4.so /usr/lib/python2.4/site-packages/pysvn
 
 6. [http://code.google.com/p/nautilussvn/wiki/v012_Installation#Installing_The_Extension Install the Extension]
 
-== Mandriva 2009 ==
-
-Coming Soon...
-
-== Arch Linux ==
-
-Coming Soon...
-
 
 = Installing The Extension =
 {{{
