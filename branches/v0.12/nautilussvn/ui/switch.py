@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+
 import pygtk
 import gobject
 import gtk
@@ -34,6 +36,9 @@ import nautilussvn.lib.helper
 class Switch(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "switch", "Switch")
+
+        if path == ".":
+            path = os.getcwd()
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()

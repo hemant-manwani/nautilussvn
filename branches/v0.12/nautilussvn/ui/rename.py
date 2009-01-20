@@ -34,6 +34,9 @@ import nautilussvn.lib.vcs
 class Rename(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "rename", "Rename")
+
+        if path == ".":
+            path = os.getcwd()
         
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
