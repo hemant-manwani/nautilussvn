@@ -705,7 +705,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.add, *args, **kwargs)
+        return self.client.add(*args, **kwargs)
     
     def copy(self, *args, **kwargs):
         """
@@ -723,7 +723,7 @@ class SVN:
         
         """
 
-        return self.action(self.client.copy, *args, **kwargs)
+        return self.client.copy(*args, **kwargs)
     
     def checkout(self, *args, **kwargs):
         
@@ -744,7 +744,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.checkout, *args, **kwargs)
+        return self.client.checkout(*args, **kwargs)
     
     def cleanup(self, *args, **kwargs):
         """
@@ -755,7 +755,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.cleanup, *args, **kwargs)
+        return self.client.cleanup(*args, **kwargs)
         
     def revert(self, *args, **kwargs):
         """
@@ -766,7 +766,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.revert, *args, **kwargs)
+        return self.client.revert(*args, **kwargs)
 
     def commit(self, *args, **kwargs):
         """
@@ -785,8 +785,8 @@ class SVN:
         @param  keep_locks: Whether or not to keep locks on commit.
         
         """
-        
-        return self.action(self.client.checkin, *args, **kwargs)
+
+        return self.client.checkin(*args, **kwargs)
     
     def log(self, *args, **kwargs):
         """
@@ -806,7 +806,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.log, *args, **kwargs)
+        return self.client.log(*args, **kwargs)
 
     def export(self, *args, **kwargs):
         
@@ -831,7 +831,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.export, *args, **kwargs)
+        return self.client.export(*args, **kwargs)
 
     def import_(self, *args, **kwargs):
         
@@ -852,7 +852,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.import_, *args, **kwargs)
+        return self.client.import_(*args, **kwargs)
 
     def lock(self, *args, **kwargs):
         
@@ -870,7 +870,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.lock, *args, **kwargs)
+        return self.client.lock(*args, **kwargs)
 
     def relocate(self, *args, **kwargs):
         
@@ -888,7 +888,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.relocate, *args, **kwargs)
+        return self.client.relocate(*args, **kwargs)
         
     def move(self, *args, **kwargs):
         
@@ -906,7 +906,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.move, *args, **kwargs)
+        return self.client.move(*args, **kwargs)
 
     def remove(self, *args, **kwargs):
         
@@ -924,7 +924,7 @@ class SVN:
                 
         """
         
-        return self.action(self.client.remove, *args, **kwargs)
+        return self.client.remove(*args, **kwargs)
 
     def revert(self, *args, **kwargs):
         """
@@ -938,7 +938,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.revert, *args, **kwargs)
+        return self.client.revert(*args, **kwargs)
 
     def resolve(self, *args, **kwargs):
         """
@@ -952,7 +952,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.resolved, *args, **kwargs)
+        return self.client.resolved(*args, **kwargs)
 
     def switch(self, *args, **kwargs):
         """
@@ -969,7 +969,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.switch, *args, **kwargs)
+        return self.client.switch(*args, **kwargs)
 
     def unlock(self, *args, **kwargs):
         """
@@ -983,7 +983,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.unlock, *args, **kwargs)
+        return self.client.unlock(*args, **kwargs)
 
     def update(self, *args, **kwargs):
         """
@@ -1003,7 +1003,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.update, *args, **kwargs)
+        return self.client.update(*args, **kwargs)
 
     def annotate(self, *args, **kwargs):
         """
@@ -1020,7 +1020,7 @@ class SVN:
                 
         """
         
-        return self.action(self.client.annotate, *args, **kwargs)
+        return self.client.annotate(*args, **kwargs)
 
     def merge_ranges(self, *args, **kwargs):
         """
@@ -1054,7 +1054,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.merge_peg2, *args, **kwargs)
+        return self.client.merge_peg2(*args, **kwargs)
 
     def merge_trees(self, *args, **kwargs):
         """
@@ -1088,26 +1088,7 @@ class SVN:
         
         """
         
-        return self.action(self.client.merge, *args, **kwargs)
-
-    def action(self, func, *args, **kwargs):
-        """
-        Perform a vcs action.
-        
-        @type   func: def
-        @param  func: A function.
-        
-        """
-        
-        returner = None
-        try:
-            returner = func(*args, **kwargs)
-        except pysvn.ClientError, e:
-            return str(e)
-        except TypeError, e:
-            return str(e)
-        
-        return returner
+        return self.client.merge(*args, **kwargs)
 
 class StatusMonitor:
     """
