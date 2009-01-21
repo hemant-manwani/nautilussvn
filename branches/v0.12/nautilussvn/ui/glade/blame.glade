@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 16:17:08 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 21 10:02:03 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Blame">
     <property name="width_request">400</property>
@@ -89,6 +89,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox6">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkRadioButton" id="revision_head_opt">
                         <property name="visible">True</property>

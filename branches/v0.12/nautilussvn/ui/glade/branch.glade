@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 16:17:53 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 21 10:06:38 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Branch">
     <property name="width_request">640</property>
@@ -145,6 +145,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkRadioButton" id="from_head_opt">
                         <property name="visible">True</property>
@@ -191,6 +192,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_show_log_clicked"/>
                             <child>

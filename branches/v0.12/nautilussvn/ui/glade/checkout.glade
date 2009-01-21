@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 16:16:27 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 21 10:06:06 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Checkout">
     <property name="width_request">550</property>
@@ -104,6 +104,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip" translatable="yes">Browse...</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_file_chooser_clicked"/>
                             <child>
@@ -159,6 +160,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkCheckButton" id="recursive">
                         <property name="visible">True</property>
@@ -220,6 +222,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkHBox" id="hbox17">
                         <property name="visible">True</property>
@@ -278,6 +281,7 @@
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_show_log_clicked"/>
                             <child>
