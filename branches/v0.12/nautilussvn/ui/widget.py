@@ -106,6 +106,14 @@ class Table:
         for col in self.treeview.get_columns():
             col.set_resizable(resizable)
 
+    def set_column_width(self, column, width=None):
+        col = self.treeview.get_column(column)
+        if width is not None:
+            col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+            col.set_fixed_width(width)
+        else:
+            col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+
 class ComboBox:
     def __init__(self, cb, items=None):
     
