@@ -62,7 +62,7 @@ class Delete(InterfaceNonView):
 if __name__ == "__main__":
     import sys
     args = sys.argv[1:]
-    if len(args) != 1:
+    if len(args) < 1:
         raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
     window = Delete(args)
     window.register_gtk_quit()
