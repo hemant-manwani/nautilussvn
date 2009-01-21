@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 16:21:00 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 21 10:07:58 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Switch">
     <property name="width_request">550</property>
@@ -137,6 +137,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox21">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkHBox" id="hbox7">
                         <property name="visible">True</property>
@@ -194,6 +195,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_show_log_clicked"/>
                             <child>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 16:19:24 2009 -->
+<!--Generated with glade3 3.4.5 on Wed Jan 21 10:07:17 2009 -->
 <glade-interface>
   <widget class="GtkAssistant" id="Merge">
     <property name="width_request">550</property>
@@ -204,6 +204,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip" translatable="yes">Show log</property>
                             <property name="response_id">0</property>
                             <signal name="clicked" handler="on_mergerange_show_log1_clicked"/>
                             <child>
@@ -363,6 +364,7 @@ To merge all revisions, leave the box empty.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip" translatable="yes">Show log</property>
                         <property name="response_id">0</property>
                         <signal name="clicked" handler="on_mergebranch_show_log1_clicked"/>
                         <child>
@@ -494,6 +496,7 @@ To merge all revisions, leave the box empty.</property>
                     <child>
                       <widget class="GtkVBox" id="vbox2">
                         <property name="visible">True</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="mergetree_from_revision_head_opt">
                             <property name="visible">True</property>
@@ -541,6 +544,7 @@ To merge all revisions, leave the box empty.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip" translatable="yes">Show log</property>
                                 <property name="response_id">0</property>
                                 <signal name="clicked" handler="on_mergetree_from_show_log_clicked"/>
                                 <child>
@@ -629,6 +633,7 @@ To merge all revisions, leave the box empty.</property>
                     <child>
                       <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
+                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="mergetree_to_revision_head_opt">
                             <property name="visible">True</property>
@@ -676,6 +681,7 @@ To merge all revisions, leave the box empty.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip" translatable="yes">Show log</property>
                                 <property name="response_id">0</property>
                                 <signal name="clicked" handler="on_mergetree_to_show_log_clicked"/>
                                 <child>
@@ -801,6 +807,7 @@ To merge all revisions, leave the box empty.</property>
                 <child>
                   <widget class="GtkVBox" id="vbox41">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkCheckButton" id="mergeoptions_recursive">
                         <property name="visible">True</property>
