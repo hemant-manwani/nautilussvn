@@ -39,6 +39,13 @@ class Function:
     def start(self):
         self.result = self.func(*self.args, **self.kwargs)
     
+    def call(self):
+        return self.func(*self.args, **self.kwargs)
+    
+    def set_args(self, *args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
+    
     def get_result(self):
         return self.result
 
@@ -51,6 +58,7 @@ class FunctionQueue:
     def __init__(self):
         self.queue = []
         self.cancel = False
+        self._exception = None
     
     def cancel_queue(self):
         self.cancel = True
@@ -72,6 +80,9 @@ class FunctionQueue:
         
         self.queue.append(Function(func, *args, **kwargs))
     
+    def set_exception_callback(self, func):
+        self._exception = Function(func)
+    
     def start(self):
         """
         Runs through the queue and calls each function
@@ -81,8 +92,13 @@ class FunctionQueue:
         for func in self.queue:
             if self.cancel == True:
                 return
-                
-            func.start()
+            
+            try:
+                func.start()
+            except Exception, e:
+                self._exception.set_args(e)
+                self._exception.call()
+                break
 
     def get_result(self, index):
         """

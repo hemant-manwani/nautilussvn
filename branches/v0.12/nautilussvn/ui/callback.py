@@ -388,9 +388,6 @@ class VCSAction(threading.Thread):
         
         if message is not None:
             self.notification.get_widget("status").set_text(message)
-        #    self.notification.append([
-        #        "", message, ""
-        #    ])
     
     def append(self, func, *args, **kwargs):
         """
@@ -412,6 +409,12 @@ class VCSAction(threading.Thread):
         
         return self.queue.get_result(index)
     
+    def callback_queue_exception(self, e):
+        self.notification.append(
+            ["", str(e), ""]
+        )
+        self.finish()
+    
     def run(self):
         """
         The central method that drives this class.  It runs the before and 
@@ -419,4 +422,5 @@ class VCSAction(threading.Thread):
         
         """
         
+        self.queue.set_exception_callback(self.callback_queue_exception)
         self.queue.start()
