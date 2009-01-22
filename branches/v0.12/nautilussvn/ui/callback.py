@@ -185,7 +185,7 @@ class VCSAction(threading.Thread):
         something in lib/vcs/svn.py soon.
         
         """
-        
+
         if self.pbar_ticks is not None:
             self.pbar_ticks_current += 1
             frac = self.pbar_ticks_current / self.pbar_ticks
@@ -196,8 +196,13 @@ class VCSAction(threading.Thread):
             # In case I want to show the percentage in the pbar
             #self.notification.pbar.set_text("%s%%" % str(frac*100))
         
+        try:
+            action = self.client.NOTIFY_ACTIONS[data["action"]]
+        except:
+            action = data["action"]
+            
         self.notification.append([
-            self.client.NOTIFY_ACTIONS[data["action"]],
+            action,
             data["path"],
             data["mime_type"]
         ])
