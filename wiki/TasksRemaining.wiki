@@ -24,6 +24,7 @@
     * Logically organize helper functions (for example helper.path, helper.string etc.)
     * Make all functionality more robust (e.g. defensive coding, handling exceptions properly without "crashing" the extension)
     * Refactor DBus code since it is not up to DBus standards. -- brucevdkooij
+    * Make sure all forms are validated and don't cause breakage -- adamplumb
   * ~~Add the NautilusSvn icons to the UI window titlebars -- adamplumb~~
   * ~~Allow resizing of table columns -- adamplumb~~
 
