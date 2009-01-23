@@ -79,24 +79,18 @@ class Merge(InterfaceView):
             startcmd = "Running Merge Command"
             endcmd = "Completed Merge"
             self.hide()
-        
-        self.action = nautilussvn.ui.callback.VCSAction(
-            self.vcs,
-            register_gtk_quit=self.gtk_quit_is_set()
-        )
-        self.action.append(self.action.set_title, "Merge")
-        self.action.append(self.action.set_status, startcmd)
-        
+
         recursive = self.get_widget("mergeoptions_recursive").get_active()
-        notice_ancestry = not self.get_widget("mergeoptions_ignore_ancestry").get_active()
+        ignore_ancestry = self.get_widget("mergeoptions_ignore_ancestry").get_active()
         record_only = self.get_widget("mergeoptions_only_record").get_active()
         
         if self.type == "range":
             url = self.get_widget("mergerange_from_url").get_text()
             headrev = self.vcs.get_revision(self.path)
             revisions = self.get_widget("mergerange_revisions").get_text()
-            revisions = revisions.lower().replace("head", str(headrev))
-
+            #revisions = revisions.lower().replace("head", str(headrev))
+            
+            """
             ranges = []
             for r in revisions.split(","):
                 if r.find("-") != -1:
@@ -106,19 +100,19 @@ class Merge(InterfaceView):
                     high = r
                 
                 ranges.append((int(low),int(high)))
-                
-            self.action.append(
-                self.vcs.merge_ranges,
-                [url],
+            """
+            
+            self.vcs.merge_ranges(
+                url,
                 revisions,
-                self.vcs.revision("head"),
+                headrev,
                 self.path,
-                notice_ancestry=notice_ancestry,
+                ignore_ancestry=ignore_ancestry,
                 dry_run=test,
                 record_only=record_only,
                 force=True
             )
-            
+
         elif self.type == "tree":
             from_url = self.get_widget("mergetree_from_url").get_text()
             from_revision = self.vcs.revision("head")
@@ -135,8 +129,8 @@ class Merge(InterfaceView):
                     number=int(self.get_widget("mergetree_to_revision_number").get_text())
                 )
             
-            self.action.append(
-                self.vcs.merge_trees,
+            # Runs from the terminal for now
+            self.vcs.merge_trees(
                 from_url,
                 from_revision,
                 to_url,
@@ -146,10 +140,6 @@ class Merge(InterfaceView):
                 recurse=recursive,
                 record_only=record_only
             )
-                
-        self.action.append(self.action.set_status, endcmd)
-        self.action.append(self.action.finish)
-        self.action.start()
 
     def on_prepare(self, widget, page):
         self.page = page
@@ -313,11 +303,6 @@ class Merge(InterfaceView):
     #
     
     def on_mergeoptions_prepare(self):
-        allowtest = True
-        if self.type == "tree":
-            allowtest = False
-        self.get_widget("mergeoptions_test_merge").set_sensitive(allowtest)
-            
         self.assistant.set_page_complete(self.page, True)
 
     def on_mergeoptions_test_merge_clicked(self, widget):

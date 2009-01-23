@@ -32,7 +32,6 @@ from os.path import isdir, isfile
 import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
-from nautilussvn.lib import ShellCommand
 from nautilussvn.lib.decorators import deprecated, timeit
 from nautilussvn.lib.helper import split_path
 
@@ -1027,8 +1026,8 @@ class SVN:
         """
         Merge a range of revisions.
         
-        @type   sources: list
-        @param  sources: A repository location (unsure)
+        @type   source: string
+        @param  source: A repository location
         
         @type   ranges_to_merge: list of tuples
         @param  ranges_to_merge: A list of revision ranges to merge
@@ -1039,8 +1038,8 @@ class SVN:
         @type   target_wcpath: string
         @param  target_wcpath: Target working copy path
         
-        @type   notice_ancestry: boolean
-        @param  notice_ancestry: unsure
+        @type   ignore_ancestry: boolean
+        @param  ignore_ancestry: unsure
         
         @type   force: boolean
         @param  force: unsure
@@ -1055,7 +1054,38 @@ class SVN:
         
         """
         
-        return self.client.merge_peg2(*args, **kwargs)
+        # Due to problems with pysvn's merge functionality, this is a
+        # temporary hackish alternative
+        
+        (source, ranges_to_merge, peg_revision, wcpath) = args
+
+        range_str = ""
+        for r in ranges_to_merge.split(","):
+            if r.find("-") != -1:
+                (low, high) = r.split("-")
+            else:
+                low = r
+                high = r
+            range_str = "%s-r %s:%s " % (range_str, str(low), str(high))
+        
+        peg_rev_str = ""
+        if peg_revision:
+            peg_rev_str = "@%s" % str(peg_revision)
+        
+        command = "svn merge %s%s%s %s" % (range_str, source, peg_rev_str, wcpath)
+        if kwargs["ignore_ancestry"]:
+            command = "%s --ignore-ancestry" % command
+        if kwargs["dry_run"]:
+            command = "%s --dry-run" % command
+        if kwargs["record_only"]:
+            command = "%s --record-only" % command
+        if kwargs["force"]:
+            command = "%s --force" % command
+        print command
+
+        from subprocess import Popen
+        command = "gnome-terminal -e \"bash -c '%s | less'\"" % command
+        Popen(command, shell=True)
 
     def merge_trees(self, *args, **kwargs):
         """
@@ -1089,9 +1119,11 @@ class SVN:
         
         """
         
+        # Due to problems with pysvn's merge functionality, this is a
+        # temporary hackish alternative
+        
         (from_url, from_rev, to_url, to_rev, wc) = args
         
-        #return self.client.merge(*args, **kwargs)
         r1_str = ""
         if from_rev == self.REVISIONS["number"]:
             r1_str = ":%" % str(from_rev.number)
@@ -1105,9 +1137,12 @@ class SVN:
             command = "%s --non-recursive" % command
         if kwargs["force"]:
             command = "%s --force" % command
+        if kwargs["dry_run"]:
+            command = "%s --dry-run" % command
             
-        sc = SVNShellCommand(command, self.client.callback_notify)
-        sc.start()
+        from subprocess import Popen
+        command = "gnome-terminal -e \"bash -c '%s | less'\"" % command
+        Popen(command, shell=True)
 
 class StatusMonitor:
     """
@@ -1444,99 +1479,3 @@ class PySVN:
             })
             
         return statuses
-
-class SVNShellCommand(ShellCommand):
-    """
-    Run SVN commands through the shell and send the resulting output to
-    our notify callback function.  The notify callback function
-    (which is in nautilussvn.ui.callback) requires a specific data dictionary, 
-    so we need to parse the shell output into a suitable dict.
-    
-    Inherits from the ShellCommand class.
-    
-    Example:
-        1. Run a command and set it to call callback_notify each time
-        cmd = "svn checkout http://example.com/svn/trunk example"
-        sc = SVNShellCommand(cmd, self.client.callback_notify)
-        sc.start()
-        
-        2. Run a command and have the output show up on the shell
-        cmd = "svn checkout http://example.com/svn/trunk example"
-        sc = SVNShellCommand(cmd)
-        sc.start()
-        
-    """
-    
-    ACTION_MAP = {
-        "A": "Added",
-        "D": "Deleted",
-        "M": "Modified",
-        "C": "Conflicted",
-        "G": "Merged",
-        "E": "Existed",
-        "U": "Updated"
-    }
-    
-    def __init__(self, command, cb_notify=None):
-        """
-        @type   command: string
-        @param  command: The shell command to run
-
-        @type   cb_notify: def
-        @param  cb_notify: The notify callback function
-
-        """
-
-        ShellCommand.__init__(self, command)
-        self.callback = self.emulate_notify_callback
-        self.cb_notify = cb_notify
-
-    def set_cb_notify(self, func):
-        """
-        If, for some reason, cb_notify isn't passed in the constructor,
-        it can be set later using this method.
-        
-        @type   func: def
-        @param  func: The notify callback function
-
-        """
-
-        self.cb_notify = func
-
-    def emulate_notify_callback(self, line):
-        """
-        Overrides the default callback method to generate a proper data
-        dictionary that can be passed to our notify callback function.
-        
-        Or if no callback function has been set, just print it to stdout.
-
-        @type   line: string
-        @param  line: The stdout data
-
-        """
-        
-        # SVN outputs like "A    /path/to/file"
-        arr = line.split("    ")
-        if len(arr) == 1:
-            action = ""
-            path = arr[0]
-        else:
-            (action, path) = arr
-    
-        try:
-            action_word = self.ACTION_MAP[action]
-        except KeyError:
-            action_word = action
-
-        if self.cb_notify is not None:
-            self.cb_notify({
-                "path":     path,
-                "action":   action_word,
-                "kind":     "",
-                "mime_type": "",
-                "content_state": "",
-                "prop_state": "",
-                "revision": ""
-            })
-        else:
-            print line
