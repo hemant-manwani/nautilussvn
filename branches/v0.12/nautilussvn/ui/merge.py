@@ -83,14 +83,17 @@ class Merge(InterfaceView):
         recursive = self.get_widget("mergeoptions_recursive").get_active()
         ignore_ancestry = self.get_widget("mergeoptions_ignore_ancestry").get_active()
         record_only = self.get_widget("mergeoptions_only_record").get_active()
+
+        action = VCSAction(self.vcs, register_gtk_quit=self.gtk_quit_is_set())
+        action.append(action.set_title, "Merge")
+        action.append(action.set_status, startcmd)
         
         if self.type == "range":
             url = self.get_widget("mergerange_from_url").get_text()
-            headrev = self.vcs.get_revision(self.path)
+            head_revision = self.vcs.get_revision(self.path)
             revisions = self.get_widget("mergerange_revisions").get_text()
-            #revisions = revisions.lower().replace("head", str(headrev))
-            
-            """
+            revisions = revisions.lower().replace("head", str(head_revision))
+
             ranges = []
             for r in revisions.split(","):
                 if r.find("-") != -1:
@@ -99,18 +102,21 @@ class Merge(InterfaceView):
                     low = r
                     high = r
                 
-                ranges.append((int(low),int(high)))
-            """
+                ranges.append((
+                    self.vcs.revision("number", number=int(low)),
+                    self.vcs.revision("number", number=int(high)),
+                    None
+                ))
             
-            self.vcs.merge_ranges(
+            action.append(
+                self.vcs.merge_ranges,
                 url,
-                revisions,
-                headrev,
+                ranges,
+                self.vcs.revision("head"),
                 self.path,
-                ignore_ancestry=ignore_ancestry,
+                notice_ancestry=(not ignore_ancestry),
                 dry_run=test,
-                record_only=record_only,
-                force=True
+                record_only=record_only
             )
 
         elif self.type == "tree":
@@ -129,17 +135,20 @@ class Merge(InterfaceView):
                     number=int(self.get_widget("mergetree_to_revision_number").get_text())
                 )
             
-            # Runs from the terminal for now
-            self.vcs.merge_trees(
+            action.append(
+                self.vcs.merge_trees,
                 from_url,
                 from_revision,
                 to_url,
                 to_revision,
                 self.path,
-                force=True,
                 recurse=recursive,
                 record_only=record_only
             )
+            
+        action.append(action.set_status, endcmd)
+        action.append(action.finish)
+        action.start()
 
     def on_prepare(self, widget, page):
         self.page = page

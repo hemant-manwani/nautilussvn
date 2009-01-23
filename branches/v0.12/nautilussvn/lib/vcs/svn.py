@@ -662,6 +662,9 @@ class SVN:
         
         """
         
+        # TODO: Don't use kwargs for date/number, just accept a "value" as a
+        #       regular arg
+        
         try:
             pysvn_obj = self.REVISIONS[kind]
         except KeyError, e:
@@ -1038,8 +1041,8 @@ class SVN:
         @type   target_wcpath: string
         @param  target_wcpath: Target working copy path
         
-        @type   ignore_ancestry: boolean
-        @param  ignore_ancestry: unsure
+        @type   notice_ancestry: boolean
+        @param  notice_ancestry: unsure
         
         @type   force: boolean
         @param  force: unsure
@@ -1053,39 +1056,8 @@ class SVN:
         TODO: Will firm up the parameter documentation later
         
         """
-        
-        # Due to problems with pysvn's merge functionality, this is a
-        # temporary hackish alternative
-        
-        (source, ranges_to_merge, peg_revision, wcpath) = args
 
-        range_str = ""
-        for r in ranges_to_merge.split(","):
-            if r.find("-") != -1:
-                (low, high) = r.split("-")
-            else:
-                low = r
-                high = r
-            range_str = "%s-r %s:%s " % (range_str, str(low), str(high))
-        
-        peg_rev_str = ""
-        if peg_revision:
-            peg_rev_str = "@%s" % str(peg_revision)
-        
-        command = "svn merge %s%s%s %s" % (range_str, source, peg_rev_str, wcpath)
-        if kwargs["ignore_ancestry"]:
-            command = "%s --ignore-ancestry" % command
-        if kwargs["dry_run"]:
-            command = "%s --dry-run" % command
-        if kwargs["record_only"]:
-            command = "%s --record-only" % command
-        if kwargs["force"]:
-            command = "%s --force" % command
-        print command
-
-        from subprocess import Popen
-        command = "gnome-terminal -e \"bash -c '%s | less'\"" % command
-        Popen(command, shell=True)
+        return self.client.merge_peg2(*args, **kwargs)
 
     def merge_trees(self, *args, **kwargs):
         """
@@ -1118,31 +1090,8 @@ class SVN:
         TODO: Will firm up the parameter documentation later
         
         """
-        
-        # Due to problems with pysvn's merge functionality, this is a
-        # temporary hackish alternative
-        
-        (from_url, from_rev, to_url, to_rev, wc) = args
-        
-        r1_str = ""
-        if from_rev == self.REVISIONS["number"]:
-            r1_str = ":%" % str(from_rev.number)
 
-        r2_str = ""
-        if to_rev == self.REVISIONS["number"]:
-            r2_str = ":%" % str(to_rev.number)
-        
-        command = "svn merge %s%s %s%s %s" %(from_url, r1_str, to_url, r2_str, wc)
-        if not kwargs["recurse"]:
-            command = "%s --non-recursive" % command
-        if kwargs["force"]:
-            command = "%s --force" % command
-        if kwargs["dry_run"]:
-            command = "%s --dry-run" % command
-            
-        from subprocess import Popen
-        command = "gnome-terminal -e \"bash -c '%s | less'\"" % command
-        Popen(command, shell=True)
+        return self.client.merge(*args, **kwargs)
 
 class StatusMonitor:
     """
