@@ -189,18 +189,17 @@ class Merge(InterfaceView):
             )
             self.get_widget("mergerange_working_copy").set_text(self.path)
         
+        self.mergerange_check_ready()
+        
     def on_mergerange_show_log1_clicked(self, widget):
         LogDialog(
-            self.path,
+            self.get_widget("mergerange_from_url").get_text(),
             ok_callback=self.on_mergerange_log1_closed, 
             multiple=True
         )
     
     def on_mergerange_log1_closed(self, data):
         self.get_widget("mergerange_revisions").set_text(data)
-    
-    def on_mergerange_show_log2_clicked(self, widget):
-        LogDialog(self.path)
 
     def on_mergerange_from_url_changed(self, widget):
         self.mergerange_check_ready()
@@ -216,6 +215,11 @@ class Merge(InterfaceView):
             ready = False
 
         self.assistant.set_page_complete(self.page, ready)
+
+        allow_log = False
+        if self.get_widget("mergerange_from_url").get_text():
+            allow_log = True        
+        self.get_widget("mergerange_show_log1").set_sensitive(allow_log)
 
     #
     # Step 2b: Reintegrate a Branch
