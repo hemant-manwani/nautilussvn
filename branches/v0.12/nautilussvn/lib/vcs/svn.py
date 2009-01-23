@@ -108,8 +108,7 @@ class SVN:
         pysvn.wc_notify_action.locked:                  "Locked",
         pysvn.wc_notify_action.unlocked:                "Unlocked",
         pysvn.wc_notify_action.failed_lock:             "Failed Lock",
-        pysvn.wc_notify_action.failed_unlock:           "Failed Unlock",
-        "merge_begin":                                  "Merge Begin"
+        pysvn.wc_notify_action.failed_unlock:           "Failed Unlock"
     }
     
     NOTIFY_ACTIONS_COMPLETE = [
