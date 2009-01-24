@@ -359,7 +359,16 @@ class SVN:
                 return True
         
         return False
+
+    def has_locked(self, path):
+        infos = self.client.info2(path)
+        print infos
+        for info in infos:
+            if info[1].lock is not None:
+                print info[1].lock
+                return True
         
+        return False        
         
     #
     # provides information for ui

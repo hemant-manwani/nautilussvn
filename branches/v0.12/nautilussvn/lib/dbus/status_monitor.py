@@ -40,12 +40,7 @@ class StatusMonitor(dbus.service.Object):
     """
     
     def __init__(self, connection):
-        try:
-            dbus.service.Object.__init__(self, connection, OBJECT_PATH)
-        except AttributeError:
-            bus = dbus.SessionBus()
-            bus_name = dbus.service.BusName(SERVICE, bus)
-            dbus.service.Object.__init__(self, bus_name, OBJECT_PATH)
+        dbus.service.Object.__init__(self, connection, OBJECT_PATH)
             
         self.status_monitor = SVNStatusMonitor(self.StatusChanged)
         
