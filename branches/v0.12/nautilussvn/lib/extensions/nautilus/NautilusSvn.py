@@ -259,7 +259,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         item = self.nautilusVFSFile_table[path]
         
         # Begin debugging code
-        print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
+        #~ print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         if status in self.EMBLEMS:
@@ -281,7 +281,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         # Begin debugging code
-        print "Debug: cb_status() called for %s with status %s" % (path, status)
+        #~ print "Debug: cb_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         # See comment for variable: statuses

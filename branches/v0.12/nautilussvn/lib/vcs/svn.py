@@ -178,15 +178,12 @@ class SVN:
     def __init__(self):
         self.client = pysvn.Client()
     
-    def status(self, path, recurse=True, depth=None):
+    def status(self, path, recurse=True):
         """
         This function will eventually be deprecated for status_with_cache.
         
         """
         
-        if depth:
-            return self.client.status(path, depth=depth)
-
         return self.client.status(path, recurse=recurse)
     
     def status_with_cache(self, path, invalidate=False, recurse=True, depth=None):
@@ -221,13 +218,9 @@ class SVN:
                     # The following condition is used to bypass the cache when
                     # an infinity check is requesting and it's most likely
                     # that only an empty check was done before.
-                    (depth is not None and
-                        len(self.status_cache[path]) == 1)):
+                    (recurse and len(self.status_cache[path]) == 1)):
                 #~ print "Debug: status_with_cache() invalidated %s" % path
-                if depth is not None:
-                    statuses = self.client.status(path, depth=depth)
-                else:
-                    statuses = self.client.status(path, recurse=recurse)
+                statuses = self.client.status(path, recurse=recurse)
             else:
                 return self.status_cache[path]
         except pysvn.ClientError:
@@ -259,7 +252,7 @@ class SVN:
             return True
         except pysvn.ClientError, e:
             # FIXME: ClientError client in use on another thread
-            print "    Debug: EXCEPTION in is_working_copy(): %s" % str(e)
+            #~ print "    Debug: EXCEPTION in is_working_copy(): %s" % str(e)
             return False
         
     def is_in_a_or_a_working_copy(self, path):
@@ -1311,72 +1304,35 @@ class StatusMonitor:
         
         vcs_client = SVN()
         
-        # Directories and all other files
-        priority_status = None 
-        while path != "":
-            #~ print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
-            # Some statuses take precedence in relation to other statuses
-            if priority_status == "conflicted":
-                self.do_callback(path, "conflicted")
-            else:
-                try:
-                    status = vcs_client.status_with_cache(
-                        path, 
-                        invalidate=invalidate, 
-                        recurse=False)[-1].data["text_status"]
-                except IndexError, e:
-                    # TODO: This probably has to do with temporary files
-                    print "    DEBUG: EXCEPTION in StatusMonitor.status(): %s" % str(e)
-                    path = split_path(path)
-                    continue
+        # Figure out what working copy we belong to
+        path_to_check = path
+        working_copy_path = None
+        while path_to_check != "":
+            if vcs_client.is_working_copy(path_to_check):
+                working_copy_path = path_to_check
+            path_to_check = split_path(path_to_check)
+            
+        if working_copy_path:
+            # Do a recursive status check (this should be relatively fast on
+            # consecutive checks).
+            statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
+            
+            # Go through all the statuses and set the correct state
+            for status in statuses:
+                current_path = status.data["path"]
+                if not self.has_watch(current_path): continue
+                print current_path
                 
-                if isfile(path):
-                    if status == SVN.STATUS["conflicted"]:
-                        priority_status = "conflicted"
-                        self.do_callback(path, "conflicted")
-                    else:
-                        self.do_callback(path, PySVN.STATUS[status])
-                elif isdir(path):
-                    sub_statuses = vcs_client.status_with_cache(path, invalidate=invalidate)[:-1]
-                    statuses = set([sub_status.data["text_status"] for sub_status in sub_statuses])
+                if isdir(current_path):
+                    sub_statuses = vcs_client.status_with_cache(current_path, invalidate=False)
+                    sub_text_statuses = set([sub_status.data["text_status"] 
+                        for sub_status in sub_statuses])
                     
-                    # Let's figure out if we have any priority statuses
-                    if SVN.STATUS["conflicted"] in statuses:
-                        priority_status = "conflicted"
-                        self.do_callback(path, "conflicted")
-                    # No priority status, let's find out what we do have
-                    else:
-                        # An item it's own modified status takes precedence over the statuses of children.
-                        if status in self.MODIFIED_STATUSES:
-                            self.do_callback(path, PySVN.STATUS[status])
-                        else:
-                            # A directory should have a modified status when any of its children
-                            # have a certain status (see modified_statuses below). Jason thought up 
-                            # of a nifty way to do this by using sets and the bitwise AND operator (&).
-                            if len(set(self.MODIFIED_STATUSES) & statuses):
-                                self.do_callback(path, "modified")
-                            else:
-                                self.do_callback(path, PySVN.STATUS[status])
-                                
-            path = split_path(path)
-            
-    def do_callback(self, path, status):
-        """
-        Figure out whether or not we should do a callback (if we do too many
-        callbacks the extension will hang).
-        """
-        
-        if path not in self.status_cache: 
-            self.status_cache[path] = {
-                "current_status": None,
-                "previous_status": None
-            }
-            
-        self.status_cache[path]["previous_status"] = self.status_cache[path]["current_status"]
-        self.status_cache[path]["current_status"] = status
-        
-        if self.status_cache[path]["current_status"] != self.status_cache[path]["previous_status"]:
-            self.callback(path, status)
+                    if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
+                        self.callback(current_path, "modified")
+                        continue
+                
+                self.callback(current_path, PySVN.STATUS[status.data["text_status"]])
         
 class PySVN:
     """
