@@ -1340,6 +1340,11 @@ class StatusMonitor:
                 if not self.has_watch(current_path): continue
                 
                 if isdir(current_path):
+                    if status.data["text_status"] in SVN.STATUSES_FOR_COMMIT:
+                        self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
+                        continue
+                    
+                    # Check any children
                     sub_statuses = vcs_client.status_with_cache(current_path, invalidate=False)
                     sub_text_statuses = set([sub_status.data["text_status"] 
                         for sub_status in sub_statuses])
