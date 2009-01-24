@@ -15,6 +15,7 @@
 
 = Tasks remaining for v0.12 Final =
 
+  * Add all TortoiseSVN columns (get_columns)
   * Create packages for Ubuntu and Fedora
   * ~~Document installation process for Ubuntu, Fedora, OpenSUSE, maybe others.~~
   * ~~Allow multiple selection for properties -- adamplumb~~
