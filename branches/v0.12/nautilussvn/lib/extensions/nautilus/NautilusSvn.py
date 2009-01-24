@@ -763,6 +763,22 @@ class MainContextMenu:
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Relocate",
+                        "label": "Relocate...",
+                        "tooltip": "",
+                        "icon": "nautilussvn-relocate",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_relocate,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_relocate,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::GetLock",
                         "label": "Get Lock...",
                         "tooltip": "",
@@ -1271,6 +1287,14 @@ class MainContextMenu:
             
         return False
 
+    def condition_relocate(self):
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
+
     def condition_switch(self):
         for path in self.paths:
             if (self.vcs_client.is_in_a_or_a_working_copy(path) and
@@ -1546,3 +1570,6 @@ class MainContextMenu:
         
     def callback_create(self, menu_item, paths):
         launch_ui_window("create", paths)
+    
+    def callback_relocate(self, menu_item, paths):
+        launch_ui_window("relocate", paths)
