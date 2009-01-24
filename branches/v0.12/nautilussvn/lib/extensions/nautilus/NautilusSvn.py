@@ -1300,9 +1300,14 @@ class MainContextMenu:
                 self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
     
     def condition_resolve(self):
-        # TODO: Implement has_conflicted/is_conflicted methods
-        return True
-    
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path) and
+                    self.vcs_client.has_conflicted(path)):
+                return True
+            
+        return False
+            
     def condition_create(self):
         return (len(self.paths) == 1 and
                 not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))

@@ -320,6 +320,15 @@ class SVN:
             print str(e)
             
         return is_locked
+
+    def is_conflicted(self, path):
+        status = self.status_with_cache(path, recurse=False)[-1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.conflicted:
+            return True
+        
+        return False
+        
     #
     # has
     #
@@ -360,15 +369,32 @@ class SVN:
         
         return False
 
+    def has_ignored(self, path):
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
+        
+        for status in statuses:
+            if status.data["text_status"] == pysvn.wc_status_kind.ignored:
+                return True
+        
+        return False
+
     def has_locked(self, path):
         infos = self.client.info2(path)
-        print infos
+
         for info in infos:
             if info[1].lock is not None:
-                print info[1].lock
                 return True
         
         return False        
+
+    def has_conflicted(self, path):
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
+        
+        for status in statuses:
+            if status.data["text_status"] == pysvn.wc_status_kind.conflicted:
+                return True
+        
+        return False
         
     #
     # provides information for ui
