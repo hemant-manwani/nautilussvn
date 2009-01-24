@@ -1203,10 +1203,6 @@ class StatusMonitor:
     #:     
     watches = {}
     
-    #: 
-    #:
-    status_cache = {}
-    
     #: The mask for the inotify events we're interested in.
     #: TODO: understand how masking works
     #: TODO: maybe we should just analyze VCSProcessEvent and determine this 
