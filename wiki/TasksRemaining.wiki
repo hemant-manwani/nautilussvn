@@ -5,10 +5,10 @@
 
   * Get UIs to refresh file manager status -- brucevdkooij
   * Call status functions asynchronously -- brucevdkooij
-  * add is_conflicted/has_conflicted methods -- brucevdkooij
-    * implement the condition_resolve method -- adamplumb
-  * add is_locked/has_locked methods -- brucevdkooij
-    * implement the condition_unlock method -- adamplumb
+  * ~~add is_conflicted/has_conflicted methods -- brucevdkooij~~
+    * ~~implement the condition_resolve method -- adamplumb~~
+  * ~~add is_locked/has_locked methods -- brucevdkooij~~
+    * ~~implement the condition_unlock method -- adamplumb~~
   * ~~Create invisible interface for deleting -- adamplumb~~
   * ~~Create invisible interface for ignoring -- adamplumb~~
   * ~~Create invisible interface for "Create Repository" -- adamplumb~~
