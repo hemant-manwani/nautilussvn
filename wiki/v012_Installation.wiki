@@ -17,8 +17,6 @@ Here is a basic set of dependencies that you will need to install before you can
 || [http://subversion.tigris.org/ subversion] || Subversion, duh! ||
 || [http://meld.sourceforge.net/ meld] || A GTK+ diff tool ||
 
-
-
 = Distro-specific instructions =
 
 == Ubuntu 8.10 ==
@@ -119,7 +117,16 @@ mkdir -p ~/.nautilus/python-extensions
 ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
 mkdir -p ~/.icons
 ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
+}}}
 
+Add the following line to to /etc/environment:
+
+{{{
+PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
+}}} 
+
+Note that /etc/environment is only parsed when X is started, but you can load the extension immediately using:
+{{{
 export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
-nautilus -q &&nautilus --no-desktop .
+nautilus -q && nautilus &
 }}}
