@@ -1511,7 +1511,7 @@ class MainContextMenu:
         launch_ui_window("revert", paths)
 
     def callback_diff(self, menu_item, paths):
-        launch_diff_tool(paths)
+        launch_diff_tool(paths[0])
     
     def callback_show_log(self, menu_item, paths):
         launch_ui_window("log", paths)
