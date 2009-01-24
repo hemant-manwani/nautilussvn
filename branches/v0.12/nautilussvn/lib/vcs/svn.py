@@ -379,7 +379,10 @@ class SVN:
         return False
 
     def has_locked(self, path):
-        infos = self.client.info2(path)
+        try:
+            infos = self.client.info2(path)
+        except:
+            return False
 
         for info in infos:
             if info[1].lock is not None:
