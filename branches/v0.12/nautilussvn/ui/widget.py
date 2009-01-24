@@ -69,6 +69,16 @@ class Table:
         model = self.treeview.get_model()
         del model[index]
 
+    def remove_multiple(self, rows):
+        i = 0
+        for row in rows:
+            rm_index = row
+            if i > 0:
+                rm_index -= 1
+            
+            self.remove(rm_index)
+            i += 1            
+
     def get_items(self):
         return self.treeview.get_model()
 

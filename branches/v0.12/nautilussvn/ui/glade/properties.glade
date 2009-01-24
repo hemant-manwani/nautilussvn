@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 16:19:43 2009 -->
+<!--Generated with glade3 3.4.5 on Sat Jan 24 11:51:38 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Properties">
     <property name="width_request">500</property>
@@ -63,7 +63,9 @@
                           <widget class="GtkTreeView" id="table">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <signal name="button_press_event" handler="on_table_button_pressed"/>
+                            <property name="rubber_banding">True</property>
+                            <signal name="button_release_event" handler="on_table_button_released"/>
+                            <signal name="cursor_changed" handler="on_table_cursor_changed"/>
                           </widget>
                         </child>
                       </widget>
