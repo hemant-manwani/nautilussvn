@@ -136,27 +136,11 @@ class SVN:
         "working":          pysvn.opt_revision_kind.working,
         "head":             pysvn.opt_revision_kind.head
     }
-
-    try:
-        DEPTHS = {
-            "empty":        pysvn.depth.empty,
-            "exclude":      pysvn.depth.exclude,
-            "files":        pysvn.depth.files,
-            "immediates":   pysvn.depth.immediates,
-            "infinity":     pysvn.depth.infinity,
-            "unknown":      pysvn.depth.unknown
-        }
-
-        DEPTHS_FOR_CHECKOUT = {
-            "Fully Recursive":                          DEPTHS["infinity"],
-            "Immediate children, including folders":    DEPTHS["immediates"],
-            "Only file children":                       DEPTHS["files"],
-            "Only this item":                           DEPTHS["empty"]
-        }
-    except:
-        #~ print "Debug: pysvn.depth object not supported in this version of subversion."
-        DEPTHS = {}
-        DEPTHS_FOR_CHECKOUT = {"Recursive": True, "Not Recursive": False}
+    
+    DEPTHS_FOR_CHECKOUT = { 
+        "Recursive": True, 
+        "Not Recursive": False 
+    }
         
     #: This variable is used to maintain a status cache. Paths function as keys
     #: and every item in the cache has all the statuses for all the items below
@@ -186,7 +170,7 @@ class SVN:
         
         return self.client.status(path, recurse=recurse)
     
-    def status_with_cache(self, path, invalidate=False, recurse=True, depth=None):
+    def status_with_cache(self, path, invalidate=False, recurse=True):
         """
         
         Look up the status for path.
@@ -203,9 +187,6 @@ class SVN:
 
         @type   recurse: boolean
         @param  recurse: Should status recurse or not
-        
-        @type   depth: one of pysvn.depth
-        @param  depth: Defines how deep the status check should go.
         
         @rtype:        list of PysvnStatus
         @return:       A list of statuses for the given path, with the status
@@ -1369,19 +1350,6 @@ class PySVN:
         pysvn.opt_revision_kind.working:        "working",
         pysvn.opt_revision_kind.head:           "head"
     }
-    
-    try:
-        DEPTHS = {
-            pysvn.depth.empty:      "empty",
-            pysvn.depth.exclude:    "exclude",
-            pysvn.depth.files:      "files",
-            pysvn.depth.immediates: "immediates",
-            pysvn.depth.infinity:   "infinity",
-            pysvn.depth.unknown:    "unknown"
-        }
-    except:
-        #~ print "Debug: pysvn.depth object not supported in this version of subversion."
-        DEPTHS = {}
         
     def convert_pysvn_statuses(self, pysvn_statuses):
         """
