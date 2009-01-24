@@ -94,7 +94,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # Start up our DBus service if it's not already started, if this fails
         # we can't really do anything.
         self.dbus_service_available = nautilussvn.lib.dbus.service.start()
-            
+
         # Create a StatusMonitor and register a callback with it to notify us 
         # of any status changes.
         if self.dbus_service_available:
@@ -1308,11 +1308,10 @@ class MainContextMenu:
                 not self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]))
 
     def condition_unlock(self):
-        # TODO: Implement is_locked/has_locked methods
-        # TODO: Should show if path is directory
         for path in self.paths:
             if (self.vcs_client.is_in_a_or_a_working_copy(path) and
-                    self.vcs_client.is_versioned(path)):
+                    self.vcs_client.is_versioned(path) and
+                    self.vcs_client.has_locked(path)):
                 return True
             
         return False

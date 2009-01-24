@@ -38,13 +38,8 @@ class SVNClient(dbus.service.Object):
     """
     
     def __init__(self, connection):
-        try:
-            dbus.service.Object.__init__(self, connection, OBJECT_PATH)
-        except AttributeError:
-            bus = dbus.SessionBus()
-            bus_name = dbus.service.BusName(SERVICE, bus)
-            dbus.service.Object.__init__(self, bus_name, OBJECT_PATH)
-            
+        dbus.service.Object.__init__(self, connection, OBJECT_PATH)            
+
         self.pysvn = PySVN()
         self.svn_client = SVN()
     
@@ -100,6 +95,10 @@ class SVNClient(dbus.service.Object):
     @dbus.service.method(INTERFACE)
     def HasDeleted(self, path):
         return self.svn_client.has_deleted(str(path))
+
+    @dbus.service.method(INTERFACE)
+    def HasLocked(self, path):
+        return self.svn_client.has_locked(str(path))
     
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
@@ -153,6 +152,9 @@ class SVNClientStub:
     
     def has_deleted(self, path):
         return self.svn_client.HasDeleted(path)
+
+    def has_locked(self, path):
+        return self.svn_client.HasLocked(path)
     
     def exit(self):
         self.svn_client.Exit()
