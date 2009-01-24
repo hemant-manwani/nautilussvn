@@ -217,15 +217,32 @@ class SVN:
                     # an infinity check is requesting and it's most likely
                     # that only an empty check was done before.
                     (recurse and len(self.status_cache[path]) == 1)):
-                #~ print "Debug: status_with_cache() invalidated %s" % path
+                print "Debug: status_with_cache() invalidated %s" % path
                 statuses = self.client.status(path, recurse=recurse)
             else:
                 return self.status_cache[path]
         except pysvn.ClientError:
-            statuses = [pysvn.PysvnStatus({"text_status": pysvn.wc_status_kind.none})]
+            return [pysvn.PysvnStatus({"text_status": pysvn.wc_status_kind.none})]
         
         # If we do end up here the cache was bypassed.
-        self.status_cache[path] = statuses
+        if recurse:
+            # Empty out all the caches
+            for status in statuses:
+                current_path = os.path.join(path, status.data["path"])
+                while current_path != "":
+                    self.status_cache[current_path] = []
+                    current_path = split_path(current_path)
+            
+            # Fill them back up
+            for status in statuses:
+                current_path = os.path.join(path, status.data["path"])
+                while current_path != "":
+                    if current_path not in self.status_cache: break;
+                    self.status_cache[current_path].append(status)
+                    current_path = split_path(current_path)
+        else:
+            self.status_cache[path] = statuses
+                
         return self.status_cache[path]
     #
     # is
@@ -1300,6 +1317,8 @@ class StatusMonitor:
         @param  invalidate: Whether or not the cache should be bypassed.
         """
         
+        print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
+        
         vcs_client = SVN()
         
         # Figure out what working copy we belong to
@@ -1319,7 +1338,6 @@ class StatusMonitor:
             for status in statuses:
                 current_path = status.data["path"]
                 if not self.has_watch(current_path): continue
-                print current_path
                 
                 if isdir(current_path):
                     sub_statuses = vcs_client.status_with_cache(current_path, invalidate=False)
