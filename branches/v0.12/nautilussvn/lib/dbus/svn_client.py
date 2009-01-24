@@ -25,7 +25,7 @@ import traceback
 import dbus
 import dbus.service
 
-from nautilussvn.lib.vcs.svn import SVN, PySVN
+from nautilussvn.lib.vcs.svn import SVN
 
 INTERFACE = "org.google.code.nautilussvn.SVNClient"
 OBJECT_PATH = "/org/google/code/nautilussvn/SVNClient"
@@ -38,15 +38,9 @@ class SVNClient(dbus.service.Object):
     """
     
     def __init__(self, connection):
-        dbus.service.Object.__init__(self, connection, OBJECT_PATH)            
-
-        self.pysvn = PySVN()
+        dbus.service.Object.__init__(self, connection, OBJECT_PATH)
+        
         self.svn_client = SVN()
-    
-    @dbus.service.method(INTERFACE)
-    def StatusWithCache(self, path, invalidate=False):
-        return self.pysvn.convert_pysvn_statuses(
-            self.svn_client.status_with_cache(str(path), bool(invalidate)))
     
     @dbus.service.method(INTERFACE)
     def IsWorkingCopy(self, path):
@@ -129,9 +123,6 @@ class SVNClientStub:
             self.svn_client = self.session_bus.get_object(SERVICE, OBJECT_PATH)
         except dbus.DBusException:
             traceback.print_exc()
-    
-    def status_with_cache(self, path, invalidate=False):
-        return self.svn_client.StatusWithCache(path, invalidate)
     
     def is_working_copy(self, path):
         return self.svn_client.IsWorkingCopy(path)
