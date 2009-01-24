@@ -1340,7 +1340,11 @@ class StatusMonitor:
                 if not self.has_watch(current_path): continue
                 
                 if isdir(current_path):
-                    if status.data["text_status"] in SVN.STATUSES_FOR_COMMIT:
+                    if status.data["text_status"] in [
+                            SVN.STATUS["added"],
+                            SVN.STATUS["modified"],
+                            SVN.STATUS["deleted"]
+                        ]:
                         self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
                         continue
                     
@@ -1349,6 +1353,9 @@ class StatusMonitor:
                     sub_text_statuses = set([sub_status.data["text_status"] 
                         for sub_status in sub_statuses])
                     
+                    if SVN.STATUS["conflicted"] in sub_text_statuses:
+                        self.callback(current_path, "conflicted")
+                        continue
                     if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
                         self.callback(current_path, "modified")
                         continue
