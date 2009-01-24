@@ -4,6 +4,7 @@
 = Tasks remaining for v0.12 Beta =
 
   * Get UIs to refresh file manager status -- brucevdkooij
+    * The biggest issue blocking this task is improving the status checking performance (this is a logic issue), doing the status checking asynchronous should only be the finishing touch.
   * Call status functions asynchronously -- brucevdkooij
   * ~~add is_conflicted/has_conflicted methods -- brucevdkooij~~
     * ~~implement the condition_resolve method -- adamplumb~~
