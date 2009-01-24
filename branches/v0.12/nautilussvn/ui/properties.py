@@ -36,7 +36,8 @@ class Properties(InterfaceView):
     
     """
 
-    SELECTED_ROW = None
+    selected_row = None
+    selected_rows = []
 
     def __init__(self, path):
         InterfaceView.__init__(self, "properties", "Properties")
@@ -55,6 +56,7 @@ class Properties(InterfaceView):
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
             ["Name", "Value"]
         )
+        self.table.allow_multiple()
         
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.proplist = self.vcs.proplist(path)
@@ -93,32 +95,42 @@ class Properties(InterfaceView):
             self.set_selected_name_value(name, value)
     
     def on_delete_clicked(self, widget, data=None):
-        row = self.table.get_row(self.SELECTED_ROW)
-        self.delete_stack.append([row[0],row[1]])
-        self.table.remove(self.SELECTED_ROW)
+        if not self.selected_rows:
+            return
+            
+        for i in self.selected_rows:
+            row = self.table.get_row(i)
+            self.delete_stack.append([row[0],row[1]])
+            
+        self.table.remove_multiple(self.selected_rows)
     
     def set_selected_name_value(self, name, value):
-        self.table.set_row(self.SELECTED_ROW, [name,value])
+        self.table.set_row(self.selected_rows[0], [name,value])
         
     def get_selected_name_value(self):
         returner = None
-        if self.SELECTED_ROW is not None:
-            returner = self.table.get_row(self.SELECTED_ROW)
+        if self.selected_rows is not None:
+            returner = self.table.get_row(self.selected_rows[0])
         return returner
     
-    def on_table_button_pressed(self, treeview, event=None):
-        pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
-        if pathinfo is not None:
-            path, col, cellx, celly = pathinfo
-            treeview.grab_focus()
-            treeview.set_cursor(path, col, 0)
-            self.SELECTED_ROW = path
+    def on_table_cursor_changed(self, treeview):
+        selection = treeview.get_selection()
+        (liststore, indexes) = selection.get_selected_rows()
+        self.selected_rows = []
+        for tup in indexes:
+            self.selected_rows.append(tup[0])
+
+        length = len(self.selected_rows)
+        if length == 0:
+            self.get_widget("edit").set_sensitive(False)
+            self.get_widget("delete").set_sensitive(False)
+        elif length == 1:
             self.get_widget("edit").set_sensitive(True)
             self.get_widget("delete").set_sensitive(True)
         else:
-            self.SELECTED_ROW = None
             self.get_widget("edit").set_sensitive(False)
-            self.get_widget("delete").set_sensitive(False)
+            self.get_widget("delete").set_sensitive(True)
+
 
 if __name__ == "__main__":
     import sys
