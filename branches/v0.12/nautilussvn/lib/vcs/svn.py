@@ -56,6 +56,23 @@ class SVN:
         "external"      : pysvn.wc_status_kind.external,
         "incomplete"    : pysvn.wc_status_kind.incomplete
     }
+    
+    STATUS_REVERSE = {
+        pysvn.wc_status_kind.none:          "none",
+        pysvn.wc_status_kind.unversioned:   "unversioned",
+        pysvn.wc_status_kind.normal:        "normal",
+        pysvn.wc_status_kind.added:         "added",
+        pysvn.wc_status_kind.missing:       "missing",
+        pysvn.wc_status_kind.deleted:       "deleted",
+        pysvn.wc_status_kind.replaced:      "replaced",
+        pysvn.wc_status_kind.modified:      "modified",
+        pysvn.wc_status_kind.merged:        "merged",
+        pysvn.wc_status_kind.conflicted:    "conflicted",
+        pysvn.wc_status_kind.ignored:       "ignored",
+        pysvn.wc_status_kind.obstructed:    "obstructed",
+        pysvn.wc_status_kind.external:      "external",
+        pysvn.wc_status_kind.incomplete:    "incomplete"
+    }
 
     STATUSES_FOR_COMMIT = [
         STATUS["unversioned"],
@@ -1313,80 +1330,4 @@ class StatusMonitor:
                         self.callback(current_path, "modified")
                         continue
                 
-                self.callback(current_path, PySVN.STATUS[status.data["text_status"]])
-        
-class PySVN:
-    """
-    Used to convert all sorts of PySVN objects to primitives which can be 
-    submitted over the DBus.
-    """
-    
-    #: TODO: this is the reverse of C{STATUS} in the svn module and should probably
-    #: be moved there once I figure out what the responsibilities for the svn
-    #: module are.
-    STATUS = {
-        pysvn.wc_status_kind.none:          "none",
-        pysvn.wc_status_kind.unversioned:   "unversioned",
-        pysvn.wc_status_kind.normal:        "normal",
-        pysvn.wc_status_kind.added:         "added",
-        pysvn.wc_status_kind.missing:       "missing",
-        pysvn.wc_status_kind.deleted:       "deleted",
-        pysvn.wc_status_kind.replaced:      "replaced",
-        pysvn.wc_status_kind.modified:      "modified",
-        pysvn.wc_status_kind.merged:        "merged",
-        pysvn.wc_status_kind.conflicted:    "conflicted",
-        pysvn.wc_status_kind.ignored:       "ignored",
-        pysvn.wc_status_kind.obstructed:    "obstructed",
-        pysvn.wc_status_kind.external:      "external",
-        pysvn.wc_status_kind.incomplete:    "incomplete"
-    }
-    
-    REVISIONS = {
-        pysvn.opt_revision_kind.unspecified:    "unspecified",
-        pysvn.opt_revision_kind.number:         "number",
-        pysvn.opt_revision_kind.date:           "date",
-        pysvn.opt_revision_kind.committed:      "committed",
-        pysvn.opt_revision_kind.previous:       "previous",
-        pysvn.opt_revision_kind.working:        "working",
-        pysvn.opt_revision_kind.head:           "head"
-    }
-        
-    def convert_pysvn_statuses(self, pysvn_statuses):
-        """
-        Converts a list of C{PysvnStatus}es to a dictionary:::
-            
-            {
-                "data": {
-                    "text_status": "normal"
-                    ...
-                }
-            }
-            
-        Sorta...
-        
-        """
-        
-        statuses = []
-        
-        for pysvn_status in pysvn_statuses:
-            data = []
-            for key, value in pysvn_status.data.items():
-                try:
-                    if value == None:
-                        continue
-                    elif isinstance(value, (str, int, unicode)):
-                        data.append((key, value))
-                    elif value in self.STATUS:
-                        data.append((key, self.STATUS[value]))
-                    
-                except TypeError, e:
-                    if str(e) == "unhashable instance":
-                        continue
-                    else:
-                        raise e
-                    
-            statuses.append({
-                "data": dict(data)
-            })
-            
-        return statuses
+                self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]]) 
