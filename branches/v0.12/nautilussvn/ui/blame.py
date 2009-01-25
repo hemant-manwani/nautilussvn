@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+
 import pygtk
 import gobject
 import gtk
@@ -42,7 +44,15 @@ class Blame(InterfaceView):
     """
     
     def __init__(self, path):
+        if os.path.isdir(path):
+            MessageBox("Cannot annotate a directory")
+            raise SystemExit()
+            return
+            
         InterfaceView.__init__(self, "blame", "Blame")
+
+        if path == ".":
+            path = os.getcwd()
         
         self.get_widget("Blame").set_title("Blame - %s" % path)
         

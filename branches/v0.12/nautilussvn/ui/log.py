@@ -21,6 +21,7 @@
 #
 
 from __future__ import division
+import os
 import threading
 from datetime import datetime
 
@@ -56,6 +57,10 @@ class Log(InterfaceView):
         """
         
         InterfaceView.__init__(self, "log", "Log")
+
+        if path == ".":
+            path = os.getcwd()
+
         self.get_widget("Log").set_title("Log - %s" % path)
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
