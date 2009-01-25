@@ -62,7 +62,7 @@ class Properties(InterfaceView):
         self.proplist = self.vcs.proplist(path)
         
         for key,val in self.proplist.items():
-            self.table.append([key,val])
+            self.table.append([key,val.rstrip()])
 
     def on_destroy(self, widget):
         gtk.main_quit()
