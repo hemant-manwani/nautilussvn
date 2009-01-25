@@ -13,6 +13,7 @@
   * ~~Create invisible interface for deleting -- adamplumb~~
   * ~~Create invisible interface for ignoring -- adamplumb~~
   * ~~Create invisible interface for "Create Repository" -- adamplumb~~
+  * Move NautilusSVN configuration directory to conform to the freedesktop.org [http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html#variables XDG Base Directory Specifications]. $XDG_CONFIG_HOME if set, by default ~/.config
 
 = Tasks remaining for v0.12 Final =
 
