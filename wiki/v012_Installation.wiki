@@ -23,7 +23,7 @@ Here is a basic set of dependencies that you will need to install before you can
 
 1. Install the following packages through your package manager.
 {{{
-sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade python-dbus python-svn subversion meld
+sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade2 python-dbus python-svn subversion meld
 }}}
 
 2. [http://code.google.com/p/nautilussvn/wiki/v012_Installation#Installing_The_Extension Install the Extension]
