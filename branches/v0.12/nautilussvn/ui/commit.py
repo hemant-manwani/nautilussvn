@@ -99,13 +99,19 @@ class Commit(InterfaceView):
             self.files_table.get_row(self.last_row_clicked)[0] = True
         
         # Ignored/Normal files should not be shown
-        if status in [
-                    self.vcs.STATUS["normal"], 
-                    self.vcs.STATUS["ignored"],
-                    self.vcs.STATUS["none"],
-                    None
-                ]:
-            self.files_table.remove(self.last_row_clicked)
+        index = 0
+        remove = []
+        for item in self.files_table.get_items():
+            if (self.vcs.is_normal(item[1]) or
+                    self.vcs.is_ignored(item[1])):
+                
+                self.files_table.remove(index)
+                del self.items[index]
+                index -= 1
+                
+            index += 1
+
+        #self.files_table.remove_multiple(remove)
     
     def get_last_path(self):
         return self.files_table.get_row(self.last_row_clicked)[1]
@@ -364,14 +370,6 @@ class Commit(InterfaceView):
     #
     
     def condition_add(self):
-        """
-        Show the Add item when the file is unversioned.
-        
-        @rtype:     boolean
-        @return:    Whether or not to show the add context menu item.
-        
-        """
-
         return (
             self.get_last_status() in [
                 self.vcs.STATUS["unversioned"]
@@ -379,15 +377,6 @@ class Commit(InterfaceView):
         )
     
     def condition_revert(self):
-        """
-        Show the Revert item when the file has been added but not committed
-        to the repository.
-        
-        @rtype:     boolean
-        @return:    Whether or not to show the revert context menu item.
-        
-        """
-
         return (
             self.get_last_status() in [
                 self.vcs.STATUS["added"],
@@ -398,15 +387,6 @@ class Commit(InterfaceView):
         )
 
     def condition_view_diff(self):
-        """
-        Show the View Diff item when the file has been modified but not
-        yet committed to the repository.
-        
-        @rtype:  boolean
-        @return: Whether or not to show the view diff context menu item.
-        
-        """
-
         return (
             self.get_last_status() in [
                 self.vcs.STATUS["modified"]
@@ -414,15 +394,6 @@ class Commit(InterfaceView):
         )
 
     def condition_delete(self):
-        """
-        Show the Revert item when the file has been added but not committed
-        to the repository.
-        
-        @rtype:     boolean
-        @return:    Whether or not to show the revert context menu item.
-        
-        """
-
         return (
             self.get_last_status() not in [
                 self.vcs.STATUS["deleted"]
