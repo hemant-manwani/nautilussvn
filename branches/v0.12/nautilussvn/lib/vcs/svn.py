@@ -241,8 +241,8 @@ class SVN:
                     self.status_cache[current_path].append(status)
                     current_path = split_path(current_path)
         else:
-            self.status_cache[path] = statuses
-                
+            return statuses
+            
         return self.status_cache[path]
     #
     # is
