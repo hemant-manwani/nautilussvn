@@ -28,7 +28,7 @@ from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
 from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
-import nautilussvn.ui.dialog
+from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -44,51 +44,68 @@ class Blame(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "blame", "Blame")
         
+        self.get_widget("Blame").set_title("Blame - %s" % path)
+        
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
         self.pbar = nautilussvn.ui.widget.ProgressBar(self.get_widget("pbar"))
+        self.get_widget("from").set_text(str(1))
+        self.get_widget("to").set_text("HEAD")        
+
+        self.table = nautilussvn.ui.widget.Table(
+            self.get_widget("table"),
+            [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, 
+                gobject.TYPE_STRING, gobject.TYPE_STRING], 
+            ["Line", "Revision", "Author", 
+                "Date", "Text"],
+        )
+        self.table.allow_multiple()
+        
         self.is_loading = False
-        self.action = None
+        self.load()
         
     def on_destroy(self, widget):
         self.close()
-
-    def on_cancel_clicked(self, widget):
-        if self.is_loading:
-            self.action.set_cancel(True)
-            self.pbar.set_text("Cancelled")
-            self.pbar.update(1)
-            self.set_loading(False)
-        else:
-            self.close()
-
-    def on_ok_clicked(self, widget):
-    
-        if self.action is not None:
-            self.close()
-            return
-    
-        from_rev_num = int(self.get_widget("from_revision").get_text())
-        if not from_rev_num:
-            nautilussvn.ui.dialog.MessageBox("You must specify a FROM revision.")
-            return
-            
-        from_rev = self.vcs.revision("number", number=from_rev_num)
         
-        to_rev = None
-        if self.get_widget("revision_head_opt").get_active():
-            to_rev = self.vcs.revision("head")
-        elif self.get_widget("revision_number_opt").get_active():
-            rev_num = self.get_widget("revision_number").get_text()
-            
-            if rev_num == "":
-                nautilussvn.ui.dialog.MessageBox("You must specify a TO revision.")
-                
-                return
-                
-            to_rev = self.vcs.revision("number", number=rev_num)
+    def on_close_clicked(self, widget):
+        self.close()
 
+    def on_refresh_clicked(self, widget):
+        self.load()
+
+    def on_from_show_log_clicked(self, widget, data=None):
+        LogDialog(self.path, ok_callback=self.on_from_log_closed)
+    
+    def on_from_log_closed(self, data):
+        if data is not None:
+            self.get_widget("from").set_text(data)
+
+    def on_to_show_log_clicked(self, widget, data=None):
+        LogDialog(self.path, ok_callback=self.on_to_log_closed)
+    
+    def on_to_log_closed(self, data):
+        if data is not None:
+            self.get_widget("to").set_text(data)
+
+
+    #
+    # Helper methods
+    #
+    
+    def load(self):
+        from_rev_num = self.get_widget("from").get_text().lower()
+        to_rev_num = self.get_widget("to").get_text().lower()
+        
+        if not from_rev_num.isdigit():
+            MessageBox("From revision field must be an integer")
+            return
+             
+        from_rev = self.vcs.revision("number", number=int(from_rev_num))
+        
+        to_rev = self.vcs.revision("head")
+        if to_rev_num.isdigit():
+            to_rev = self.vcs.revision("number", number=int(to_rev_num))
 
         self.set_loading(True)
         self.pbar.set_text("Retrieving Blame Information...")
@@ -99,9 +116,9 @@ class Blame(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set(),
             notification=False
         )    
-        
+
         self.action.append(
-            self.vcs.annotate, 
+            self.vcs.annotate,
             self.path,
             from_rev,
             to_rev
@@ -109,37 +126,27 @@ class Blame(InterfaceView):
         self.action.append(self.pbar.update, 1)
         self.action.append(self.pbar.set_text, "Completed")
         self.action.append(self.set_loading, False)
-        self.action.append(self.launch_blame)
+        self.action.append(self.populate_table)
         self.action.start()
-
-    
-    def on_revision_number_focused(self, widget, data=None):
-        self.set_revision_number_opt_active()
-        
-    def set_revision_number_opt_active(self):
-        self.get_widget("revision_number_opt").set_active(True)
-
-    def on_show_log_clicked(self, widget, data=None):
-        LogDialog(self.path, ok_callback=self.on_log_closed)
-    
-    def on_log_closed(self, data):
-        if data is not None:
-            self.set_revision_number_opt_active()
-            self.get_widget("revision_number").set_text(data)
-
-    #
-    # Helper methods
-    #
-
-    def launch_blame(self):
-        self.get_widget("ok").set_sensitive(False)
-        blamedict = self.action.get_result(0)
-        
-        from nautilussvn.ui.blameui import BlameUI
-        BlameUI(blamedict)
     
     def set_loading(self, loading=True):
         self.is_loading = loading
+
+    def populate_table(self):
+        blamedict = self.action.get_result(0)
+
+        self.table.clear()
+        for item in blamedict:
+        
+            date = item["date"].replace("T", " ")[0:-8]
+        
+            self.table.append([
+                item["number"],
+                item["revision"].number,
+                item["author"],
+                date,
+                item["line"]
+            ])
 
 if __name__ == "__main__":
     import sys
