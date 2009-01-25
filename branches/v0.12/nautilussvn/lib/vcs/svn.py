@@ -1333,7 +1333,6 @@ class StatusMonitor:
             # Go through all the statuses and set the correct state
             for status in statuses:
                 current_path = status.data["path"]
-                if not self.has_watch(current_path): continue
                 
                 if isdir(current_path):
                     if status.data["text_status"] in [

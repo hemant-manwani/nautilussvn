@@ -210,6 +210,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 path = gnomevfs.get_local_path_from_uri(item.get_uri())
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
+                
+                print "Debug: get_file_items() for %s" % path
         
         return MainContextMenu(paths, self).construct_menu()
         
@@ -281,7 +283,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         # Begin debugging code
-        #~ print "Debug: cb_status() called for %s with status %s" % (path, status)
+        print "Debug: cb_status() called for %s with status %s" % (path, status)
         # End debugging code
         
         # See comment for variable: statuses
