@@ -105,10 +105,22 @@ class UnlockQuick(InterfaceNonView):
         self.vcs.unlock(self.path, force=True)
         
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
+    from os import getcwd
+    from sys import argv
+
+    args = argv[1:]
     if len(args) < 1:
         raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
-    window = Unlock(args)
+
+    # Convert "." to current working directory
+    paths = args
+    i = 0
+    for arg in args:
+        paths[i] = arg
+        if paths[i] == ".":
+            paths[i] = getcwd()
+        i += 1
+
+    window = Unlock(paths)
     window.register_gtk_quit()
     gtk.main()

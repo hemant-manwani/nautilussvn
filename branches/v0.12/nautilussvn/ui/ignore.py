@@ -35,6 +35,15 @@ class Ignore(InterfaceNonView):
     """
 
     def __init__(self, path, pattern):
+        """
+        @type   path: string
+        @param  path: The path to apply the ignore keyword to
+        
+        @type   pattern: string
+        @param  pattern: Ignore items with the given pattern
+        
+        """
+        
         InterfaceNonView.__init__(self)
         self.path = path
         self.pattern = pattern
@@ -45,11 +54,13 @@ class Ignore(InterfaceNonView):
         return self.vcs.propset(self.path, prop, self.pattern)
         
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
-    if len(args) != 1:
-        raise SystemExit("Usage: python %s [path]" % __file__)
-    window = Ignore(args[0])
+    from os import getcwd
+    from sys import argv
+    
+    args = argv[1:]
+    if len(args) < 2:
+        raise SystemExit("Usage: python %s [path] [pattern]" % __file__)
+    if args[0] == ".": args[0] = getcwd()
+    window = Ignore(args[0], args[1])
     window.register_gtk_quit()
     window.start()
-    gtk.main()

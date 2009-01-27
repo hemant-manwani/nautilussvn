@@ -57,10 +57,13 @@ class Cleanup(InterfaceNonView):
 
         
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
+    from os import getcwd
+    from sys import argv
+
+    args = argv[1:]
     if len(args) != 1:
         raise SystemExit("Usage: python %s [path]" % __file__)
+    if args[0] == ".": args[0] = getcwd()
     window = Cleanup(args[0])
     window.register_gtk_quit()
     window.start()

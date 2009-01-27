@@ -21,7 +21,6 @@
 #
 
 from __future__ import division
-import os
 import threading
 from datetime import datetime
 
@@ -57,9 +56,6 @@ class Log(InterfaceView):
         """
         
         InterfaceView.__init__(self, "log", "Log")
-
-        if path == ".":
-            path = os.getcwd()
 
         self.get_widget("Log").set_title("Log - %s" % path)
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
@@ -381,10 +377,13 @@ class LogCache:
         self.cache = {}
 
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
+    from os import getcwd
+    from sys import argv
+    
+    args = argv[1:]
     if len(args) != 1:
         raise SystemExit("Usage: python %s [path]" % __file__)
+    if args[0] == ".": args[0] = getcwd()
     window = Log(args[0])
     window.register_gtk_quit()
     gtk.main()
