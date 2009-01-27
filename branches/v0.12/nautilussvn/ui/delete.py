@@ -40,10 +40,13 @@ class Delete(InterfaceNonView):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
     def start(self):
-        versioned = False
+        versioned = []
+        unversioned = []
         for path in self.paths:
             if self.vcs.is_versioned(path):
-                versioned = True
+                versioned.append(path)
+            else:
+                unversioned.append(path)
         
         result = True
         if not versioned:
@@ -53,18 +56,32 @@ class Delete(InterfaceNonView):
             result = confirm.run()
         
         if result:
-            for path in self.paths:
-                if self.vcs.is_versioned(path):
-                    self.vcs.remove(path, force=True)
-                else:
-                    nautilussvn.lib.helper.delete_item(data[1])
+            try:
+                self.vcs.remove(versioned, force=True)
+            except Exception, e:
+                print str(e)
+                
+        else:
+            for path in unversioned:
+                nautilussvn.lib.helper.delete_item(path)
         
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
+    from os import getcwd
+    from sys import argv
+    
+    args = argv[1:]
     if len(args) < 1:
         raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
-    window = Delete(args)
+
+    # Convert "." to current working directory
+    paths = args
+    i = 0
+    for arg in args:
+        paths[i] = arg
+        if paths[i] == ".":
+            paths[i] = getcwd()
+        i += 1
+
+    window = Delete(paths)
     window.register_gtk_quit()
     window.start()
-    gtk.main()

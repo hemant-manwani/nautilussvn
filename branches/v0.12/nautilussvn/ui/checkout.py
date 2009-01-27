@@ -19,7 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
-import os
+
+import os.path
 
 import pygtk
 import gobject
@@ -43,9 +44,6 @@ class Checkout(InterfaceView):
 
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
-        
-        if path == ".":
-            path = os.getcwd()
 
         self.get_widget("Checkout").set_title("Checkout - %s" % path)
         
@@ -159,10 +157,13 @@ class Checkout(InterfaceView):
         self.get_widget("ok").set_sensitive(self.complete)
 
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
+    from os import getcwd
+    from sys import argv
+
+    args = argv[1:]
     if len(args) != 1:
         raise SystemExit("Usage: python %s [path]" % __file__)
+    if args[0] == ".": args[0] = getcwd()
     window = Checkout(args[0])
     window.register_gtk_quit()
     gtk.main()

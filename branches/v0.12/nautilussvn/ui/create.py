@@ -32,6 +32,8 @@ class Create:
     
     # TODO: This class in massively Subversion-biased.  In the future, we'll
     # need to refactor to make it platform-agnostic
+    
+    # Also, might want to just launch a terminal window instead of this
     def __init__(self, path):
     
         if not os.path.isdir(path):
@@ -45,8 +47,11 @@ class Create:
             nautilussvn.ui.dialog.MessageBox("There was an error creating the repository -- Error code: %s" % ret)
         
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
+    from os import getcwd
+    from sys import argv
+    
+    args = argv[1:]
     if len(args) < 1:
         raise SystemExit("Usage: python %s [path]" % __file__)
+    if args[0] == ".": args[0] = getcwd()
     Create(args[0])
