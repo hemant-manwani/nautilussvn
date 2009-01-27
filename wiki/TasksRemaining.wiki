@@ -30,6 +30,8 @@
     * Make sure all forms are validated and don't cause breakage -- adamplumb
   * ~~Add the NautilusSvn icons to the UI window titlebars -- adamplumb~~
   * ~~Allow resizing of table columns -- adamplumb~~
+  * For all Add-inheriting UI scripts, separate the __init__ meat into a separate method
+  * In Add UI, ignore-by-extension needs to remove all files with the same extension
 
 = Future =
 
