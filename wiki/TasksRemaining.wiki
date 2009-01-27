@@ -18,7 +18,7 @@
 = Tasks remaining for v0.12 Final =
 
   * Add all TortoiseSVN columns (get_columns)
-  * Create packages for Ubuntu and Fedora
+  * Create packages for Ubuntu and Fedora -- brucevdkooij
   * ~~Document installation process for Ubuntu, Fedora, OpenSUSE, maybe others.~~
   * ~~Allow multiple selection for properties -- adamplumb~~
   * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
