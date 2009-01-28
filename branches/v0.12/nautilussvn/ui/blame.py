@@ -23,6 +23,7 @@
 import pygtk
 import gobject
 import gtk
+import os
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
