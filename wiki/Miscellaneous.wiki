@@ -62,3 +62,14 @@ Since modules are only loaded once (per interpreter?) any variables defined in t
 {{{
 pysvn.ClientError: client in use on another thread
 }}}
+
+= Killing the running DBus service =
+You can do this using:
+{{{
+pgrep -f service.py | xargs kill; 
+}}}
+
+Or when testing:
+{{{
+pgrep -f service.py | xargs kill; nautilus --no-desktop .; pgrep -f service.py | xargs kill
+}}}
