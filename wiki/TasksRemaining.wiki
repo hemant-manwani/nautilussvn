@@ -1,6 +1,8 @@
 #summary Tasks remaining for the upcoming release
 #labels Phase-Requirements
 
+  _All [http://code.google.com/p/nautilussvn/issues/list issues] set to the related milestone should be closed._
+
 = Tasks remaining for v0.12 Beta =
 
   * Get UIs to refresh file manager status -- brucevdkooij
