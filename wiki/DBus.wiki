@@ -1,5 +1,9 @@
 #summary A summary of what DBus is
 #labels Phase-Implementation,Phase-Design
+
+= Examples =
+If you're running Debian/Ubuntu some examples can be found in the package {{{python-dbus-doc}}}.
+
 = Resources =
 
   * http://www.freedesktop.org/wiki/Software/DBusAnalogy
