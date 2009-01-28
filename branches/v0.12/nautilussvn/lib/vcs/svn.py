@@ -1291,7 +1291,7 @@ class StatusMonitor:
         if not watch_is_already_set and path_to_attach:
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
             self.watches[path_to_attach] = None # don't need a value
-            #~ print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
+            print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
             
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and
@@ -1333,6 +1333,8 @@ class StatusMonitor:
             # Go through all the statuses and set the correct state
             for status in statuses:
                 current_path = status.data["path"]
+                # FIXME: find out a way to break out instead of continuing
+                if not self.has_watch(current_path): continue
                 
                 if isdir(current_path):
                     if status.data["text_status"] in [

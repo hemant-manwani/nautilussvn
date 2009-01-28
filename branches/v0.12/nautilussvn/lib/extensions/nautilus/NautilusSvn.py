@@ -95,10 +95,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # we can't really do anything.
         self.dbus_service_available = nautilussvn.lib.dbus.service.start()
 
-        # Create a StatusMonitor and register a callback with it to notify us 
-        # of any status changes.
+        # Create a StatusMonitor and register all sorts of callbacks with it
         if self.dbus_service_available:
-            self.status_monitor = StatusMonitor(self.cb_status)
+            self.status_monitor = StatusMonitor(
+                status_callback=self.cb_status,
+                watch_added_callback=self.cb_watch_added
+            )
         
     def get_columns(self):
         """
@@ -171,7 +173,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not has_watch and is_in_a_or_a_working_copy:
             self.status_monitor.add_watch(path)
-            self.status_monitor.status(path)
+            # The status check is done in cb_watch_added
         
         # If we access the StatusMonitor over DBus it keeps running even though 
         # Nautilus is not. So watches will stay attached. So an initial status 
@@ -271,12 +273,23 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     # Callbacks
     #
     
+    def cb_watch_added(self, path):
+        """
+        This callback is called by C{StatusMonitor} when a watch is added
+        for a particular path.
+        
+        @type   path:   string
+        @param  path:   The path for which a watch was added
+        """
+        
+        self.status_monitor.status(path)
+    
     def cb_status(self, path, status):
         """
         This is the callback that C{StatusMonitor} calls. 
         
-        @type   path: string
-        @param  path: The path of the item something interesting happend to.
+        @type   path:   string
+        @param  path:   The path of the item something interesting happend to.
         
         @type   status: string
         @param  status: A string indicating the status of an item (see: EMBLEMS).

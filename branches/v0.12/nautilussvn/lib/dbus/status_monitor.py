@@ -21,6 +21,7 @@
 #
 
 import traceback
+import thread
 
 import dbus
 import dbus.service
@@ -48,6 +49,10 @@ class StatusMonitor(dbus.service.Object):
     def StatusChanged(self, path, status):
         pass
     
+    @dbus.service.signal(INTERFACE)
+    def WatchAdded(self, path):
+        pass
+    
     @dbus.service.method(INTERFACE)
     def ChangeStatus(self, path, status):
         self.StatusChanged(path, status)
@@ -59,16 +64,18 @@ class StatusMonitor(dbus.service.Object):
         
     @dbus.service.method(INTERFACE)
     def AddWatch(self, path):
-        self.status_monitor.add_watch(str(path))
+        def do_add_watch():
+            self.status_monitor.add_watch(str(path))
+            self.WatchAdded(path)
+        
+        thread.start_new_thread(do_add_watch, ())
         
     @dbus.service.method(INTERFACE)
     def Status(self, path, invalidate=False):
-        # FIXME: this will eventually call StatusChanged even though the
-        # status might not have been changed at all. This is fine right now
-        # because only the Nautilus extension is using the DBus service but
-        # wouldn't be if other people started using it to stay up to date 
-        # about VCS events.
-        self.status_monitor.status(str(path), bool(invalidate))
+        def do_status_call():
+            self.status_monitor.status(str(path), bool(invalidate))
+            
+        thread.start_new_thread(do_status_call, ())
         
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
@@ -81,13 +88,16 @@ class StatusMonitorStub:
     though, maybe request an object path and then get a generated stub back.
     """
     
-    def __init__(self, callback):
-        self.callback = callback
+    def __init__(self, status_callback, watch_added_callback):
         self.session_bus = dbus.SessionBus()
+        
+        self.status_callback = status_callback
+        self.watch_added_callback = watch_added_callback
         
         try:
             self.status_monitor = self.session_bus.get_object(SERVICE, OBJECT_PATH)
             self.status_monitor.connect_to_signal("StatusChanged", self.cb_status, dbus_interface=INTERFACE)
+            self.status_monitor.connect_to_signal("WatchAdded", self.cb_watch_added, dbus_interface=INTERFACE)
         except dbus.DBusException:
             traceback.print_exc()
     
@@ -101,7 +111,10 @@ class StatusMonitorStub:
         self.status_monitor.Status(path, invalidate, dbus_interface=INTERFACE)
     
     def cb_status(self, path, status):
-        self.callback(str(path), str(status))
+        self.status_callback(str(path), str(status))
+        
+    def cb_watch_added(self, path):
+        self.watch_added_callback(str(path))
         
     def exit(self):
         self.status_monitor.Exit()
