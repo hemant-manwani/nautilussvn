@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan 29 16:45:57 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Jan 29 16:49:14 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Rename">
     <property name="width_request">400</property>
@@ -35,6 +35,7 @@
               <widget class="GtkEntry" id="new_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
               </widget>
               <packing>
                 <property name="position">1</property>
