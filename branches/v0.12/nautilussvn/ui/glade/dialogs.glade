@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 15:58:29 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Jan 29 16:39:52 2009 -->
 <glade-interface>
   <widget class="GtkDialog" id="Authentication">
     <property name="width_request">450</property>
@@ -801,12 +801,34 @@
         <property name="visible">True</property>
         <property name="spacing">12</property>
         <child>
-          <widget class="GtkLabel" id="confirm_message">
+          <widget class="GtkHBox" id="hbox15">
             <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="xpad">6</property>
-            <property name="ypad">6</property>
-            <property name="label" translatable="yes">Are you sure you want to continue?</property>
+            <child>
+              <widget class="GtkImage" id="image1">
+                <property name="width_request">75</property>
+                <property name="visible">True</property>
+                <property name="stock">gtk-dialog-warning</property>
+                <property name="icon_size">6</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="confirm_message">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="xpad">6</property>
+                <property name="ypad">6</property>
+                <property name="label" translatable="yes">Are you sure you want to continue?</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="expand">False</property>
@@ -832,6 +854,8 @@
               <widget class="GtkButton" id="confirm_ok">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-yes</property>
                 <property name="use_stock">True</property>
