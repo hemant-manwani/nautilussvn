@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import thread
+
 import pygtk
 import gobject
 import gtk
@@ -39,18 +41,37 @@ class Unlock(Add):
         self.window = self.get_widget("Add")
         self.window.set_title("Unlock")
 
+        self.paths = paths
         self.last_row_clicked = None
-
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        self.items = None
+        self.statuses = None
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
-        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-        self.files = self.vcs.get_items(paths)
+        try:
+            thread.start_new_thread(self.load, ())
+        except Exception, e:
+            print str(e)
         
-        for item in self.files:
+        
+    #
+    # Helpers
+    #
+
+    def load(self):
+        gtk.gdk.threads_enter()
+        self.get_widget("status").set_text("Loading...")
+        self.items = self.vcs.get_items(self.paths, self.statuses)
+        self.populate_files_table()
+        gtk.gdk.threads_leave()
+    
+    def populate_files_table(self):
+        found = 0
+        for item in self.items:
             if item.text_status in (self.vcs.STATUS["unversioned"], self.vcs.STATUS["ignored"]):
                 continue
                 
@@ -62,9 +83,19 @@ class Unlock(Add):
                 item.path, 
                 nautilussvn.lib.helper.get_file_extension(item.path)
             ])
-                    
+            found += 1
+            
+        self.get_widget("status").set_text("Found %d item(s)" % found)
+    
+    #
+    # UI Signal Callbacks
+    #
+             
     def on_ok_clicked(self, widget):
         items = self.files_table.get_activated_rows(1)
+        if not items:
+            self.close()
+            return
         self.hide()
 
         self.action = nautilussvn.ui.callback.VCSAction(

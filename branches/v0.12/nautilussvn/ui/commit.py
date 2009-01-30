@@ -99,7 +99,7 @@ class Commit(InterfaceView):
         self.get_widget("status").set_text("Loading...")
         self.items = self.vcs.get_items(self.paths, self.vcs.STATUSES_FOR_COMMIT)
         self.populate_files_from_original()
-        self.get_widget("status").set_text("")
+        self.get_widget("status").set_text("Found %d item(s)" % len(self.items))
         gtk.gdk.threads_leave()
     
     def refresh_row_status(self):
