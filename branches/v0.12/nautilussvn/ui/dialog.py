@@ -242,3 +242,15 @@ class MessageBox(InterfaceView):
         dialog = self.get_widget("MessageBox")
         dialog.run()
         dialog.destroy()
+
+class DeleteConfirmation(InterfaceView):
+    def __init__(self):
+        InterfaceView.__init__(self, GLADE, "DeleteConfirmation")
+        
+    def run(self):
+        dialog = self.get_widget("DeleteConfirmation")
+        result = dialog.run()
+        
+        dialog.destroy()
+        
+        return result
