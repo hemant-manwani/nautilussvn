@@ -25,8 +25,18 @@
 import sys
 from nautilussvn.lib.helper import launch_ui_window
 
+usage = """usage: nautilussvn <module> [path1] [path2] ...
+
+Available Modules
+------------------
+about, add, blame, checkout, cleanup, commit, create, delete, export,
+ignore, import, lock, log, merge, properties, relocate, rename,
+resolve, revert, settings, switch, unlock, update, updateto
+
+"""
+
 if len(sys.argv) < 2:
-    raise SystemExit("Usage: nautilussvn [module] [path]")
+    raise SystemExit(usage)
 
 args = sys.argv[1:]   
 module = args.pop(0)
