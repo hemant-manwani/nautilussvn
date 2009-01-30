@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import thread
+
 import pygtk
 import gobject
 import gtk
@@ -31,6 +33,8 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.vcs
 import nautilussvn.lib.helper
+
+gtk.gdk.threads_init()
 
 class Lock(InterfaceView):
     """
@@ -60,26 +64,16 @@ class Lock(InterfaceView):
                 "Locked"],
         )
         self.last_row_clicked = None
-        
-        self.files = self.vcs.get_items(self.paths)
-        for item in self.files:
-        
-            locked = ""
-            if self.vcs.is_locked(item.path):
-                locked = "Yes"
-            if not self.vcs.is_versioned(item.path):
-                continue
-        
-            self.files_table.append([
-                False, 
-                item.path, 
-                nautilussvn.lib.helper.get_file_extension(item.path),
-                locked
-            ])
-        
+
         self.message = nautilussvn.ui.widget.TextView(
             self.get_widget("message")
         )
+
+        self.items = None
+        try:
+            thread.start_new_thread(self.load, ())
+        except Exception, e:
+            print str(e)
 
     #
     # Helper functions
@@ -94,6 +88,30 @@ class Lock(InterfaceView):
 
         row[3] = locked
 
+    def load(self):
+        gtk.gdk.threads_enter()
+        self.get_widget("status").set_text("Loading...")
+        self.files = self.vcs.get_items(self.paths)
+        self.populate_files_table()
+        self.get_widget("status").set_text("")
+        gtk.gdk.threads_leave()
+
+    def populate_files_table(self):
+        for item in self.files:
+        
+            locked = ""
+            if self.vcs.is_locked(item.path):
+                locked = "Yes"
+            if not self.vcs.is_versioned(item.path):
+                continue
+        
+            self.files_table.append([
+                False, 
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path),
+                locked
+            ])
+            
     #
     # UI Signal Callbacks
     #
