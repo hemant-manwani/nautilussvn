@@ -51,5 +51,9 @@ if __name__ == "__main__":
     from sys import argv
     
     args = argv[1:]
-    if args[0] == "." or not args: args[0] = getcwd()
-    Create(args[0])
+    path = getcwd()
+    if args:
+        if args[0] != ".":
+            path = args[0]
+            
+    Create(path)
