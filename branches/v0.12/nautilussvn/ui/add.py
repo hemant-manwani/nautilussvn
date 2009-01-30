@@ -170,7 +170,7 @@ class Add(InterfaceView):
         nautilussvn.lib.helper.browse_to_item(data[1])
 
     def on_context_delete_activated(self, widget, data=None):
-        confirm = nautilussvn.ui.dialog.DeleteConfirmation()
+        confirm = nautilussvn.ui.dialog.DeleteConfirmation(data[1])
         
         if confirm.run():
             nautilussvn.lib.helper.delete_item(data[1])
