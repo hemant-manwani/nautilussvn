@@ -123,37 +123,37 @@ class Log(InterfaceView):
             self.action.set_cancel(True)    
         self.close()
 
-    def on_revisions_table_button_released(self, treeview, event):
-        path = treeview.get_path_at_pos(int(event.x), int(event.y))
+    def on_revisions_table_cursor_changed(self, treeview):
         
+        # this function only listens to left-clicks or the up/down arrows
+        selection = treeview.get_selection()
+        (liststore, indexes) = selection.get_selected_rows()
         self.selected_rows = []
-        self.selected_row = None
-        if path is not None:
-            selection = treeview.get_selection()
-            self.selected_rows = selection.get_selected_rows()
-            self.selected_row = self.selected_rows[0][path[0]]
-            item = self.revision_items[path[0][0]]
+        for tup in indexes:
+            self.selected_rows.append(tup[0])
 
-            self.paths_table.clear()
-            if selection.count_selected_rows() == 1:
-                self.message.set_text(item.message)
-                
-                if item.changed_paths is not None:
-                    for subitem in item.changed_paths:
-                        
-                        copyfrom_rev = ""
-                        if hasattr(subitem.copyfrom_revision, "number"):
-                            copyfrom_rev = subitem.copyfrom_revision.number
-                        
-                        self.paths_table.append([
-                            subitem.action,
-                            subitem.path,
-                            subitem.copyfrom_path,
-                            copyfrom_rev
-                        ])    
-                
-            else:
-                self.message.set_text("")
+        item = self.revision_items[self.selected_rows[0]]
+
+        self.paths_table.clear()
+        if len(self.selected_rows) == 1:
+            self.message.set_text(item.message)
+            
+            if item.changed_paths is not None:
+                for subitem in item.changed_paths:
+                    
+                    copyfrom_rev = ""
+                    if hasattr(subitem.copyfrom_revision, "number"):
+                        copyfrom_rev = subitem.copyfrom_revision.number
+                    
+                    self.paths_table.append([
+                        subitem.action,
+                        subitem.path,
+                        subitem.copyfrom_path,
+                        copyfrom_rev
+                    ])    
+            
+        else:
+            self.message.set_text("")
     
     def on_previous_clicked(self, widget):
         self.rev_start = self.previous_starts.pop()
@@ -381,7 +381,11 @@ if __name__ == "__main__":
     from sys import argv
     
     args = argv[1:]
-    if args[0] == "." or not args: args[0] = getcwd()
-    window = Log(args[0])
+    path = getcwd()
+    if args:
+        if args[0] != ".":
+            path = args[0]
+            
+    window = Log(path)
     window.register_gtk_quit()
     gtk.main()
