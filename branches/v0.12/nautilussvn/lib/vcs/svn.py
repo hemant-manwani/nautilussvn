@@ -275,6 +275,8 @@ class SVN:
         return self.is_working_copy(path)
         
     def is_versioned(self, path):
+        if not self.is_in_a_or_a_working_copy(path): return False
+            
         # info will return nothing for an unversioned file inside a working copy
         if self.client.info(path):
             return True
