@@ -29,6 +29,7 @@ import gtk
 
 import nautilussvn
 from nautilussvn.ui import InterfaceView
+import nautilussvn.ui.widget
 import pysvn
 import configobj
 
@@ -53,16 +54,16 @@ class About(InterfaceView):
         basepath = "/".join(basepath)
         
         authors_path = os.path.join(basepath, "AUTHORS")
-        #credits_path = os.path.join(basepath, "CREDITS")
         thanks_path = os.path.join(basepath, "THANKS")
         
         authors = open(authors_path, "r").read()
-        #credits = open(credits_path, "r").read()
         thanks = open(thanks_path, "r").read()
         
         self.get_widget("authors").set_text(authors)
-        #self.get_widget("credits").set_text(credits)
-        self.get_widget("thanks").set_text(thanks)
+        thanks_widget = nautilussvn.ui.widget.TextView(
+            self.get_widget("thanks"),
+            thanks
+        )
         
         versions = []
         versions.append("NautilusSvn - %s" % str(nautilussvn.version))
