@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os.path
+
 import pygtk
 import gobject
 import gtk
@@ -244,8 +246,16 @@ class MessageBox(InterfaceView):
         dialog.destroy()
 
 class DeleteConfirmation(InterfaceView):
-    def __init__(self):
+    def __init__(self, path=None):
         InterfaceView.__init__(self, GLADE, "DeleteConfirmation")
+        
+        if path:
+            path = "\"%s\"" % os.path.basename(path)
+        else:
+            path = "the selected item(s)"
+            
+        msg = self.get_widget("message").get_label().replace("%item%", path)
+        self.get_widget("message").set_label(msg)
         
     def run(self):
         dialog = self.get_widget("DeleteConfirmation")

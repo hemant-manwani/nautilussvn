@@ -348,7 +348,7 @@ class Commit(InterfaceView):
             self.vcs.remove(data[1], force=True)
             self.refresh_row_status()
         else:
-            confirm = nautilussvn.ui.dialog.DeleteConfirmation()
+            confirm = nautilussvn.ui.dialog.DeleteConfirmation(data[1])
             
             if confirm.run():
                 nautilussvn.lib.helper.delete_item(data[1])

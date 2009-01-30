@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os.path
+
 import pygtk
 import gobject
 import gtk
@@ -45,23 +47,28 @@ class Delete(InterfaceNonView):
         for path in self.paths:
             if self.vcs.is_versioned(path):
                 versioned.append(path)
-            else:
+            elif os.path.exists(path):
                 unversioned.append(path)
         
         result = True
-        if not versioned:
-            confirm = nautilussvn.ui.dialog.DeleteConfirmation()
+        if unversioned:
+            item = None
+            if len(unversioned) == 1:
+                item = unversioned[0]
+            confirm = nautilussvn.ui.dialog.DeleteConfirmation(item)
             result = confirm.run()
-        
+
         if result:
-            try:
-                self.vcs.remove(versioned, force=True)
-            except Exception, e:
-                print str(e)
-                
-        else:
-            for path in unversioned:
-                nautilussvn.lib.helper.delete_item(path)
+            if versioned:
+                try:
+                    self.vcs.remove(versioned, force=True)
+                except Exception, e:
+                    print str(e)
+                    return
+            
+            if unversioned:
+                for path in unversioned:
+                    nautilussvn.lib.helper.delete_item(path)
         
 if __name__ == "__main__":
     from os import getcwd
