@@ -47,7 +47,7 @@ class Update(InterfaceNonView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.append(self.action.set_title, "Update")
+        self.action.append(self.action.set_header, "Update")
         self.action.append(self.action.set_status, "Updating...")
         for item in self.paths:
             self.action.append(self.vcs.update, item)

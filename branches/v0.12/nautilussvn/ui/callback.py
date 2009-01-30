@@ -91,11 +91,19 @@ class Notification(InterfaceView):
         self.table.scroll_to_bottom()
         gtk.gdk.threads_leave()
     
+    def get_title(self):
+        return self.get_widget("Notification").get_title()
+    
     def set_title(self, title):
         gtk.gdk.threads_enter()
         self.get_widget("Notification").set_title(title)
+        gtk.gdk.threads_leave()
+        
+    def set_header(self, header):
+        self.set_title(header)
+        gtk.gdk.threads_enter()
         self.get_widget("action").set_markup(
-            "<span font_size=\"xx-large\"><b>%s</b></span>" % title
+            "<span font_size=\"xx-large\"><b>%s</b></span>" % header
         )
         gtk.gdk.threads_leave()
 
@@ -149,8 +157,8 @@ class VCSAction(threading.Thread):
         
         self.pbar_ticks = num
     
-    def set_title(self, title):
-        self.notification.set_title(title)
+    def set_header(self, header):
+        self.notification.set_header(header)
     
     def cancel(self):
         """
@@ -227,7 +235,9 @@ class VCSAction(threading.Thread):
 
         self.notification.append(
             ["", "Finished", ""]
-        )        
+        )
+        title = self.notification.get_title()
+        self.notification.set_title("%s - Finished" % title)
         self.set_status(message)
         self.notification.pbar.stop_pulsate()
         self.notification.pbar.update(1)

@@ -109,7 +109,7 @@ class Add(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Add")
+        self.action.append(self.action.set_header, "Add")
         self.action.append(self.action.set_status, "Running Add Command...")
         self.action.append(self.vcs.add, items)
         self.action.append(self.action.set_status, "Completed Add")

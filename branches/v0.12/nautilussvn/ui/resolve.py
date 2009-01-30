@@ -70,7 +70,7 @@ class Resolve(Add):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Resolve")
+        self.action.append(self.action.set_header, "Resolve")
         self.action.append(self.action.set_status, "Running Resolve Command...")
         for item in items:
             self.action.append(self.vcs.resolve, item, recurse=True)
