@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jan 20 15:54:25 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Jan 29 20:36:49 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="About">
-    <property name="width_request">740</property>
+    <property name="width_request">775</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">About</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
@@ -93,17 +93,25 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="thanks">
-                        <property name="width_request">600</property>
+                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                        <property name="height_request">175</property>
                         <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0</property>
-                        <property name="wrap">True</property>
-                        <property name="selectable">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                        <child>
+                          <widget class="GtkTextView" id="thanks">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="editable">False</property>
+                            <property name="wrap_mode">GTK_WRAP_WORD</property>
+                            <property name="left_margin">5</property>
+                            <property name="right_margin">5</property>
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
