@@ -21,6 +21,7 @@
 #
 
 import os.path
+import thread
 
 import pygtk
 import gobject
@@ -30,7 +31,10 @@ from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.callback import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
+import nautilussvn.lib
 import nautilussvn.lib.helper
+
+gtk.gdk.threads_init()
 
 class Commit(InterfaceView):
     """
@@ -52,13 +56,14 @@ class Commit(InterfaceView):
     
         InterfaceView.__init__(self, "commit", "Commit")
 
+        self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
-        common = os.path.commonprefix(paths)
-        if os.path.isfile(common):
-            common = os.path.dirname(common)
+        self.common = os.path.commonprefix(self.paths)
+        if os.path.isfile(self.common):
+            self.common = os.path.dirname(self.common)
             
-        if not self.vcs.is_in_a_or_a_working_copy(common):
+        if not self.vcs.is_in_a_or_a_working_copy(self.common):
             nautilussvn.ui.dialog.MessageBox("The specified path is not a working copy")
             self.close()
             return
@@ -72,23 +77,30 @@ class Commit(InterfaceView):
         )
         self.last_row_clicked = None
         
-        self.get_widget("to").set_text(
-            self.vcs.get_repo_url(common)
-        )
-        
-        self.items = self.vcs.get_items(
-            paths, 
-            self.vcs.STATUSES_FOR_COMMIT
-        )
-        self.populate_files_from_original()
-        
         self.message = nautilussvn.ui.widget.TextView(
             self.get_widget("message")
         )
-    
+        self.get_widget("to").set_text(
+            self.vcs.get_repo_url(self.common)
+        )
+
+        self.items = None
+        try:
+            thread.start_new_thread(self.load, ())
+        except Exception, e:
+            print str(e)
+
     #
     # Helper functions
     # 
+
+    def load(self):
+        gtk.gdk.threads_enter()
+        self.get_widget("status").set_text("Loading...")
+        self.items = self.vcs.get_items(self.paths, self.vcs.STATUSES_FOR_COMMIT)
+        self.populate_files_from_original()
+        self.get_widget("status").set_text("")
+        gtk.gdk.threads_leave()
     
     def refresh_row_status(self):
         status = self.get_last_status()
@@ -125,6 +137,26 @@ class Commit(InterfaceView):
             text_status = st[0].text_status
 
         return text_status
+
+    def populate_files_from_original(self):
+        self.files_table.clear()
+
+        for item in self.items:
+            checked = True
+            
+            # Some types of files should not be checked off
+            if (not item.is_versioned 
+                    or item.text_status == self.vcs.STATUS["missing"]):
+                checked = False
+            
+            self.files_table.append([
+                checked,
+                item.path, 
+                nautilussvn.lib.helper.get_file_extension(item.path),
+                item.text_status,
+                item.prop_status
+            ])
+
     #
     # Event handlers
     #
@@ -183,25 +215,6 @@ class Commit(InterfaceView):
                 if row[3] == "unversioned":
                     self.files_table.remove(index)
                 index += 1
-
-    def populate_files_from_original(self):
-        self.files_table.clear()
-
-        for item in self.items:
-            checked = True
-            
-            # Some types of files should not be checked off
-            if (not item.is_versioned 
-                    or item.text_status == self.vcs.STATUS["missing"]):
-                checked = False
-            
-            self.files_table.append([
-                checked,
-                item.path, 
-                nautilussvn.lib.helper.get_file_extension(item.path),
-                item.text_status,
-                item.prop_status
-            ])
         
     def on_files_table_button_pressed(self, treeview, event):
         pathinfo = treeview.get_path_at_pos(int(event.x), int(event.y))
@@ -399,7 +412,7 @@ class Commit(InterfaceView):
                 self.vcs.STATUS["deleted"]
             ]
         )
-        
+
 if __name__ == "__main__":
     from os import getcwd
     from sys import argv
