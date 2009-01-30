@@ -27,6 +27,7 @@ All sorts of helper functions.
 """
 
 import os
+import subprocess
 import re
 import time
 import shutil
@@ -305,9 +306,6 @@ def open_item(path):
     """
     Use GNOME default opener to handle file opening.
     
-    TODO: Look into the os.startfile method.  That may be a better,
-    cross-platform mechanism for opening files.
-    
     @type   path: string
     @param  path: A file path.
     
@@ -316,7 +314,7 @@ def open_item(path):
     if path == "" or path is None:
         return
     
-    os.system("gnome-open %s" % path)
+    subprocess.Popen("gnome-open %s" % os.path.abspath(path), shell=True)
     
 def browse_to_item(path):
     """
@@ -327,7 +325,11 @@ def browse_to_item(path):
     
     """
 
-    os.system("nautilus --no-desktop --browser %s" % os.path.dirname(path))
+    subprocess.Popen(
+        "nautilus --no-desktop --browser %s" % 
+        os.path.dirname(os.path.abspath(path)), 
+        shell=True
+    )
     
 def delete_item(path):
     """
@@ -337,8 +339,8 @@ def delete_item(path):
     @param  path: A file path.
     
     """
-    
-    os.system("gvfs-trash %s" % path)
+
+    subprocess.Popen("gvfs-trash %s" % os.path.abspath(path), shell=True)
 
 #
 # Path manipulation
