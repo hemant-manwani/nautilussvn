@@ -58,9 +58,7 @@ if __name__ == "__main__":
     from sys import argv
     
     args = argv[1:]
-    if len(args) < 2:
-        raise SystemExit("Usage: python %s [path] [pattern]" % __file__)
-    if args[0] == ".": args[0] = getcwd()
+    if args[0] == "." or not args: args[0] = getcwd()
     window = Ignore(args[0], args[1])
     window.register_gtk_quit()
     window.start()

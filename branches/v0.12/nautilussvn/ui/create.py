@@ -51,7 +51,5 @@ if __name__ == "__main__":
     from sys import argv
     
     args = argv[1:]
-    if len(args) < 1:
-        raise SystemExit("Usage: python %s [path]" % __file__)
-    if args[0] == ".": args[0] = getcwd()
+    if args[0] == "." or not args: args[0] = getcwd()
     Create(args[0])

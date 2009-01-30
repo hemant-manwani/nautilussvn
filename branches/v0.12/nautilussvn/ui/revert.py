@@ -91,8 +91,6 @@ if __name__ == "__main__":
     from sys import argv
 
     args = argv[1:]
-    if len(args) < 1:
-        raise SystemExit("Usage: python %s [path1] [path2] ..." % __file__)
 
     # Convert "." to current working directory
     paths = args
@@ -102,6 +100,9 @@ if __name__ == "__main__":
         if paths[i] == ".":
             paths[i] = getcwd()
         i += 1
+   
+    if not paths:
+        paths = [getcwd()]
 
     window = Revert(paths)
     window.register_gtk_quit()
