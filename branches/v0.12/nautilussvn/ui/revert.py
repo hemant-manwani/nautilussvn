@@ -69,7 +69,7 @@ class Revert(Add):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Revert")
+        self.action.append(self.action.set_header, "Revert")
         self.action.append(self.action.set_status, "Running Revert Command...")
         self.action.append(self.vcs.revert, items, recurse=True)
         self.action.append(self.action.set_status, "Completed Revert")

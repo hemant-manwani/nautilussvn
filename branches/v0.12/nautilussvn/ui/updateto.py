@@ -64,7 +64,7 @@ class UpdateToRevision(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Update To Revision")
+        self.action.append(self.action.set_header, "Update To Revision")
         self.action.append(self.action.set_status, "Updating...")
         self.action.append(
             self.vcs.update, 

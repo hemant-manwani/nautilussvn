@@ -103,7 +103,7 @@ class Unlock(Add):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Unlock")
+        self.action.append(self.action.set_header, "Unlock")
         self.action.append(self.action.set_status, "Running Unlock Command...")
         for item in items:
             self.action.append(self.vcs.unlock, item, force=True)

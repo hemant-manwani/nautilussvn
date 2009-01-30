@@ -79,7 +79,7 @@ class Relocate(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Relocate")
+        self.action.append(self.action.set_header, "Relocate")
         self.action.append(self.action.set_status, "Running Relocate Command...")
         self.action.append(
             self.vcs.relocate, 

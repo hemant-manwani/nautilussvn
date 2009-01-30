@@ -63,7 +63,7 @@ class Rename(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Rename")
+        self.action.append(self.action.set_header, "Rename")
         self.action.append(self.action.set_status, "Running Rename Command...")
         self.action.append(
             self.vcs.move, 

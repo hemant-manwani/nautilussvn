@@ -138,7 +138,7 @@ class Lock(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_title, "Get Lock")
+        self.action.append(self.action.set_header, "Get Lock")
         self.action.append(self.action.set_status, "Running Lock Command...")
         self.action.append(nautilussvn.lib.helper.save_log_message, message)
         for path in items:

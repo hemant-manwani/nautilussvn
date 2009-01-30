@@ -116,7 +116,7 @@ class Branch(InterfaceView):
             self.message.get_text()
         )
         
-        self.action.append(self.action.set_title, "Branch/tag")
+        self.action.append(self.action.set_header, "Branch/tag")
         self.action.append(self.action.set_status, "Running Branch/tag Command...")
         self.action.append(self.vcs.copy, src, dest, revision)
         self.action.append(self.action.set_status, "Completed Branch/tag")
