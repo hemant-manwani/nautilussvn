@@ -50,9 +50,7 @@ class Delete(InterfaceNonView):
         
         result = True
         if not versioned:
-            confirm = nautilussvn.ui.dialog.Confirmation(
-                "One or more of the specified files is unversioned.  Do you want to send it/them to the Trash?"
-            )
+            confirm = nautilussvn.ui.dialog.DeleteConfirmation()
             result = confirm.run()
         
         if result:
