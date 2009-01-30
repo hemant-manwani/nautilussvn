@@ -96,10 +96,11 @@ class FunctionQueue:
             try:
                 func.start()
             except Exception, e:
-                self._exception.set_args(e)
-                self._exception.call()
+                if self._exception:
+                    self._exception.set_args(e)
+                    self._exception.call()
                 break
-
+    
     def get_result(self, index):
         """
         Retrieve the result of a single function call by specifying the order
