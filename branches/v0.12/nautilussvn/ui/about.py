@@ -80,8 +80,6 @@ class About(InterfaceView):
         self.close()
         
 if __name__ == "__main__":
-    import sys
-    args = sys.argv[1:]
     window = About()
     window.register_gtk_quit()
     gtk.main()
