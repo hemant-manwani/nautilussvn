@@ -21,6 +21,7 @@
 #
 
 import os
+import thread
 
 import pygtk
 import gobject
@@ -32,6 +33,8 @@ import nautilussvn.ui.dialog
 import nautilussvn.ui.callback
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
+
+gtk.gdk.threads_init()
 
 class Add(InterfaceView):
     """
@@ -47,26 +50,45 @@ class Add(InterfaceView):
     def __init__(self, paths):
         InterfaceView.__init__(self, "add", "Add")
 
+        self.paths = paths
         self.last_row_clicked = None
-
+        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
+        self.items = None
+        self.statuses = [self.vcs.STATUS["unversioned"], self.vcs.STATUS["obstructed"]]
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
             [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
         )
 
-        self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-        self.files = self.vcs.get_items(
-            paths, 
-            [self.vcs.STATUS["unversioned"], self.vcs.STATUS["obstructed"]]
-        )
-        
-        for item in self.files:
+        try:
+            thread.start_new_thread(self.load, ())
+        except Exception, e:
+            print str(e)
+
+    #
+    # Helpers
+    #
+
+    def load(self):
+        gtk.gdk.threads_enter()
+        self.get_widget("status").set_text("Loading...")
+        self.items = self.vcs.get_items(self.paths, self.statuses)
+        self.populate_files_table()
+        self.get_widget("status").set_text("Found %d item(s)" % len(self.items))
+        gtk.gdk.threads_leave()
+
+    def populate_files_table(self):
+        for item in self.items:
             self.files_table.append([
                 True, 
                 item.path, 
                 nautilussvn.lib.helper.get_file_extension(item.path)
             ])
+    
+    #
+    # UI Signal Callbacks
+    #
     
     def on_destroy(self, widget):
         self.close()
@@ -76,6 +98,10 @@ class Add(InterfaceView):
 
     def on_ok_clicked(self, widget):
         items = self.files_table.get_activated_rows(1)
+        if not items:
+            self.close()
+            return
+
         self.hide()
 
         self.action = nautilussvn.ui.callback.VCSAction(

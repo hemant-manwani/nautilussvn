@@ -91,13 +91,13 @@ class Lock(InterfaceView):
     def load(self):
         gtk.gdk.threads_enter()
         self.get_widget("status").set_text("Loading...")
-        self.files = self.vcs.get_items(self.paths)
+        self.items = self.vcs.get_items(self.paths)
         self.populate_files_table()
-        self.get_widget("status").set_text("")
+        self.get_widget("status").set_text("Found %d item(s)" % len(self.items))
         gtk.gdk.threads_leave()
 
     def populate_files_table(self):
-        for item in self.files:
+        for item in self.items:
         
             locked = ""
             if self.vcs.is_locked(item.path):
@@ -125,6 +125,10 @@ class Lock(InterfaceView):
     def on_ok_clicked(self, widget, data=None):
         steal_locks = self.get_widget("steal_locks").get_active()
         items = self.files_table.get_activated_rows(1)
+        if not items:
+            self.close()
+            return
+
         message = self.message.get_text()
         
         self.hide()
