@@ -852,7 +852,7 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Create",
-                        "label": "Create Repository...",
+                        "label": "Create Repository here",
                         "tooltip": "",
                         "icon": "nautilussvn-run",
                         "signals": {
