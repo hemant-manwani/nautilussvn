@@ -851,13 +851,13 @@ class MainContextMenu:
                         ]
                     },
                     {
-                        "identifier": "NautilusSvn::Create",
+                        "identifier": "NautilusSvn::Create_Repository",
                         "label": "Create Repository here",
                         "tooltip": "",
                         "icon": "nautilussvn-run",
                         "signals": {
                             "activate": {
-                                "callback": self.callback_create,
+                                "callback": self.callback_create_repository,
                                 "args": None
                             }
                         }, 
@@ -1583,7 +1583,7 @@ class MainContextMenu:
     def callback_unlock(self, menu_item, paths):
         launch_ui_window("unlock", paths)
         
-    def callback_create(self, menu_item, paths):
+    def callback_create_repository(self, menu_item, paths):
         launch_ui_window("create", paths)
     
     def callback_relocate(self, menu_item, paths):
