@@ -265,7 +265,7 @@ def launch_diff_tool(path):
     if not os.path.exists(diff["path"]):
         return
 
-    patch = os.popen("svn diff '%s'" % path).read()
+    patch = os.popen("svn diff --diff-cmd 'diff' '%s'" % path).read()
     open("/tmp/tmp.patch", "w").write(patch)
     
     tmp_path = "/tmp/%s" % os.path.split(path)[-1]
