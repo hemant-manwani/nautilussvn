@@ -35,7 +35,7 @@ from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
-class Blame(InterfaceView):
+class Annotate(InterfaceView):
     """
     Provides a UI interface to annotate items in the repository or
     working copy.
@@ -46,13 +46,13 @@ class Blame(InterfaceView):
     
     def __init__(self, path):
         if os.path.isdir(path):
-            MessageBox(_("Cannot generate a blame for a directory"))
+            MessageBox(_("Cannot annotate a directory"))
             raise SystemExit()
             return
             
-        InterfaceView.__init__(self, "blame", "Blame")
+        InterfaceView.__init__(self, "annotate", "Annotate")
 
-        self.get_widget("Blame").set_title(_("Blame - %s") % path)
+        self.get_widget("Annotate").set_title(_("Annotate - %s") % path)
         
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
@@ -116,7 +116,7 @@ class Blame(InterfaceView):
             to_rev = self.vcs.revision("number", number=int(to_rev_num))
 
         self.set_loading(True)
-        self.pbar.set_text(_("Retrieving Blame Information..."))
+        self.pbar.set_text(_("Generating Annotation..."))
         self.pbar.start_pulsate()
         
         self.action = VCSAction(
@@ -166,6 +166,6 @@ if __name__ == "__main__":
         if args[0] != ".":
             path = args[0]
             
-    window = Blame(path)
+    window = Annotate(path)
     window.register_gtk_quit()
     gtk.main()
