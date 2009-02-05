@@ -25,7 +25,7 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.vcs
 import nautilussvn.lib.helper

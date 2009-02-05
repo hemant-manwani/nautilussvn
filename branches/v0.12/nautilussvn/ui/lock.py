@@ -27,7 +27,7 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
@@ -133,7 +133,7 @@ class Lock(InterfaceView):
         
         self.hide()
 
-        self.action = nautilussvn.ui.callback.VCSAction(
+        self.action = nautilussvn.ui.action.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )

@@ -28,7 +28,7 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib
@@ -186,7 +186,7 @@ class Commit(InterfaceView):
 
         ticks = added + len(items)*2
         
-        self.action = nautilussvn.ui.callback.VCSAction(
+        self.action = nautilussvn.ui.action.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )

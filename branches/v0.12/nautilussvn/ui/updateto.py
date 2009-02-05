@@ -26,7 +26,7 @@ import gtk
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 

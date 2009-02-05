@@ -27,7 +27,7 @@ import gtk
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.checkout import Checkout
 from nautilussvn.ui.dialog import MessageBox
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 import nautilussvn.lib.helper
 
 class Export(Checkout):
