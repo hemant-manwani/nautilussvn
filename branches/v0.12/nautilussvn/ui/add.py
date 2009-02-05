@@ -22,6 +22,7 @@
 
 import os
 import thread
+from gettext import gettext as _
 
 import pygtk
 import gobject
@@ -58,7 +59,7 @@ class Add(InterfaceView):
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, _("Path"), _("Extension")]
         )
 
         try:
@@ -72,10 +73,10 @@ class Add(InterfaceView):
 
     def load(self):
         gtk.gdk.threads_enter()
-        self.get_widget("status").set_text("Loading...")
+        self.get_widget("status").set_text(_("Loading..."))
         self.items = self.vcs.get_items(self.paths, self.statuses)
         self.populate_files_table()
-        self.get_widget("status").set_text("Found %d item(s)" % len(self.items))
+        self.get_widget("status").set_text(_("Found %d item(s)") % len(self.items))
         gtk.gdk.threads_leave()
 
     def populate_files_table(self):
@@ -109,10 +110,10 @@ class Add(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Add")
-        self.action.append(self.action.set_status, "Running Add Command...")
+        self.action.append(self.action.set_header, _("Add"))
+        self.action.append(self.action.set_status, _("Running Add Command..."))
         self.action.append(self.vcs.add, items)
-        self.action.append(self.action.set_status, "Completed Add")
+        self.action.append(self.action.set_status, _("Completed Add"))
         self.action.append(self.action.finish)
         self.action.start()
 
@@ -135,7 +136,7 @@ class Add(InterfaceView):
                 self.last_row_clicked = path[0]
                 
                 context_menu = nautilussvn.ui.widget.ContextMenu([{
-                        "label": "Open",
+                        "label": _("Open"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_open_activated, 
@@ -144,7 +145,7 @@ class Add(InterfaceView):
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": "Browse to",
+                        "label": _("Browse to"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_browse_activated, 
@@ -153,7 +154,7 @@ class Add(InterfaceView):
                         },
                         "condition": (lambda: True)
                     },{
-                        "label": "Delete",
+                        "label": _("Delete"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_delete_activated, 
@@ -162,7 +163,7 @@ class Add(InterfaceView):
                         },
                         "condition": self.condition_delete
                     },{
-                        "label": "Add to ignore list",
+                        "label": _("Add to ignore list"),
                         'submenu': [{
                                 "label": os.path.basename(fileinfo[1]),
                                 "signals": {

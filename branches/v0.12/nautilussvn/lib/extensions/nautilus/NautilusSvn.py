@@ -949,17 +949,17 @@ class MainContextMenu:
                         "submenus": []
                     },
                     {
-                        "identifier": "NautilusSvn::Blame",
-                        "label": "Blame...",
+                        "identifier": "NautilusSvn::Annotate",
+                        "label": "Annotate...",
                         "tooltip": "",
-                        "icon": "nautilussvn-blame",
+                        "icon": "nautilussvn-annotate",
                         "signals": {
                             "activate": {
-                                "callback": self.callback_blame,
+                                "callback": self.callback_annotate,
                                 "args": None
                             }
                         }, 
-                        "condition": self.condition_blame,
+                        "condition": self.condition_annotate,
                         "submenus": [
                             
                         ]
@@ -1260,7 +1260,7 @@ class MainContextMenu:
         
         return False
         
-    def condition_blame(self):
+    def condition_annotate(self):
         if (len(self.paths) == 1 and
                 not isdir(self.paths[0]) and
                 self.vcs_client.is_in_a_or_a_working_copy(self.paths[0]) and
@@ -1577,8 +1577,8 @@ class MainContextMenu:
     def callback_resolve(self, menu_item, paths):
         launch_ui_window("resolve", paths)
         
-    def callback_blame(self, menu_item, paths):
-        launch_ui_window("blame", paths)
+    def callback_annotate(self, menu_item, paths):
+        launch_ui_window("annotate", paths)
 
     def callback_unlock(self, menu_item, paths):
         launch_ui_window("unlock", paths)
