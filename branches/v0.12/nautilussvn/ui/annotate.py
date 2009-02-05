@@ -20,10 +20,12 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
-import os
 
 from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
@@ -44,13 +46,13 @@ class Blame(InterfaceView):
     
     def __init__(self, path):
         if os.path.isdir(path):
-            MessageBox("Cannot annotate a directory")
+            MessageBox(_("Cannot generate a blame for a directory"))
             raise SystemExit()
             return
             
         InterfaceView.__init__(self, "blame", "Blame")
 
-        self.get_widget("Blame").set_title("Blame - %s" % path)
+        self.get_widget("Blame").set_title(_("Blame - %s") % path)
         
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
@@ -63,8 +65,8 @@ class Blame(InterfaceView):
             self.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Line", "Revision", "Author", 
-                "Date", "Text"],
+            [_("Line"), _("Revision"), _("Author"), 
+                _("Date"), _("Text")],
         )
         self.table.allow_multiple()
         
@@ -104,7 +106,7 @@ class Blame(InterfaceView):
         to_rev_num = self.get_widget("to").get_text().lower()
         
         if not from_rev_num.isdigit():
-            MessageBox("From revision field must be an integer")
+            MessageBox(_("The from revision field must be an integer"))
             return
              
         from_rev = self.vcs.revision("number", number=int(from_rev_num))
@@ -114,7 +116,7 @@ class Blame(InterfaceView):
             to_rev = self.vcs.revision("number", number=int(to_rev_num))
 
         self.set_loading(True)
-        self.pbar.set_text("Retrieving Blame Information...")
+        self.pbar.set_text(_("Retrieving Blame Information..."))
         self.pbar.start_pulsate()
         
         self.action = VCSAction(
@@ -130,7 +132,7 @@ class Blame(InterfaceView):
             to_rev
         )
         self.action.append(self.pbar.update, 1)
-        self.action.append(self.pbar.set_text, "Completed")
+        self.action.append(self.pbar.set_text, _("Completed"))
         self.action.append(self.set_loading, False)
         self.action.append(self.populate_table)
         self.action.start()
