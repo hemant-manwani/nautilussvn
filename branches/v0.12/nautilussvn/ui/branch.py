@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -28,7 +30,7 @@ from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.callback
+import nautilussvn.ui.action
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -64,7 +66,7 @@ class Branch(InterfaceView):
             self.tooltips = gtk.Tooltips()
             self.tooltips.set_tip(
                 self.get_widget("from_revision_number_opt"),
-                "There have been modifications to your working copy.  If you copy from the HEAD revision you will lose your changes."
+                _("There have been modifications to your working copy.  If you copy from the HEAD revision you will lose your changes.")
             )
             self.set_revision_number_opt_active()
             self.get_widget("from_revision_number").set_text(
@@ -82,7 +84,7 @@ class Branch(InterfaceView):
         dest = self.get_widget("to_url").get_text()
         
         if dest == "":
-            nautilussvn.ui.dialog.MessageBox("You must supply a destination.")
+            nautilussvn.ui.dialog.MessageBox(_("You must supply a destination path."))
             return
         
         revision = None
@@ -92,7 +94,7 @@ class Branch(InterfaceView):
             rev_num = self.get_widget("from_revision_number").get_text()
             
             if rev_num == "":
-                nautilussvn.ui.dialog.MessageBox("When copying from a specific revision, you must specify which revision to copy from.")
+                nautilussvn.ui.dialog.MessageBox(_("The from revision field is required."))
                 return
             
             revision = self.vcs.revision("number", number=rev_num)
@@ -101,11 +103,11 @@ class Branch(InterfaceView):
             revision = self.vcs.revision("working")
 
         if revision is None:
-            nautilussvn.ui.dialog.MessageBox("Invalid revision information")
+            nautilussvn.ui.dialog.MessageBox(_("Invalid revision information"))
             return
 
         self.hide()
-        self.action = nautilussvn.ui.callback.VCSAction(
+        self.action = nautilussvn.ui.action.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
@@ -116,10 +118,10 @@ class Branch(InterfaceView):
             self.message.get_text()
         )
         
-        self.action.append(self.action.set_header, "Branch/tag")
-        self.action.append(self.action.set_status, "Running Branch/tag Command...")
+        self.action.append(self.action.set_header, _("Branch/tag"))
+        self.action.append(self.action.set_status, _("Running Branch/tag Command..."))
         self.action.append(self.vcs.copy, src, dest, revision)
-        self.action.append(self.action.set_status, "Completed Branch/tag")
+        self.action.append(self.action.set_status, _("Completed Branch/tag"))
         self.action.append(self.action.finish)
         self.action.start()
                 

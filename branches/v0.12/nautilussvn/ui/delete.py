@@ -27,7 +27,7 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceNonView
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 import nautilussvn.lib.vcs
 
 class Delete(InterfaceNonView):

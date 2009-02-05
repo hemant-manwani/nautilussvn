@@ -30,7 +30,7 @@ from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.log import LogDialog
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-import nautilussvn.ui.callback
+import nautilussvn.ui.action
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
 
@@ -89,7 +89,7 @@ class Checkout(InterfaceView):
             )
     
         self.hide()
-        self.action = nautilussvn.ui.callback.VCSAction(
+        self.action = nautilussvn.ui.action.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )

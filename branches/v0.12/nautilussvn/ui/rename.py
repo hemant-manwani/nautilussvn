@@ -27,7 +27,7 @@ import gobject
 import gtk
 
 from nautilussvn.ui import InterfaceView
-from nautilussvn.ui.callback import VCSAction
+from nautilussvn.ui.action import VCSAction
 from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.vcs
 
@@ -58,7 +58,7 @@ class Rename(InterfaceView):
         new_path = os.path.join(self.dir, new_name)
         
         self.hide()
-        self.action = nautilussvn.ui.callback.VCSAction(
+        self.action = nautilussvn.ui.action.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
