@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -46,7 +48,7 @@ class Properties(InterfaceView):
         self.delete_stack = []
         
         self.get_widget("Properties").set_title(
-            "Properties - %s" % path
+            _("Properties - %s") % path
         )
         
         self.get_widget("path").set_text(path)
@@ -54,7 +56,7 @@ class Properties(InterfaceView):
         self.table = nautilussvn.ui.widget.Table(
             self.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Name", "Value"]
+            [_("Name"), _("Value")]
         )
         self.table.allow_multiple()
         

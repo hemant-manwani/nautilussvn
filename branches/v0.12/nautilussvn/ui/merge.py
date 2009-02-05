@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -73,11 +75,11 @@ class Merge(InterfaceView):
             return
         
         if test:
-            startcmd = "Running Merge Test"
-            endcmd = "Completed Merge Test"
+            startcmd = _("Running Merge Test")
+            endcmd = _("Completed Merge Test")
         else:
-            startcmd = "Running Merge Command"
-            endcmd = "Completed Merge"
+            startcmd = _("Running Merge Command")
+            endcmd = _("Completed Merge")
             self.hide()
 
         recursive = self.get_widget("mergeoptions_recursive").get_active()
@@ -85,7 +87,7 @@ class Merge(InterfaceView):
         record_only = self.get_widget("mergeoptions_only_record").get_active()
 
         action = VCSAction(self.vcs, register_gtk_quit=self.gtk_quit_is_set())
-        action.append(action.set_title, "Merge")
+        action.append(action.set_title, _("Merge"))
         action.append(action.set_status, startcmd)
         
         if self.type == "range":
@@ -317,9 +319,6 @@ class Merge(InterfaceView):
     
     def on_mergeoptions_prepare(self):
         self.assistant.set_page_complete(self.page, True)
-
-    def on_mergeoptions_test_merge_clicked(self, widget):
-        print "Test Merge"
 
 if __name__ == "__main__":
     from os import getcwd

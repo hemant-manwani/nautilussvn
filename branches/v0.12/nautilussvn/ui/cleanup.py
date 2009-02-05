@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -48,10 +50,10 @@ class Cleanup(InterfaceNonView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Cleanup")
-        self.action.append(self.action.set_status, "Cleaning Up...")
+        self.action.append(self.action.set_header, _("Cleanup"))
+        self.action.append(self.action.set_status, _("Cleaning Up..."))
         self.action.append(self.vcs.cleanup, self.path)
-        self.action.append(self.action.set_status, "Completed Cleanup")
+        self.action.append(self.action.set_status, _("Completed Cleanup"))
         self.action.append(self.action.finish)
         self.action.start()
 

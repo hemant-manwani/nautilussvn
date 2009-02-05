@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -33,7 +35,7 @@ import nautilussvn.lib.helper
 class Import(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "import", "Import")
-        self.get_widget("Import").set_title("Import - %s" % path)
+        self.get_widget("Import").set_title(_("Import - %s") % path)
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
@@ -60,7 +62,7 @@ class Import(InterfaceView):
         
         url = self.get_widget("repository").get_text()
         if not url:
-            nautilussvn.ui.dialog.MessageBox("Repository location to import to is required.")
+            nautilussvn.ui.dialog.MessageBox(_("The repository URL field is required."))
             return
             
         ignore = not self.get_widget("include_ignored").get_active()
@@ -72,8 +74,8 @@ class Import(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Import")
-        self.action.append(self.action.set_status, "Running Import Command...")
+        self.action.append(self.action.set_header, _("Import"))
+        self.action.append(self.action.set_status, _("Running Import Command..."))
         self.action.append(
             self.vcs.import_, 
             self.path,
@@ -81,7 +83,7 @@ class Import(InterfaceView):
             self.message.get_text(),
             ignore=ignore
         )
-        self.action.append(self.action.set_status, "Completed Import")
+        self.action.append(self.action.set_status, _("Completed Import"))
         self.action.append(self.action.finish)
         self.action.start()
 

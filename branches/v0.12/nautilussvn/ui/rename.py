@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import os.path
 
 import pygtk
@@ -52,7 +53,7 @@ class Rename(InterfaceView):
         
         new_name = self.get_widget("new_name").get_text()
         if not new_name:
-            MessageBox("The Name field is required")
+            MessageBox(_("The new name field is required"))
             return
         
         new_path = os.path.join(self.dir, new_name)
@@ -63,15 +64,15 @@ class Rename(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Rename")
-        self.action.append(self.action.set_status, "Running Rename Command...")
+        self.action.append(self.action.set_header, _("Rename"))
+        self.action.append(self.action.set_status, _("Running Rename Command..."))
         self.action.append(
             self.vcs.move, 
             self.path,
             new_path,
             force=True
         )
-        self.action.append(self.action.set_status, "Completed Rename")
+        self.action.append(self.action.set_status, _("Completed Rename"))
         self.action.append(self.action.finish)
         self.action.start()
         

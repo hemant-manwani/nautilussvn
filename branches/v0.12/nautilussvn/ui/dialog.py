@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import os.path
 
 import pygtk
@@ -43,7 +44,7 @@ class PreviousMessages(InterfaceView):
         self.message_table = nautilussvn.ui.widget.Table(
             self.get_widget("prevmes_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Date", "Message"]
+            [_("Date"), _("Message")]
         )
         self.entries = nautilussvn.lib.helper.get_previous_messages()
         if self.entries is None:
@@ -84,7 +85,7 @@ class PreviousMessages(InterfaceView):
         
 class FolderChooser:
     def __init__(self):
-        self.dialog = gtk.FileChooserDialog("Select a Folder", 
+        self.dialog = gtk.FileChooserDialog(_("Select a Folder"), 
             None, 
             gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, 
             (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
@@ -114,7 +115,7 @@ class Certificate(InterfaceView):
         self.get_widget("cert_host").set_label(host)
         self.get_widget("cert_issuer").set_label(issuer)
         self.get_widget("cert_valid").set_label(
-            "%s to %s" % (valid_from, valid_until)
+            _("%s to %s") % (valid_from, valid_until)
         )
         self.get_widget("cert_fingerprint").set_label(fingerprint)
         
@@ -205,7 +206,7 @@ class Property(InterfaceView):
         self.save_value = self.value.get_text()
 
 class FileChooser:
-    def __init__(self, title="Select a File", folder=None):
+    def __init__(self, title=_("Select a File"), folder=None):
         self.dialog = gtk.FileChooserDialog(title, 
             None, 
             gtk.FILE_CHOOSER_ACTION_OPEN, 
@@ -224,7 +225,7 @@ class FileChooser:
         return returner
         
 class Confirmation(InterfaceView):
-    def __init__(self, message="Are you sure you want to continue?"):
+    def __init__(self, message=_("Are you sure you want to continue?")):
         InterfaceView.__init__(self, GLADE, "Confirmation")
         self.get_widget("confirm_message").set_text(message)
         
@@ -252,7 +253,7 @@ class DeleteConfirmation(InterfaceView):
         if path:
             path = "\"%s\"" % os.path.basename(path)
         else:
-            path = "the selected item(s)"
+            path = _("the selected item(s)")
             
         msg = self.get_widget("message").get_label().replace("%item%", path)
         self.get_widget("message").set_label(msg)

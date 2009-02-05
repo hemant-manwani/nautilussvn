@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import thread
 
 import pygtk
@@ -39,7 +40,7 @@ class Resolve(Add):
         InterfaceView.__init__(self, "add", "Add")
 
         self.window = self.get_widget("Add")
-        self.window.set_title("Resolve")
+        self.window.set_title(_("Resolve"))
 
         self.paths = paths
         self.last_row_clicked = None
@@ -49,7 +50,7 @@ class Resolve(Add):
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, _("Path"), _("Extension")]
         )
 
         try:
@@ -70,11 +71,11 @@ class Resolve(Add):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Resolve")
-        self.action.append(self.action.set_status, "Running Resolve Command...")
+        self.action.append(self.action.set_header, _("Resolve"))
+        self.action.append(self.action.set_status, _("Running Resolve Command..."))
         for item in items:
             self.action.append(self.vcs.resolve, item, recurse=True)
-        self.action.append(self.action.set_status, "Completed Resolve")
+        self.action.append(self.action.set_status, _("Completed Resolve"))
         self.action.append(self.action.finish)
         self.action.start()
 

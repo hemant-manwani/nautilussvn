@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -64,8 +66,8 @@ class UpdateToRevision(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Update To Revision")
-        self.action.append(self.action.set_status, "Updating...")
+        self.action.append(self.action.set_header, _("Update To Revision"))
+        self.action.append(self.action.set_status, _("Updating..."))
         self.action.append(
             self.vcs.update, 
             self.path,
@@ -73,7 +75,7 @@ class UpdateToRevision(InterfaceView):
             recurse=recursive,
             ignore_externals=omit_externals
         )
-        self.action.append(self.action.set_status, "Completed Update")
+        self.action.append(self.action.set_status, _("Completed Update"))
         self.action.append(self.action.finish)
         self.action.start()
 

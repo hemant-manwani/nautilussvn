@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import thread
 
 import pygtk
@@ -60,8 +61,8 @@ class Lock(InterfaceView):
             self.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING], 
-            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension", 
-                "Locked"],
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, _("Path"), _("Extension"), 
+                _("Locked")],
         )
         self.last_row_clicked = None
 
@@ -84,16 +85,16 @@ class Lock(InterfaceView):
         
         locked = ""
         if self.vcs.is_locked(row[1]):
-            locked = "Yes"
+            locked = _("Yes")
 
         row[3] = locked
 
     def load(self):
         gtk.gdk.threads_enter()
-        self.get_widget("status").set_text("Loading...")
+        self.get_widget("status").set_text(_("Loading..."))
         self.items = self.vcs.get_items(self.paths)
         self.populate_files_table()
-        self.get_widget("status").set_text("Found %d item(s)" % len(self.items))
+        self.get_widget("status").set_text(_("Found %d item(s)") % len(self.items))
         gtk.gdk.threads_leave()
 
     def populate_files_table(self):
@@ -101,7 +102,7 @@ class Lock(InterfaceView):
         
             locked = ""
             if self.vcs.is_locked(item.path):
-                locked = "Yes"
+                locked = _("Yes")
             if not self.vcs.is_versioned(item.path):
                 continue
         
@@ -138,8 +139,8 @@ class Lock(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Get Lock")
-        self.action.append(self.action.set_status, "Running Lock Command...")
+        self.action.append(self.action.set_header, _("Get Lock"))
+        self.action.append(self.action.set_status, _("Running Lock Command..."))
         self.action.append(nautilussvn.lib.helper.save_log_message, message)
         for path in items:
             self.action.append(
@@ -148,7 +149,7 @@ class Lock(InterfaceView):
                 message,
                 force=steal_locks
             )
-        self.action.append(self.action.set_status, "Completed Lock")
+        self.action.append(self.action.set_status, _("Completed Lock"))
         self.action.append(self.action.finish)
         self.action.start()
     
@@ -170,7 +171,7 @@ class Lock(InterfaceView):
                 self.last_row_clicked = path
                 context_menu = nautilussvn.ui.widget.ContextMenu([
                     {
-                        "label": "Remove Lock",
+                        "label": _("Remove Lock"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_remove_lock_activated, 
@@ -180,7 +181,7 @@ class Lock(InterfaceView):
                         "condition": self.condition_remove_lock
                     },
                     {
-                        "label": "View Diff",
+                        "label": _("View Diff"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_diff_activated, 
@@ -190,7 +191,7 @@ class Lock(InterfaceView):
                         "condition": self.condition_diff
                     },
                     {
-                        "label": "Show log",
+                        "label": _("Show log"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_log_activated, 
@@ -200,7 +201,7 @@ class Lock(InterfaceView):
                         "condition": (lambda: True)
                     },
                     {
-                        "label": "Open",
+                        "label": _("Open"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_open_activated, 
@@ -210,7 +211,7 @@ class Lock(InterfaceView):
                         "condition": (lambda: True)
                     },
                     {
-                        "label": "Browse to",
+                        "label": _("Browse to"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_browse_activated, 

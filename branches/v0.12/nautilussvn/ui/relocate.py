@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -69,7 +71,7 @@ class Relocate(InterfaceView):
         to_url = self.get_widget("to_url").get_text()
     
         if not from_url or not to_url:
-            MessageBox("Both the From and To URLs are required.")
+            MessageBox(_("The from and to url fields are both required."))
             return
     
         self.hide()
@@ -79,15 +81,15 @@ class Relocate(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Relocate")
-        self.action.append(self.action.set_status, "Running Relocate Command...")
+        self.action.append(self.action.set_header, _("Relocate"))
+        self.action.append(self.action.set_status, _("Running Relocate Command..."))
         self.action.append(
             self.vcs.relocate, 
             from_url,
             to_url,
             self.path
         )
-        self.action.append(self.action.set_status, "Completed Relocate")
+        self.action.append(self.action.set_status, _("Completed Relocate"))
         self.action.append(self.action.finish)
         self.action.start()
 

@@ -21,6 +21,7 @@
 #
 
 from __future__ import division
+from gettext import gettext as _
 import threading
 from datetime import datetime
 
@@ -57,17 +58,10 @@ class Log(InterfaceView):
         
         InterfaceView.__init__(self, "log", "Log")
 
-        self.get_widget("Log").set_title("Log - %s" % path)
+        self.get_widget("Log").set_title(_("Log - %s") % path)
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
         self.path = path
-        """
-        if (not self.vcs.is_in_a_or_a_working_copy(self.path)
-                or not self.vcs.is_versioned(self.path)):
-            MessageBox("The given path is not part of a working copy.")
-            self.close()
-            return
-        """
         self.cache = LogCache()
 
         self.rev_start = None
@@ -81,8 +75,8 @@ class Log(InterfaceView):
             self.get_widget("revisions_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Revision", "Author", 
-                "Date", "Message"]
+            [_("Revision"), _("Author"), 
+                _("Date"), _("Message")]
         )
         self.revisions_table.allow_multiple()
 
@@ -90,7 +84,8 @@ class Log(InterfaceView):
             self.get_widget("paths_table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Action", "Path", "Copy From Path", "Copy From Revision"]
+            [_("Action"), _("Path"), 
+                _("Copy From Path"), _("Copy From Revision")]
         )
 
         self.message = nautilussvn.ui.widget.TextView(
@@ -112,7 +107,7 @@ class Log(InterfaceView):
     def on_cancel_clicked(self, widget, data=None):
         if self.is_loading:
             self.action.set_cancel(True)
-            self.pbar.set_text("Cancelled")
+            self.pbar.set_text(_("Cancelled"))
             self.pbar.update(1)
             self.set_loading(False)
         else:
@@ -235,8 +230,8 @@ class Log(InterfaceView):
         self.get_widget("end").set_text(str(rev))
 
     def initialize_revision_labels(self):
-        self.set_start_revision("N/A")
-        self.set_end_revision("N/A")
+        self.set_start_revision(_("N/A"))
+        self.set_end_revision(_("N/A"))
 
     #
     # Log-loading callback methods
@@ -252,7 +247,7 @@ class Log(InterfaceView):
         self.revisions_table.clear()
         self.message.set_text("")
         self.paths_table.clear()        
-        self.pbar.set_text("Loading...")
+        self.pbar.set_text(_("Loading..."))
         
         if self.rev_start and self.cache.has(self.rev_start):
             self.revision_items = self.cache.get(self.rev_start)
@@ -304,11 +299,11 @@ class Log(InterfaceView):
         self.check_previous_sensitive()
         self.check_next_sensitive()
         self.set_loading(False)
-        self.pbar.set_text("Finished")
+        self.pbar.set_text(_("Finished"))
 
     def load(self):
         self.set_loading(True)
-        self.pbar.set_text("Retrieving Log Information...")
+        self.pbar.set_text(_("Retrieving Log Information..."))
         self.pbar.start_pulsate()
         
         self.action = VCSAction(

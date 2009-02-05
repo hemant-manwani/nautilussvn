@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import os
 
 import pygtk
@@ -44,7 +45,7 @@ class Settings(InterfaceView):
         
         self.language = nautilussvn.ui.widget.ComboBox(
             self.get_widget("language"), 
-            ['English']
+            [_("English")]
         )
         self.language.set_active_from_value(
             self.settings.get("general", "language")
@@ -124,7 +125,7 @@ class Settings(InterfaceView):
 
     def on_external_diff_tool_browse_clicked(self, widget):
         chooser = nautilussvn.ui.dialog.FileChooser(
-            "Select a program", "/usr/bin"
+            _("Select a program"), "/usr/bin"
         )
         path = chooser.run()
         path = path.replace("file://", "")
@@ -133,7 +134,7 @@ class Settings(InterfaceView):
 
     def on_external_repo_browser_browse_clicked(self, widget):
         chooser = nautilussvn.ui.dialog.FileChooser(
-            "Select a program", "/usr/bin"
+            _("Select a program"), "/usr/bin"
         )
         path = chooser.run()
         path = path.replace("file://", "")
@@ -142,29 +143,29 @@ class Settings(InterfaceView):
 
     def on_cache_clear_repositories_clicked(self, widget):
         confirmation = nautilussvn.ui.dialog.Confirmation(
-            "Are you sure you want to clear your repository paths?"
+            _("Are you sure you want to clear your repository paths?")
         )
         if confirmation.run() == 1:
             path = nautilussvn.lib.helper.get_repository_paths_path()
             fh = open(path, "w")
             fh.write("")
             fh.close()
-            nautilussvn.ui.dialog.MessageBox("Repository paths cleared")
+            nautilussvn.ui.dialog.MessageBox(_("Repository paths cleared"))
 
     def on_cache_clear_messages_clicked(self, widget):
         confirmation = nautilussvn.ui.dialog.Confirmation(
-            "Are you sure you want to clear your previous messages?"
+            _("Are you sure you want to clear your previous messages?")
         )
         if confirmation.run() == 1:
             path = nautilussvn.lib.helper.get_previous_messages_path()
             fh = open(path, "w")
             fh.write("")
             fh.close()
-            nautilussvn.ui.dialog.MessageBox("Previous messages cleared")
+            nautilussvn.ui.dialog.MessageBox(_("Previous messages cleared"))
 
     def on_cache_clear_authentication_clicked(self, widget):
         confirmation = nautilussvn.ui.dialog.Confirmation(
-            "Are you sure you want to clear your authentication information?"
+            _("Are you sure you want to clear your authentication information?")
         )
         if confirmation.run() == 1:
             home_dir = nautilussvn.lib.helper.get_user_path()
@@ -181,7 +182,7 @@ class Settings(InterfaceView):
                         filepath = "%s/%s" % (path, filename)
                         os.remove(filepath)
 
-            nautilussvn.ui.dialog.MessageBox("Authentication cleared")
+            nautilussvn.ui.dialog.MessageBox(_("Authentication information cleared"))
                 
 
 if __name__ == "__main__":

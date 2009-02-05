@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import thread
 
 import pygtk
@@ -39,7 +40,7 @@ class Revert(Add):
         InterfaceView.__init__(self, "add", "Add")
 
         self.window = self.get_widget("Add")
-        self.window.set_title("Revert")
+        self.window.set_title(_("Revert"))
 
         self.paths = paths
         self.last_row_clicked = None
@@ -49,7 +50,7 @@ class Revert(Add):
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, _("Path"), _("Extension")]
         )
 
         try:
@@ -69,10 +70,10 @@ class Revert(Add):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Revert")
-        self.action.append(self.action.set_status, "Running Revert Command...")
+        self.action.append(self.action.set_header, _("Revert"))
+        self.action.append(self.action.set_status, _("Running Revert Command..."))
         self.action.append(self.vcs.revert, items, recurse=True)
-        self.action.append(self.action.set_status, "Completed Revert")
+        self.action.append(self.action.set_status, _("Completed Revert"))
         self.action.append(self.action.finish)
         self.action.start()
 
