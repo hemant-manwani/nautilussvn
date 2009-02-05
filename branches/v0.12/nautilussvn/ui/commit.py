@@ -177,10 +177,13 @@ class Commit(InterfaceView):
 
         added = 0
         for item in items:
-            if self.vcs.status(item, recurse=False)[0].text_status == self.vcs.STATUS["unversioned"]:
-                self.vcs.add(item)
-                added += 1
-        
+            try:
+                if self.vcs.status(item, recurse=False)[0].text_status == self.vcs.STATUS["unversioned"]:
+                    self.vcs.add(item)
+                    added += 1
+            except Exception, e:
+                print str(e)        
+
         ticks = added + len(items)*2
         
         self.action = nautilussvn.ui.callback.VCSAction(
