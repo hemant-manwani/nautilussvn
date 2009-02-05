@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import os.path
 import thread
 
@@ -64,7 +65,7 @@ class Commit(InterfaceView):
             self.common = os.path.dirname(self.common)
             
         if not self.vcs.is_in_a_or_a_working_copy(self.common):
-            nautilussvn.ui.dialog.MessageBox("The specified path is not a working copy")
+            nautilussvn.ui.dialog.MessageBox(_("The given path is not a working copy"))
             self.close()
             return
 
@@ -72,8 +73,8 @@ class Commit(InterfaceView):
             self.get_widget("files_table"),
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING, 
                 gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension", 
-                "Text Status", "Property Status"],
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, _("Path"), _("Extension"), 
+                _("Text Status"), _("Property Status")],
         )
         self.last_row_clicked = None
         
@@ -96,10 +97,10 @@ class Commit(InterfaceView):
 
     def load(self):
         gtk.gdk.threads_enter()
-        self.get_widget("status").set_text("Loading...")
+        self.get_widget("status").set_text(_("Loading..."))
         self.items = self.vcs.get_items(self.paths, self.vcs.STATUSES_FOR_COMMIT)
         self.populate_files_from_original()
-        self.get_widget("status").set_text("Found %d item(s)" % len(self.items))
+        self.get_widget("status").set_text(_("Found %d item(s)") % len(self.items))
         gtk.gdk.threads_leave()
     
     def refresh_row_status(self):
@@ -191,14 +192,14 @@ class Commit(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         self.action.set_pbar_ticks(ticks)
-        self.action.append(self.action.set_header, "Commit")
-        self.action.append(self.action.set_status, "Running Commit Command...")
+        self.action.append(self.action.set_header, _("Commit"))
+        self.action.append(self.action.set_status, _("Running Commit Command..."))
         self.action.append(
             nautilussvn.lib.helper.save_log_message, 
             self.message.get_text()
         )
         self.action.append(self.vcs.commit, items, self.message.get_text())
-        self.action.append(self.action.set_status, "Completed Commit")
+        self.action.append(self.action.set_status, _("Completed Commit"))
         self.action.append(self.action.finish)
         self.action.start()
         
@@ -232,7 +233,7 @@ class Commit(InterfaceView):
                 self.last_row_clicked = path
                 context_menu = nautilussvn.ui.widget.ContextMenu([
                     {
-                        "label": "View Diff",
+                        "label": _("View Diff"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_diff_activated, 
@@ -242,7 +243,7 @@ class Commit(InterfaceView):
                         "condition": self.condition_view_diff
                     },
                     {
-                        "label": "Open",
+                        "label": _("Open"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_open_activated, 
@@ -252,7 +253,7 @@ class Commit(InterfaceView):
                         "condition": (lambda: True)
                     },
                     {
-                        "label": "Browse to",
+                        "label": _("Browse to"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_browse_activated, 
@@ -262,7 +263,7 @@ class Commit(InterfaceView):
                         "condition": (lambda: True)
                     },
                     {
-                        "label": "Delete",
+                        "label": _("Delete"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_delete_activated, 
@@ -272,7 +273,7 @@ class Commit(InterfaceView):
                         "condition": self.condition_delete
                     },
                     {
-                        "label": "Add",
+                        "label": _("Add"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_add_activated, 
@@ -282,7 +283,7 @@ class Commit(InterfaceView):
                         "condition": self.condition_add
                     },
                     {
-                        "label": "Revert",
+                        "label": _("Revert"),
                         "signals": {
                             "activate": {
                                 "callback": self.on_context_revert_activated, 
@@ -292,7 +293,7 @@ class Commit(InterfaceView):
                         "condition": self.condition_revert
                     },
                     {
-                        "label": "Add to ignore list",
+                        "label": _("Add to ignore list"),
                         'submenu': [
                             {
                                 "label": os.path.basename(fileinfo[1]),

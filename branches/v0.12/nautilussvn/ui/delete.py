@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import os.path
 
 import pygtk
@@ -42,6 +44,8 @@ class Delete(InterfaceNonView):
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
     def start(self):
+    
+        # From the given paths, determine which are versioned and which are not
         versioned = []
         unversioned = []
         for path in self.paths:
@@ -50,6 +54,8 @@ class Delete(InterfaceNonView):
             elif os.path.exists(path):
                 unversioned.append(path)
         
+        # If there are unversioned files, confirm that the user wants to
+        # delete those.  Default to true.
         result = True
         if unversioned:
             item = None
@@ -58,6 +64,8 @@ class Delete(InterfaceNonView):
             confirm = nautilussvn.ui.dialog.DeleteConfirmation(item)
             result = confirm.run()
 
+        # If the user wants to continue (or there are no unversioned files)
+        # remove or delete the given files
         if result:
             if versioned:
                 try:

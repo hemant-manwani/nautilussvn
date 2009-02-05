@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import os
 import subprocess
 
@@ -42,9 +44,9 @@ class Create:
         # Let svnadmin return a bad value if a repo already exists there
         ret = subprocess.call(["/usr/bin/svnadmin", "create", path])
         if ret == 0:
-            nautilussvn.ui.dialog.MessageBox("Repository successfully created")
+            nautilussvn.ui.dialog.MessageBox(_("Repository successfully created"))
         else:
-            nautilussvn.ui.dialog.MessageBox("There was an error creating the repository -- Error code: %s" % ret)
+            nautilussvn.ui.dialog.MessageBox(_("There was an error creating the repository.  Make sure the given folder is empty."))
         
 if __name__ == "__main__":
     from os import getcwd

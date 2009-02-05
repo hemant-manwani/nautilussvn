@@ -21,6 +21,7 @@
 #
 
 from __future__ import division
+from gettext import gettext as _
 import threading
 
 import pygtk
@@ -60,7 +61,7 @@ class Notification(InterfaceView):
         self.table = nautilussvn.ui.widget.Table(
             self.get_widget("table"),
             [gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            ["Action", "Path", "Mime Type"]
+            [_("Action"), _("Path"), _("Mime Type")]
         )
         
         self.pbar = nautilussvn.ui.widget.ProgressBar(
@@ -117,7 +118,7 @@ class VCSAction(threading.Thread):
     def __init__(self, client, register_gtk_quit=False, notification=True):
         threading.Thread.__init__(self)
         
-        self.message = "Empty Message"
+        self.message = _("Empty Message")
         
         self.client = client
         self.client.set_callback_cancel(self.cancel)
@@ -200,9 +201,6 @@ class VCSAction(threading.Thread):
             if frac > 1:
                 frac = 1
             self.notification.pbar.update(frac)
-            
-            # In case I want to show the percentage in the pbar
-            #self.notification.pbar.set_text("%s%%" % str(frac*100))
         
         try:
             action = self.client.NOTIFY_ACTIONS[data["action"]]
@@ -234,10 +232,10 @@ class VCSAction(threading.Thread):
         """
 
         self.notification.append(
-            ["", "Finished", ""]
+            ["", _("Finished"), ""]
         )
         title = self.notification.get_title()
-        self.notification.set_title("%s - Finished" % title)
+        self.notification.set_title(_("%s - Finished") % title)
         self.set_status(message)
         self.notification.pbar.stop_pulsate()
         self.notification.pbar.update(1)

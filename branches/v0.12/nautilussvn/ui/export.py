@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -33,7 +35,7 @@ import nautilussvn.lib.helper
 class Export(Checkout):
     def __init__(self, path):
         Checkout.__init__(self, path)
-        self.get_widget("Checkout").set_title("Export - %s" % path)
+        self.get_widget("Checkout").set_title(_("Export - %s") % path)
         
         # If the given path is a working copy, then export FROM the path
         # Otherwise export TO the path
@@ -51,7 +53,7 @@ class Export(Checkout):
         recursive = self.get_widget("recursive").get_active()
 
         if not url or not path:
-            MessageBox("You must fill in both the URL and Destination fields.")
+            MessageBox(_("The repository URL and destination path are both required fields."))
             return
         
         if url.startswith("file://"):
@@ -72,8 +74,8 @@ class Export(Checkout):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Export")
-        self.action.append(self.action.set_status, "Running Export Command...")
+        self.action.append(self.action.set_header, _("Export"))
+        self.action.append(self.action.set_status, _("Running Export Command..."))
         self.action.append(nautilussvn.lib.helper.save_repository_path, url)
         self.action.append(
             self.vcs.export,
@@ -84,6 +86,7 @@ class Export(Checkout):
             revision=revision,
             ignore_externals=omit_externals
         )
+        self.action.append(self.action.set_status, _("Completed Export"))
         self.action.append(self.action.finish)
         self.action.start()
         

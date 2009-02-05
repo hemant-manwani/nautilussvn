@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -58,7 +60,7 @@ class Switch(InterfaceView):
         url = self.get_widget("repository").get_text()
         
         if not url or not self.path:
-            nautilussvn.ui.dialog.MessageBox("The repository location is a required field.")
+            nautilussvn.ui.dialog.MessageBox(_("The repository location is a required field."))
             return
 
         revision = self.vcs.revision("head")
@@ -74,8 +76,8 @@ class Switch(InterfaceView):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Switch")
-        self.action.append(self.action.set_status, "Running Switch Command...")
+        self.action.append(self.action.set_header, _("Switch"))
+        self.action.append(self.action.set_status, _("Running Switch Command..."))
         self.action.append(nautilussvn.lib.helper.save_repository_path, url)
         self.action.append(
             self.vcs.switch,
@@ -83,7 +85,7 @@ class Switch(InterfaceView):
             url,
             revision=revision
         )
-        self.action.append(self.action.set_status, "Completed Switch")
+        self.action.append(self.action.set_status, _("Completed Switch"))
         self.action.append(self.action.finish)
         self.action.start()
 

@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import thread
 
 import pygtk
@@ -39,7 +40,7 @@ class Unlock(Add):
         InterfaceView.__init__(self, "add", "Add")
 
         self.window = self.get_widget("Add")
-        self.window.set_title("Unlock")
+        self.window.set_title(_("Unlock"))
 
         self.paths = paths
         self.last_row_clicked = None
@@ -49,7 +50,7 @@ class Unlock(Add):
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"), 
             [gobject.TYPE_BOOLEAN, gobject.TYPE_STRING, gobject.TYPE_STRING], 
-            [nautilussvn.ui.widget.TOGGLE_BUTTON, "Path", "Extension"]
+            [nautilussvn.ui.widget.TOGGLE_BUTTON, _("Path"), _("Extension")]
         )
 
         try:
@@ -64,7 +65,7 @@ class Unlock(Add):
 
     def load(self):
         gtk.gdk.threads_enter()
-        self.get_widget("status").set_text("Loading...")
+        self.get_widget("status").set_text(_("Loading..."))
         self.items = self.vcs.get_items(self.paths, self.statuses)
         self.populate_files_table()
         gtk.gdk.threads_leave()
@@ -85,7 +86,7 @@ class Unlock(Add):
             ])
             found += 1
             
-        self.get_widget("status").set_text("Found %d item(s)" % found)
+        self.get_widget("status").set_text(_("Found %d item(s)") % found)
     
     #
     # UI Signal Callbacks
@@ -103,11 +104,11 @@ class Unlock(Add):
             register_gtk_quit=self.gtk_quit_is_set()
         )
         
-        self.action.append(self.action.set_header, "Unlock")
-        self.action.append(self.action.set_status, "Running Unlock Command...")
+        self.action.append(self.action.set_header, _("Unlock"))
+        self.action.append(self.action.set_status, _("Running Unlock Command..."))
         for item in items:
             self.action.append(self.vcs.unlock, item, force=True)
-        self.action.append(self.action.set_status, "Completed Unlock")
+        self.action.append(self.action.set_status, _("Completed Unlock"))
         self.action.append(self.action.finish)
         self.action.start()
 

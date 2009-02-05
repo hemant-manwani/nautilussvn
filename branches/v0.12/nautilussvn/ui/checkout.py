@@ -20,6 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
 import os.path
 
 import pygtk
@@ -45,7 +46,7 @@ class Checkout(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
 
-        self.get_widget("Checkout").set_title("Checkout - %s" % path)
+        self.get_widget("Checkout").set_title(_("Checkout - %s") % path)
         
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
@@ -75,7 +76,7 @@ class Checkout(InterfaceView):
         recursive = self.get_widget("recursive").get_active()
         
         if not url or not path:
-            nautilussvn.ui.dialog.MessageBox("You must fill in both the URL and Destination fields.")
+            nautilussvn.ui.dialog.MessageBox(_("The repository URL and destination path are both required fields."))
             return
 
         if path.startswith("file://"):
@@ -93,8 +94,8 @@ class Checkout(InterfaceView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.append(self.action.set_header, "Checkout")
-        self.action.append(self.action.set_status, "Running Checkout Command...")
+        self.action.append(self.action.set_header, _("Checkout"))
+        self.action.append(self.action.set_status, _("Running Checkout Command..."))
         self.action.append(nautilussvn.lib.helper.save_repository_path, url)
         self.action.append(
             self.vcs.checkout,
@@ -104,7 +105,7 @@ class Checkout(InterfaceView):
             revision=revision,
             ignore_externals=omit_externals
         )
-        self.action.append(self.action.set_status, "Completed Checkout")
+        self.action.append(self.action.set_status, _("Completed Checkout"))
         self.action.append(self.action.finish)
         self.action.start()
 

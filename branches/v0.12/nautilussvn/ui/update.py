@@ -20,6 +20,8 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from gettext import gettext as _
+
 import pygtk
 import gobject
 import gtk
@@ -47,11 +49,11 @@ class Update(InterfaceNonView):
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
         )
-        self.action.append(self.action.set_header, "Update")
-        self.action.append(self.action.set_status, "Updating...")
+        self.action.append(self.action.set_header, _("Update"))
+        self.action.append(self.action.set_status, _("Updating..."))
         for item in self.paths:
             self.action.append(self.vcs.update, item)
-        self.action.append(self.action.set_status, "Completed Update")
+        self.action.append(self.action.set_status, _("Completed Update"))
         self.action.append(self.action.finish)
         self.action.start()
 
