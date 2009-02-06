@@ -28,6 +28,7 @@ Our module for everything related to the Nautilus extension.
 
 import os.path
 from os.path import isdir, isfile
+from gettext import gettext as _
 
 import gnomevfs
 import nautilus
@@ -358,7 +359,7 @@ class MainContextMenu:
         menu_definition = [
             {
                 "identifier": "NautilusSvn::Debug",
-                "label": "Debug",
+                "label": _("Debug"),
                 "tooltip": "",
                 "icon": "nautilussvn-monkey",
                 "signals": {
@@ -371,7 +372,7 @@ class MainContextMenu:
                 "submenus": [
                     {
                         "identifier": "NautilusSvn::DBus",
-                        "label": "DBus",
+                        "label": _("DBus"),
                         "tooltip": "",
                         "icon": "nautilussvn-dbus",
                         "signals": {
@@ -384,7 +385,7 @@ class MainContextMenu:
                         "submenus": [
                             {
                                 "identifier": "NautilusSvn::DBus_Restart",
-                                "label": "Start/Restart Service",
+                                "label": _("Start/Restart Service"),
                                 "tooltip": "",
                                 "icon": "nautilussvn-run",
                                 "signals": {
@@ -400,7 +401,7 @@ class MainContextMenu:
                             },
                             {
                                 "identifier": "NautilusSvn::DBus_Exit",
-                                "label": "Exit Service",
+                                "label": _("Exit Service"),
                                 "tooltip": "",
                                 "icon": "nautilussvn-stop",
                                 "signals": {
@@ -418,7 +419,7 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Bugs",
-                        "label": "Bugs",
+                        "label": _("Bugs"),
                         "tooltip": "",
                         "icon": "nautilussvn-bug",
                         "signals": {
@@ -431,7 +432,7 @@ class MainContextMenu:
                         "submenus": [
                             {
                                 "identifier": "NautilusSvn::Debug_Asynchronicity",
-                                "label": "Test Asynchronicity",
+                                "label": _("Test Asynchronicity"),
                                 "tooltip": "",
                                 "icon": "nautilussvn-asynchronous",
                                 "signals": {
@@ -449,7 +450,7 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Debug_Shell",
-                        "label": "Open Shell",
+                        "label": _("Open Shell"),
                         "tooltip": "",
                         "icon": "gnome-terminal",
                         "signals": {
@@ -465,7 +466,7 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Refresh_Status",
-                        "label": "Refresh Status",
+                        "label": _("Refresh Status"),
                         "tooltip": "",
                         "icon": "nautilussvn-refresh",
                         "signals": {
@@ -482,8 +483,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Debug_Revert",
-                        "label": "Debug Revert",
-                        "tooltip": "Reverts everything it sees",
+                        "label": _("Debug Revert"),
+                        "tooltip": _("Reverts everything it sees"),
                         "icon": "nautilussvn-revert",
                         "signals": {
                             "activate": {
@@ -498,8 +499,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Debug_Invalidate",
-                        "label": "Invalidate",
-                        "tooltip": "Force a invalidate_extension_info() call",
+                        "label": _("Invalidate"),
+                        "tooltip": _("Force an invalidate_extension_info() call"),
                         "icon": "nautilussvn-clear",
                         "signals": {
                             "activate": {
@@ -514,8 +515,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Debug_Add_Emblem",
-                        "label": "Add Emblem",
-                        "tooltip": "Add an emblem",
+                        "label": _("Add Emblem"),
+                        "tooltip": _("Add an emblem"),
                         "icon": "nautilussvn-emblems",
                         "signals": {
                             "activate": {
@@ -532,8 +533,8 @@ class MainContextMenu:
             },
             {
                 "identifier": "NautilusSvn::Checkout",
-                "label": "Checkout",
-                "tooltip": "",
+                "label": _("Checkout"),
+                "tooltip": _("Check out a working copy"),
                 "icon": "nautilussvn-checkout",
                 "signals": {
                     "activate": {
@@ -548,8 +549,8 @@ class MainContextMenu:
             },
             {
                 "identifier": "NautilusSvn::Update",
-                "label": "Update",
-                "tooltip": "",
+                "label": _("Update"),
+                "tooltip": _("Update a working copy"),
                 "icon": "nautilussvn-update",
                 "signals": {
                     "activate": {
@@ -564,8 +565,8 @@ class MainContextMenu:
             },
             {
                 "identifier": "NautilusSvn::Commit",
-                "label": "Commit",
-                "tooltip": "",
+                "label": _("Commit"),
+                "tooltip": _("Commit modifications to the repository"),
                 "icon": "nautilussvn-commit",
                 "signals": {
                     "activate": {
@@ -580,7 +581,7 @@ class MainContextMenu:
             },
             {
                 "identifier": "NautilusSvn::NautilusSvn",
-                "label": "NautilusSvn",
+                "label": _("NautilusSvn"),
                 "tooltip": "",
                 "icon": "nautilussvn",
                 "signals": {
@@ -593,8 +594,8 @@ class MainContextMenu:
                 "submenus": [
                     {
                         "identifier": "NautilusSvn::Diff",
-                        "label": "Diff",
-                        "tooltip": "",
+                        "label": _("View Diff"),
+                        "tooltip": _("View the modifications made to a file"),
                         "icon": "nautilussvn-diff",
                         "signals": {
                             "activate": {
@@ -609,8 +610,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Show_Log",
-                        "label": "Show Log",
-                        "tooltip": "",
+                        "label": _("Show Log"),
+                        "tooltip": _("Show a file's log information"),
                         "icon": "nautilussvn-show_log",
                         "signals": {
                             "activate": {
@@ -634,8 +635,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Add",
-                        "label": "Add",
-                        "tooltip": "",
+                        "label": _("Add"),
+                        "tooltip": _("Schedule an item to be added to the repository"),
                         "icon": "nautilussvn-add",
                         "signals": {
                             "activate": {
@@ -650,7 +651,7 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::AddToIgnoreList",
-                        "label": "Add to ignore list",
+                        "label": _("Add to ignore list"),
                         "tooltip": "",
                         "icon": None,
                         "signals": {}, 
@@ -659,7 +660,7 @@ class MainContextMenu:
                             {
                                 "identifier": "NautilusSvn::AddToIgnoreFile",
                                 "label": os.path.basename(self.paths[0]),
-                                "tooltip": "",
+                                "tooltip": _("Ignore an item"),
                                 "icon": None,
                                 "signals": {
                                     "activate": {
@@ -674,7 +675,7 @@ class MainContextMenu:
                             {
                                 "identifier": "NautilusSvn::AddToIgnoreExt",
                                 "label": "*.%s"%get_file_extension(self.paths[0]),
-                                "tooltip": "",
+                                "tooltip": _("Ignore all files with this extension"),
                                 "icon": None,
                                 "signals": {
                                     "activate": {
@@ -699,8 +700,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::UpdateToRevision",
-                        "label": "Update to revision...",
-                        "tooltip": "",
+                        "label": _("Update to revision..."),
+                        "tooltip": _("Update a file to a specific revision"),
                         "icon": "nautilussvn-update",
                         "signals": {
                             "activate": {
@@ -715,8 +716,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Rename",
-                        "label": "Rename...",
-                        "tooltip": "",
+                        "label": _("Rename..."),
+                        "tooltip": _("Schedule an item to be renamed on the repository"),
                         "icon": "nautilussvn-rename",
                         "signals": {
                             "activate": {
@@ -731,8 +732,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Delete",
-                        "label": "Delete",
-                        "tooltip": "",
+                        "label": _("Delete"),
+                        "tooltip": _("Schedule an item to be deleted from the repository"),
                         "icon": "nautilussvn-delete",
                         "signals": {
                             "activate": {
@@ -747,8 +748,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Revert",
-                        "label": "Revert",
-                        "tooltip": "",
+                        "label": _("Revert"),
+                        "tooltip": _("Revert an item to its unmodified state"),
                         "icon": "nautilussvn-revert",
                         "signals": {
                             "activate": {
@@ -763,8 +764,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Resolve",
-                        "label": "Resolve",
-                        "tooltip": "",
+                        "label": _("Resolve"),
+                        "tooltip": _("Mark a conflicted item as resolved"),
                         "icon": "nautilussvn-resolve",
                         "signals": {
                             "activate": {
@@ -779,8 +780,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Relocate",
-                        "label": "Relocate...",
-                        "tooltip": "",
+                        "label": _("Relocate..."),
+                        "tooltip": _("Relocate your working copy"),
                         "icon": "nautilussvn-relocate",
                         "signals": {
                             "activate": {
@@ -795,8 +796,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::GetLock",
-                        "label": "Get Lock...",
-                        "tooltip": "",
+                        "label": _("Get Lock..."),
+                        "tooltip": _("Locally lock items"),
                         "icon": "nautilussvn-lock",
                         "signals": {
                             "activate": {
@@ -811,8 +812,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Unlock",
-                        "label": "Release Lock...",
-                        "tooltip": "",
+                        "label": _("Release Lock..."),
+                        "tooltip": _("Release lock on an item"),
                         "icon": "nautilussvn-unlock",
                         "signals": {
                             "activate": {
@@ -836,8 +837,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Export",
-                        "label": "Export",
-                        "tooltip": "",
+                        "label": _("Export"),
+                        "tooltip": _("Export a working copy or repository with no versioning information"),
                         "icon": "nautilussvn-export",
                         "signals": {
                             "activate": {
@@ -852,8 +853,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Create_Repository",
-                        "label": "Create Repository here",
-                        "tooltip": "",
+                        "label": _("Create Repository here"),
+                        "tooltip": _("Create a repository in a folder"),
                         "icon": "nautilussvn-run",
                         "signals": {
                             "activate": {
@@ -868,8 +869,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Import",
-                        "label": "Import",
-                        "tooltip": "",
+                        "label": _("Import"),
+                        "tooltip": _("Import an item into a repository"),
                         "icon": "nautilussvn-import",
                         "signals": {
                             "activate": {
@@ -893,8 +894,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::BranchTag",
-                        "label": "Branch/tag...",
-                        "tooltip": "",
+                        "label": _("Branch/tag..."),
+                        "tooltip": _("Copy an item to another location in the repository"),
                         "icon": "nautilussvn-branch",
                         "signals": {
                             "activate": {
@@ -909,8 +910,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Switch",
-                        "label": "Switch...",
-                        "tooltip": "",
+                        "label": _("Switch..."),
+                        "tooltip": _("Change the repository location of a working copy"),
                         "icon": "nautilussvn-switch",
                         "signals": {
                             "activate": {
@@ -925,8 +926,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Merge",
-                        "label": "Merge...",
-                        "tooltip": "",
+                        "label": _("Merge..."),
+                        "tooltip": _("A wizard with steps for merging"),
                         "icon": "nautilussvn-merge",
                         "signals": {
                             "activate": {
@@ -950,8 +951,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Annotate",
-                        "label": "Annotate...",
-                        "tooltip": "",
+                        "label": _("Annotate..."),
+                        "tooltip": _("Annotate a file"),
                         "icon": "nautilussvn-annotate",
                         "signals": {
                             "activate": {
@@ -975,8 +976,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Properties",
-                        "label": "Properties",
-                        "tooltip": "",
+                        "label": _("Properties"),
+                        "tooltip": _("View the properties of an item"),
                         "icon": "nautilussvn-properties",
                         "signals": {
                             "activate": {
@@ -1007,8 +1008,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Help",
-                        "label": "Help",
-                        "tooltip": "",
+                        "label": _("Help"),
+                        "tooltip": _("View help"),
                         "icon": "nautilussvn-help",
                         "signals": {
                             "activate": {
@@ -1023,8 +1024,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::Settings",
-                        "label": "Settings",
-                        "tooltip": "",
+                        "label": _("Settings"),
+                        "tooltip": _("View or change NautilusSvn settings"),
                         "icon": "nautilussvn-settings",
                         "signals": {
                             "activate": {
@@ -1039,8 +1040,8 @@ class MainContextMenu:
                     },
                     {
                         "identifier": "NautilusSvn::About",
-                        "label": "About",
-                        "tooltip": "",
+                        "label": _("About"),
+                        "tooltip": _("About NautilusSvn"),
                         "icon": "nautilussvn-about",
                         "signals": {
                             "activate": {
