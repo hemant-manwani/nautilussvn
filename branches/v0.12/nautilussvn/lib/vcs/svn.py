@@ -28,6 +28,7 @@ Concrete VCS implementation for Subversion functionality.
 
 import os.path
 from os.path import isdir, isfile
+from gettext import gettext as _
 
 import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
@@ -102,31 +103,31 @@ class SVN:
     }
     
     NOTIFY_ACTIONS = {
-        pysvn.wc_notify_action.add:                     "Added",
-        pysvn.wc_notify_action.copy:                    "Copied",
-        pysvn.wc_notify_action.delete:                  "Deleted",
-        pysvn.wc_notify_action.restore:                 "Restored",
-        pysvn.wc_notify_action.revert:                  "Reverted",
-        pysvn.wc_notify_action.failed_revert:           "Failed Revert",
-        pysvn.wc_notify_action.resolved:                "Resolved",
-        pysvn.wc_notify_action.skip:                    "Skipped",
-        pysvn.wc_notify_action.update_delete:           "Deleted",
-        pysvn.wc_notify_action.update_add:              "Added",
-        pysvn.wc_notify_action.update_update:           "Updated",
-        pysvn.wc_notify_action.update_completed:        "Completed",
-        pysvn.wc_notify_action.update_external:         "External",
-        pysvn.wc_notify_action.status_completed:        "Completed",
-        pysvn.wc_notify_action.status_external:         "External",
-        pysvn.wc_notify_action.commit_modified:         "Modified",
-        pysvn.wc_notify_action.commit_added:            "Added",
-        pysvn.wc_notify_action.commit_deleted:          "Copied",
-        pysvn.wc_notify_action.commit_replaced:         "Replaced",
-        pysvn.wc_notify_action.commit_postfix_txdelta:  "Changed",
-        pysvn.wc_notify_action.annotate_revision:       "Annotated",
-        pysvn.wc_notify_action.locked:                  "Locked",
-        pysvn.wc_notify_action.unlocked:                "Unlocked",
-        pysvn.wc_notify_action.failed_lock:             "Failed Lock",
-        pysvn.wc_notify_action.failed_unlock:           "Failed Unlock"
+        pysvn.wc_notify_action.add:                     _("Added"),
+        pysvn.wc_notify_action.copy:                    _("Copied"),
+        pysvn.wc_notify_action.delete:                  _("Deleted"),
+        pysvn.wc_notify_action.restore:                 _("Restored"),
+        pysvn.wc_notify_action.revert:                  _("Reverted"),
+        pysvn.wc_notify_action.failed_revert:           _("Failed Revert"),
+        pysvn.wc_notify_action.resolved:                _("Resolved"),
+        pysvn.wc_notify_action.skip:                    _("Skipped"),
+        pysvn.wc_notify_action.update_delete:           _("Deleted"),
+        pysvn.wc_notify_action.update_add:              _("Added"),
+        pysvn.wc_notify_action.update_update:           _("Updated"),
+        pysvn.wc_notify_action.update_completed:        _("Completed"),
+        pysvn.wc_notify_action.update_external:         _("External"),
+        pysvn.wc_notify_action.status_completed:        _("Completed"),
+        pysvn.wc_notify_action.status_external:         _("External"),
+        pysvn.wc_notify_action.commit_modified:         _("Modified"),
+        pysvn.wc_notify_action.commit_added:            _("Added"),
+        pysvn.wc_notify_action.commit_deleted:          _("Copied"),
+        pysvn.wc_notify_action.commit_replaced:         _("Replaced"),
+        pysvn.wc_notify_action.commit_postfix_txdelta:  _("Changed"),
+        pysvn.wc_notify_action.annotate_revision:       _("Annotated"),
+        pysvn.wc_notify_action.locked:                  _("Locked"),
+        pysvn.wc_notify_action.unlocked:                _("Unlocked"),
+        pysvn.wc_notify_action.failed_lock:             _("Failed Lock"),
+        pysvn.wc_notify_action.failed_unlock:           _("Failed Unlock")
     }
     
     NOTIFY_ACTIONS_COMPLETE = [
@@ -135,14 +136,14 @@ class SVN:
     ]
     
     NOTIFY_STATES = {
-        pysvn.wc_notify_state.inapplicable:             "Inapplicable",
-        pysvn.wc_notify_state.unknown:                  "Unknown",
-        pysvn.wc_notify_state.unchanged:                "Unchanged",
-        pysvn.wc_notify_state.missing:                  "Missing",
-        pysvn.wc_notify_state.obstructed:               "Obstructed",
-        pysvn.wc_notify_state.changed:                  "Changed",
-        pysvn.wc_notify_state.merged:                   "Merged",
-        pysvn.wc_notify_state.conflicted:               "Conflicted"
+        pysvn.wc_notify_state.inapplicable:             _("Inapplicable"),
+        pysvn.wc_notify_state.unknown:                  _("Unknown"),
+        pysvn.wc_notify_state.unchanged:                _("Unchanged"),
+        pysvn.wc_notify_state.missing:                  _("Missing"),
+        pysvn.wc_notify_state.obstructed:               _("Obstructed"),
+        pysvn.wc_notify_state.changed:                  _("Changed"),
+        pysvn.wc_notify_state.merged:                   _("Merged"),
+        pysvn.wc_notify_state.conflicted:               _("Conflicted")
     }
     
     REVISIONS = {
