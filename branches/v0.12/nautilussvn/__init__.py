@@ -21,3 +21,5 @@
 #
 
 version = "0.12-dev"
+APP_NAME = "NautilusSvn"
+LOCALE_DIR = "locale"

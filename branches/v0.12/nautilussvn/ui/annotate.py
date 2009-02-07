@@ -21,7 +21,7 @@
 #
 
 import os
-from gettext import gettext as _
+import gettext
 
 import pygtk
 import gobject
@@ -34,6 +34,11 @@ import nautilussvn.ui.widget
 from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
+
+from nautilussvn import APP_NAME, LOCALE_DIR
+gettext.bindtextdomain(APP_NAME, LOCALE_DIR)
+gettext.textdomain(APP_NAME)
+_ = gettext.gettext
 
 class Annotate(InterfaceView):
     """
