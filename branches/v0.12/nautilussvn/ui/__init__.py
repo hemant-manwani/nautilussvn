@@ -33,6 +33,8 @@ import gobject
 import gtk
 import gtk.glade
 
+from nautilussvn import APP_NAME, LOCALE_DIR
+
 class InterfaceView:
     """
     Every ui window should inherit this class and send it the "self"
@@ -50,7 +52,9 @@ class InterfaceView:
             os.path.dirname(os.path.realpath(__file__)), 
             filename
         )
-        self.tree = gtk.glade.XML(path, id)
+        gtk.glade.bindtextdomain(APP_NAME, LOCALE_DIR)
+        gtk.glade.textdomain(APP_NAME)
+        self.tree = gtk.glade.XML(path, id, APP_NAME)
         self.tree.signal_autoconnect(self)
         self.id = id
         self.do_gtk_quit = False
