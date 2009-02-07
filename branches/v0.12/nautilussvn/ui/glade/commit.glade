@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan 29 19:41:33 2009 -->
+<!--Generated with glade3 3.4.5 on Sat Feb  7 16:11:58 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Commit">
     <property name="width_request">640</property>
@@ -175,7 +175,7 @@
                           <widget class="GtkCheckButton" id="toggle_show_all">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Select / Deselect All</property>
+                            <property name="label" translatable="yes">Select / Deselect all</property>
                             <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_toggle_show_all_toggled"/>
