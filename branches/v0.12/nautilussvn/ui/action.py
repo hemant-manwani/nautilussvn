@@ -21,7 +21,6 @@
 #
 
 from __future__ import division
-from gettext import gettext as _
 import threading
 
 import pygtk
@@ -34,6 +33,9 @@ import nautilussvn.ui.dialog
 import nautilussvn.lib
 import nautilussvn.lib.vcs
 import nautilussvn.lib.helper
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 gtk.gdk.threads_init()
 

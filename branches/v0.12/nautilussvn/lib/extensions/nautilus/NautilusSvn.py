@@ -28,7 +28,6 @@ Our module for everything related to the Nautilus extension.
 
 import os.path
 from os.path import isdir, isfile
-from gettext import gettext as _
 
 import gnomevfs
 import nautilus
@@ -45,6 +44,9 @@ from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
 from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension
 from nautilussvn.lib.decorators import timeit
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 

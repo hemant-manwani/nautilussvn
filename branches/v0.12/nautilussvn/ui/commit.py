@@ -20,7 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
 import os.path
 import thread
 
@@ -34,6 +33,9 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib
 import nautilussvn.lib.helper
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 gtk.gdk.threads_init()
 

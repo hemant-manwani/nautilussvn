@@ -20,7 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
 import os
 
 import pygtk
@@ -32,6 +31,9 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.settings
 import nautilussvn.lib.helper
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class Settings(InterfaceView):
     def __init__(self):

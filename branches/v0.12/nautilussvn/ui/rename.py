@@ -20,7 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
 import os.path
 
 import pygtk
@@ -31,6 +30,9 @@ from nautilussvn.ui import InterfaceView
 from nautilussvn.ui.action import VCSAction
 from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.vcs
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class Rename(InterfaceView):
     def __init__(self, path):

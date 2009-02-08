@@ -22,7 +22,6 @@
 
 import os
 import thread
-from gettext import gettext as _
 
 import pygtk
 import gobject
@@ -34,6 +33,9 @@ import nautilussvn.ui.dialog
 import nautilussvn.ui.action
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 gtk.gdk.threads_init()
 
