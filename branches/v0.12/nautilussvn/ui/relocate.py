@@ -20,8 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import pygtk
 import gobject
 import gtk
@@ -31,6 +29,9 @@ from nautilussvn.ui.action import VCSAction
 from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.lib.vcs
 import nautilussvn.lib.helper
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class Relocate(InterfaceView):
     """

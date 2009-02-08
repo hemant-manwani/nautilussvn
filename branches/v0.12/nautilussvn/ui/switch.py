@@ -20,8 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import pygtk
 import gobject
 import gtk
@@ -32,6 +30,9 @@ from nautilussvn.ui.action import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.helper
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class Switch(InterfaceView):
     def __init__(self, path):

@@ -20,8 +20,6 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import pygtk
 import gobject
 import gtk
@@ -29,6 +27,9 @@ import gtk
 from nautilussvn.ui import InterfaceNonView
 from nautilussvn.ui.action import VCSAction
 import nautilussvn.lib.vcs
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class Ignore(InterfaceNonView):
     """

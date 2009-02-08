@@ -21,7 +21,6 @@
 #
 
 from __future__ import division
-from gettext import gettext as _
 import threading
 from datetime import datetime
 
@@ -35,6 +34,9 @@ from nautilussvn.ui.dialog import MessageBox
 import nautilussvn.ui.widget
 import nautilussvn.lib.helper
 import nautilussvn.lib.vcs
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 DATETIME_FORMAT = nautilussvn.lib.helper.DATETIME_FORMAT
 

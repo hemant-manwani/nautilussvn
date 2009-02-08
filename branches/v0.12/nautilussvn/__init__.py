@@ -20,6 +20,11 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import gettext
+
 version = "0.12-dev"
 APP_NAME = "NautilusSvn"
 LOCALE_DIR = "locale"
+
+gettext.bindtextdomain(APP_NAME, LOCALE_DIR)
+gettext.textdomain(APP_NAME)

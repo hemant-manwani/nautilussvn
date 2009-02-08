@@ -20,12 +20,13 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from gettext import gettext as _
-
 import os
 import subprocess
 
 import nautilussvn.ui.dialog
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class Create:
     """

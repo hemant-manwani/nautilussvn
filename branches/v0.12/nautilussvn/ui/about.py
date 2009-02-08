@@ -33,6 +33,9 @@ import nautilussvn.ui.widget
 import pysvn
 import configobj
 
+from nautilussvn import gettext
+_ = gettext.gettext
+
 class About(InterfaceView):
     """
     This class provides an interface to the About window.

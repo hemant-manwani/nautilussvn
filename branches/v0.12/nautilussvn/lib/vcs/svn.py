@@ -28,13 +28,15 @@ Concrete VCS implementation for Subversion functionality.
 
 import os.path
 from os.path import isdir, isfile
-from gettext import gettext as _
 
 import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
 from nautilussvn.lib.decorators import deprecated, timeit
 from nautilussvn.lib.helper import split_path
+
+from nautilussvn import gettext
+_ = gettext.gettext
 
 class SVN:
     """
