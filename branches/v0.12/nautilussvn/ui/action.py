@@ -108,6 +108,9 @@ class Notification(InterfaceView):
         )
         gtk.gdk.threads_leave()
 
+    def focus_on_ok_button(self):
+        self.get_widget("ok").grab_focus()
+
 class VCSAction(threading.Thread):
     """
     Provides a central interface to handle vcs actions & callbacks.
@@ -234,6 +237,7 @@ class VCSAction(threading.Thread):
         self.notification.append(
             ["", _("Finished"), ""]
         )
+        self.notification.focus_on_ok_button()
         title = self.notification.get_title()
         self.notification.set_title(_("%s - Finished") % title)
         self.set_status(message)
