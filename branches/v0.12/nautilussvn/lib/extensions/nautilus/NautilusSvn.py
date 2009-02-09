@@ -1381,7 +1381,11 @@ class MainContextMenu:
         # All references to the previous DBus will now have been invaldated
         time.sleep(1)
         self.nautilussvn_extension.status_monitor = (
-            StatusMonitor(self.nautilussvn_extension.cb_status))
+            StatusMonitor(
+                self.nautilussvn_extension.cb_status,
+                self.nautilussvn_extension.cb_watch_added
+            )
+        )
         
     def callback_dbus_exit(self, menu_item, paths):
         nautilussvn.lib.dbus.service.exit()
