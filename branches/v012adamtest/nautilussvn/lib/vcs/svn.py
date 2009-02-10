@@ -35,6 +35,9 @@ from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, Pro
 from nautilussvn.lib.decorators import deprecated, timeit
 from nautilussvn.lib.helper import split_path
 
+from nautilussvn import gettext
+_ = gettext.gettext
+
 class SVN:
     """
     
@@ -102,31 +105,31 @@ class SVN:
     }
     
     NOTIFY_ACTIONS = {
-        pysvn.wc_notify_action.add:                     "Added",
-        pysvn.wc_notify_action.copy:                    "Copied",
-        pysvn.wc_notify_action.delete:                  "Deleted",
-        pysvn.wc_notify_action.restore:                 "Restored",
-        pysvn.wc_notify_action.revert:                  "Reverted",
-        pysvn.wc_notify_action.failed_revert:           "Failed Revert",
-        pysvn.wc_notify_action.resolved:                "Resolved",
-        pysvn.wc_notify_action.skip:                    "Skipped",
-        pysvn.wc_notify_action.update_delete:           "Deleted",
-        pysvn.wc_notify_action.update_add:              "Added",
-        pysvn.wc_notify_action.update_update:           "Updated",
-        pysvn.wc_notify_action.update_completed:        "Completed",
-        pysvn.wc_notify_action.update_external:         "External",
-        pysvn.wc_notify_action.status_completed:        "Completed",
-        pysvn.wc_notify_action.status_external:         "External",
-        pysvn.wc_notify_action.commit_modified:         "Modified",
-        pysvn.wc_notify_action.commit_added:            "Added",
-        pysvn.wc_notify_action.commit_deleted:          "Copied",
-        pysvn.wc_notify_action.commit_replaced:         "Replaced",
-        pysvn.wc_notify_action.commit_postfix_txdelta:  "Changed",
-        pysvn.wc_notify_action.annotate_revision:       "Annotated",
-        pysvn.wc_notify_action.locked:                  "Locked",
-        pysvn.wc_notify_action.unlocked:                "Unlocked",
-        pysvn.wc_notify_action.failed_lock:             "Failed Lock",
-        pysvn.wc_notify_action.failed_unlock:           "Failed Unlock"
+        pysvn.wc_notify_action.add:                     _("Added"),
+        pysvn.wc_notify_action.copy:                    _("Copied"),
+        pysvn.wc_notify_action.delete:                  _("Deleted"),
+        pysvn.wc_notify_action.restore:                 _("Restored"),
+        pysvn.wc_notify_action.revert:                  _("Reverted"),
+        pysvn.wc_notify_action.failed_revert:           _("Failed Revert"),
+        pysvn.wc_notify_action.resolved:                _("Resolved"),
+        pysvn.wc_notify_action.skip:                    _("Skipped"),
+        pysvn.wc_notify_action.update_delete:           _("Deleted"),
+        pysvn.wc_notify_action.update_add:              _("Added"),
+        pysvn.wc_notify_action.update_update:           _("Updated"),
+        pysvn.wc_notify_action.update_completed:        _("Completed"),
+        pysvn.wc_notify_action.update_external:         _("External"),
+        pysvn.wc_notify_action.status_completed:        _("Completed"),
+        pysvn.wc_notify_action.status_external:         _("External"),
+        pysvn.wc_notify_action.commit_modified:         _("Modified"),
+        pysvn.wc_notify_action.commit_added:            _("Added"),
+        pysvn.wc_notify_action.commit_deleted:          _("Copied"),
+        pysvn.wc_notify_action.commit_replaced:         _("Replaced"),
+        pysvn.wc_notify_action.commit_postfix_txdelta:  _("Changed"),
+        pysvn.wc_notify_action.annotate_revision:       _("Annotated"),
+        pysvn.wc_notify_action.locked:                  _("Locked"),
+        pysvn.wc_notify_action.unlocked:                _("Unlocked"),
+        pysvn.wc_notify_action.failed_lock:             _("Failed Lock"),
+        pysvn.wc_notify_action.failed_unlock:           _("Failed Unlock")
     }
     
     NOTIFY_ACTIONS_COMPLETE = [
@@ -135,14 +138,14 @@ class SVN:
     ]
     
     NOTIFY_STATES = {
-        pysvn.wc_notify_state.inapplicable:             "Inapplicable",
-        pysvn.wc_notify_state.unknown:                  "Unknown",
-        pysvn.wc_notify_state.unchanged:                "Unchanged",
-        pysvn.wc_notify_state.missing:                  "Missing",
-        pysvn.wc_notify_state.obstructed:               "Obstructed",
-        pysvn.wc_notify_state.changed:                  "Changed",
-        pysvn.wc_notify_state.merged:                   "Merged",
-        pysvn.wc_notify_state.conflicted:               "Conflicted"
+        pysvn.wc_notify_state.inapplicable:             _("Inapplicable"),
+        pysvn.wc_notify_state.unknown:                  _("Unknown"),
+        pysvn.wc_notify_state.unchanged:                _("Unchanged"),
+        pysvn.wc_notify_state.missing:                  _("Missing"),
+        pysvn.wc_notify_state.obstructed:               _("Obstructed"),
+        pysvn.wc_notify_state.changed:                  _("Changed"),
+        pysvn.wc_notify_state.merged:                   _("Merged"),
+        pysvn.wc_notify_state.conflicted:               _("Conflicted")
     }
     
     REVISIONS = {
@@ -1270,12 +1273,12 @@ class StatusMonitor:
         Request a watch to be added for path. This function will figure out
         the best spot to add the watch (most likely a parent directory).
         """
-        
-        vcs_client = SVN()
 
         path_to_check = path
         path_to_attach = None
         watch_is_already_set = False
+        
+        vcs_client = SVN()
         
         while path_to_check != "":
             # If in /foo/bar/baz
@@ -1320,21 +1323,32 @@ class StatusMonitor:
         
         vcs_client = SVN()
         
-        # Figure out what working copy we belong to
+        # Generate a list of the given path as well as all parent folders
         path_to_check = path
-        working_copy_path = None
+        working_copy_paths = []
         while path_to_check != "":
             if vcs_client.is_working_copy(path_to_check):
-                working_copy_path = path_to_check
+                working_copy_paths.append(path_to_check)
             path_to_check = split_path(path_to_check)
-            
-        if working_copy_path:
-            # Do a recursive status check (this should be relatively fast on
-            # consecutive checks).
-            statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
-            
+        
+        if working_copy_paths:
+            # Get the status for this folder and all parent folders
+            all_statuses = []
+            index = 0
+            for working_copy_path in working_copy_paths:
+                statuses = vcs_client.status_with_cache(working_copy_path, invalidate=True, recurse=True)
+                
+                if index == 0:
+                    for status in statuses:
+                        all_statuses.append(status)
+                else:
+                    all_statuses.append(statuses.pop())
+                index += 1                    
+
+            print all_statuses
+
             # Go through all the statuses and set the correct state
-            for status in statuses:
+            for status in all_statuses:
                 current_path = status.data["path"]
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
@@ -1347,9 +1361,9 @@ class StatusMonitor:
                         ]:
                         self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
                         continue
-                    
+                        
                     # Check any children
-                    sub_statuses = vcs_client.status_with_cache(current_path, invalidate=False)
+                    sub_statuses = vcs_client.status_with_cache(current_path, invalidate=True, recurse=True)
                     sub_text_statuses = set([sub_status.data["text_status"] 
                         for sub_status in sub_statuses])
                     
@@ -1359,5 +1373,5 @@ class StatusMonitor:
                     if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
                         self.callback(current_path, "modified")
                         continue
-                
-                self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]]) 
+
+                self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
