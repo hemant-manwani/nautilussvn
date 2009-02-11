@@ -157,7 +157,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        #~ print "Debug: update_file_info() called for %s" % path
+        print "Debug: update_file_info() called for %s" % path
         # End debugging code
         
         # Always replace the item in the table with the one we receive, because
@@ -206,7 +206,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @return:        The context menu entries to add to the menu.
         
         """
-        
+
         if len(items) == 0: return
         
         paths = []
@@ -236,7 +236,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @return:        The context menu entries to add to the menu.
         
         """
-        
+
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
@@ -1103,7 +1103,6 @@ class MainContextMenu:
         for definition_item in menu_definition:
             is_last = (index + 1 == length)
             if definition_item["condition"]():
-
                 # If the item is a separator, don't show it if this is the first
                 # or last item, or if the previous item was a separator
                 if (definition_item["label"] == self.SEPARATOR and
