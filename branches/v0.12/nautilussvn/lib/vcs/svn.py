@@ -28,6 +28,7 @@ Concrete VCS implementation for Subversion functionality.
 
 import os.path
 from os.path import isdir, isfile
+from time import time
 
 import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
@@ -1264,6 +1265,8 @@ class StatusMonitor:
         self.notifier = ThreadedNotifier(
             self.watch_manager, self.VCSProcessEvent(self))
         self.notifier.start()
+        
+        self.time_cache = {}
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -1341,6 +1344,13 @@ class StatusMonitor:
                 current_path = status.data["path"]
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
+                
+                # Skip this if its callback has recently be activated
+                if current_path in self.time_cache:
+                    if time() - self.time_cache[current_path] < 3:
+                        continue
+                
+                self.time_cache[current_path] = time()
                 
                 if isdir(current_path):
                     if status.data["text_status"] in [
