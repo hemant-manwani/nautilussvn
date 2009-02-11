@@ -28,6 +28,7 @@ Concrete VCS implementation for Subversion functionality.
 
 import os.path
 from os.path import isdir, isfile
+from time import time
 
 import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
@@ -1264,6 +1265,8 @@ class StatusMonitor:
         self.notifier = ThreadedNotifier(
             self.watch_manager, self.VCSProcessEvent(self))
         self.notifier.start()
+        
+        self.time_cache = {}
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -1273,12 +1276,12 @@ class StatusMonitor:
         Request a watch to be added for path. This function will figure out
         the best spot to add the watch (most likely a parent directory).
         """
-        
-        vcs_client = SVN()
 
         path_to_check = path
         path_to_attach = None
         watch_is_already_set = False
+        
+        vcs_client = SVN()
         
         while path_to_check != "":
             # If in /foo/bar/baz
@@ -1323,22 +1326,39 @@ class StatusMonitor:
         
         vcs_client = SVN()
         
-        # Figure out what working copy we belong to
+        # Generate a list of the given path as well as all parent folders
         path_to_check = path
-        working_copy_path = None
+        working_copy_paths = []
         while path_to_check != "":
             if vcs_client.is_working_copy(path_to_check):
-                working_copy_path = path_to_check
+                working_copy_paths.append(path_to_check)
             path_to_check = split_path(path_to_check)
-            
-        if working_copy_path:
-            # Do a recursive status check (this should be relatively fast on
-            # consecutive checks).
-            statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
-            
+        
+        if working_copy_paths:
+            # Get the status for this folder and all parent folders
+            all_statuses = []
+            index = 0
+            for working_copy_path in working_copy_paths:
+                statuses = vcs_client.status_with_cache(working_copy_path, invalidate=True, recurse=True)
+                
+                if index == 0:
+                    for status in statuses:
+                        all_statuses.append(status)
+                else:
+                    all_statuses.append(statuses.pop())
+                index += 1                    
+
             # Go through all the statuses and set the correct state
-            for status in statuses:
+            for status in all_statuses:
                 current_path = status.data["path"]
+                
+                if current_path in self.time_cache:
+                    if time() - self.time_cache[current_path] < 3:
+                        self.time_cache[current_path] = time()
+                        continue
+                        
+                self.time_cache[current_path] = time()   
+                
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
                 
@@ -1350,9 +1370,9 @@ class StatusMonitor:
                         ]:
                         self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
                         continue
-                    
+                        
                     # Check any children
-                    sub_statuses = vcs_client.status_with_cache(current_path, invalidate=False)
+                    sub_statuses = vcs_client.status_with_cache(current_path, invalidate=True, recurse=True)
                     sub_text_statuses = set([sub_status.data["text_status"] 
                         for sub_status in sub_statuses])
                     
@@ -1362,5 +1382,5 @@ class StatusMonitor:
                     if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
                         self.callback(current_path, "modified")
                         continue
-                
-                self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]]) 
+
+                self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
