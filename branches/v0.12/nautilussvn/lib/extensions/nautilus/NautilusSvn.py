@@ -185,7 +185,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         elif (has_watch and
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
-            self.status_monitor.status(path)
+            gobject.idle_add(self.status_monitor.status, path)
         
     def get_file_items(self, window, items):
         """
