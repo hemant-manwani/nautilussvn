@@ -1267,6 +1267,7 @@ class StatusMonitor:
         self.notifier.start()
         
         self.time_cache = {}
+        self.last_status_cache = {}
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -1345,32 +1346,44 @@ class StatusMonitor:
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
                 
-                # Skip this if its callback has recently be activated
-                if current_path in self.time_cache:
+                # Skip this if its callback has recently been activated
+                try:
                     if time() - self.time_cache[current_path] < 3:
                         continue
-                
+                except KeyError:
+                    pass
+                    
                 self.time_cache[current_path] = time()
-                
-                if isdir(current_path):
-                    if status.data["text_status"] in [
-                            SVN.STATUS["added"],
-                            SVN.STATUS["modified"],
-                            SVN.STATUS["deleted"]
-                        ]:
-                        self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]])
+
+                text_status = self.get_text_status(vcs_client, path, status)
+                # If status is the same as last time, don't run callback
+                try:
+                    if self.last_status_cache[current_path] == text_status:
                         continue
+                except KeyError:
+                    pass
                     
-                    # Check any children
-                    sub_statuses = vcs_client.status_with_cache(current_path, invalidate=False)
-                    sub_text_statuses = set([sub_status.data["text_status"] 
-                        for sub_status in sub_statuses])
-                    
-                    if SVN.STATUS["conflicted"] in sub_text_statuses:
-                        self.callback(current_path, "conflicted")
-                        continue
-                    if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
-                        self.callback(current_path, "modified")
-                        continue
+                self.last_status_cache[current_path] = text_status
+                self.callback(current_path, text_status)
+
+    def get_text_status(self, vcs_client, path, status):
+        if isdir(path):
+            if status.data["text_status"] in [
+                    SVN.STATUS["added"],
+                    SVN.STATUS["modified"],
+                    SVN.STATUS["deleted"]
+                ]:
+                return SVN.STATUS_REVERSE[status.data["text_status"]]
+            
+            # Check any children
+            sub_statuses = vcs_client.status_with_cache(path, invalidate=False)
+            sub_text_statuses = set([sub_status.data["text_status"] 
+                for sub_status in sub_statuses])
+            
+            if SVN.STATUS["conflicted"] in sub_text_statuses:
+                return "conflicted"
                 
-                self.callback(current_path, SVN.STATUS_REVERSE[status.data["text_status"]]) 
+            if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
+                return "modified"
+        
+        return SVN.STATUS_REVERSE[status.data["text_status"]]
