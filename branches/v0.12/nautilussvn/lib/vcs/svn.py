@@ -215,6 +215,7 @@ class SVN:
                        for the path being the first item in the list.
         
         """
+        
         try:
             if (invalidate or 
                     path not in self.status_cache or
@@ -225,10 +226,7 @@ class SVN:
                 print "Debug: status_with_cache() invalidated %s" % path
                 statuses = self.client.status(path, recurse=recurse)
             else:
-                try:
-                    return self.status_cache[path]
-                except KeyError:
-                    pass
+                return self.status_cache[path]
         except pysvn.ClientError:
             return [pysvn.PysvnStatus({"text_status": pysvn.wc_status_kind.none})]
         
@@ -250,13 +248,9 @@ class SVN:
                     current_path = split_path(current_path)
         else:
             return statuses
-            
-        try:
-            returner = self.status_cache[path]
-        except KeyError:
-            returner = []
+         
+        return self.status_cache[path]
         
-        return returner
     #
     # is
     #
@@ -1334,24 +1328,30 @@ class StatusMonitor:
         print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
         
         vcs_client = SVN()
+
+        if path.endswith(".svn/entries"):
+            path = path[0:-13]
         
         # Generate a list of parent paths that should get a status update
-        path_to_check = os.path.dirname(path)
-        parent_paths = []
+        path_to_check = path
+        working_copy_path = None
         while path_to_check != "":
             if vcs_client.is_working_copy(path_to_check):
-                parent_paths.append(path_to_check)
+                working_copy_path = path_to_check
             path_to_check = split_path(path_to_check)
 
-        if path:
+        if working_copy_path:
             # Do a recursive status check (this should be relatively fast on
             # consecutive checks).
-            statuses = vcs_client.status_with_cache(path, invalidate=invalidate)
-            
+            try:
+                statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
+            except KeyError:
+                return
+
             # Go through all the statuses and set the correct state
-            parents_set = False
             for status in statuses:
                 current_path = status.data["path"]
+
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
                 
@@ -1366,13 +1366,6 @@ class StatusMonitor:
 
                 text_status = self.get_text_status(vcs_client, current_path, status)
                 
-                # If this path's status is not normal, then right away we can
-                # mark the parents as having that status
-                if text_status != "normal":
-                    for parent_path in parent_paths:
-                        self.callback(parent_path, text_status)
-                        parents_set = True
-                
                 # If status is the same as last time, don't run callback
                 try:
                     if self.last_status_cache[current_path] == text_status:
@@ -1382,11 +1375,6 @@ class StatusMonitor:
                     
                 self.last_status_cache[current_path] = text_status
                 self.callback(current_path, text_status)
-            
-            # If the parent paths have not been updated, then set them as normal
-            if not parents_set:
-                for parent_path in parent_paths:
-                    self.callback(parent_path, "normal")
 
     def get_text_status(self, vcs_client, path, status):
         if isdir(path):
