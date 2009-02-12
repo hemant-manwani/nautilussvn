@@ -391,7 +391,7 @@ def save_log_message(message):
 %s
 """%(m[0], m[1], s)
 
-    f.write(s)
+    f.write(s.encode("utf-8"))
     f.close()
 
 def save_repository_path(path):
@@ -415,7 +415,7 @@ def save_repository_path(path):
         paths.pop()
     
     f = open(get_repository_paths_path(), "w")
-    f.write("\n".join(paths))
+    f.write("\n".join(paths).encode("utf-8"))
     f.close()
     
 def launch_ui_window(filename, args=[], return_immmediately=True):
