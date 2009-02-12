@@ -41,7 +41,8 @@ class Unlock(Add):
     def __init__(self, paths):
         InterfaceView.__init__(self, "add", "Add")
         
-        nautilussvn.lib.helper.setcwd(paths[0])
+        self.common = nautilussvn.lib.helper.get_common_directory(paths)
+        nautilussvn.lib.helper.setcwd(self.common)
 
         self.window = self.get_widget("Add")
         self.window.set_title(_("Unlock"))
@@ -70,7 +71,7 @@ class Unlock(Add):
     def load(self):
         gtk.gdk.threads_enter()
         self.get_widget("status").set_text(_("Loading..."))
-        self.items = self.vcs.get_items(self.paths, self.statuses)
+        self.items = self.vcs.get_items(self.common, self.statuses)
         self.populate_files_table()
         gtk.gdk.threads_leave()
     

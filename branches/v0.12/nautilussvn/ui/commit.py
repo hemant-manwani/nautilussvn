@@ -57,15 +57,12 @@ class Commit(InterfaceView):
         
         """
         InterfaceView.__init__(self, "commit", "Commit")
-        
-        nautilussvn.lib.helper.setcwd(paths[0])
-        
+
+        self.common = nautilussvn.lib.helper.get_common_directory(paths)
+        nautilussvn.lib.helper.setcwd(self.common)
+
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-        
-        self.common = os.path.commonprefix(self.paths)
-        if os.path.isfile(self.common):
-            self.common = os.path.dirname(self.common)
             
         if not self.vcs.is_in_a_or_a_working_copy(self.common):
             nautilussvn.ui.dialog.MessageBox(_("The given path is not a working copy"))
@@ -101,7 +98,7 @@ class Commit(InterfaceView):
     def load(self):
         gtk.gdk.threads_enter()
         self.get_widget("status").set_text(_("Loading..."))
-        self.items = self.vcs.get_items(self.paths, self.vcs.STATUSES_FOR_COMMIT)
+        self.items = self.vcs.get_items(self.common, self.vcs.STATUSES_FOR_COMMIT)
         self.populate_files_from_original()
         self.get_widget("status").set_text(_("Found %d item(s)") % len(self.items))
         gtk.gdk.threads_leave()
