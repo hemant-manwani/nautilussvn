@@ -116,18 +116,13 @@ class Commit(InterfaceView):
         
         # Ignored/Normal files should not be shown
         index = 0
-        remove = []
         for item in self.files_table.get_items():
             if (self.vcs.is_normal(item[1]) or
                     self.vcs.is_ignored(item[1])):
-                
                 self.files_table.remove(index)
                 del self.items[index]
                 index -= 1
-                
             index += 1
-
-        #self.files_table.remove_multiple(remove)
     
     def get_last_path(self):
         return self.files_table.get_row(self.last_row_clicked)[1]

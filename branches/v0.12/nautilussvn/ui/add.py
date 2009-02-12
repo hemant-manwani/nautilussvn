@@ -84,6 +84,7 @@ class Add(InterfaceView):
         gtk.gdk.threads_leave()
 
     def populate_files_table(self):
+        self.files_table.clear()
         for item in self.items:
             self.files_table.append([
                 True, 
@@ -219,9 +220,16 @@ class Add(InterfaceView):
         prop_value = "*%s" % data[2]
         
         if self.vcs.propset(data[1], prop_name, prop_value):
-            self.files_table.remove(self.last_row_clicked)
+            # Ignored/Normal files should not be shown
+            index = 0
+            for item in self.files_table.get_items():
+                if (self.vcs.is_normal(item[1]) or
+                        self.vcs.is_ignored(item[1])):
+                    self.files_table.remove(index)
+                    del self.items[index]
+                    index -= 1
+                index += 1
             
-
     #
     # Context Menu Conditions
     #
