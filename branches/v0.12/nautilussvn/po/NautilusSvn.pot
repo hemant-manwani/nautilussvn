@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-12 09:17-0500\n"
+"POT-Creation-Date: 2009-02-12 09:54-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -529,15 +529,17 @@ msgid "<b>Switch Details</b>"
 msgstr ""
 
 #: ui/glade/switch.glade.h:3 ui/glade/branch.glade.h:8
+#: ui/glade/relocate.glade.h:2
 msgid "From:"
 msgstr ""
 
 #: ui/glade/switch.glade.h:4 ui/glade/merge.glade.h:10
-#: ui/glade/update.glade.h:3
-msgid "HEAD Revision"
+#: ui/glade/checkout.glade.h:7 ui/glade/update.glade.h:3
+msgid "HEAD"
 msgstr ""
 
 #: ui/glade/switch.glade.h:8 ui/glade/branch.glade.h:11
+#: ui/glade/relocate.glade.h:4
 msgid "To:"
 msgstr ""
 
@@ -1017,10 +1019,6 @@ msgstr ""
 msgid "Destination:"
 msgstr ""
 
-#: ui/glade/checkout.glade.h:7
-msgid "HEAD"
-msgstr ""
-
 #: ui/glade/checkout.glade.h:8 ui/glade/update.glade.h:4
 msgid "Omit Externals"
 msgstr ""
@@ -1043,14 +1041,6 @@ msgstr ""
 
 #: ui/glade/relocate.glade.h:1
 msgid "<b>Change the repository of your working copy</b>"
-msgstr ""
-
-#: ui/glade/relocate.glade.h:2
-msgid "From URL:"
-msgstr ""
-
-#: ui/glade/relocate.glade.h:4
-msgid "To URL:"
 msgstr ""
 
 #: lib/extensions/nautilus/NautilusSvn.py:364

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Feb  7 16:14:27 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Feb 12 09:52:57 2009 -->
 <glade-interface>
   <widget class="GtkAssistant" id="Merge">
     <property name="width_request">550</property>
@@ -482,12 +482,11 @@ To merge all revisions, leave the box empty.</property>
                     <child>
                       <widget class="GtkVBox" id="vbox2">
                         <property name="visible">True</property>
-                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="mergetree_from_revision_head_opt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">HEAD Revision</property>
+                            <property name="label" translatable="yes">HEAD</property>
                             <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -619,12 +618,11 @@ To merge all revisions, leave the box empty.</property>
                     <child>
                       <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
-                        <property name="spacing">6</property>
                         <child>
                           <widget class="GtkRadioButton" id="mergetree_to_revision_head_opt">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">HEAD Revision</property>
+                            <property name="label" translatable="yes">HEAD</property>
                             <property name="response_id">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -793,7 +791,6 @@ To merge all revisions, leave the box empty.</property>
                 <child>
                   <widget class="GtkVBox" id="vbox41">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkCheckButton" id="mergeoptions_recursive">
                         <property name="visible">True</property>
