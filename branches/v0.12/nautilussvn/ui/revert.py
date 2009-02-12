@@ -40,6 +40,8 @@ _ = gettext.gettext
 class Revert(Add):
     def __init__(self, paths):
         InterfaceView.__init__(self, "add", "Add")
+        
+        nautilussvn.lib.helper.setcwd(path)
 
         self.window = self.get_widget("Add")
         self.window.set_title(_("Revert"))

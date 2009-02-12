@@ -28,6 +28,7 @@ from nautilussvn.ui import InterfaceView
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib.vcs
+from nautilussvn.lib.helper import setcwd
 
 from nautilussvn import gettext
 _ = gettext.gettext
@@ -44,6 +45,8 @@ class Properties(InterfaceView):
 
     def __init__(self, path):
         InterfaceView.__init__(self, "properties", "Properties")
+
+        setcwd(path)
 
         self.path = path
         self.delete_stack = []

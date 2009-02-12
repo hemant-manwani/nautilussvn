@@ -47,6 +47,8 @@ class Relocate(InterfaceView):
         """
         
         InterfaceView.__init__(self, "relocate", "Relocate")
+        
+        nautilussvn.lib.helper.setcwd(path)
 
         self.path = path
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()

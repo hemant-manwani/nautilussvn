@@ -37,6 +37,9 @@ _ = gettext.gettext
 class Merge(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "merge", "Merge")
+        
+        nautilussvn.lib.helper.setcwd(path)
+        
         self.assistant = self.get_widget("Merge")
         
         self.path = path

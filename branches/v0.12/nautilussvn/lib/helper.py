@@ -459,3 +459,8 @@ def get_log_messages_limit():
 def get_repository_paths_limit():
     sm = nautilussvn.lib.settings.SettingsManager()
     return sm.get("cache", "number_repositories")
+
+def setcwd(path):
+    from os import chdir
+    cwd = os.path.isdir(path) and path or os.path.dirname(path)
+    chdir(cwd)

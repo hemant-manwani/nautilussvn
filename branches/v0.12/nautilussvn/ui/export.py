@@ -36,6 +36,7 @@ _ = gettext.gettext
 class Export(Checkout):
     def __init__(self, path):
         Checkout.__init__(self, path)
+        
         self.get_widget("Checkout").set_title(_("Export - %s") % path)
         
         # If the given path is a working copy, then export FROM the path
