@@ -1339,6 +1339,10 @@ class StatusMonitor:
             if vcs_client.is_working_copy(path_to_check):
                 working_copy_path = path_to_check
             path_to_check = split_path(path_to_check)
+            
+        if ((working_copy_path in self.time_cache) and 
+                (time() - self.time_cache[working_copy_path] < 1)):
+            return
 
         if working_copy_path:
             # Do a recursive status check (this should be relatively fast on
