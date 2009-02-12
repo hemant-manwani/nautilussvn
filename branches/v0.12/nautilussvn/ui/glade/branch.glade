@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan 29 16:44:02 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Feb 12 09:10:42 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Branch">
     <property name="width_request">640</property>
@@ -47,8 +47,7 @@
                             <property name="width_request">90</property>
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="label" translatable="yes">From URL:</property>
+                            <property name="label" translatable="yes">From:</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -56,15 +55,11 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="from_url">
+                          <widget class="GtkEntry" id="from_url">
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="xpad">5</property>
-                            <property name="wrap">True</property>
-                            <property name="wrap_mode">PANGO_WRAP_CHAR</property>
+                            <property name="can_focus">True</property>
                           </widget>
                           <packing>
-                            <property name="padding">5</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -79,7 +74,7 @@
                             <property name="width_request">90</property>
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">To URL:</property>
+                            <property name="label" translatable="yes">To:</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -97,7 +92,6 @@
                             </child>
                           </widget>
                           <packing>
-                            <property name="padding">8</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -144,7 +138,6 @@
                 <child>
                   <widget class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
-                    <property name="spacing">6</property>
                     <child>
                       <widget class="GtkRadioButton" id="from_head_opt">
                         <property name="visible">True</property>
