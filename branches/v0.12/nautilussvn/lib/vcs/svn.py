@@ -1343,10 +1343,12 @@ class StatusMonitor:
             if vcs_client.is_working_copy(path_to_check):
                 working_copy_path = path_to_check
             path_to_check = split_path(path_to_check)
-            
-        if ((working_copy_path in self.time_cache) and 
-                (time() - self.time_cache[working_copy_path] < 1)):
-            return
+
+            if ((path_to_check in self.time_cache) and 
+                    (time() - self.time_cache[path_to_check] < 1)):
+                break
+
+        self.time_cache[working_copy_path] = time()
 
         if working_copy_path:
             # Do a recursive status check (this should be relatively fast on
@@ -1362,25 +1364,14 @@ class StatusMonitor:
 
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
-                
-                # Skip this if its callback has recently been activated
-                try:
-                    if time() - self.time_cache[current_path] < 1:
-                        continue
-                except KeyError:
-                    pass
-                    
-                self.time_cache[current_path] = time()
 
                 text_status = self.get_text_status(vcs_client, current_path, status)
                 
                 # If status is the same as last time, don't run callback
-                try:
-                    if self.last_status_cache[current_path] == text_status:
-                        continue
-                except KeyError:
-                    pass
-                    
+                if (current_path in self.last_status_cache and
+                        self.last_status_cache[current_path] == text_status):
+                    continue
+                                        
                 self.last_status_cache[current_path] = text_status
                 self.callback(current_path, text_status)
 
