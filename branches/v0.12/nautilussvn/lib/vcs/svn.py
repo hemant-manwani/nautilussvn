@@ -536,8 +536,12 @@ class SVN:
 
         if not self.is_versioned(path) and os.path.isfile(path):
             path = os.path.dirname(path)
-        
-        return path
+
+        path_to_use = path
+        while not self.is_versioned(path_to_use):
+            path_to_use = split_path(path_to_use)
+
+        return path_to_use
         
     def propset(self, path, prop_name, prop_value, overwrite=False):
         """
@@ -554,7 +558,7 @@ class SVN:
         @param  prop_value: An svn property value/pattern.
         
         """
-        
+
         path = self.proppath(path)
 
         if overwrite:
