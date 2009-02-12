@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-12 09:12-0500\n"
+"POT-Creation-Date: 2009-02-12 09:17-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -528,17 +528,17 @@ msgstr ""
 msgid "<b>Switch Details</b>"
 msgstr ""
 
-#: ui/glade/switch.glade.h:3 ui/glade/merge.glade.h:10
+#: ui/glade/switch.glade.h:3 ui/glade/branch.glade.h:8
+msgid "From:"
+msgstr ""
+
+#: ui/glade/switch.glade.h:4 ui/glade/merge.glade.h:10
 #: ui/glade/update.glade.h:3
 msgid "HEAD Revision"
 msgstr ""
 
-#: ui/glade/switch.glade.h:4
-msgid "Path:"
-msgstr ""
-
-#: ui/glade/switch.glade.h:8 ui/glade/relocate.glade.h:4
-msgid "To URL:"
+#: ui/glade/switch.glade.h:8 ui/glade/branch.glade.h:11
+msgid "To:"
 msgstr ""
 
 #: ui/glade/switch.glade.h:9 ui/glade/notification.glade.h:2
@@ -687,14 +687,6 @@ msgstr ""
 
 #: ui/glade/branch.glade.h:7
 msgid "Copy from working copy"
-msgstr ""
-
-#: ui/glade/branch.glade.h:8
-msgid "From:"
-msgstr ""
-
-#: ui/glade/branch.glade.h:11
-msgid "To:"
 msgstr ""
 
 #: ui/glade/log.glade.h:1
@@ -1055,6 +1047,10 @@ msgstr ""
 
 #: ui/glade/relocate.glade.h:2
 msgid "From URL:"
+msgstr ""
+
+#: ui/glade/relocate.glade.h:4
+msgid "To URL:"
 msgstr ""
 
 #: lib/extensions/nautilus/NautilusSvn.py:364
