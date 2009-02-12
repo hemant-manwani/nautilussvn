@@ -106,6 +106,6 @@ if __name__ == "__main__":
         if args[0] != ".":
             path = args[0]
             
-    window = Relocate(relocate)
+    window = Relocate(path)
     window.register_gtk_quit()
     gtk.main()

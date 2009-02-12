@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Jan 29 16:46:32 2009 -->
+<!--Generated with glade3 3.4.5 on Thu Feb 12 09:51:26 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="Settings">
     <property name="width_request">550</property>
@@ -21,7 +21,6 @@
             <property name="can_focus">True</property>
             <child>
               <widget class="GtkVBox" id="vbox3">
-                <property name="visible">True</property>
                 <child>
                   <widget class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
@@ -83,7 +82,6 @@
                             <child>
                               <widget class="GtkVBox" id="vbox13">
                                 <property name="visible">True</property>
-                                <property name="spacing">6</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="enable_attributes">
                                     <property name="visible">True</property>
@@ -154,7 +152,6 @@
             </child>
             <child>
               <widget class="GtkLabel" id="general">
-                <property name="visible">True</property>
                 <property name="label" translatable="yes">General</property>
               </widget>
               <packing>
