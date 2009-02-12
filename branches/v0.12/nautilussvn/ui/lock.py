@@ -55,6 +55,8 @@ class Lock(InterfaceView):
         """
         
         InterfaceView.__init__(self, "lock", "Lock")
+        
+        nautilussvn.lib.helper.setcwd(paths[0])
 
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()

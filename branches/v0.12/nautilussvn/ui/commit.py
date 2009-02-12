@@ -20,7 +20,7 @@
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os.path
+import os
 import thread
 
 import pygtk
@@ -56,9 +56,10 @@ class Commit(InterfaceView):
         @param paths:   A list of local paths.
         
         """
-    
         InterfaceView.__init__(self, "commit", "Commit")
-
+        
+        nautilussvn.lib.helper.setcwd(paths[0])
+        
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         
@@ -315,7 +316,7 @@ class Commit(InterfaceView):
                                         "args": fileinfo
                                     }
                                 },
-                                "condition": (lambda: True)
+                                "condition": self.condition_ignore_by_fileext
                             }
                         ],
                         "condition": (lambda: True)
@@ -416,6 +417,9 @@ class Commit(InterfaceView):
                 self.vcs.STATUS["deleted"]
             ]
         )
+    
+    def condition_ignore_by_fileext(self):
+        return os.path.isfile(self.get_last_path())
 
 if __name__ == "__main__":
     from os import getcwd

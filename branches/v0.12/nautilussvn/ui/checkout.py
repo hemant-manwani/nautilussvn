@@ -48,6 +48,8 @@ class Checkout(InterfaceView):
     def __init__(self, path):
         InterfaceView.__init__(self, "checkout", "Checkout")
 
+        nautilussvn.lib.helper.setcwd(path)
+
         self.get_widget("Checkout").set_title(_("Checkout - %s") % path)
         
         self.path = path

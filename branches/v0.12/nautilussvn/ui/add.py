@@ -52,6 +52,8 @@ class Add(InterfaceView):
 
     def __init__(self, paths):
         InterfaceView.__init__(self, "add", "Add")
+        
+        nautilussvn.lib.helper.setcwd(paths[0])
 
         self.paths = paths
         self.last_row_clicked = None
