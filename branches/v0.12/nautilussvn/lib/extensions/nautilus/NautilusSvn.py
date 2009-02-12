@@ -829,6 +829,22 @@ class MainContextMenu:
                         ]
                     },
                     {
+                        "identifier": "NautilusSvn::Cleanup",
+                        "label": _("Cleanup"),
+                        "tooltip": _("Clean up working copy"),
+                        "icon": "nautilussvn-cleanup",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_cleanup,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_cleanup,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
                         "identifier": "NautilusSvn::Separator2",
                         "label": self.SEPARATOR,
                         "tooltip": "",
@@ -1362,6 +1378,15 @@ class MainContextMenu:
                 return True
             
         return False
+
+    def condition_cleanup(self):
+        for path in self.paths:
+            if (self.vcs_client.is_in_a_or_a_working_copy(path) and
+                    self.vcs_client.is_versioned(path)):
+                return True
+            
+        return False
+
     #
     # Callbacks
     #
@@ -1595,3 +1620,6 @@ class MainContextMenu:
     
     def callback_relocate(self, menu_item, paths):
         launch_ui_window("relocate", paths)
+
+    def callback_cleanup(self, menu_item, paths):
+        launch_ui_window("cleanup", paths)
