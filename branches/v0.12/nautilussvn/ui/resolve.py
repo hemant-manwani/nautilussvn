@@ -41,7 +41,8 @@ class Resolve(Add):
     def __init__(self, paths):
         InterfaceView.__init__(self, "add", "Add")
         
-        nautilussvn.lib.helper.setcwd(paths[0])
+        self.common = nautilussvn.lib.helper.get_common_directory(paths)
+        nautilussvn.lib.helper.setcwd(self.common)
 
         self.window = self.get_widget("Add")
         self.window.set_title(_("Resolve"))

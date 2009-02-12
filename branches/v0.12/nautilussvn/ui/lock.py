@@ -56,7 +56,8 @@ class Lock(InterfaceView):
         
         InterfaceView.__init__(self, "lock", "Lock")
         
-        nautilussvn.lib.helper.setcwd(paths[0])
+        self.common = nautilussvn.lib.helper.get_common_directory(paths)
+        nautilussvn.lib.helper.setcwd(self.common)
 
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
@@ -96,7 +97,7 @@ class Lock(InterfaceView):
     def load(self):
         gtk.gdk.threads_enter()
         self.get_widget("status").set_text(_("Loading..."))
-        self.items = self.vcs.get_items(self.paths)
+        self.items = self.vcs.get_items(self.common)
         self.populate_files_table()
         self.get_widget("status").set_text(_("Found %d item(s)") % len(self.items))
         gtk.gdk.threads_leave()

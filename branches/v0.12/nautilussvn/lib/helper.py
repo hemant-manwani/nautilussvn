@@ -461,6 +461,13 @@ def get_repository_paths_limit():
     return sm.get("cache", "number_repositories")
 
 def setcwd(path):
-    from os import chdir
     cwd = os.path.isdir(path) and path or os.path.dirname(path)
-    chdir(cwd)
+    os.chdir(cwd)
+
+def get_common_directory(paths):
+    common = os.path.commonprefix(paths)
+    
+    while not os.path.exists(common) or os.path.isfile(common):
+        common = split_path(common)
+        
+    return common
