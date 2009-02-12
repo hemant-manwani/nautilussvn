@@ -10,7 +10,7 @@ do
 	intltool-extract --type=gettext/glade $i
 done
 
-xgettext -L Python --keyword=_ --keyword=N_ -o po/nautilussvn.pot -f po/POTFILES.in
+xgettext -L Python --keyword=_ --keyword=N_ -o po/NautilusSvn.pot -f po/POTFILES.in
 
 for i in `find . | grep '\.glade\.h' | grep -v '\.svn'`;
 do
