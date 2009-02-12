@@ -262,7 +262,7 @@ class VCSAction(threading.Thread):
         
         """
         
-        return True, self.message
+        return True, self.message.encode("utf-8")
     
     def get_login(self, realm, username, may_save):
         """
