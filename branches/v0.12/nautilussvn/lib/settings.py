@@ -70,6 +70,10 @@ DEFAULT_SETTINGS = {
     "cache": {
         "number_repositories": 30,
         "number_messages": 30
+    },
+    "logging": {
+        "type": "Console",
+        "level": "Debug"
     }
 }
 
@@ -87,6 +91,7 @@ class SettingsManager:
         Set settings:
             sm = SettingsManager()
             sm.set("external", "diff_tool", "/usr/bin/meld")
+            sm.write()
     """
     
     def __init__(self):
@@ -122,7 +127,7 @@ class SettingsManager:
         if keyword is None:
             return self.settings[section]
         
-        returner = None
+        returner = ""
         try:
             returner = self.settings[section][keyword]
         except KeyError:
