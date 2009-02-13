@@ -45,6 +45,9 @@ from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension
 from nautilussvn.lib.decorators import timeit
 
+from nautilussvn.lib.log import Log
+log = Log("nautilussvn.lib.extensions.nautilus")
+
 from nautilussvn import gettext
 _ = gettext.gettext
 
@@ -157,7 +160,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
         # Begin debugging code
-        #~ print "Debug: update_file_info() called for %s" % path
+        #log.debug("update_file_info() called for %s" % path)
         # End debugging code
         
         # Always replace the item in the table with the one we receive, because
@@ -216,7 +219,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
                 
-                print "Debug: get_file_items() for %s" % path
+                log.debug("get_file_items() for %s" % path)
         
         return MainContextMenu(paths, self).construct_menu()
         
@@ -266,7 +269,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         item = self.nautilusVFSFile_table[path]
         
         # Begin debugging code
-        #~ print "Debug: set_emblem_by_status() called for %s with status %s" % (path, status)
+        #log.debug("set_emblem_by_status() called for %s with status %s" % (path, status))
         # End debugging code
         
         if status in self.EMBLEMS:
@@ -299,7 +302,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         # Begin debugging code
-        print "Debug: cb_status() called for %s with status %s" % (path, status)
+        log.debug("cb_status() called for %s with status %s" % (path, status))
         # End debugging code
         
         # See comment for variable: statuses
@@ -1454,12 +1457,12 @@ class MainContextMenu:
         import time
         
         def asynchronous_function():
-            print "Debug: inside asynchronous_function()"
+            log.debug("inside asynchronous_function()")
             
             for i in range(0, 100000):
                 print i
             
-            print "Debug: asynchronous_function() finished"
+            log.debug("asynchronous_function() finished")
         
         # Calling threads_init does not do anything.
         gobject.threads_init()
@@ -1517,7 +1520,7 @@ class MainContextMenu:
         nautilusVFSFile_table = nautilussvn_extension.nautilusVFSFile_table
         for path in paths:
             # Begin debugging code
-            print "Debug: callback_debug_invalidate() called for %s" % path
+            log.debug("callback_debug_invalidate() called for %s" % path)
             # End debugging code
             if path in nautilusVFSFile_table:
                 nautilusVFSFile_table[path].invalidate_extension_info()

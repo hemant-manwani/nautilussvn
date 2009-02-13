@@ -74,8 +74,8 @@ if changed:
 
 LOG_PATH = expanduser("~/.nautilussvn/NautilusSvn.log")
 DEFAULT_FORMAT = "%(message)s"
-FILE_FORMAT = "%(asctime)s %(levelname)s\t%(name)s\t\t%(message)s"
-CONSOLE_FORMAT = "%(levelname)s\t%(name)s\t\t%(message)s"
+FILE_FORMAT = "%(asctime)s %(levelname)s\t%(name)s\t%(message)s"
+CONSOLE_FORMAT = "%(levelname)s\t%(name)s\t%(message)s"
 
 class BaseLog:
     """
