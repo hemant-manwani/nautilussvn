@@ -35,6 +35,9 @@ from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, Pro
 
 from nautilussvn.lib.decorators import deprecated, timeit
 from nautilussvn.lib.helper import split_path
+from nautilussvn.lib.log import Log
+
+log = Log("nautilussvn.lib.vcs.svn")
 
 from nautilussvn import gettext
 _ = gettext.gettext
@@ -223,7 +226,7 @@ class SVN:
                     # an infinity check is requesting and it's most likely
                     # that only an empty check was done before.
                     (recurse and len(self.status_cache[path]) == 1)):
-                print "Debug: status_with_cache() invalidated %s" % path
+                log.debug("status_with_cache() invalidated %s" % path)
                 statuses = self.client.status(path, recurse=recurse)
             else:
                 return self.status_cache[path]
@@ -274,7 +277,7 @@ class SVN:
             return True
         except pysvn.ClientError, e:
             # FIXME: ClientError client in use on another thread
-            #~ print "    Debug: EXCEPTION in is_working_copy(): %s" % str(e)
+            #~ log.debug("EXCEPTION in is_working_copy(): %s" % str(e))
             return False
         
     def is_in_a_or_a_working_copy(self, path):
@@ -1239,7 +1242,7 @@ class StatusMonitor:
             if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
             
             # Begin debugging code
-            print "Debug: Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep))
+            log.debug("Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep)))
             # End debugging code
             
             # Make sure to strip any trailing slashes because that will 
@@ -1307,7 +1310,7 @@ class StatusMonitor:
         if not watch_is_already_set and path_to_attach:
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
             self.watches[path_to_attach] = None # don't need a value
-            print "Debug: StatusMonitor.add_watch() added watch for %s" % path_to_attach
+            log.debug("StatusMonitor.add_watch() added watch for %s" % path_to_attach)
             
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and
@@ -1329,7 +1332,7 @@ class StatusMonitor:
         @param  invalidate: Whether or not the cache should be bypassed.
         """
         
-        print "Debug: StatusMonitor.status() called for %s with %s" % (path, invalidate)
+        log.debug("StatusMonitor.status() called for %s with %s" % (path, invalidate))
         
         vcs_client = SVN()
 
