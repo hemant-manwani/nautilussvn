@@ -28,11 +28,23 @@ inherit from the Log class: ConsoleLog, FileLog, and DualLog.  ConsoleLog logs
 messages to the standard output (command line), FileLog outputs to a log file,
 and DualLog outputs to both.
 
+The programmer does not need to think about the logger types because this will
+be specified in the user's settings.  So to set up your module to log do the 
+following:
+
+Usage:
+    from nautilussvn.lib.log import Log
+
+    log = Log("my.module")
+    log.debug("a debug message")
+
 """
 
 from os.path import expanduser
 import logging
 import logging.handlers
+
+from nautilussvn.lib.settings import SettingsManager
 
 LEVELS = {
     "debug":    logging.DEBUG,
@@ -42,25 +54,43 @@ LEVELS = {
     "critical": logging.CRITICAL
 }
 
+sm = SettingsManager()
+DEFAULT_LEVEL = sm.get("logging", "level").lower()
+DEFAULT_LOG_TYPE = sm.get("logging", "type")
+
+changed = False
+if DEFAULT_LEVEL not in LEVELS:
+    DEFAULT_LEVEL = "debug"
+    sm.set("logging", "level", DEFAULT_LEVEL.title())
+    changed = True
+    
+if not DEFAULT_LOG_TYPE:
+    DEFAULT_LOG_TYPE = "Console"
+    sm.set("logging", "type", DEFAULT_LOG_TYPE)
+    changed = True
+
+if changed:
+    sm.write()
+
 LOG_PATH = expanduser("~/.nautilussvn/NautilusSvn.log")
 DEFAULT_FORMAT = "%(message)s"
 FILE_FORMAT = "%(asctime)s %(levelname)s\t%(name)s\t\t%(message)s"
 CONSOLE_FORMAT = "%(levelname)s\t%(name)s\t\t%(message)s"
 
-class Log:
+class BaseLog:
     """
     Provides a wrapper around the logging module to simplify some logging tasks.
     This base class should generally not be called.
     
     """
     
-    def __init__(self, logger="", level="debug"):
+    def __init__(self, logger="", level=DEFAULT_LEVEL):
         self.logger = logging.getLogger(logger)
         self.level = level
         self.logger.setLevel(LEVELS[level])
         self.handler = None
     
-    def set_level(self, level="debug"):
+    def set_level(self, level=DEFAULT_LEVEL):
         """
         Set the mimimum level to be logged.
         
@@ -144,9 +174,9 @@ class Log:
         self.handler.setFormatter(logging.Formatter(format))
         self.logger.addHandler(self.handler)
 
-class ConsoleLog(Log):
+class ConsoleLog(BaseLog):
     """
-    Inherits from Log and provides a simple interface to log calls to the
+    Inherits from BaseLog and provides a simple interface to log calls to the
     command line/standard output.
     
     Usage:
@@ -156,7 +186,7 @@ class ConsoleLog(Log):
     
     """
     
-    def __init__(self, logger="", level="debug"):
+    def __init__(self, logger="", level=DEFAULT_LEVEL):
         """
         @type   logger: string
         @param  logger: A keyword describing the source of the log messages
@@ -166,12 +196,12 @@ class ConsoleLog(Log):
         
         """
         
-        Log.__init__(self, logger, level)
+        BaseLog.__init__(self, logger, level)
         self.set_handler(logging.StreamHandler(), CONSOLE_FORMAT)
 
-class FileLog(Log):
+class FileLog(BaseLog):
     """
-    Inherits from Log and provides a simple interface to log calls to file
+    Inherits from BaseLog and provides a simple interface to log calls to file
     which is automatically rotated every day and keeps seven days worth of data.
     
     Usage:
@@ -181,7 +211,7 @@ class FileLog(Log):
     
     """
 
-    def __init__(self, logger="", level="debug"):
+    def __init__(self, logger="", level=DEFAULT_LEVEL):
         """
         @type   logger: string
         @param  logger: A keyword describing the source of the log messages
@@ -191,15 +221,15 @@ class FileLog(Log):
         
         """
 
-        Log.__init__(self, logger, level)
+        BaseLog.__init__(self, logger, level)
         self.set_handler(
             logging.handlers.TimedRotatingFileHandler(LOG_PATH, "D", 1, 7, "utf-8"), 
             FILE_FORMAT
         )
 
-class DualLog(Log):
+class DualLog(BaseLog):
     """
-    Inherits from Log and provides a simple interface to log calls to both the
+    Inherits from BaseLog and provides a simple interface to log calls to both the
     command line/standard output and a file which is automatically rotated every
     day.
     
@@ -210,7 +240,7 @@ class DualLog(Log):
     
     """
 
-    def __init__(self, logger="", level="debug"):
+    def __init__(self, logger="", level=DEFAULT_LEVEL):
         """
         @type   logger: string
         @param  logger: A keyword describing the source of the log messages
@@ -220,9 +250,37 @@ class DualLog(Log):
         
         """
         
-        Log.__init__(self, logger, level)
+        BaseLog.__init__(self, logger, level)
         self.set_handler(
             logging.handlers.TimedRotatingFileHandler(LOG_PATH, "D", 1, 7, "utf-8"), 
             FILE_FORMAT
         )
         self.set_handler(logging.StreamHandler(), CONSOLE_FORMAT)
+
+class NullHandler(logging.Handler):
+    """
+    Handles log messages and doesn't do anything with them
+    
+    """
+
+    def emit(self, record):
+        pass
+
+class NullLog(BaseLog):
+    """
+    If the user does not want to generate a log file, use the NullLog.  It calls
+    the NullHandler class as its handler.    
+    
+    """
+
+    def __init__(self, *args, **kwargs):
+        BaseLog.__init__(self, *args, **kwargs)
+        self.set_handler(NullHandler())
+
+Log = NullLog
+if DEFAULT_LOG_TYPE == "File":
+    Log = FileLog
+elif DEFAULT_LOG_TYPE == "Console":
+    Log = ConsoleLog
+elif DEFAULT_LOG_TYPE == "Both":
+    Log = DualLog

@@ -77,6 +77,24 @@ class Settings(InterfaceView):
             self.settings.get("cache", "number_messages")
         )
         
+        self.logging_type = nautilussvn.ui.widget.ComboBox(
+            self.get_widget("logging_type"), 
+            ["None", "Console", "File", "Both"]
+        )
+        val = self.settings.get("logging", "type")
+        if not val:
+            val = "Console"
+        self.logging_type.set_active_from_value(val)
+
+        self.logging_level = nautilussvn.ui.widget.ComboBox(
+            self.get_widget("logging_level"), 
+            ["Debug", "Info", "Warning", "Error", "Critical"]
+        )
+        val = self.settings.get("logging", "level")
+        if not val:
+            val = "Debug"
+        self.logging_level.set_active_from_value(val)
+
     def on_destroy(self, widget):
         gtk.main_quit()
 
@@ -122,6 +140,14 @@ class Settings(InterfaceView):
         self.settings.set(
             "cache", "number_messages",
             self.get_widget("cache_number_messages").get_text()
+        )
+        self.settings.set(
+            "logging", "type",
+            self.logging_type.get_active_text()
+        )
+        self.settings.set(
+            "logging", "level",
+            self.logging_level.get_active_text()
         )
         self.settings.write()
 
