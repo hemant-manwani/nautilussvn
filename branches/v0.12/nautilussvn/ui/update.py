@@ -29,7 +29,6 @@ from nautilussvn.ui.log import LogDialog
 from nautilussvn.ui.action import VCSAction
 import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
-from nautilussvn.lib.helper import setcwd, get_common_directory
 
 from nautilussvn import gettext
 _ = gettext.gettext
@@ -43,9 +42,6 @@ class Update(InterfaceNonView):
     """
 
     def __init__(self, paths):
-        self.common = get_common_directory(paths)
-        setcwd(self.common)
-        
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
 
