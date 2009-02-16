@@ -27,7 +27,7 @@ Concrete VCS implementation for Subversion functionality.
 """
 
 import os.path
-from os.path import isdir, isfile
+from os.path import isdir, isfile, dirname
 from time import time
 
 import pysvn
@@ -443,19 +443,16 @@ class SVN:
         
         returner = []
         common = get_common_directory(paths)
+        print common
         setcwd(common)
-        
-        #recursively searches all "paths"
-        for path in paths:        
-            path_rel = path[len(common)+1:]
-            if path_rel == "":
-                path_rel = "."
 
+        #recursively searches all "paths"
+        for path in paths:
             try:
-                st = self.status_with_cache(path_rel, invalidate=True)
+                st = self.status(path)
             except Exception, e:
                 continue
-                
+
             if st is None:
                 continue
 
@@ -463,6 +460,12 @@ class SVN:
                 if statuses:
                     if st_item.text_status not in statuses:
                         continue
+
+                if st_item.path == common:
+                    # Get the parent dirname so the path string is not empty
+                    st_item.path = st_item.path[len(dirname(common))+1:]
+                else:
+                    st_item.path = st_item.path[len(common)+1:]
                     
                 returner.append(st_item)
             
