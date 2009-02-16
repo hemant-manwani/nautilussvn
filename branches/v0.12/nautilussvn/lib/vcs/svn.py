@@ -34,7 +34,7 @@ import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
 from nautilussvn.lib.decorators import deprecated, timeit
-from nautilussvn.lib.helper import split_path
+from nautilussvn.lib.helper import split_path, get_common_directory, setcwd
 from nautilussvn.lib.log import Log
 
 log = Log("nautilussvn.lib.vcs.svn")
@@ -423,7 +423,7 @@ class SVN:
     # provides information for ui
     #
     
-    def get_items(self, paths, statuses=None):
+    def get_items(self, paths, statuses=[]):
         """
         Retrieves a list of files that have one of a set of statuses
         
@@ -440,35 +440,32 @@ class SVN:
 
         if paths is None:
             return []
- 
-        if len(paths) > 1:
-            dirs = []
-            for i in paths:
-                dirs.append(os.path.dirname(i))
-            path = os.path.commonprefix(dirs)
-        else:
-            path = paths[0]
         
-        #if the current path is a parent of the given path, cut off the parents
-        if path.find(os.getcwd()) != -1:
-            path = path[len(os.getcwd())+1:]
-        
-        #recursively searches the common path of all "paths" item
-        st = self.client.status(
-            path
-        )
-
-        if st is None:
-            return []
-
         returner = []
-        for st_item in st:
-            if statuses is not None:
-                if st_item.text_status not in statuses:
-                    continue
-                
-            returner.append(st_item)
+        common = get_common_directory(paths)
+        setcwd(common)
         
+        #recursively searches all "paths"
+        for path in paths:        
+            path_rel = path[len(common)+1:]
+            if path_rel == "":
+                path_rel = "."
+
+            try:
+                st = self.status_with_cache(path_rel, invalidate=True)
+            except Exception, e:
+                continue
+                
+            if st is None:
+                continue
+
+            for st_item in st:
+                if statuses:
+                    if st_item.text_status not in statuses:
+                        continue
+                    
+                returner.append(st_item)
+            
         return returner
         
     def get_repo_url(self, path):
