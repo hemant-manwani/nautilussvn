@@ -333,14 +333,13 @@ def browse_to_item(path):
     
 def delete_item(path):
     """
-    Send an item to the trash
+    Send an item to the trash. 
     
     @type   path: string
     @param  path: A file path.
-    
     """
 
-    subprocess.Popen("gvfs-trash %s" % os.path.abspath(path), shell=True)
+    subprocess.Popen(["gvfs-trash", os.path.abspath(path)]).pid
 
 #
 # Path manipulation
