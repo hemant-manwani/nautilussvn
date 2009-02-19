@@ -58,11 +58,11 @@ class Commit(InterfaceView):
         """
         InterfaceView.__init__(self, "commit", "Commit")
 
-        self.common = nautilussvn.lib.helper.get_common_directory(paths)
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
-            
-        if not self.vcs.is_in_a_or_a_working_copy(self.common):
+        self.common = nautilussvn.lib.helper.get_common_directory(paths)
+        
+        if not self.vcs.get_versioned_path(self.common):
             nautilussvn.ui.dialog.MessageBox(_("The given path is not a working copy"))
             self.close()
             return
@@ -126,9 +126,10 @@ class Commit(InterfaceView):
         path = self.get_last_path()
         
         text_status = None
-        st = self.vcs.status(path)
-        if st:
-            text_status = st[0].text_status
+        try:
+            text_status = self.vcs.status(path)[0].text_status
+        except Exception, e:
+            print str(e)
 
         return text_status
 
@@ -354,7 +355,7 @@ class Commit(InterfaceView):
     def on_subcontext_ignore_by_filename_activated(self, widget, data=None):
         prop_name = self.vcs.PROPERTIES["ignore"]
         prop_value = os.path.basename(data[1])
-        
+
         if self.vcs.propset(data[1], prop_name, prop_value):
             self.refresh_row_status()
         
