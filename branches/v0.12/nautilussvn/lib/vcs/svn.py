@@ -505,9 +505,11 @@ class SVN:
         # If the given path is not part of a working copy, keep trying the
         # parent path to see if it is part of a working copy
         path = self.get_versioned_path(os.path.abspath(path))
+        if not path:
+            return ""
         
         info = self.client.info(path)
-        returner = None
+        returner = ""
         try:
             returner = info["url"]
         except Exception, e:
