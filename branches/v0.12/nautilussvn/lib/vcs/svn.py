@@ -274,6 +274,8 @@ class SVN:
             if entry:
                 if isdir(path) and not isdir(os.path.join(path, ".svn")):
                     return False
+            else:
+                return False
             return True
         except pysvn.ClientError, e:
             # FIXME: ClientError client in use on another thread
@@ -442,21 +444,38 @@ class SVN:
             return []
         
         returner = []
-        common = get_common_directory(paths)
-        print common
+        
+        # All paths should be absolute paths so we can access each path's
+        # parents and make sure we are in a working copy
+        index = 0
+        for path in paths:
+            paths[index] = os.path.abspath(path)
+            index += 1
+        
+        common = self.get_versioned_path(get_common_directory(paths))
         setcwd(common)
 
-        #recursively searches all "paths"
         for path in paths:
+        
+            # Make sure the given path is in a working copy
+            versioned_path = self.get_versioned_path(path)
+
             try:
-                st = self.status(path)
+                st = self.status(versioned_path)
             except Exception, e:
+                print str(e)
                 continue
 
             if st is None:
                 continue
 
             for st_item in st:
+                # If we had to move up to a parent folder to get to a working
+                # copy, then skip all items that weren't specified
+                if versioned_path != path:
+                    if not st_item.path.startswith(path):
+                        continue
+            
                 if statuses:
                     if st_item.text_status not in statuses:
                         continue
@@ -483,15 +502,18 @@ class SVN:
         
         """
         
-        info = self.client.info(path)
+        # If the given path is not part of a working copy, keep trying the
+        # parent path to see if it is part of a working copy
+        path = self.get_versioned_path(os.path.abspath(path))
         
+        info = self.client.info(path)
         returner = None
         try:
             returner = info["url"]
-        except KeyError, e:
-            print "KeyError exception in svn.py get_repo_url()"
+        except Exception, e:
+            print "Exception in svn.py get_repo_url()"
             print str(e)
-        
+
         return returner
     
     def get_revision(self, path):
@@ -524,7 +546,7 @@ class SVN:
     # properties
     #
     
-    def proppath(self, path):
+    def get_versioned_path(self, path):
         """
         Generates a safe path to use with the prop* functions.
         If the given path is unversioned, go to the next path up.
@@ -562,7 +584,7 @@ class SVN:
         
         """
 
-        path = self.proppath(path)
+        path = self.get_versioned_path(path)
 
         if overwrite:
             props = prop_value
@@ -625,7 +647,7 @@ class SVN:
         
         """
 
-        path = self.proppath(path)
+        path = self.get_versioned_path(path)
 
         try:
             returner = self.client.propget(
@@ -657,7 +679,7 @@ class SVN:
         
         """
         
-        path = self.proppath(path)
+        path = self.get_versioned_path(path)
         
         returner = False
         try:
