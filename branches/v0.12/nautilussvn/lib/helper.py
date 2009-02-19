@@ -470,3 +470,11 @@ def get_common_directory(paths):
         common = split_path(common)
         
     return common
+
+def abspaths(paths):
+    index = 0
+    for path in paths:
+        paths[index] = os.path.abspath(path)
+        index += 1
+    
+    return paths
