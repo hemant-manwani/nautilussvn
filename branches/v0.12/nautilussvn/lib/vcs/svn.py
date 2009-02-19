@@ -34,7 +34,7 @@ import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
 from nautilussvn.lib.decorators import deprecated, timeit
-from nautilussvn.lib.helper import split_path, get_common_directory, setcwd
+from nautilussvn.lib.helper import split_path, abspaths
 from nautilussvn.lib.log import Log
 
 log = Log("nautilussvn.lib.vcs.svn")
@@ -441,14 +441,7 @@ class SVN:
         
         returner = []
         
-        # All paths should be absolute paths so we can access each path's
-        # parents and make sure we are in a working copy
-        index = 0
-        for path in paths:
-            paths[index] = os.path.abspath(path)
-            index += 1
-        
-        for path in paths:
+        for path in abspaths(paths):
         
             # Make sure the given path is in a working copy
             versioned_path = self.get_versioned_path(path)
