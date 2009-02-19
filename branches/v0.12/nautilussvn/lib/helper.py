@@ -357,7 +357,7 @@ def split_path(path):
     @param  path: An item path.
     
     """
-    
+
     path = path.rstrip(os.path.sep)
     return path[:path.rfind(os.path.sep)]
     

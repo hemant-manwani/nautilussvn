@@ -42,7 +42,7 @@ import nautilussvn.lib.dbus.service
 from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonitor
 from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
-from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension
+from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension, setcwd
 from nautilussvn.lib.decorators import timeit
 
 from nautilussvn.lib.log import Log
@@ -216,11 +216,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         for item in items:
             if item.get_uri().startswith("file://"):
                 path = gnomevfs.get_local_path_from_uri(item.get_uri())
+                
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
                 
                 log.debug("get_file_items() for %s" % path)
         
+        if paths[0]:
+            setcwd(split_path(paths[0]))
+            
         return MainContextMenu(paths, self).construct_menu()
         
     def get_background_items(self, window, item):
@@ -242,6 +246,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
+        setcwd(split_path(path))
         
         self.nautilusVFSFile_table[path] = item
         

@@ -260,7 +260,6 @@ class SVN:
     
     def is_working_copy(self, path):
         try:
-            entry = self.client.info(path)
             # when a versioned directory is removed and replaced with a
             # non-versioned directory (one that doesn't have a working copy
             # administration area, or .svn directory) you can't do a status 
@@ -271,22 +270,19 @@ class SVN:
             #
             # TODO: This check doesn't really belong here though.
             #
-            if entry:
-                if isdir(path) and not isdir(os.path.join(path, ".svn")):
-                    return False
-            else:
-                return False
-            return True
+            if self.client.info(path):
+                return True
+            return False
         except pysvn.ClientError, e:
             # FIXME: ClientError client in use on another thread
             #~ log.debug("EXCEPTION in is_working_copy(): %s" % str(e))
             return False
         
     def is_in_a_or_a_working_copy(self, path):
-        return self.is_working_copy(path)
+        return self.is_working_copy(path) or self.is_working_copy(split_path(path))
         
     def is_versioned(self, path):
-        if not self.is_in_a_or_a_working_copy(path): return False
+        if not self.is_working_copy(path): return False
             
         # info will return nothing for an unversioned file inside a working copy
         if self.client.info(path):
@@ -452,9 +448,6 @@ class SVN:
             paths[index] = os.path.abspath(path)
             index += 1
         
-        common = self.get_versioned_path(get_common_directory(paths))
-        setcwd(common)
-
         for path in paths:
         
             # Make sure the given path is in a working copy
@@ -480,11 +473,7 @@ class SVN:
                     if st_item.text_status not in statuses:
                         continue
 
-                if st_item.path == common:
-                    # Get the parent dirname so the path string is not empty
-                    st_item.path = st_item.path[len(dirname(common))+1:]
-                else:
-                    st_item.path = st_item.path[len(common)+1:]
+                st_item.path = st_item.path[len(os.getcwd())+1:]
                     
                 returner.append(st_item)
             
@@ -560,6 +549,8 @@ class SVN:
         @return:        A prop* function-safe path.
 
         """
+        
+        path = os.path.abspath(path)
 
         if not self.is_versioned(path) and os.path.isfile(path):
             path = os.path.dirname(path)
@@ -567,8 +558,8 @@ class SVN:
         path_to_use = path
         while not self.is_versioned(path_to_use):
             path_to_use = split_path(path_to_use)
-            
-            if not path_to_use:
+
+            if path_to_use == "":
                 break
 
         return path_to_use
@@ -590,7 +581,6 @@ class SVN:
         """
 
         path = self.get_versioned_path(path)
-
         if overwrite:
             props = prop_value
         else:
@@ -653,7 +643,6 @@ class SVN:
         """
 
         path = self.get_versioned_path(path)
-
         try:
             returner = self.client.propget(
                 prop_name,
