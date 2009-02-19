@@ -145,7 +145,7 @@ class Add(InterfaceView):
                                 "args": fileinfo
                             }
                         },
-                        "condition": (lambda: True)
+                        "condition": self.condition_open
                     },{
                         "label": _("Browse to"),
                         "signals": {
@@ -236,6 +236,10 @@ class Add(InterfaceView):
     
     def condition_ignore_submenu(self):
         return True
+
+    def condition_open(self):
+        path = self.files_table.get_row(self.last_row_clicked)[1]
+        return os.path.isfile(path)
         
 if __name__ == "__main__":
     from os import getcwd
