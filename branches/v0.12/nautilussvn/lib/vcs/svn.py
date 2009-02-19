@@ -565,6 +565,9 @@ class SVN:
         path_to_use = path
         while not self.is_versioned(path_to_use):
             path_to_use = split_path(path_to_use)
+            
+            if not path_to_use:
+                break
 
         return path_to_use
         
