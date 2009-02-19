@@ -1,0 +1,8 @@
+#summary Everything related to issues.
+#labels Phase-Support
+
+= Submitting issues =
+
+Is anything relevant being displayed when running Nautilus from the command line? Use the command: "pgrep -f service.py | xargs kill; nautilus -q; nautilus --no-desktop;".
+
+Note: If you are running a non-stable version, please make sure the bug exists in the latest version (use svn update). Always use the above command to restart Nautilus and the DBus service after updating.
