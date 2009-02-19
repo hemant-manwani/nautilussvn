@@ -61,7 +61,7 @@ class Commit(InterfaceView):
         self.paths = paths
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
         self.common = nautilussvn.lib.helper.get_common_directory(paths)
-        
+
         if not self.vcs.get_versioned_path(self.common):
             nautilussvn.ui.dialog.MessageBox(_("The given path is not a working copy"))
             raise SystemExit()
@@ -179,7 +179,7 @@ class Commit(InterfaceView):
                 print str(e)        
 
         ticks = added + len(items)*2
-        
+
         self.action = nautilussvn.ui.action.VCSAction(
             self.vcs,
             register_gtk_quit=self.gtk_quit_is_set()
