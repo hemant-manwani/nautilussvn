@@ -64,8 +64,7 @@ class Commit(InterfaceView):
         
         if not self.vcs.get_versioned_path(self.common):
             nautilussvn.ui.dialog.MessageBox(_("The given path is not a working copy"))
-            self.close()
-            return
+            raise SystemExit()
 
         self.files_table = nautilussvn.ui.widget.Table(
             self.get_widget("files_table"),
