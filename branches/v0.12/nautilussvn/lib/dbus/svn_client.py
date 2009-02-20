@@ -81,7 +81,15 @@ class SVNClient(dbus.service.Object):
     @dbus.service.method(INTERFACE)
     def IsConflicted(self, path):
         return self.svn_client.is_conflicted(str(path))
-    
+
+    @dbus.service.method(INTERFACE)
+    def IsMissing(self, path):
+        return self.svn_client.is_missing(str(path))
+
+    @dbus.service.method(INTERFACE)
+    def IsObstructed(self, path):
+        return self.svn_client.is_obstructed(str(path))
+            
     @dbus.service.method(INTERFACE)
     def HasUnversioned(self, path):
         return self.svn_client.has_unversioned(str(path))
@@ -109,6 +117,14 @@ class SVNClient(dbus.service.Object):
     @dbus.service.method(INTERFACE)
     def HasConflicted(self, path):
         return self.svn_client.has_conflicted(str(path))
+
+    @dbus.service.method(INTERFACE)
+    def HasMissing(self, path):
+        return self.svn_client.has_missing(str(path))
+
+    @dbus.service.method(INTERFACE)
+    def HasObstructed(self, path):
+        return self.svn_client.has_obstructed(str(path))
     
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
@@ -153,6 +169,12 @@ class SVNClientStub:
 
     def is_conflicted(self, path):
         return self.svn_client.IsConflicted(path)
+
+    def is_missing(self, path):
+        return self.svn_client.IsMissing(path)
+
+    def is_obstructed(self, path):
+        return self.svn_client.IsObstructed(path)
     
     def has_unversioned(self, path):
         return self.svn_client.HasUnversioned(path)
@@ -174,6 +196,12 @@ class SVNClientStub:
 
     def has_conflicted(self, path):
         return self.svn_client.HasConflicted(path)
+
+    def has_missing(self, path):
+        return self.svn_client.HasMissing(path)
+
+    def has_obstructed(self, path):
+        return self.svn_client.HasObstructed(path)
     
     def exit(self):
         self.svn_client.Exit()
