@@ -286,6 +286,16 @@ class Commit(InterfaceView):
                         "condition": self.condition_revert
                     },
                     {
+                        "label": _("Restore"),
+                        "signals": {
+                            "activate": {
+                                "callback": self.on_context_restore_activated, 
+                                "args": fileinfo
+                            }
+                        },
+                        "condition": self.condition_restore
+                    },
+                    {
                         "label": _("Add to ignore list"),
                         'submenu': [
                             {
@@ -364,6 +374,14 @@ class Commit(InterfaceView):
         
         if self.vcs.propset(data[1], prop_name, prop_value):
             self.refresh_row_status()
+
+    def on_context_restore_activated(self, widget, data=None):
+        nautilussvn.lib.helper.launch_ui_window(
+            "update", 
+            [data[1]],
+            return_immmediately=False
+        )
+        self.refresh_row_status()
         
     def on_previous_messages_clicked(self, widget, data=None):
         dialog = nautilussvn.ui.dialog.PreviousMessages()
@@ -389,8 +407,7 @@ class Commit(InterfaceView):
             self.get_last_status() in [
                 self.vcs.STATUS["added"],
                 self.vcs.STATUS["deleted"],
-                self.vcs.STATUS["modified"],
-                self.vcs.STATUS["missing"]
+                self.vcs.STATUS["modified"]
             ]
         )
 
@@ -398,6 +415,13 @@ class Commit(InterfaceView):
         return (
             self.get_last_status() in [
                 self.vcs.STATUS["modified"]
+            ]
+        )
+
+    def condition_restore(self):
+        return (
+            self.get_last_status() in [
+                self.vcs.STATUS["missing"]
             ]
         )
 
