@@ -461,7 +461,8 @@ def get_repository_paths_limit():
 
 def setcwd(path):
     cwd = os.path.isdir(path) and path or os.path.dirname(path)
-    os.chdir(cwd)
+    if os.path.exists(cwd):
+        os.chdir(cwd)
 
 def get_common_directory(paths):
     common = os.path.commonprefix(paths)
