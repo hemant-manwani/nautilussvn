@@ -1,29 +1,14 @@
 #summary Tasks remaining for the upcoming release
 #labels Phase-Requirements
 
-  _All [http://code.google.com/p/nautilussvn/issues/list issues] set to the related milestone should be closed._
+  _All [http://code.google.com/p/nautilussvn/issues/list issues] set to the related milestone should be closed. Please do not duplicate issues in this list._
 
 = Tasks remaining for v0.12 Beta =
-
-  * Get UIs to refresh file manager status -- brucevdkooij
-    * The biggest issue blocking this task is improving the status checking performance (this is a logic issue), doing the status checking asynchronous should only be the finishing touch.
-  * Call status functions asynchronously -- brucevdkooij
-  * ~~add is_conflicted/has_conflicted methods -- brucevdkooij~~
-    * ~~implement the condition_resolve method -- adamplumb~~
-  * ~~add is_locked/has_locked methods -- brucevdkooij~~
-    * ~~implement the condition_unlock method -- adamplumb~~
-  * ~~Create invisible interface for deleting -- adamplumb~~
-  * ~~Create invisible interface for ignoring -- adamplumb~~
-  * ~~Create invisible interface for "Create Repository" -- adamplumb~~
-  * Move NautilusSVN configuration directory to conform to the freedesktop.org [http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html#variables XDG Base Directory Specifications]. $XDG_CONFIG_HOME if set, by default ~/.config
+  * Fix the status emblem handling code -- brucevdkooij
   * Walk through the entire application (e.g. all GUI dialogs) to see if all functionality is working is intended.
 
 = Tasks remaining for v0.12 Final =
 
-  * Add all TortoiseSVN columns (get_columns)
-  * Create packages for Ubuntu and Fedora -- brucevdkooij
-  * ~~Document installation process for Ubuntu, Fedora, OpenSUSE, maybe others.~~
-  * ~~Allow multiple selection for properties -- adamplumb~~
   * Figure out a new non file manager, non version control system specific name for NautilusSvn ([http://groups.google.com/group/nautilussvn/browse_thread/thread/4b5de75a62251a65 see this discussion])
   * Do a code review for the entire code base and refactor based on the results, with the goal of making the code more elegant, flexible, maintainable, robust etc.. Subtasks include: 
     * Eliminate all redundancy (e.g. context menu generation)
@@ -31,11 +16,6 @@
     * Make all functionality more robust (e.g. defensive coding, handling exceptions properly without "crashing" the extension)
     * Refactor DBus code since it is not up to DBus standards. -- brucevdkooij
     * Make sure all forms are validated and don't cause breakage -- adamplumb
-  * ~~Add the NautilusSvn icons to the UI window titlebars -- adamplumb~~
-  * ~~Allow resizing of table columns -- adamplumb~~
-  * ~~For all Add-inheriting UI scripts, separate the __init__ meat into a separate method~~
-  * In Add UI, ignore-by-extension needs to remove all files with the same extension
-  * ~~Rename dialog should be an actual dialog (not a window in disguise), and the enter button should submit the dialog.~~
 
 = Future =
 
