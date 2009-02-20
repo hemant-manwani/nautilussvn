@@ -26,8 +26,7 @@ Our module for everything related to the Nautilus extension.
   
 """
 
-import os.path
-from os.path import isdir, isfile
+from os.path import isdir, isfile, realpath, basename
 
 import gnomevfs
 import nautilus
@@ -212,17 +211,16 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         """
         
         if len(items) == 0: return
-        
+
         paths = []
         for item in items:
             if item.get_uri().startswith("file://"):
-                path = gnomevfs.get_local_path_from_uri(item.get_uri())
-                
+                path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
                 
                 log.debug("get_file_items() for %s" % path)
-        
+
         if paths[0]:
             setcwd(split_path(paths[0]))
             
@@ -670,7 +668,7 @@ class MainContextMenu:
                         "submenus": [
                             {
                                 "identifier": "NautilusSvn::AddToIgnoreFile",
-                                "label": os.path.basename(self.paths[0]),
+                                "label": basename(self.paths[0]),
                                 "tooltip": _("Ignore an item"),
                                 "icon": None,
                                 "signals": {
@@ -1587,7 +1585,7 @@ class MainContextMenu:
     
     def callback_ignore_filename(self, menu_item, paths):
         from nautilussvn.ui.ignore import Ignore
-        ignore = Ignore(paths[0], os.path.basename(paths[0]))
+        ignore = Ignore(paths[0], basename(paths[0]))
         ignore.start()
 
     def callback_ignore_ext(self, menu_item, paths):
