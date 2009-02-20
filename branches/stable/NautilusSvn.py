@@ -204,21 +204,20 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             return
 
         file = files[0]
-
-	if file is None :
-		return
+        if file is None:
+            return
 
         path = gnomevfs.get_local_path_from_uri(file.get_uri())
 
         items = [ ('NautilusPython::svndelete_file_item', 'Delete' , 'Remove files from the repository.', self.OnDelete),
                   ('NautilusPython::svnrefreshstatus_file_item', 'Refresh Status', 'Refresh the display status of the selected files.', self.OnRefreshStatus),
-            ]
+        ]
 
         if len( files ) == 1:
             items += [    ('NautilusPython::svnlog_file_item', 'Log' , 'Log of %s' % file.get_name(), self.OnShowLog),
                         ('NautilusPython::svnupdate_file_item', 'Update' , 'Get the latest code from the repository.', self.OnUpdate),
                         ('NautilusPython::svnproperties_file_item', 'Properties', 'File properties for %s.'%file.get_name(), self.OnProperties),
-		]
+            ]
 
         # Check if this is a folder, and if so if it's under source control
         if os.path.isdir(path):
@@ -234,7 +233,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 if len( t & statuses ):
                     # If so, add some useful menu items
                     items += [    ('NautilusPython::svndiffdir_file_item', 'Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiffDir),
-				                ('NautilusPython::svnmkdiff_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiff), 
+	                            ('NautilusPython::svnmkdiff_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiff), 
                                 ('NautilusPython::svncommit_file_item', 'Commit' , 'Commit %s to the repository.' % file.get_name(), self.OnCommit),
                                 ('NautilusPython::svnrevert_file_item', 'Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert),]
             else:
@@ -261,7 +260,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                         items += [    ('NautilusPython::svncommit_file_item', 'Commit' , 'Commit %s to the repository.' % file.get_name(), self.OnCommit),
                                     ('NautilusPython::svndiff_file_item', 'Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiff),
                                     ('NautilusPython::svnmkdiff_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiff), 
-				]
+	            ]
 
                 # Add the conflict resolution menu items
                 if st.text_status in [pysvn.wc_status_kind.conflicted]:
@@ -273,22 +272,24 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             else:
                 items = []
 
-	menuitem = nautilus.MenuItem('NautilusPython::Svn', 'NautilusSvn', '')
-	submenu = nautilus.Menu()
+        menuitem = nautilus.MenuItem('NautilusPython::Svn', 'NautilusSvn', '')
+        submenu = nautilus.Menu()
         menuitem.set_submenu(submenu)
         for item in items:
             i = nautilus.MenuItem( item[0], item[1], item[2] )
             i.connect( 'activate', item[3], files )
             submenu.append_item( i )
-	return menuitem,
+
+        return menuitem,
 
     #-------------------------------------------------------------------------- 
     def get_background_items(self, window, file):
         """ Menu activated on window background
         """
-	if file.get_uri() == "x-nautilus-desktop:///" :
-		return
-	
+
+        if file.get_uri() == "x-nautilus-desktop:///":
+            return
+
         path = gnomevfs.get_local_path_from_uri(file.get_uri())
 
         if not os.path.isdir(os.path.join(path,".svn")):
@@ -300,17 +301,18 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                         ('NautilusPython::svnupdate_file_item', 'Update' , 'Get the latest code from the repository.', self.OnUpdate),
                         ('NautilusPython::svndiffdir_file_item', 'Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiffDir),
                         ('NautilusPython::svnrefreshstatus_file_item', 'Refresh', 'Refresh the display status of %s.'%file.get_name(), self.OnRefreshStatus),
-			('NautilusPython::svnmkdiffdir_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiffDir)
+                        ('NautilusPython::svnmkdiffdir_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiffDir)
                     ]
-        
-	menuitem = nautilus.MenuItem('NautilusPython::Svn', 'NautilusSvn', '')
-	submenu = nautilus.Menu()
+
+        menuitem = nautilus.MenuItem('NautilusPython::Svn', 'NautilusSvn', '')
+        submenu = nautilus.Menu()
         menuitem.set_submenu(submenu)
         for item in items:
             i = nautilus.MenuItem( item[0], item[1], item[2] )
             i.connect( 'activate', item[3], [file] )
             submenu.append_item( i )
-	return menuitem,
+
+        return menuitem,
 
     #--------------------------------------------------------------------------
     def OnEditConflicts(self, menuitem, files):
@@ -494,35 +496,37 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
     #--------------------------------------------------------------------------
     def OnMkDiff(self, menuitem, files):
-	""" MkDiff menu handler.
-	"""
-	file = files[0]
+        """ MkDiff menu handler.
+        """
+	    
+        file = files[0]
         path = gnomevfs.get_local_path_from_uri(file.get_uri())
-	nname = path + ".patch"
+        nname = path + ".patch"
 
         c = pysvn.Client()
         entry = c.info(path)
-        
+
         df = os.popen('svn diff "%s"' % path).read()
         open(nname, "w").write(df)
-	dlg = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
+        dlg = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
         dlg.set_markup("Patch written to %s"%nname)
         dlg.run()
         dlg.destroy()
 
     #--------------------------------------------------------------------------
     def OnMkDiffDir(self, menuitem, files):
-	""" MkDiffDir menu handler.
-	"""
-	file = files[0]
-	path = gnomevfs.get_local_path_from_uri(file.get_uri())
-	nname = os.path.join( os.path.abspath(path +"/../"),  os.path.basename(path) + ".patch" )
+        """ MkDiffDir menu handler.
+        """
+
+        file = files[0]
+        path = gnomevfs.get_local_path_from_uri(file.get_uri())
+        nname = os.path.join( os.path.abspath(path +"/../"),  os.path.basename(path) + ".patch" )
         c = pysvn.Client()
         entry = c.info(path)
 
         df = os.popen('svn diff "%s"' % path).read()
         open(nname, "w").write(df)
-	dlg = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
+        dlg = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
         dlg.set_markup("Patch written to %s"%nname)
         dlg.run()
         dlg.destroy()
