@@ -27,6 +27,7 @@ All sorts of helper functions.
 """
 
 import os
+import os.path
 import subprocess
 import re
 import time
@@ -340,26 +341,6 @@ def delete_item(path):
     """
 
     subprocess.Popen(["gvfs-trash", os.path.abspath(path)]).pid
-
-#
-# Path manipulation
-#
-
-def split_path(path):
-    """
-    
-    Sorta like os.path.split, but removes any trailing path separators.
-    
-    >>> split_path("/foo/bar/baz")
-    '/foo/bar'
-    
-    @type   path: string
-    @param  path: An item path.
-    
-    """
-
-    path = path.rstrip(os.path.sep)
-    return path[:path.rfind(os.path.sep)]
     
 def save_log_message(message):
     """
@@ -468,7 +449,7 @@ def get_common_directory(paths):
     common = os.path.commonprefix(paths)
     
     while not os.path.exists(common) or os.path.isfile(common):
-        common = split_path(common)
+        common = os.path.split(common)[0]
         
     return common
 

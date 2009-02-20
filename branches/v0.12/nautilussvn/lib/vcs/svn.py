@@ -34,7 +34,7 @@ import pysvn
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
 from nautilussvn.lib.decorators import deprecated, timeit
-from nautilussvn.lib.helper import split_path, abspaths
+from nautilussvn.lib.helper import abspaths
 from nautilussvn.lib.log import Log
 
 log = Log("nautilussvn.lib.vcs.svn")
@@ -238,17 +238,17 @@ class SVN:
             # Empty out all the caches
             for status in statuses:
                 current_path = os.path.join(path, status.data["path"])
-                while current_path != "":
+                while current_path != "/":
                     self.status_cache[current_path] = []
-                    current_path = split_path(current_path)
+                    current_path = os.path.split(current_path)[0]
             
             # Fill them back up
             for status in statuses:
                 current_path = os.path.join(path, status.data["path"])
-                while current_path != "":
+                while current_path != "/":
                     if current_path not in self.status_cache: break;
                     self.status_cache[current_path].append(status)
-                    current_path = split_path(current_path)
+                    current_path = os.path.split(current_path)[0]
         else:
             return statuses
          
@@ -279,7 +279,7 @@ class SVN:
             return False
         
     def is_in_a_or_a_working_copy(self, path):
-        return self.is_working_copy(path) or self.is_working_copy(split_path(path))
+        return self.is_working_copy(path) or self.is_working_copy(os.path.split(path)[0])
         
     def is_versioned(self, path):
         if not self.is_working_copy(path): return False
@@ -589,7 +589,7 @@ class SVN:
 
         path_to_use = path
         while not self.is_versioned(path_to_use):
-            path_to_use = split_path(path_to_use)
+            path_to_use = os.path.split(path_to_use)[0]
 
             if path_to_use == "":
                 break
@@ -1342,7 +1342,7 @@ class StatusMonitor:
         path_to_attach = None
         watch_is_already_set = False
         
-        while path_to_check != "":
+        while path_to_check != "/":
             # If in /foo/bar/baz
             #                 ^
             # baz is unversioned, this will stay allow us to attach a watch and
@@ -1354,7 +1354,7 @@ class StatusMonitor:
                 watch_is_already_set = True
                 break;
                 
-            path_to_check = split_path(path_to_check)
+            path_to_check = os.path.split(path_to_check)[0]
         
         if not watch_is_already_set and path_to_attach:
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
@@ -1391,10 +1391,10 @@ class StatusMonitor:
         # Generate a list of parent paths that should get a status update
         path_to_check = path
         working_copy_path = None
-        while path_to_check != "":
+        while path_to_check != "/":
             if vcs_client.is_working_copy(path_to_check):
                 working_copy_path = path_to_check
-            path_to_check = split_path(path_to_check)
+            path_to_check = os.path.split(path_to_check)[0]
 
             if ((path_to_check in self.time_cache) and 
                     (time() - self.time_cache[path_to_check] < 1)):

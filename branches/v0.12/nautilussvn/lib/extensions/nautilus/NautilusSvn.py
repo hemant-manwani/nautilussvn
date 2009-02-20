@@ -26,6 +26,7 @@ Our module for everything related to the Nautilus extension.
   
 """
 
+import os.path
 from os.path import isdir, isfile, realpath, basename
 
 import gnomevfs
@@ -41,7 +42,7 @@ import nautilussvn.lib.dbus.service
 from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonitor
 from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
-from nautilussvn.lib.helper import split_path, launch_ui_window, launch_diff_tool, get_file_extension, setcwd
+from nautilussvn.lib.helper import launch_ui_window, launch_diff_tool, get_file_extension, setcwd
 from nautilussvn.lib.decorators import timeit
 
 from nautilussvn.lib.log import Log
@@ -222,7 +223,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 log.debug("get_file_items() for %s" % path)
 
         if paths[0]:
-            setcwd(split_path(paths[0]))
+            setcwd(os.path.split(paths[0])[0])
             
         return MainContextMenu(paths, self).construct_menu()
         
@@ -245,7 +246,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
-        setcwd(split_path(path))
+        setcwd(os.path.split(path)[0])
         
         self.nautilusVFSFile_table[path] = item
         
