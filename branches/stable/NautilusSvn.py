@@ -34,6 +34,9 @@ import os
 import pysvn
 import shutil
 import sys
+import wx
+import wx.xrc
+from wx.xrc import XRCCTRL
 
 # NautilusSvn is actually more than just this module so we need to add the entire
 # directory to the path to be able to find our other modules. Because on import
@@ -202,16 +205,20 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
         file = files[0]
 
+	if file is None :
+		return
+
         path = gnomevfs.get_local_path_from_uri(file.get_uri())
 
-        items = [ ('NautilusPython::svndelete_file_item', 'SVN Delete' , 'Remove files from the repository.', self.OnDelete),
-                  ('NautilusPython::svnrefreshstatus_file_item', 'SVN Refresh Status', 'Refresh the display status of the selected files.', self.OnRefreshStatus),
+        items = [ ('NautilusPython::svndelete_file_item', 'Delete' , 'Remove files from the repository.', self.OnDelete),
+                  ('NautilusPython::svnrefreshstatus_file_item', 'Refresh Status', 'Refresh the display status of the selected files.', self.OnRefreshStatus),
             ]
 
         if len( files ) == 1:
-            items += [    ('NautilusPython::svnlog_file_item', 'SVN Log' , 'Log of %s' % file.get_name(), self.OnShowLog),
-                        ('NautilusPython::svnupdate_file_item', 'SVN Update' , 'Get the latest code from the repository.', self.OnUpdate),
-                          ('NautilusPython::svnproperties_file_item', 'SVN Properties', 'File properties for %s.'%file.get_name(), self.OnProperties), ]
+            items += [    ('NautilusPython::svnlog_file_item', 'Log' , 'Log of %s' % file.get_name(), self.OnShowLog),
+                        ('NautilusPython::svnupdate_file_item', 'Update' , 'Get the latest code from the repository.', self.OnUpdate),
+                        ('NautilusPython::svnproperties_file_item', 'Properties', 'File properties for %s.'%file.get_name(), self.OnProperties),
+		]
 
         # Check if this is a folder, and if so if it's under source control
         if os.path.isdir(path):
@@ -226,13 +233,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                             pysvn.wc_status_kind.deleted])
                 if len( t & statuses ):
                     # If so, add some useful menu items
-                    items += [    ('NautilusPython::svndiffdir_file_item', 'SVN Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiffDir),
-                                ('NautilusPython::svncommit_file_item', 'SVN Commit' , 'Commit %s to the repository.' % file.get_name(), self.OnCommit),
-                                ('NautilusPython::svnrevert_file_item', 'SVN Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert),]
+                    items += [    ('NautilusPython::svndiffdir_file_item', 'Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiffDir),
+				                ('NautilusPython::svnmkdiff_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiff), 
+                                ('NautilusPython::svncommit_file_item', 'Commit' , 'Commit %s to the repository.' % file.get_name(), self.OnCommit),
+                                ('NautilusPython::svnrevert_file_item', 'Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert),]
             else:
                 # Check if the parent is under source control
                 if os.path.isdir(os.path.join(os.path.split(path)[0], ".svn")):
-                    items = [('NautilusPython::svnadd_file_item', 'SVN Add' , 'Add %s to the repository.'%file.get_name(), self.OnAdd)]
+                    items = [('NautilusPython::svnadd_file_item', 'Add' , 'Add %s to the repository.'%file.get_name(), self.OnAdd)]
                 else:
                     return
         else:
@@ -243,61 +251,66 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 st = c.status(path)[0]
                 if not st.is_versioned:
                     # If not, we can only offer to add the file.
-                    items = [('NautilusPython::svnadd_file_item', 'SVN Add' , 'Add %s to the repository.'%file.get_name(), self.OnAdd)]
+                    items = [('NautilusPython::svnadd_file_item', 'Add' , 'Add %s to the repository.'%file.get_name(), self.OnAdd)]
 
                 # Add the revert and diff items if we've changed from the repos version
                 if st.text_status in [pysvn.wc_status_kind.added, pysvn.wc_status_kind.modified]:
-                    items += [    ('NautilusPython::svnrevert_file_item', 'SVN Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert), ]
+                    items += [    ('NautilusPython::svnrevert_file_item', 'Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert), ]
 
                     if len(files) == 1:
-                        items += [    ('NautilusPython::svncommit_file_item', 'SVN Commit' , 'Commit %s to the repository.' % file.get_name(), self.OnCommit),
-                                    ('NautilusPython::svndiff_file_item', 'SVN Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiff),]
+                        items += [    ('NautilusPython::svncommit_file_item', 'Commit' , 'Commit %s to the repository.' % file.get_name(), self.OnCommit),
+                                    ('NautilusPython::svndiff_file_item', 'Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiff),
+                                    ('NautilusPython::svnmkdiff_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiff), 
+				]
 
                 # Add the conflict resolution menu items
                 if st.text_status in [pysvn.wc_status_kind.conflicted]:
-                    items += [    ('NautilusPython::svnrevert_file_item', 'SVN Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert), ]
+                    items += [    ('NautilusPython::svnrevert_file_item', 'Revert' , 'Revert %s back to the repository version.'%file.get_name(), self.OnRevert), ]
 
                     if len(files) == 1:
-                        items += [  ('NautilusPython::svneditconflict_file_item', 'SVN Edit Conflicts' , 'Edit the conflicts found when updating %s.'%file.get_name(), self.OnEditConflicts),
-                                    ('NautilusPython::svnresolveconflict_file_item', 'SVN Conflicts Resolved' , 'Mark %s as resolved.'%file.get_name(), self.OnResolveConflicts), ]
+                        items += [  ('NautilusPython::svneditconflict_file_item', 'Edit Conflicts' , 'Edit the conflicts found when updating %s.'%file.get_name(), self.OnEditConflicts),
+                                    ('NautilusPython::svnresolveconflict_file_item', 'Resolved' , 'Mark %s as resolved.'%file.get_name(), self.OnResolveConflicts), ]
             else:
                 items = []
 
-        # We now have a list of menu items to add - we can format the return in
-        # a way that the Nautilus extensions understand
-        itemlist = []
+	menuitem = nautilus.MenuItem('NautilusPython::Svn', 'NautilusSvn', '')
+	submenu = nautilus.Menu()
+        menuitem.set_submenu(submenu)
         for item in items:
             i = nautilus.MenuItem( item[0], item[1], item[2] )
             i.connect( 'activate', item[3], files )
-            itemlist.append( i )
-
-        return itemlist
+            submenu.append_item( i )
+	return menuitem,
 
     #-------------------------------------------------------------------------- 
     def get_background_items(self, window, file):
         """ Menu activated on window background
         """
-
+	if file.get_uri() == "x-nautilus-desktop:///" :
+		return
+	
         path = gnomevfs.get_local_path_from_uri(file.get_uri())
 
         if not os.path.isdir(os.path.join(path,".svn")):
-            items = [     ('NautilusPython::svncheckout_file_item', 'SVN Checkout' , 'Checkout code from an SVN repository', self.OnCheckout)
+            items = [     ('NautilusPython::svncheckout_file_item', 'Checkout' , 'Checkout code from an SVN repository', self.OnCheckout)
                     ]
         else:
-            items = [     ('NautilusPython::svnlog_file_item', 'SVN Log' , 'SVN Log of %s' % file.get_name(), self.OnShowLog),
-                        ('NautilusPython::svncommit_file_item', 'SVN Commit' , 'Commit %s back to the repository.' % file.get_name(), self.OnCommit),
-                        ('NautilusPython::svnupdate_file_item', 'SVN Update' , 'Get the latest code from the repository.', self.OnUpdate),
-                        ('NautilusPython::svndiffdir_file_item', 'SVN Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiffDir),
-                        ('NautilusPython::svnrefreshstatus_file_item', 'SVN Refresh Status', 'Refresh the display status of %s.'%file.get_name(), self.OnRefreshStatus)
+            items = [     ('NautilusPython::svnlog_file_item', 'Log' , 'SVN Log of %s' % file.get_name(), self.OnShowLog),
+                        ('NautilusPython::svncommit_file_item', 'Commit' , 'Commit %s back to the repository.' % file.get_name(), self.OnCommit),
+                        ('NautilusPython::svnupdate_file_item', 'Update' , 'Get the latest code from the repository.', self.OnUpdate),
+                        ('NautilusPython::svndiffdir_file_item', 'Diff' , 'Diff %s against the repository version' % file.get_name(), self.OnShowDiffDir),
+                        ('NautilusPython::svnrefreshstatus_file_item', 'Refresh', 'Refresh the display status of %s.'%file.get_name(), self.OnRefreshStatus),
+			('NautilusPython::svnmkdiffdir_file_item', 'Patch', 'Create a patch of %s from the repository version'%file.get_name(), self.OnMkDiffDir)
                     ]
         
-        itemlist = []
+	menuitem = nautilus.MenuItem('NautilusPython::Svn', 'NautilusSvn', '')
+	submenu = nautilus.Menu()
+        menuitem.set_submenu(submenu)
         for item in items:
-            i = nautilus.MenuItem(item[0], item[1], item[2])
-            i.connect('activate', item[3], [file])
-            itemlist.append(i)
-
-        return itemlist
+            i = nautilus.MenuItem( item[0], item[1], item[2] )
+            i.connect( 'activate', item[3], [file] )
+            submenu.append_item( i )
+	return menuitem,
 
     #--------------------------------------------------------------------------
     def OnEditConflicts(self, menuitem, files):
@@ -478,5 +491,40 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         file = files[0]
         path = gnomevfs.get_local_path_from_uri(file.get_uri())
         os.spawnl(os.P_NOWAIT, "/usr/bin/python", "python", GetPath("SvnProperties.py"), '%s' % path)
+
+    #--------------------------------------------------------------------------
+    def OnMkDiff(self, menuitem, files):
+	""" MkDiff menu handler.
+	"""
+	file = files[0]
+        path = gnomevfs.get_local_path_from_uri(file.get_uri())
+	nname = path + ".patch"
+
+        c = pysvn.Client()
+        entry = c.info(path)
+        
+        df = os.popen('svn diff "%s"' % path).read()
+        open(nname, "w").write(df)
+	dlg = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
+        dlg.set_markup("Patch written to %s"%nname)
+        dlg.run()
+        dlg.destroy()
+
+    #--------------------------------------------------------------------------
+    def OnMkDiffDir(self, menuitem, files):
+	""" MkDiffDir menu handler.
+	"""
+	file = files[0]
+	path = gnomevfs.get_local_path_from_uri(file.get_uri())
+	nname = os.path.join( os.path.abspath(path +"/../"),  os.path.basename(path) + ".patch" )
+        c = pysvn.Client()
+        entry = c.info(path)
+
+        df = os.popen('svn diff "%s"' % path).read()
+        open(nname, "w").write(df)
+	dlg = gtk.MessageDialog(buttons=gtk.BUTTONS_OK)
+        dlg.set_markup("Patch written to %s"%nname)
+        dlg.run()
+        dlg.destroy()
 
 #============================================================================== 
