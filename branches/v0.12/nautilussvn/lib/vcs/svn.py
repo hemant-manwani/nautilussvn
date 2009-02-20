@@ -270,10 +270,10 @@ class SVN:
             #
             # TODO: This check doesn't really belong here though.
             #
-            if self.client.info(path):
+            if self.client.info(path).data["uuid"] is not None:
                 return True
             return False
-        except pysvn.ClientError, e:
+        except Exception, e:
             # FIXME: ClientError client in use on another thread
             #~ log.debug("EXCEPTION in is_working_copy(): %s" % str(e))
             return False
@@ -343,6 +343,22 @@ class SVN:
         status = self.status_with_cache(path, recurse=False)[-1]
         
         if status.data["text_status"] == pysvn.wc_status_kind.conflicted:
+            return True
+        
+        return False
+
+    def is_missing(self, path):
+        status = self.status_with_cache(path, recurse=False)[-1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.missing:
+            return True
+        
+        return False
+
+    def is_obstructed(self, path):
+        status = self.status_with_cache(path, recurse=False)[-1]
+        
+        if status.data["text_status"] == pysvn.wc_status_kind.obstructed:
             return True
         
         return False
@@ -416,6 +432,24 @@ class SVN:
                 return True
         
         return False
+
+    def has_missing(self, path):
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
+        
+        for status in statuses:
+            if status.data["text_status"] == pysvn.wc_status_kind.missing:
+                return True
+        
+        return False
+
+    def has_obstructed(self, path):
+        statuses = self.status_with_cache(path, recurse=True)[:-1]
+        
+        for status in statuses:
+            if status.data["text_status"] == pysvn.wc_status_kind.obstructed:
+                return True
+        
+        return False
         
     #
     # provides information for ui
@@ -459,7 +493,12 @@ class SVN:
                 # If we had to move up to a parent folder to get to a working
                 # copy, then skip all items that weren't specified
                 if versioned_path != path:
-                    if not st_item.path.startswith(path):
+                
+                    # Filter the item if it IS NOT "path" and
+                    # if it's a file and not a child of the "path" folder
+                    if (path != st_item.path and 
+                            (isfile(st_item.path) and 
+                            st_item.path.startswith(path) == False)):
                         continue
             
                 if statuses:
@@ -1214,7 +1253,8 @@ class StatusMonitor:
         pysvn.wc_status_kind.added,
         pysvn.wc_status_kind.deleted,
         pysvn.wc_status_kind.replaced,
-        pysvn.wc_status_kind.modified
+        pysvn.wc_status_kind.modified,
+        pysvn.wc_status_kind.missing
     ]
     
     #: A dictionary to keep track of the paths we're watching.
@@ -1403,6 +1443,9 @@ class StatusMonitor:
             
             if SVN.STATUS["conflicted"] in sub_text_statuses:
                 return "conflicted"
+            
+            if SVN.STATUS["obstructed"] in sub_text_statuses:
+                return "obstructed"
                 
             if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
                 return "modified"

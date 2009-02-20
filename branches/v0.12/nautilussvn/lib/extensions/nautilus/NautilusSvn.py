@@ -67,7 +67,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         "normal":       "nautilussvn-normal",
         "ignored":      "nautilussvn-ignored",
         "locked":       "nautilussvn-locked",
-        "read_only":    "nautilussvn-read_only"
+        "read_only":    "nautilussvn-read_only",
+        "obstructed":   "nautilussvn-obstructed"
     }
     
     
@@ -1210,7 +1211,8 @@ class MainContextMenu:
                             (self.vcs_client.has_added(path) or 
                             self.vcs_client.has_modified(path) or
                             self.vcs_client.has_deleted(path)) or
-                            self.vcs_client.has_unversioned(path)):
+                            self.vcs_client.has_unversioned(path) or
+                            self.vcs_client.has_missing(path)):
                         return True
         
         return False
