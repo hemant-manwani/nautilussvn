@@ -95,6 +95,15 @@ update_notifier = [("/usr/share/nautilussvn", [
     "packages/ubuntu/debian/do-nautilussvn-restart-nautilus"
 ])]
 
+# Documentation
+documentation = [("/usr/share/doc/nautilussvn", [
+    "README",
+    "AUTHORS",
+    "MAINTAINERS",
+    "CREDITS",
+    "THANKS"
+])]
+
 #==============================================================================
 # Ready to install
 #==============================================================================
@@ -121,5 +130,5 @@ dist = setup(
     #   file) into site-packages
     # - data_files: any file you want, anywhere you want it
     packages=packages,
-    data_files=nautilus_extension+icons+update_notifier
+    data_files=nautilus_extension + icons + documentation + update_notifier
 )
