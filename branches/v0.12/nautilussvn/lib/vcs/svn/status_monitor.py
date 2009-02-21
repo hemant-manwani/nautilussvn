@@ -167,8 +167,6 @@ class StatusMonitor:
         """
         
         vcs_client = SVN()
-        
-        #~ log.debug("StatusMonitor.add_watch() requested for %s" % path)
 
         path_to_check = path
         path_to_attach = None
@@ -192,8 +190,7 @@ class StatusMonitor:
             log.debug("StatusMonitor.add_watch() added watch for %s" % path_to_attach)
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
             self.watches[path_to_attach] = None # don't need a value
-            
-            
+        
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and
                 vcs_client.is_in_a_or_a_working_copy(path)):
@@ -234,11 +231,11 @@ class StatusMonitor:
             # Do a recursive status check (this should be relatively fast on
             # consecutive checks).
             statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
-
+            
             # Go through all the statuses and set the correct state
             for status in statuses:
-                current_path = status.data["path"]
-
+                current_path = os.path.join(working_copy_path, status.data["path"])
+                
                 # If we don't have a watch Nautilus doesn't know about it
                 # and we're not interested.
                 # FIXME: find out a way to break out instead of continuing
