@@ -1,8 +1,28 @@
 #summary Everything related to issues.
 #labels Phase-Support
 
+= Viewing and searching issues =
+
+  * [http://code.google.com/p/nautilussvn/issues/list A list of all open issues (defects and feature requests).]
+  * [http://code.google.com/p/nautilussvn/issues/advsearch The advanced search page.]
+
 = Submitting issues =
 
-Is anything relevant being displayed when running Nautilus from the command line? Use the command: "pgrep -f service.py | xargs kill; nautilus -q; nautilus --no-desktop;".
+== Defects ==
+First use the [http://code.google.com/p/nautilussvn/issues/list?can=2&q=type:Defect search functionality] to find out if a defect (i.e. bug) has already been submitted. If you can't find anything file [http://code.google.com/p/nautilussvn/issues/entry?template=Defect%20report%20from%20user a new issue]. Follow these steps:
 
-Note: If you are running a non-stable version, please make sure the bug exists in the latest version (use svn update). Always use the above command to restart Nautilus and the DBus service after updating.
+  * Make sure you're running the latest stable version of NautilusSvn. If you are running an unstable version of NautilusSvn make sure you update to the latest version (e.g. using {{{svn update}}}). 
+
+  * Start up a terminal inside a working copy and restart Nautilus and the NautilusSvn DBus service using the following command:
+
+{{{
+nautilus -q; pgrep -f service.py | xargs kill; nautilus --no-desktop; pgrep -f service.py | xargs kill
+}}}
+
+  * Try to reproduce the defect, if a traceback is shown (with the exception of [http://code.google.com/p/nautilussvn/issues/detail?id=33 this one]) make sure to include that in your issue report.
+
+After you're done testing, close all Nautilus windows, hit ALT + F2 and type {{{nautilus}}} to start Nautilus as usual.
+
+== Enhancements ==
+
+Just as with defects, please use [http://code.google.com/p/nautilussvn/issues/list?can=2&q=type%3AEnhancement the search functionality] to find out if somebody already thought up of this idea. If not, you can [http://code.google.com/p/nautilussvn/issues/entry?template=Feature%20request%20from%20user file an enhancement here]. If at all possible include a UI mockup.
