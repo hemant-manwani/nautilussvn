@@ -25,4 +25,4 @@ After you're done testing, close all Nautilus windows, hit ALT + F2 and type {{{
 
 == Enhancements ==
 
-Just as with defects, please use [http://code.google.com/p/nautilussvn/issues/list?can=2&q=type%3AEnhancement the search functionality] to find out if somebody already thought up of this idea. If not, you can [http://code.google.com/p/nautilussvn/issues/entry?template=Feature%20request%20from%20user file an enhancement here]. If at all possible include a UI mockup.
+Just as with defects, please use [http://code.google.com/p/nautilussvn/issues/list?can=2&q=type%3AEnhancement the search functionality] to find out if somebody already thought up of this idea. If not, you can [http://code.google.com/p/nautilussvn/issues/entry?template=Feature%20request%20from%20user file an enhancement here]. If at all possible include a UI mockup. An example of a mockup can be found in [http://code.google.com/p/nautilussvn/issues/detail?id=38 this enhancement report].
