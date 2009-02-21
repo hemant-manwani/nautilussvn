@@ -43,7 +43,7 @@ from nautilussvn.lib.dbus.status_monitor import StatusMonitorStub as StatusMonit
 from nautilussvn.lib.dbus.svn_client import SVNClientStub as SVNClient
 
 from nautilussvn.lib.helper import launch_ui_window, launch_diff_tool, get_file_extension, setcwd
-from nautilussvn.lib.decorators import timeit
+from nautilussvn.lib.decorators import timeit, disable
 
 from nautilussvn.lib.log import Log
 log = Log("nautilussvn.lib.extensions.nautilus")
@@ -160,7 +160,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        log.debug("update_file_info() called for %s" % path)
+        #~ log.debug("update_file_info() called for %s" % path)
         
         # Always replace the item in the table with the one we receive, because
         # for example if an item is deleted and recreated the NautilusVFSFile
@@ -193,7 +193,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
             self.status_monitor.status(path)
-        
+    
+    #~ @disable
     def get_file_items(self, window, items):
         """
         Menu activated with items selected. Nautilus also calls this function
@@ -227,7 +228,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             setcwd(os.path.split(paths[0])[0])
             
         return MainContextMenu(paths, self).construct_menu()
-        
+    
+    #~ @disable
     def get_background_items(self, window, item):
         
         """
@@ -273,7 +275,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not path in self.nautilusVFSFile_table: return
         item = self.nautilusVFSFile_table[path]
         
-        log.debug("set_emblem_by_status() called for %s with status %s" % (path, status))
+        #~ log.debug("set_emblem_by_status() called for %s with status %s" % (path, status))
         
         if status in self.EMBLEMS:
             item.add_emblem(self.EMBLEMS[status])

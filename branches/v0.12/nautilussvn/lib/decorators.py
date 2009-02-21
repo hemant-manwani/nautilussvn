@@ -92,3 +92,17 @@ def timeit(func):
         return result
         
     return update_func_meta(newfunc, func)
+
+def disable(func):
+    """
+    Disable a function.
+    
+    @type   func: function
+    @param  func: The function to be disabled.
+    
+    """
+
+    def newfunc(*args, **kwargs):
+        return
+        
+    return update_func_meta(newfunc, func)

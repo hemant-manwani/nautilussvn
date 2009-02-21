@@ -223,7 +223,7 @@ class SVN:
                     # an infinity check is requesting and it's most likely
                     # that only an empty check was done before.
                     (recurse and len(self.status_cache[path]) == 1)):
-                log.debug("status_with_cache() invalidated %s" % path)
+                #~ log.debug("status_with_cache() invalidated %s" % path)
                 statuses = self.client.status(path, recurse=recurse)
             else:
                 return self.status_cache[path]

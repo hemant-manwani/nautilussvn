@@ -97,6 +97,10 @@ class StatusMonitor:
     #:     
     watches = {}
     
+    #: A dictionary to keep track of the statuses for paths so we don't
+    #: block the Nautilus extension.
+    last_status_cache = {}
+    
     #: The mask for the inotify events we're interested in.
     #: TODO: understand how masking works
     #: TODO: maybe we should just analyze VCSProcessEvent and determine this 
@@ -120,7 +124,7 @@ class StatusMonitor:
             if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
             
             # Begin debugging code
-            log.debug("Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep)))
+            #~ log.debug("Event %s triggered for: %s" % (event.event_name, path.rstrip(os.path.sep)))
             # End debugging code
             
             # Make sure to strip any trailing slashes because that will 
@@ -152,9 +156,6 @@ class StatusMonitor:
         self.notifier = ThreadedNotifier(
             self.watch_manager, self.VCSProcessEvent(self))
         self.notifier.start()
-        
-        self.time_cache = {}
-        self.last_status_cache = {}
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -166,6 +167,8 @@ class StatusMonitor:
         """
         
         vcs_client = SVN()
+        
+        #~ log.debug("StatusMonitor.add_watch() requested for %s" % path)
 
         path_to_check = path
         path_to_attach = None
@@ -186,9 +189,10 @@ class StatusMonitor:
             path_to_check = os.path.split(path_to_check)[0]
         
         if not watch_is_already_set and path_to_attach:
+            log.debug("StatusMonitor.add_watch() added watch for %s" % path_to_attach)
             self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
             self.watches[path_to_attach] = None # don't need a value
-            log.debug("StatusMonitor.add_watch() added watch for %s" % path_to_attach)
+            
             
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and
@@ -210,14 +214,15 @@ class StatusMonitor:
         @param  invalidate: Whether or not the cache should be bypassed.
         """
         
-        log.debug("StatusMonitor.status() called for %s with %s" % (path, invalidate))
+        #~ log.debug("StatusMonitor.status() called for %s with %s" % (path, invalidate))
         
         vcs_client = SVN()
-
-        if path.endswith(".svn/entries"):
-            path = path[0:-13]
         
-        # Generate a list of parent paths that should get a status update
+        # Doing a status check top-down (starting from the working copy)
+        # is a better idea than doing it bottom-up. So figure out what
+        # working copy this path belongs to first of all. 
+        # FIXME: this won't work when you have different working copies
+        # contained in eachother.
         path_to_check = path
         working_copy_path = None
         while path_to_check != "/":
@@ -225,24 +230,17 @@ class StatusMonitor:
                 working_copy_path = path_to_check
             path_to_check = os.path.split(path_to_check)[0]
 
-            if ((path_to_check in self.time_cache) and 
-                    (time() - self.time_cache[path_to_check] < 1)):
-                break
-
-        self.time_cache[working_copy_path] = time()
-
         if working_copy_path:
             # Do a recursive status check (this should be relatively fast on
             # consecutive checks).
-            try:
-                statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
-            except KeyError:
-                return
+            statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
 
             # Go through all the statuses and set the correct state
             for status in statuses:
                 current_path = status.data["path"]
 
+                # If we don't have a watch Nautilus doesn't know about it
+                # and we're not interested.
                 # FIXME: find out a way to break out instead of continuing
                 if not self.has_watch(current_path): continue
 
@@ -252,12 +250,13 @@ class StatusMonitor:
                 if (current_path in self.last_status_cache and
                         self.last_status_cache[current_path] == text_status):
                     continue
-                                        
+                
                 self.last_status_cache[current_path] = text_status
                 self.callback(current_path, text_status)
 
     def get_text_status(self, vcs_client, path, status):
         if isdir(path):
+            # TODO: shouldn't conflicted/obstructed go before these?
             if status.data["text_status"] in [
                     SVN.STATUS["added"],
                     SVN.STATUS["modified"],
@@ -265,7 +264,7 @@ class StatusMonitor:
                 ]:
                 return SVN.STATUS_REVERSE[status.data["text_status"]]
             
-            # Check any children
+            # Verify the status of the children
             sub_statuses = vcs_client.status_with_cache(path, invalidate=False)
             sub_text_statuses = set([sub_status.data["text_status"] 
                 for sub_status in sub_statuses])
@@ -276,7 +275,11 @@ class StatusMonitor:
             if SVN.STATUS["obstructed"] in sub_text_statuses:
                 return "obstructed"
                 
+            # A directory should have a modified status when any of its children
+            # have a certain status (see modified_statuses above). Jason thought up 
+            # of a nifty way to do this by using sets and the bitwise AND operator (&).
             if len(set(self.MODIFIED_STATUSES) & sub_text_statuses):
                 return "modified"
         
+        # If we're not a directory we end up here.
         return SVN.STATUS_REVERSE[status.data["text_status"]]
