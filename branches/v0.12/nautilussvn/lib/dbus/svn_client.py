@@ -141,67 +141,67 @@ class SVNClientStub:
             traceback.print_exc()
     
     def is_working_copy(self, path):
-        return self.svn_client.IsWorkingCopy(path)
+        return bool(self.svn_client.IsWorkingCopy(path))
     
     def is_in_a_or_a_working_copy(self, path):
-        return self.svn_client.IsInAOrAWorkingCopy(path)
+        return bool(self.svn_client.IsInAOrAWorkingCopy(path))
     
     def is_versioned(self, path):
-        return self.svn_client.IsVersioned(path)
+        return bool(self.svn_client.IsVersioned(path))
     
     def is_normal(self, path):
-        return self.svn_client.IsNormal(path)
+        return bool(self.svn_client.IsNormal(path))
     
     def is_added(self, path):
-        return self.svn_client.IsAdded(path)
+        return bool(self.svn_client.IsAdded(path))
     
     def is_modified(self, path):
-        return self.svn_client.IsModified(path)
+        return bool(self.svn_client.IsModified(path))
     
     def is_deleted(self, path):
-        return self.svn_client.IsDeleted(path)
+        return bool(self.svn_client.IsDeleted(path))
     
     def is_ignored(self, path):
-        return self.svn_client.IsIgnored(path)
+        return bool(self.svn_client.IsIgnored(path))
 
     def is_locked(self, path):
-        return self.svn_client.IsLocked(path)
+        return bool(self.svn_client.IsLocked(path))
 
     def is_conflicted(self, path):
-        return self.svn_client.IsConflicted(path)
+        return bool(self.svn_client.IsConflicted(path))
 
     def is_missing(self, path):
-        return self.svn_client.IsMissing(path)
+        return bool(self.svn_client.IsMissing(path))
 
     def is_obstructed(self, path):
-        return self.svn_client.IsObstructed(path)
+        return bool(self.svn_client.IsObstructed(path))
     
     def has_unversioned(self, path):
-        return self.svn_client.HasUnversioned(path)
+        return bool(self.svn_client.HasUnversioned(path))
     
     def has_added(self, path):
-        return self.svn_client.HasAdded(path)
+        return bool(self.svn_client.HasAdded(path))
     
     def has_modified(self, path):
-        return self.svn_client.HasModified(path)
+        return bool(self.svn_client.HasModified(path))
     
     def has_deleted(self, path):
-        return self.svn_client.HasDeleted(path)
+        return bool(self.svn_client.HasDeleted(path))
 
     def has_ignored(self, path):
-        return self.svn_client.HasIgnored(path)
+        return bool(self.svn_client.HasIgnored(path))
 
     def has_locked(self, path):
-        return self.svn_client.HasLocked(path)
+        return bool(self.svn_client.HasLocked(path))
 
     def has_conflicted(self, path):
-        return self.svn_client.HasConflicted(path)
+        return bool(self.svn_client.HasConflicted(path))
 
     def has_missing(self, path):
-        return self.svn_client.HasMissing(path)
+        return bool(self.svn_client.HasMissing(path))
 
     def has_obstructed(self, path):
-        return self.svn_client.HasObstructed(path)
+        return bool(self.svn_client.HasObstructed(path))
     
     def exit(self):
         self.svn_client.Exit()

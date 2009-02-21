@@ -102,7 +102,7 @@ class StatusMonitorStub:
             traceback.print_exc()
     
     def has_watch(self, path):
-        return self.status_monitor.HasWatch(path, dbus_interface=INTERFACE)
+        return bool(self.status_monitor.HasWatch(path, dbus_interface=INTERFACE))
         
     def add_watch(self, path):
         self.status_monitor.AddWatch(path, dbus_interface=INTERFACE)
