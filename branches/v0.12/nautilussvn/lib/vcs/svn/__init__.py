@@ -32,6 +32,7 @@ from os.path import isdir, isfile, dirname
 import pysvn
 
 from nautilussvn.lib.helper import abspaths
+from nautilussvn.lib.decorators import timeit
 from nautilussvn.lib.log import Log
 
 log = Log("nautilussvn.lib.vcs.svn")
@@ -186,7 +187,8 @@ class SVN:
     
     def status(self, path, recurse=True):
         """
-        This function will eventually be deprecated for status_with_cache.
+        
+        Look up the status for path.
         
         """
         
@@ -194,8 +196,12 @@ class SVN:
             return self.client.status(path, recurse=recurse)
         except pysvn.ClientError:
             log.debug("Exception occured in SVN.status() for %s" % path)
-            return [pysvn.PysvnStatus({"text_status": pysvn.wc_status_kind.none})]
+            return [pysvn.PysvnStatus({
+                "text_status": pysvn.wc_status_kind.none,
+                "path": path
+            })]
     
+    #~ @timeit
     def status_with_cache(self, path, invalidate=False, recurse=True):
         """
         
@@ -220,7 +226,37 @@ class SVN:
         
         """
         
-        return self.status(path, recurse)
+        if (invalidate or 
+                path not in self.status_cache or
+                # The following condition is used to bypass the cache when
+                # an infinity check is requesting and it's most likely
+                # that only an empty check was done before.
+                (recurse and len(self.status_cache[path]) == 1)):
+            #~ log.debug("status_with_cache() invalidated %s" % path)
+            statuses = self.status(path, recurse=recurse)
+        else:
+            return self.status_cache[path]
+        
+        # If we do end up here the cache was bypassed.
+        if recurse:
+            # Empty out all the caches
+            for status in statuses:
+                current_path = os.path.join(path, status.data["path"])
+                while current_path != "/":
+                    self.status_cache[current_path] = []
+                    current_path = os.path.split(current_path)[0]
+            
+            # Fill them back up
+            for status in statuses:
+                current_path = os.path.join(path, status.data["path"])
+                while current_path != "/":
+                    if current_path not in self.status_cache: break;
+                    self.status_cache[current_path].append(status)
+                    current_path = os.path.split(current_path)[0]
+        else:
+            return statuses
+         
+        return self.status_cache[path]
         
     #
     # is
@@ -251,13 +287,15 @@ class SVN:
         return self.is_working_copy(path) or self.is_working_copy(os.path.split(path)[0])
         
     def is_versioned(self, path):
-        if not self.is_working_copy(os.path.split(path)[0]): return False
-            
-        # info will return nothing for an unversioned file inside a working copy
-        if self.client.info(path):
+        if self.is_working_copy(path):
             return True
-        
-        return False
+        else:
+            # info will return nothing for an unversioned file inside a working copy
+            if (self.is_working_copy(os.path.split(path)[0]) and
+                    self.client.info(path)): 
+                return True
+                
+            return False
     
     def is_normal(self, path):
         status = self.status_with_cache(path, recurse=False)[-1]
@@ -443,7 +481,7 @@ class SVN:
             return []
         
         returner = []
-        
+
         for path in abspaths(paths):
         
             # Make sure the given path is in a working copy
@@ -477,7 +515,7 @@ class SVN:
                 st_item.path = st_item.path[len(os.getcwd())+1:]
                     
                 returner.append(st_item)
-            
+
         return returner
         
     def get_repo_url(self, path):
@@ -550,19 +588,16 @@ class SVN:
         @return:        A prop* function-safe path.
 
         """
+
+        path_to_check = path
+        path_to_use = None
+        while path_to_check != "/":
+            if self.is_versioned(path_to_check):
+                path_to_use = path_to_check
+                return path_to_use
+
+            path_to_check = os.path.split(path_to_check)[0]
         
-        path = os.path.abspath(path)
-
-        if not self.is_versioned(path) and os.path.isfile(path):
-            path = os.path.dirname(path)
-
-        path_to_use = path
-        while not self.is_versioned(path_to_use):
-            path_to_use = os.path.split(path_to_use)[0]
-
-            if path_to_use == "":
-                break
-
         return path_to_use
         
     def propset(self, path, prop_name, prop_value, overwrite=False):
