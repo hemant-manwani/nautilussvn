@@ -215,42 +215,50 @@ class StatusMonitor:
         
         vcs_client = SVN()
         
-        # Doing a status check top-down (starting from the working copy)
-        # is a better idea than doing it bottom-up. So figure out what
-        # working copy this path belongs to first of all. 
-        # FIXME: this won't work when you have different working copies
-        # contained in eachother.
-        path_to_check = path
-        working_copy_path = None
-        while path_to_check != "/":
-            if vcs_client.is_working_copy(path_to_check):
-                working_copy_path = path_to_check
-            path_to_check = os.path.split(path_to_check)[0]
+        if not invalidate:
+            # Temporary hack, if the working copy didn't change we don't
+            # have to do all the stuff we do below (go all the way up
+            # the tree and all). 
+            status = vcs_client.status_with_cache(path, invalidate=invalidate, recurse=False)[-1]
+            text_status = self.get_text_status(vcs_client, path, status)
+            self.callback(path, text_status)
+        else:
+            # Doing a status check top-down (starting from the working copy)
+            # is a better idea than doing it bottom-up. So figure out what
+            # working copy this path belongs to first of all. 
+            # FIXME: this won't work when you have different working copies
+            # contained in eachother.
+            path_to_check = path
+            working_copy_path = None
+            while path_to_check != "/":
+                if vcs_client.is_working_copy(path_to_check):
+                    working_copy_path = path_to_check
+                path_to_check = os.path.split(path_to_check)[0]
 
-        if working_copy_path:
-            # Do a recursive status check (this should be relatively fast on
-            # consecutive checks).
-            statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
+            if working_copy_path:
+                # Do a recursive status check (this should be relatively fast on
+                # consecutive checks).
+                statuses = vcs_client.status_with_cache(working_copy_path, invalidate=invalidate)
+                
+                # Go through all the statuses and set the correct state
+                for status in statuses:
+                    current_path = os.path.join(working_copy_path, status.data["path"])
+                    
+                    # If we don't have a watch Nautilus doesn't know about it
+                    # and we're not interested.
+                    # FIXME: find out a way to break out instead of continuing
+                    if not self.has_watch(current_path): continue
+
+                    text_status = self.get_text_status(vcs_client, current_path, status)
+                    
+                    # If status is the same as last time, don't run callback
+                    if (current_path in self.last_status_cache and
+                            self.last_status_cache[current_path] == text_status):
+                        continue
+                    
+                    self.last_status_cache[current_path] = text_status
+                    self.callback(current_path, text_status)
             
-            # Go through all the statuses and set the correct state
-            for status in statuses:
-                current_path = os.path.join(working_copy_path, status.data["path"])
-                
-                # If we don't have a watch Nautilus doesn't know about it
-                # and we're not interested.
-                # FIXME: find out a way to break out instead of continuing
-                if not self.has_watch(current_path): continue
-
-                text_status = self.get_text_status(vcs_client, current_path, status)
-                
-                # If status is the same as last time, don't run callback
-                if (current_path in self.last_status_cache and
-                        self.last_status_cache[current_path] == text_status):
-                    continue
-                
-                self.last_status_cache[current_path] = text_status
-                self.callback(current_path, text_status)
-
     def get_text_status(self, vcs_client, path, status):
         if isdir(path):
             # TODO: shouldn't conflicted/obstructed go before these?
