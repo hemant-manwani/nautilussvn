@@ -167,7 +167,9 @@ class StatusMonitor:
         """
         
         vcs_client = SVN()
-
+        
+        log.debug("StatusMonitor.add_watch() watch requested for %s" % path)
+        
         path_to_check = path
         path_to_attach = None
         watch_is_already_set = False
@@ -211,7 +213,7 @@ class StatusMonitor:
         @param  invalidate: Whether or not the cache should be bypassed.
         """
         
-        #~ log.debug("StatusMonitor.status() called for %s with %s" % (path, invalidate))
+        log.debug("StatusMonitor.status() called for %s with %s" % (path, invalidate))
         
         vcs_client = SVN()
         
@@ -221,6 +223,12 @@ class StatusMonitor:
             # the tree and all). 
             status = vcs_client.status_with_cache(path, invalidate=invalidate, recurse=False)[-1]
             text_status = self.get_text_status(vcs_client, path, status)
+            
+            # If status is the same as last time, don't run callback
+            if (path in self.last_status_cache and
+                    self.last_status_cache[current_path] == text_status):
+                return
+            self.last_status_cache[path] = text_status
             self.callback(path, text_status)
         else:
             # Doing a status check top-down (starting from the working copy)
@@ -248,10 +256,7 @@ class StatusMonitor:
                     # and we're not interested.
                     # FIXME: find out a way to break out instead of continuing
                     if not self.has_watch(current_path): continue
-
                     text_status = self.get_text_status(vcs_client, current_path, status)
-                    
-                    # If status is the same as last time, don't run callback
                     if (current_path in self.last_status_cache and
                             self.last_status_cache[current_path] == text_status):
                         continue
