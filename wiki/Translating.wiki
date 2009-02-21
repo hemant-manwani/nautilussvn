@@ -26,6 +26,12 @@ $ mkdir -p locale/en_CA/LC_MESSAGES
 $ msgfmt --output-file=locale/en_CA/LC_MESSAGES/NautilusSvn.mo po/en_CA.po
 }}}
 
+= Translating with a GUI =
+
+Several programs have been created specifically for translating with .po files.  Here is a short list:
+
+ * [http://www.poedit.net/ Poedit]
+
 = Getting your translation to us =
 
-[http://groups.google.com/group/nautilussvn Email] us your NautilusSvn.mo file and the .po file you created.  We will immediately update our development trunk, and it will be included in the next official release.
+Open a new issue in our [http://code.google.com/p/nautilussvn/wiki/Issues?tm=3 Issue Tracker] and attach the NautilusSvn.mo and .po files that you created.  We will immediately update our development trunk, and it will be included in the next official release.
