@@ -183,7 +183,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         is_in_a_or_a_working_copy = vcs_client.is_in_a_or_a_working_copy(path)
         
         if not has_watch and is_in_a_or_a_working_copy:
-            print "heresay!"
             self.status_monitor.add_watch(path)
         
         # If we access the StatusMonitor over DBus it keeps running even though 
