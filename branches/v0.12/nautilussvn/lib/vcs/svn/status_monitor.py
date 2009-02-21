@@ -198,7 +198,7 @@ class StatusMonitor:
                 vcs_client.is_in_a_or_a_working_copy(path)):
             self.watches[path] = None
         
-    def status(self, path, invalidate=False):
+    def status(self, path, invalidate=False, bypass=False):
         """
         
         TODO: This function is really quite unmaintainable.
@@ -225,9 +225,10 @@ class StatusMonitor:
             text_status = self.get_text_status(vcs_client, path, status)
             
             # If status is the same as last time, don't run callback
-            if (path in self.last_status_cache and
-                    self.last_status_cache[current_path] == text_status):
-                return
+            if not bypass:
+                if (path in self.last_status_cache and
+                        self.last_status_cache[path] == text_status):
+                    return
             self.last_status_cache[path] = text_status
             self.callback(path, text_status)
         else:
@@ -257,9 +258,10 @@ class StatusMonitor:
                     # FIXME: find out a way to break out instead of continuing
                     if not self.has_watch(current_path): continue
                     text_status = self.get_text_status(vcs_client, current_path, status)
-                    if (current_path in self.last_status_cache and
-                            self.last_status_cache[current_path] == text_status):
-                        continue
+                    if not bypass:
+                        if (current_path in self.last_status_cache and
+                                self.last_status_cache[current_path] == text_status):
+                            continue
                     
                     self.last_status_cache[current_path] = text_status
                     self.callback(current_path, text_status)
