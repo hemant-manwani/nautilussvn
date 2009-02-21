@@ -119,7 +119,7 @@ mkdir -p ~/.icons
 ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
 }}}
 
-Add the following line to to /etc/environment:
+Add the following line to to /etc/environment (replace $USER with your username):
 
 {{{
 PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
