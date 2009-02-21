@@ -26,7 +26,6 @@ import thread
 import dbus
 import dbus.service
 
-from nautilussvn.lib.dbus import generic_reply_handler, generic_error_handler
 from nautilussvn.lib.vcs.svn.status_monitor import StatusMonitor as SVNStatusMonitor
 
 INTERFACE = "org.google.code.nautilussvn.StatusMonitor"
@@ -102,18 +101,14 @@ class StatusMonitorStub:
     def add_watch(self, path):
         self.status_monitor.AddWatch(
             path, 
-            dbus_interface=INTERFACE,
-            reply_handler=generic_reply_handler,
-            error_handler=generic_error_handler
+            dbus_interface=INTERFACE
         )
     
     def status(self, path, invalidate=False):
         self.status_monitor.Status(
             path, 
             invalidate, 
-            dbus_interface=INTERFACE,
-            reply_handler=generic_reply_handler,
-            error_handler=generic_error_handler
+            dbus_interface=INTERFACE
         )
     
     def cb_status(self, path, status):
