@@ -193,6 +193,7 @@ class SVN:
         try:
             return self.client.status(path, recurse=recurse)
         except pysvn.ClientError:
+            log.debug("Exception occured in SVN.status() for %s" % path)
             return [pysvn.PysvnStatus({"text_status": pysvn.wc_status_kind.none})]
     
     def status_with_cache(self, path, invalidate=False, recurse=True):
@@ -250,7 +251,7 @@ class SVN:
         return self.is_working_copy(path) or self.is_working_copy(os.path.split(path)[0])
         
     def is_versioned(self, path):
-        if not self.is_working_copy(path): return False
+        if not self.is_working_copy(os.path.split(path)[0]): return False
             
         # info will return nothing for an unversioned file inside a working copy
         if self.client.info(path):
