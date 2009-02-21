@@ -68,8 +68,8 @@ class StatusMonitor(dbus.service.Object):
         self.WatchAdded(path)
         
     @dbus.service.method(INTERFACE)
-    def Status(self, path, invalidate=False):
-        self.status_monitor.status(str(path), bool(invalidate))
+    def Status(self, path, invalidate=False, bypass=False):
+        self.status_monitor.status(str(path), bool(invalidate), bool(bypass))
         
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
@@ -104,10 +104,11 @@ class StatusMonitorStub:
             dbus_interface=INTERFACE
         )
     
-    def status(self, path, invalidate=False):
+    def status(self, path, invalidate=False, bypass=False):
         self.status_monitor.Status(
             path, 
             invalidate, 
+            bypass,
             dbus_interface=INTERFACE
         )
     
