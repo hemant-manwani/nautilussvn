@@ -64,18 +64,12 @@ class StatusMonitor(dbus.service.Object):
         
     @dbus.service.method(INTERFACE)
     def AddWatch(self, path):
-        def do_add_watch():
-            self.status_monitor.add_watch(str(path))
-            self.WatchAdded(path)
-        
-        thread.start_new_thread(do_add_watch, ())
+        self.status_monitor.add_watch(str(path))
+        self.WatchAdded(path)
         
     @dbus.service.method(INTERFACE)
     def Status(self, path, invalidate=False):
-        def do_status_call():
-            self.status_monitor.status(str(path), bool(invalidate))
-            
-        thread.start_new_thread(do_status_call, ())
+        self.status_monitor.status(str(path), bool(invalidate))
         
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
@@ -105,10 +99,23 @@ class StatusMonitorStub:
         return bool(self.status_monitor.HasWatch(path, dbus_interface=INTERFACE))
         
     def add_watch(self, path):
-        self.status_monitor.AddWatch(path, dbus_interface=INTERFACE)
+        def handler(*args): pass
+        self.status_monitor.AddWatch(
+            path, 
+            dbus_interface=INTERFACE,
+            reply_handler=handler,
+            error_handler=handler
+        )
     
     def status(self, path, invalidate=False):
-        self.status_monitor.Status(path, invalidate, dbus_interface=INTERFACE)
+        def handler(*args): pass
+        self.status_monitor.Status(
+            path, 
+            invalidate, 
+            dbus_interface=INTERFACE,
+            reply_handler=handler,
+            error_handler=handler
+        )
     
     def cb_status(self, path, status):
         self.status_callback(str(path), str(status))
