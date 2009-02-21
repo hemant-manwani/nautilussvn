@@ -263,11 +263,12 @@ class SVN:
             # call on that item itself (results in an exception).
             # 
             # Note that this is not a conflict, it's more of a corruption. 
-            # And it's associated with the status "obstructed".
-            #
-            # TODO: This check doesn't really belong here though.
-            #
-            if self.client.info(path).data["uuid"] is not None:
+            # And it's associated with the status "obstructed". The only
+            # way to make sure that we're dealing with a working copy
+            # is by verifying the SVN administration area exists.
+            if (isdir(path) and
+                    self.client.info(path) and
+                    isdir(os.path.join(path, ".svn"))):
                 return True
             return False
         except Exception, e:
