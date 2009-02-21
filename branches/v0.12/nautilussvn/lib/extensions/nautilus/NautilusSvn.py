@@ -160,9 +160,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not item.get_uri().startswith("file://"): return
         path = gnomevfs.get_local_path_from_uri(item.get_uri())
         
-        # Begin debugging code
-        #log.debug("update_file_info() called for %s" % path)
-        # End debugging code
+        log.debug("update_file_info() called for %s" % path)
         
         # Always replace the item in the table with the one we receive, because
         # for example if an item is deleted and recreated the NautilusVFSFile
@@ -172,15 +170,21 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # See comment for variable: statuses
         if path in self.statuses:
             self.set_emblem_by_status(path, self.statuses[path])
+            
+            # We don't have to do anything else since it's already clear
+            # that the StatusMonitor is aware of this item.
+            return
         
-        # Figure out whether or not we should do a status check
+        # Since update_file_info is also the function which lets us
+        # know when we see a particular item for the first time we have
+        # to figure out whether or not we should do a status check.
         vcs_client = SVNClient()
         has_watch = self.status_monitor.has_watch(path)
         is_in_a_or_a_working_copy = vcs_client.is_in_a_or_a_working_copy(path)
         
         if not has_watch and is_in_a_or_a_working_copy:
+            print "heresay!"
             self.status_monitor.add_watch(path)
-            # The status check is done in cb_watch_added
         
         # If we access the StatusMonitor over DBus it keeps running even though 
         # Nautilus is not. So watches will stay attached. So an initial status 
@@ -189,7 +193,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         elif (has_watch and
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
-            gobject.idle_add(self.status_monitor.status, path)
+            self.status_monitor.status(path)
         
     def get_file_items(self, window, items):
         """
@@ -219,9 +223,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
-                
-                log.debug("get_file_items() for %s" % path)
-
+        
         if paths[0]:
             setcwd(os.path.split(paths[0])[0])
             
@@ -267,15 +269,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  status: A string indicating the status of an item (see: EMBLEMS).
         """
         
-        # Try and lookup the NautilusVFSFile in the lookup table since we need it
-        # TODO: should we remove this? This function is only called by 
-        # update_file_info so this should be guaranteed.
+        # Try and lookup the NautilusVFSFile in the lookup table since 
+        # we need it.
         if not path in self.nautilusVFSFile_table: return
         item = self.nautilusVFSFile_table[path]
         
-        # Begin debugging code
-        #log.debug("set_emblem_by_status() called for %s with status %s" % (path, status))
-        # End debugging code
+        log.debug("set_emblem_by_status() called for %s with status %s" % (path, status))
         
         if status in self.EMBLEMS:
             item.add_emblem(self.EMBLEMS[status])
@@ -306,17 +305,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         @param  status: A string indicating the status of an item (see: EMBLEMS).
         """
         
-        # Begin debugging code
         log.debug("cb_status() called for %s with status %s" % (path, status))
-        # End debugging code
         
-        # See comment for variable: statuses
-        # There's no reason to do a lot of stuff if the emblem is the same
-        # but since we're the only function who does a add_emblem, we have to.
-        # We might not have a NautilusVFSFile yet but we can already store the
-        # status.
+        # We might not have a NautilusVFSFile (which we need to apply an
+        # emblem) but we can already store the status for when we do.
         self.statuses[path] = status
-        
+
         if not path in self.nautilusVFSFile_table: return
         item = self.nautilusVFSFile_table[path]
         
@@ -329,11 +323,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         # After invalidating update_file_info applies the correct emblem.
         #
         item.invalidate_extension_info()
-        
-        # FIXME: for some reason when not using the DBus service C{update_file_info}
-        # isn't always called, which doesn't make sense but ok.
-        if not self.dbus_service_available:
-            self.set_emblem_by_status(path, status)
     
 class MainContextMenu:
     """
