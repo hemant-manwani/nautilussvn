@@ -19,6 +19,3 @@
 # You should have received a copy of the GNU General Public License
 # along with NautilusSvn;  If not, see <http://www.gnu.org/licenses/>.
 #
-
-def generic_reply_handler(*args): pass
-def generic_error_handler(e): raise e
