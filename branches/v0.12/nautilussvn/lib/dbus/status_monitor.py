@@ -26,7 +26,7 @@ import thread
 import dbus
 import dbus.service
 
-from nautilussvn.lib.vcs.svn import StatusMonitor as SVNStatusMonitor
+from nautilussvn.lib.vcs.svn.status_monitor import StatusMonitor as SVNStatusMonitor
 
 INTERFACE = "org.google.code.nautilussvn.StatusMonitor"
 OBJECT_PATH = "/org/google/code/nautilussvn/StatusMonitor"
