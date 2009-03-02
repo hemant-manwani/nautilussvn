@@ -27,6 +27,9 @@ import dbus.service
 
 from nautilussvn.lib.vcs.svn import SVN
 
+from nautilussvn import init_locale
+init_locale()
+
 INTERFACE = "org.google.code.nautilussvn.SVNClient"
 OBJECT_PATH = "/org/google/code/nautilussvn/SVNClient"
 SERVICE = "org.google.code.nautilussvn.NautilusSvn"
@@ -44,87 +47,87 @@ class SVNClient(dbus.service.Object):
     
     @dbus.service.method(INTERFACE)
     def IsWorkingCopy(self, path):
-        return self.svn_client.is_working_copy(str(path))
+        return self.svn_client.is_working_copy(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsInAOrAWorkingCopy(self, path):
-        return self.svn_client.is_in_a_or_a_working_copy(str(path))
+        return self.svn_client.is_in_a_or_a_working_copy(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsVersioned(self, path):
-        return self.svn_client.is_versioned(str(path))
+        return self.svn_client.is_versioned(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsNormal(self, path):
-        return self.svn_client.is_normal(str(path))
+        return self.svn_client.is_normal(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsAdded(self, path):
-        return self.svn_client.is_added(str(path))
+        return self.svn_client.is_added(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsModified(self, path):
-        return self.svn_client.is_modified(str(path))
+        return self.svn_client.is_modified(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsDeleted(self, path):
-        return self.svn_client.is_deleted(str(path))
+        return self.svn_client.is_deleted(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def IsIgnored(self, path):
-        return self.svn_client.is_ignored(str(path))
+        return self.svn_client.is_ignored(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def IsLocked(self, path):
-        return self.svn_client.is_locked(str(path))
+        return self.svn_client.is_locked(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def IsConflicted(self, path):
-        return self.svn_client.is_conflicted(str(path))
+        return self.svn_client.is_conflicted(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def IsMissing(self, path):
-        return self.svn_client.is_missing(str(path))
+        return self.svn_client.is_missing(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def IsObstructed(self, path):
-        return self.svn_client.is_obstructed(str(path))
+        return self.svn_client.is_obstructed(unicode(path))
             
     @dbus.service.method(INTERFACE)
     def HasUnversioned(self, path):
-        return self.svn_client.has_unversioned(str(path))
+        return self.svn_client.has_unversioned(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def HasAdded(self, path):
-        return self.svn_client.has_added(str(path))
+        return self.svn_client.has_added(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def HasModified(self, path):
-        return self.svn_client.has_modified(str(path))
+        return self.svn_client.has_modified(unicode(path))
     
     @dbus.service.method(INTERFACE)
     def HasDeleted(self, path):
-        return self.svn_client.has_deleted(str(path))
+        return self.svn_client.has_deleted(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def HasIgnored(self, path):
-        return self.svn_client.has_ignored(str(path))
+        return self.svn_client.has_ignored(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def HasLocked(self, path):
-        return self.svn_client.has_locked(str(path))
+        return self.svn_client.has_locked(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def HasConflicted(self, path):
-        return self.svn_client.has_conflicted(str(path))
+        return self.svn_client.has_conflicted(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def HasMissing(self, path):
-        return self.svn_client.has_missing(str(path))
+        return self.svn_client.has_missing(unicode(path))
 
     @dbus.service.method(INTERFACE)
     def HasObstructed(self, path):
-        return self.svn_client.has_obstructed(str(path))
+        return self.svn_client.has_obstructed(unicode(path))
     
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
@@ -141,67 +144,67 @@ class SVNClientStub:
             traceback.print_exc()
     
     def is_working_copy(self, path):
-        return bool(self.svn_client.IsWorkingCopy(path))
+        return bool(self.svn_client.IsWorkingCopy(unicode(path)))
     
     def is_in_a_or_a_working_copy(self, path):
-        return bool(self.svn_client.IsInAOrAWorkingCopy(path))
+        return bool(self.svn_client.IsInAOrAWorkingCopy(unicode(path)))
     
     def is_versioned(self, path):
-        return bool(self.svn_client.IsVersioned(path))
+        return bool(self.svn_client.IsVersioned(unicode(path)))
     
     def is_normal(self, path):
-        return bool(self.svn_client.IsNormal(path))
+        return bool(self.svn_client.IsNormal(unicode(path)))
     
     def is_added(self, path):
-        return bool(self.svn_client.IsAdded(path))
+        return bool(self.svn_client.IsAdded(unicode(path)))
     
     def is_modified(self, path):
-        return bool(self.svn_client.IsModified(path))
+        return bool(self.svn_client.IsModified(unicode(path)))
     
     def is_deleted(self, path):
-        return bool(self.svn_client.IsDeleted(path))
+        return bool(self.svn_client.IsDeleted(unicode(path)))
     
     def is_ignored(self, path):
-        return bool(self.svn_client.IsIgnored(path))
+        return bool(self.svn_client.IsIgnored(unicode(path)))
 
     def is_locked(self, path):
-        return bool(self.svn_client.IsLocked(path))
+        return bool(self.svn_client.IsLocked(unicode(path)))
 
     def is_conflicted(self, path):
-        return bool(self.svn_client.IsConflicted(path))
+        return bool(self.svn_client.IsConflicted(unicode(path)))
 
     def is_missing(self, path):
-        return bool(self.svn_client.IsMissing(path))
+        return bool(self.svn_client.IsMissing(unicode(path)))
 
     def is_obstructed(self, path):
-        return bool(self.svn_client.IsObstructed(path))
+        return bool(self.svn_client.IsObstructed(unicode(path)))
     
     def has_unversioned(self, path):
-        return bool(self.svn_client.HasUnversioned(path))
+        return bool(self.svn_client.HasUnversioned(unicode(path)))
     
     def has_added(self, path):
-        return bool(self.svn_client.HasAdded(path))
+        return bool(self.svn_client.HasAdded(unicode(path)))
     
     def has_modified(self, path):
-        return bool(self.svn_client.HasModified(path))
+        return bool(self.svn_client.HasModified(unicode(path)))
     
     def has_deleted(self, path):
-        return bool(self.svn_client.HasDeleted(path))
+        return bool(self.svn_client.HasDeleted(unicode(path)))
 
     def has_ignored(self, path):
-        return bool(self.svn_client.HasIgnored(path))
+        return bool(self.svn_client.HasIgnored(unicode(path)))
 
     def has_locked(self, path):
-        return bool(self.svn_client.HasLocked(path))
+        return bool(self.svn_client.HasLocked(unicode(path)))
 
     def has_conflicted(self, path):
-        return bool(self.svn_client.HasConflicted(path))
+        return bool(self.svn_client.HasConflicted(unicode(path)))
 
     def has_missing(self, path):
-        return bool(self.svn_client.HasMissing(path))
+        return bool(self.svn_client.HasMissing(unicode(path)))
 
     def has_obstructed(self, path):
-        return bool(self.svn_client.HasObstructed(path))
+        return bool(self.svn_client.HasObstructed(unicode(path)))
     
     def exit(self):
         self.svn_client.Exit()

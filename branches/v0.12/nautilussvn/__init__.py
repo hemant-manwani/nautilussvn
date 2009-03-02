@@ -21,6 +21,7 @@
 #
 
 import gettext
+import locale
 
 version = "0.12-dev"
 APP_NAME = "NautilusSvn"
@@ -28,3 +29,21 @@ LOCALE_DIR = "locale"
 
 gettext.bindtextdomain(APP_NAME, LOCALE_DIR)
 gettext.textdomain(APP_NAME)
+
+def init_locale():
+    lang, encoding = locale.getdefaultlocale()
+    
+    if encoding is None:
+        encoding = "UTF-8"
+    if encoding.lower() == "utf":
+        encoding = "UTF-8"
+    if encoding == "UTF8":
+        encoding = "UTF-8"
+    
+    try:
+        locale.setlocale(locale.LC_ALL, "%s.%s" % (lang, encoding))
+    except locale.Error, e:
+        try:
+            locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+        except locale.Error, e:
+            locale.setlocale(locale.LC_ALL, "C")
