@@ -48,8 +48,9 @@ from nautilussvn.lib.decorators import timeit, disable
 from nautilussvn.lib.log import Log
 log = Log("nautilussvn.lib.extensions.nautilus")
 
-from nautilussvn import gettext
+from nautilussvn import gettext, init_locale
 _ = gettext.gettext
+init_locale()
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 

@@ -42,6 +42,9 @@ from nautilussvn.lib.dbus.status_monitor import StatusMonitor
 from nautilussvn.lib.dbus.svn_client import SVNClient
 from nautilussvn.lib.log import Log
 
+from nautilussvn import init_locale
+init_locale()
+
 log = Log("nautilussvn.lib.dbus.service")
 
 INTERFACE = "org.google.code.nautilussvn.Service"
