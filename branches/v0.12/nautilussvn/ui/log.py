@@ -59,8 +59,6 @@ class Log(InterfaceView):
         """
         
         InterfaceView.__init__(self, "log", "Log")
-        
-        nautilussvn.lib.helper.setcwd(path)
 
         self.get_widget("Log").set_title(_("Log - %s") % path)
         self.vcs = nautilussvn.lib.vcs.create_vcs_instance()
@@ -277,19 +275,23 @@ class Log(InterfaceView):
         total = len(self.revision_items)
         inc = 1 / total
         fraction = 0
-        
+
         for item in self.revision_items:
             msg = item.message.replace("\n", " ")
             if len(msg) > 80:
                 msg = "%s..." % msg[0:80]
-        
+
+            author = _("(no author)")
+            if hasattr(item, "author"):
+                author = item.author
+
             self.revisions_table.append([
                 item.revision.number,
-                item.author,
+                author,
                 datetime.fromtimestamp(item.date).strftime(DATETIME_FORMAT),
                 msg
             ])
-
+            
             # Stop on copy after adding the item to the table
             # so the user can look at the item that was copied
             if self.stop_on_copy:
