@@ -63,7 +63,7 @@ elif maj_min == (2,6):
 
 1. Install Packages:
 {{{
-yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-devel subversion meld
+yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-devel subversion meld gcc
 }}}
 
 2. Get python-pyinotify http://pyinotify.sourceforge.net/
