@@ -1,11 +1,9 @@
 #summary Describe the installation procedure for NautilusSvn
 #labels Phase-Deploy
 
-  _*Please see the announcement on the frontpage.*_
-
 <wiki:toc max_depth="2" />
 
-At the moment it's recommend to grab !NautilusSvn from the repository. However, you'll have to use the stable branch and not trunk (detailed instructions follow below). We're currently working on automatically generating packages for the most popular distributions, e.g. Debian/Ubuntu, Fedora and Gentoo.
+These are the installation instructions for the stable release of NautilusSvn. 
 
 = Requirements =
 This software requires the following packages to be installed:
