@@ -13,6 +13,3 @@
 
 == Blame ==
 [http://nautilussvn.googlecode.com/svn/wiki/screenshots/v012/blame.png]
-
-== Meld (diff viewer) ==
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/meld_integration.png]
