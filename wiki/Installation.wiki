@@ -27,9 +27,6 @@ Might require some manual work, see [http://groups.google.com/group/nautilussvn/
 
 You still need to follow the manual installation instructions below.
 
-== Gentoo ==
-Consult Rion's overlay containing !NautilusSvn at http://rion-overlay.googlecode.com/svn/
-
 = Installation =
 Note that as we update NautiluSvn you'll most likely have to delete everything and start over again as per the most current version of this page. We apologize for the inconvenience, but that's just how development goes. We hope to stabilize the project somewhere after the next release.
 
