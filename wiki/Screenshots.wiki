@@ -3,6 +3,9 @@
 
 = Screenshots =
 
+== Nautilus ==
+[http://nautilussvn.googlecode.com/svn/wiki/screenshots/v012/context_menu.png]
+
 == Commit dialog ==
 [http://nautilussvn.googlecode.com/svn/wiki/screenshots/v012/commit_dialog.png]
 
