@@ -26,7 +26,7 @@ Here is a basic set of dependencies that you will need to install before you can
 sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade2 python-dbus python-svn subversion meld
 }}}
 
-2. [http://code.google.com/p/nautilussvn/wiki/v012_Installation#Installing_The_Extension Install the Extension]
+2. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == OpenSUSE 11.1 ==
 
@@ -57,7 +57,7 @@ elif maj_min == (2,6):
     _pysvn = _pysvn_2_6
 }}}
 
-6. [http://code.google.com/p/nautilussvn/wiki/v012_Installation#Installing_The_Extension Install the Extension]
+6. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == Fedora 10 ==
 
@@ -72,7 +72,7 @@ yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-dev
 
   Note: I couldn't get the bz2 file from the pyinotify site to install, but the Fedora 9 0.7.1 RPMs linked to above will install and work for F10.
 
-3. [http://code.google.com/p/nautilussvn/wiki/v012_Installation#Installing_The_Extension Install the Extension]
+3. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == CentOS 5.2 ==
 
@@ -106,7 +106,7 @@ cp pysvn/__init__.py /usr/lib/python2.4/site-packages/pysvn
 cp pysvn/_pysvn_2_4.so /usr/lib/python2.4/site-packages/pysvn
 }}}
 
-6. [http://code.google.com/p/nautilussvn/wiki/v012_Installation#Installing_The_Extension Install the Extension]
+6. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == Gentoo Linux ==
 
@@ -115,25 +115,3 @@ cp pysvn/_pysvn_2_4.so /usr/lib/python2.4/site-packages/pysvn
 # layman -a sunrise
 # emerge nautilussvn
 }}} 
-
-= Installing The Extension =
-{{{
-svn checkout http://nautilussvn.googlecode.com/svn/trunk/ ~/nautilussvn
-
-mkdir -p ~/.nautilus/python-extensions
-ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
-mkdir -p ~/.icons
-ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
-}}}
-
-Add the following line to to /etc/environment (replace $USER with your username):
-
-{{{
-PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
-}}} 
-
-Note that /etc/environment is only parsed when X is started, but you can load the extension immediately using:
-{{{
-export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
-nautilus -q && nautilus &
-}}}
