@@ -2,3 +2,12 @@
 #labels Featured
 
 = Screenshots =
+
+== Commit dialog ==
+[http://nautilussvn.googlecode.com/svn/wiki/screenshots/v012/commit_dialog.png]
+
+== Log viewer ==
+[http://nautilussvn.googlecode.com/svn/wiki/screenshots/v012/log_viewer.png]
+
+== Blame ==
+[http://nautilussvn.googlecode.com/svn/wiki/screenshots/v012/blame.png]
