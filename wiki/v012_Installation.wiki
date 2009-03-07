@@ -118,7 +118,7 @@ cp pysvn/_pysvn_2_4.so /usr/lib/python2.4/site-packages/pysvn
 
 = Installing The Extension =
 {{{
-svn checkout http://nautilussvn.googlecode.com/svn/branches/v0.12/ ~/nautilussvn
+svn checkout http://nautilussvn.googlecode.com/svn/trunk/ ~/nautilussvn
 
 mkdir -p ~/.nautilus/python-extensions
 ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
