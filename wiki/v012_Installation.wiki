@@ -21,6 +21,12 @@ Here is a basic set of dependencies that you will need to install before you can
 
 == Ubuntu 8.10 ==
 
+=== Using the provided Debian package ==
+
+We've provided a Debian package you can use to install NautilusSvn, you can find it in [http://code.google.com/p/nautilussvn/downloads/list the Downloads section]. Make sure you enabled the community (universe) repository.
+
+=== Manually ===
+
 1. Install the following packages through your package manager.
 {{{
 sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade2 python-dbus python-svn subversion meld
