@@ -5,6 +5,8 @@
 You can install the extension globally using the setup script (setup.py), here's how:
 
 {{{
+svn checkout http://nautilussvn.googlecode.com/svn/trunk/ ~/nautilussvn
+cd ~/nautilussvn
 sudo python setup.py install
 nautilus -q && nautilus &
 }}}
