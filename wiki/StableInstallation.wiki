@@ -1,5 +1,5 @@
 #summary Describe the installation procedure for NautilusSvn
-#labels Featured,Phase-Deploy
+#labels Phase-Deploy
 
   _*Please see the announcement on the frontpage.*_
 
