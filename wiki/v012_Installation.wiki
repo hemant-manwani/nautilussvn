@@ -19,6 +19,8 @@ Here is a basic set of dependencies that you will need to install before you can
 
 = Distro-specific instructions =
 
+== Ubuntu 8.10 ==
+
 1. Install the following packages through your package manager.
 {{{
 sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade2 python-dbus python-svn subversion meld
