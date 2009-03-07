@@ -2,15 +2,3 @@
 #labels Featured
 
 = Screenshots =
-
-== Columns and Emblems ==
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/columns_emblems.png]
-
-== Commit Dialog ==
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/commit_dialog.png]
-
-=== Meld Integration ===
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/meld_integration.png]
-
-=== Log Viewer ===
-[http://nautilussvn.googlecode.com/svn/wiki/screenshots/svn_log.png]
