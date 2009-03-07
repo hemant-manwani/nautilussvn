@@ -1,0 +1,16 @@
+#summary Installation instructions
+#labels Featured,Phase-Deploy
+
+Installing NautilusSvn is the easiest using Ubuntu, simply download [http://code.google.com/p/nautilussvn/downloads/list the Debian package] and off you go. For other distributions you have to fetch the [http://code.google.com/p/nautilussvn/downloads/list tarball] and do a manual installation using:
+
+{{{
+sudo python setup.py
+nautilus -q && nautilus . &
+}}}
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
