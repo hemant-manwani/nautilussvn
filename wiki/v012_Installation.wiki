@@ -115,7 +115,7 @@ All of the packages required to run nautilussvn can be found in Arch Linux User-
 1. Install packages using yaourt:
 
 {{{
-yaourt -Syu python-nautilus python-configobj pyinotify pygtk dbus-python pysvn subversion meld
+yaourt -S python-nautilus python-configobj pyinotify pygtk dbus-python pysvn subversion meld
 }}}
 
 2. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
