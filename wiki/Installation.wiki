@@ -1,5 +1,10 @@
 #summary Installation instructions
 #labels Featured,Phase-Deploy
 
-  * For the latest beta, please see: [http://code.google.com/p/nautilussvn/wiki/v012_Installation v0.12 installation]
-  * For the stable release see: [http://code.google.com/p/nautilussvn/wiki/StableInstallation stable installation]
+= Bleeding edge =
+
+  * For installing the bleeding edge version, please see: [http://code.google.com/p/nautilussvn/wiki/v012_Installation v0.12 installation]
+
+= Stable =
+
+ * For installing the stable release (currently v0.11) see: [http://code.google.com/p/nautilussvn/wiki/StableInstallation stable installation]. This 
