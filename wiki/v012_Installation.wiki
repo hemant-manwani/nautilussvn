@@ -108,6 +108,18 @@ cp pysvn/_pysvn_2_4.so /usr/lib/python2.4/site-packages/pysvn
 
 6. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
+== Arch Linux ==
+
+All of the packages required to run nautilussvn can be found in Arch Linux User-community Repository (AUR). You can download and build them from there, or use yaourt to simplify the process.
+
+1. Install packages using yaourt:
+
+{{{
+yaourt -Syu python-nautilus python-configobj pyinotify pygtk dbus-python pysvn subversion meld
+}}}
+
+2. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
+
 == Gentoo Linux ==
 
 {{{
