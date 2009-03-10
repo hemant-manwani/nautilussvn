@@ -1,9 +1,13 @@
 #summary Installation instructions
 #labels Featured,Phase-Deploy
 
-  <font color="#F00">_*NOTE: Neither of the installation procedures below are for the faint-hearted.*_</font>
+  <font color="#00F">_*NOTE: Neither of the installation procedures below are for the faint-hearted.*_</font>
 
 = Bleeding edge =
+
+  <font color="#F00">_*WARNING: do not install this unless you know exactly what you are doing!*_</font> 
+
+   _*If you're not an experienced developer, walk away right now.*_
 
   * For installing the bleeding edge version, please see: [http://code.google.com/p/nautilussvn/wiki/v012_Installation v0.12 installation].
 
