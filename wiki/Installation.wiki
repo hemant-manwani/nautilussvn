@@ -1,6 +1,8 @@
 #summary Installation instructions
 #labels Featured,Phase-Deploy
 
+Neither of the installation procedures below are really for the faint-hearted. For the distinction between bleeding edge (upcoming v0.12) and stable (v0.11) see [http://cobradragon.com/nautilussvn/archives/53 this blog post at our Development blog].
+
 = Bleeding edge =
 
   * For installing the bleeding edge version, please see: [http://code.google.com/p/nautilussvn/wiki/v012_Installation v0.12 installation]
