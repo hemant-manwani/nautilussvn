@@ -1,16 +1,4 @@
 #summary Installation instructions
 #labels Featured,Phase-Deploy
 
-  <font color="#00F">_*NOTE: Neither of the installation procedures below are for the faint-hearted.*_</font>
-
-= Bleeding edge =
-
-  <font color="#F00">_*WARNING: do not install this unless you know exactly what you are doing!*_</font> 
-
-   _*If you're not an experienced developer, walk away right now.*_
-
-  * For installing the bleeding edge version, please see: [http://code.google.com/p/nautilussvn/wiki/v012_Installation v0.12 installation].
-
-= Stable =
-
- * For installing the stable release (currently v0.11) see: [http://code.google.com/p/nautilussvn/wiki/StableInstallation stable installation].
+  <font color="#F00">_*NOTE: We're working on a new release and advising against installing any version of NautilusSvn for the time being. See [http://cobradragon.com/nautilussvn/archives/60 this blog post].*_</font>
