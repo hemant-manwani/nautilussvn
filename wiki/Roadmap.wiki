@@ -13,7 +13,12 @@
 
 = !NautilusSvn 0.13 = 
 
-    * Improved status checking and emblem support. Manual status refresh no longer required.
+  * Improved status checking and emblem support. Manual status refresh no longer required.
+  * Do a code review for the entire code base and refactor based on the results, with the goal of making the code more elegant, flexible, maintainable, robust etc.. Subtasks include:
+    * Eliminate all redundancy (e.g. context menu generation)
+    * Logically organize helper functions (for example helper.path, helper.string etc.)
+    * Make all functionality more robust (e.g. defensive coding, handling exceptions properly without "crashing" the extension)
+    * Make sure all forms are validated and don't cause breakage
   * Implementation of a Nautilus Property Page. 
   * Increase the depth and usefulness of the extension and dialogs
 
