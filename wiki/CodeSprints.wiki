@@ -2,7 +2,7 @@
 
 = 14 march 2009 =
 
-Why is update_file_items being called twice?
+== Why is update_file_items being called twice? ==
 
 {{{
 DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
@@ -28,4 +28,21 @@ class Log():
         
     def debug(self, message):
         print "DEBUG: %s: %s" % (self.module, message)
+}}}
+
+== Everything with Popen and shell=true needs to go ==
+Won't handle spaces, quotes, etc. properly. Use (example):
+
+{{{
+Popen(["nautilus", "--no-desktop", "--browser", os.path.dirname(os.path.abspath(path))])
+}}}
+
+Instead of:
+{{{
+subprocess.Popen(
+    "nautilus --no-desktop --browser %s" % 
+    os.path.dirname(os.path.abspath(path)), 
+    shell=True
+)
+
 }}}
