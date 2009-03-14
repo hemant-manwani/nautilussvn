@@ -1,5 +1,7 @@
 #summary Wiki page for using when we do code sprints
 
+<wiki:toc max_depth="2" />
+
 = 14 march 2009 =
 
 == Why is update_file_items being called twice? ==
