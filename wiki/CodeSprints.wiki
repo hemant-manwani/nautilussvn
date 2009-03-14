@@ -8,3 +8,5 @@
 DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
 DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk}
 }}}
+
+  A: It's not, the logger is doing this. Why?
