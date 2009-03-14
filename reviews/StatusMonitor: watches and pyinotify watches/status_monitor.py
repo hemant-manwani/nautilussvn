@@ -202,9 +202,12 @@ class StatusMonitor:
             self.watches = self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
         
         # Make sure we also attach watches for the path itself
+        # TODO: how come this is still being called even though the
+        # watches dictionary should already contain everything?
         if (not path in self.watches and
                 vcs_client.is_in_a_or_a_working_copy(path)):
-            self.watches[path] = None
+            log.debug("StatusMonitor.add_watch() added watch for %s" % path)
+            self.watches = self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
         
     def status(self, path, invalidate=False, bypass=False):
         """
@@ -263,6 +266,7 @@ class StatusMonitor:
                     # and we're not interested.
                     # FIXME: find out a way to break out instead of continuing
                     if not self.has_watch(current_path): continue
+                    
                     text_status = self.get_text_status(vcs_client, current_path, status)
                     if not bypass:
                         if (current_path in self.last_status_cache and
