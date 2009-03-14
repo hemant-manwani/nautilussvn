@@ -4,6 +4,30 @@
 
 = 14 march 2009 =
 
+== v0.11's monitoredFiles thingy ==
+So, without a complete status monitor you can't really keep track of things that happen. So: 
+
+  * One choice is to register callbacks with all dialog functions so it will tell the extension exactly what paths to update. This would probably be nice, but atm every dialog is spawned using subprocess and there is no communication possible. This is a lot like v0.11.
+
+  * v0.11 monitored /proc after starting any process and waited for the program to exit then it used a monitoredFiles stack (similar to our nautilusVFSFile thing, except it was only for files that were modified, added or deleted) which it would go through and invalidate all items (after which Nautilus would grab the correct status). There's one problem with this, monitoredFiles would contain all modified, added or deleted files the user has ever seen from all working copies the user has ever seen. This can have pretty bad effects.
+
+== Everything with Popen and shell=true needs to go ==
+Won't handle spaces, quotes, etc. properly. Use (example):
+
+{{{
+Popen(["nautilus", "--no-desktop", "--browser", os.path.dirname(os.path.abspath(path))]).pid
+}}}
+
+Instead of:
+{{{
+subprocess.Popen(
+    "nautilus --no-desktop --browser %s" % 
+    os.path.dirname(os.path.abspath(path)), 
+    shell=True
+)
+
+}}}
+
 == Why is update_file_items being called twice? ==
 
 {{{
@@ -31,27 +55,3 @@ class Log():
     def debug(self, message):
         print "DEBUG: %s: %s" % (self.module, message)
 }}}
-
-== Everything with Popen and shell=true needs to go ==
-Won't handle spaces, quotes, etc. properly. Use (example):
-
-{{{
-Popen(["nautilus", "--no-desktop", "--browser", os.path.dirname(os.path.abspath(path))]).pid
-}}}
-
-Instead of:
-{{{
-subprocess.Popen(
-    "nautilus --no-desktop --browser %s" % 
-    os.path.dirname(os.path.abspath(path)), 
-    shell=True
-)
-
-}}}
-
-== v0.11's monitoredFiles thingy ==
-So, without a complete status monitor you can't really keep track of things that happen. So: 
-
-  * One choice is to register callbacks with all dialog functions so it will tell the extension exactly what paths to update. This would probably be nice, but atm every dialog is spawned using subprocess and there is no communication possible. This is a lot like v0.11.
-
-  * v0.11 monitored /proc after starting any process and waited for the program to exit then it used a monitoredFiles stack (similar to our nautilusVFSFile thing, except it was only for files that were modified, added or deleted) which it would go through and invalidate all items (after which Nautilus would grab the correct status). There's one problem with this, monitoredFiles would contain all modified, added or deleted files the user has ever seen from all working copies the user has ever seen. This can have pretty bad effects.
