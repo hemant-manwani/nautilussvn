@@ -41,7 +41,7 @@ subprocess.Popen(
 }}}
 
 == Why is update_file_items being called twice? ==
-
+*FIXED*
 {{{
 DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
 DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
