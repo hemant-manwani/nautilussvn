@@ -4,6 +4,20 @@
 
 = 14 march 2009 =
 
+== Problems with checkout ==
+{{{
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/lib/python2.5/threading.py", line 486, in __bootstrap_inner
+    self.run()
+  File "./nautilussvn/ui/action.py", line 456, in run
+    self.queue.start()
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/__init__.py", line 103, in start
+    log.exception()
+AttributeError: Log instance has no attribute 'exception'
+}}}
+
+
 == monitored_files thingy again ==
 
 Looks like Jason was a fucking genius! Well, it actually works better than I expected it would. Can't find any flaws in my reimplementation just yet.
