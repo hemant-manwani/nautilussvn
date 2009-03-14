@@ -36,7 +36,7 @@ class Log():
 Won't handle spaces, quotes, etc. properly. Use (example):
 
 {{{
-Popen(["nautilus", "--no-desktop", "--browser", os.path.dirname(os.path.abspath(path))])
+Popen(["nautilus", "--no-desktop", "--browser", os.path.dirname(os.path.abspath(path))]).pid
 }}}
 
 Instead of:
