@@ -4,6 +4,10 @@
 
 = 14 march 2009 =
 
+== monitored_files thingy again ==
+
+Looks like Jason was a fucking genius! Well, it actually works better than I expected it would. Can't find any flaws in my reimplementation just yet.
+
 == Can helper.py:launch_ui_window return a pid? ==
 
 I'm wondering about return_immmediately:
