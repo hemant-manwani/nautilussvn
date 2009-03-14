@@ -18,6 +18,21 @@ AttributeError: Log instance has no attribute 'exception'
 }}}
 
 
+Here's the actual exception:
+{{{
+Traceback (most recent call last):
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/__init__.py", line 101, in start
+    func.start()
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/__init__.py", line 44, in start
+    self.result = self.func(*self.args, **self.kwargs)
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/vcs/svn/__init__.py", line 806, in checkout
+    return self.client.checkout(*args, **kwargs)
+ClientError: URL 'http://nautilussvn.googlecode.com/svn/trunk/packages/debian' doesn't exist
+}}}
+
+Should be obvious what the problem is :-)
+
+
 == monitored_files thingy again ==
 
 Looks like Jason was a fucking genius! Well, it actually works better than I expected it would. Can't find any flaws in my reimplementation just yet.
