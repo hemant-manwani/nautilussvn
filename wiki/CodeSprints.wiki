@@ -4,6 +4,16 @@
 
 = 14 march 2009 =
 
+== Can helper.py:launch_ui_window return a pid? ==
+
+I'm wondering about return_immmediately:
+
+{{{
+$ grep -n -i -R "return_immmediately=false" .
+./nautilussvn/ui/commit.py:385:            return_immmediately=False
+./bin/nautilussvn:44:launch_ui_window(module, args, return_immmediately=False)
+}}}
+
 == v0.11's monitoredFiles thingy ==
 So, without a complete status monitor you can't really keep track of things that happen. So: 
 
