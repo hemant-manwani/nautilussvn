@@ -2,11 +2,15 @@
 
 = 14 march 2009 =
 
-  * Why is update_file_items being called twice?
+Why is update_file_items being called twice?
 
 {{{
 DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
-DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk}
+DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
 }}}
 
-  A: It's not, the logger is doing this. Why?
+A: It's not, the logger is doing this. Why?
+
+Why? Because it uses addHandler and everytime a Log instance is created addHandler is called which just adds to the handler that is already there.
+
+The logger seems a little too complicated, can't we do something simpler? Yes, we want a file log and a console log, and yes the logging module is cool, but this is too much code.
