@@ -88,15 +88,14 @@ class StatusMonitor:
         pysvn.wc_status_kind.missing
     ]
     
-    #: A dictionary to keep track of the paths we're watching.
+    #: A dictionary with all the paths watched by pyinotify, together with their
+    #: 'watch descriptors' (a number representing this watch internally in pyinotify):
     #: 
-    #: It looks like:::
+    #: watches = {
+    #:     "foo/bar" : 37,
+    #:     "foo/bar/baz" : 64
+    #: }
     #:
-    #:     watches = {
-    #:         # Always None because we just want to check if a watch has been set
-    #:         "/foo/bar/baz": None
-    #:     }
-    #:     
     watches = {}
     
     #: A dictionary to keep track of the statuses for paths so we don't
@@ -200,8 +199,7 @@ class StatusMonitor:
         
         if not watch_is_already_set and path_to_attach:
             log.debug("StatusMonitor.add_watch() added watch for %s" % path_to_attach)
-            self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
-            self.watches[path_to_attach] = None # don't need a value
+            self.watches = self.watch_manager.add_watch(path_to_attach, self.mask, rec=True, auto_add=True)
         
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and
