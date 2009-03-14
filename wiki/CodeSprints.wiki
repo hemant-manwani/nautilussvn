@@ -30,7 +30,7 @@ Traceback (most recent call last):
 ClientError: URL 'http://nautilussvn.googlecode.com/svn/trunk/packages/debian' doesn't exist
 }}}
 
-Should be obvious what the problem is :-)
+Should be obvious what the problem is :-) Actually, log.exception needs to be added because the dialog already seems to handle clienterrors properly.
 
 
 == monitored_files thingy again ==
