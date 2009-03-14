@@ -14,3 +14,18 @@ A: It's not, the logger is doing this. Why?
 Why? Because it uses addHandler and everytime a Log instance is created addHandler is called which just adds to the handler that is already there.
 
 The logger seems a little too complicated, can't we do something simpler? Yes, we want a file log and a console log, and yes the logging module is cool, but this is too much code.
+
+Replaced locally temporarily with just:
+
+{{{
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+class Log():
+    
+    def __init__(self, module):
+        self.module = module
+        
+    def debug(self, message):
+        print "DEBUG: %s: %s" % (self.module, message)
+}}}
