@@ -1,9 +1,21 @@
 #summary Installation from SVN
 #labels Phase-Implementation
 
-= Local installation from SVN =
+= Installing using the setup script =
+You can install the extension globally using the setup script (setup.py), here's how:
 
-Installing globally is precisely the same as described in ManualInstallation, however if you want to install NautilusSvn locally and be able to update with a simple 'svn update' command you'll have to follow these instructions: 
+{{{
+svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
+cd ~/nautilussvn
+sudo python setup.py install
+nautilus -q && nautilus &
+}}}
+
+And you're done.
+
+= Installing locally manually =
+
+Iif you want to install NautilusSvn locally and be able to update with a simple SVN Update you'll have to follow these instructions: 
 
 {{{
 svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
