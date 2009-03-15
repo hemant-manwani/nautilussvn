@@ -4,6 +4,10 @@
 
 = 15 march 2009 =
 
+== Show log messages when updating ==
+
+I'm wondering if it's a cool idea to show a collection of log messages when doing an SVN update. That way you can get a quick feel for what happened.
+
 == When committing (and sending changes) state of dialog isn't clear ==
 
 When you commit and you're sending a big change or something the dialog isn't really giving any feedback.
