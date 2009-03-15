@@ -4,6 +4,10 @@
 
 = 15 march 2009 =
 
+== Settings aren't instant apply? ==
+
+See title.
+
 == Functions I don't/didn't know how to use ==
 
   * Branch/merge (well, I haven't used it properly yet)
