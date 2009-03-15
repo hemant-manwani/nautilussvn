@@ -2,6 +2,12 @@
 
 <wiki:toc max_depth="2" />
 
+= 15 march 2009 =
+
+== GUI ideas ==
+
+I'm wondering if it's a good idea to add something like a Days column in the log viewer that says "x days ago" to allow you to much quicker see if something is fresh.
+
 = 14 march 2009 =
 
 == Problems with checkout ==
