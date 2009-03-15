@@ -36,11 +36,11 @@ Currently we're regularly creating snapshots of our development version (trunk) 
 
 <table border="0" cellpadding="5">
 <tr>
-<td>[http://nautilussvn.googlecode.com/svn/wiki/media/development.png]</td>
+<td>[http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation http://nautilussvn.googlecode.com/svn/wiki/media/development.png]</td>
 <td>
 *Development snapshots*
 
-The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation here], be sure to install all dependencies as explained [http://code.google.com/p/nautilussvn/wiki/v012_Installation here].
+The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation here].
 </td>
 </tr>
 </table>
