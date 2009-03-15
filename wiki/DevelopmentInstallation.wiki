@@ -1,6 +1,10 @@
 #summary Installation from SVN
 #labels Phase-Implementation
 
+= Requirements =
+
+  See: http://code.google.com/p/nautilussvn/wiki/v012_Installation
+
 = Installing using the setup script =
 You can install the extension globally using the setup script (setup.py), here's how:
 
