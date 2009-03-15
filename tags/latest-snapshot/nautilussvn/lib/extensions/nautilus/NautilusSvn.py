@@ -26,6 +26,7 @@ Our module for everything related to the Nautilus extension.
   
 """
 
+import traceback
 import copy
 import os.path
 from os.path import isdir, isfile, realpath, basename
@@ -41,11 +42,14 @@ from nautilussvn.lib.vcs.svn import SVN
 from nautilussvn.lib.helper import launch_ui_window, launch_diff_tool, get_file_extension, get_common_directory
 from nautilussvn.lib.decorators import timeit, disable
 
-from nautilussvn.lib.log import Log
+from nautilussvn.lib.log import Log, reload_log_settings
 log = Log("nautilussvn.lib.extensions.nautilus")
 
 from nautilussvn import gettext
 _ = gettext.gettext
+
+from nautilussvn.lib.settings import SettingsManager
+settings = SettingsManager()
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
@@ -133,12 +137,37 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
     def get_columns(self):
         """
-        
+        Return all the columns we support.
         
         """
             
-        pass
-        
+        return (
+            nautilus.Column(
+                "NautilusSvn::status_column",
+                "status",
+                "SVN Status",
+                "The SVN status"
+            ),
+            nautilus.Column(
+                "NautilusSvn::revision_column",
+                "revision",
+                "SVN Revision",
+                "The SVN revision"
+            ),
+            nautilus.Column(
+                "NautilusSvn::url_column",
+                "url",
+                "SVN URL",
+                "The SVN URL"
+            ),
+            nautilus.Column(
+                "NautilusSvn::author_column",
+                "author",
+                "SVN Author",
+                "The SVN author"
+            )
+        )
+    
     def update_file_info(self, item):
         """
         
@@ -176,7 +205,41 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         is_in_a_or_a_working_copy = self.vcs_client.is_in_a_or_a_working_copy(path)
         if not is_in_a_or_a_working_copy: return
         
-        # Apply the correct emblem
+        # Do our magic
+        if bool(int(settings.get("general", "enable_attributes"))): self.update_columns(item, path)
+        if bool(int(settings.get("general", "enable_emblems"))): self.update_status(item, path)
+        
+    def update_columns(self, item, path):
+        """
+        Update the columns for a given item. This isn't a very elegant 
+        function but it does work.
+        """
+        
+        values = {
+            "status": "",
+            "revision": "",
+            "url": "",
+            "author": ""
+        }
+        
+        try:
+            # TODO: using pysvn directly because I don't like the current
+            # SVN class.
+            client = pysvn.Client()
+            info = client.info(path).data
+            status = client.status(path, recurse=False)[-1].data
+            
+            values["status"] = SVN.STATUS_REVERSE[status["text_status"]]
+            values["revision"] = str(info["commit_revision"].number)
+            values["url"] = str(info["url"])
+            values["author"] = str(info["commit_author"])
+        except: 
+            log.exception()
+            
+        for key, value in values.items():
+            item.add_string_attribute(key, value)
+    
+    def update_status(self, item, path):
         statuses = self.vcs_client.status_with_cache(path, invalidate=True)
         self.statuses[path] = self.get_text_status(path, statuses)
         self.set_emblem_by_path(path)
@@ -201,16 +264,17 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 
                 if parent_path in self.nautilusVFSFile_table: 
                     item = self.nautilusVFSFile_table[parent_path]
-                    # We need to invalidate the extension info for only one reason:
+                    # One important reason to invalidate the extension info (besides
+                    # the fact that otherwise we wouldn't update the status) is that:
                     #
                     # - Invalidating the extension info will cause Nautilus to remove all
                     #   temporary emblems we applied so we don't have overlay problems
                     #   (with ourselves, we'd still have some with other extensions).
-                    #
+                    # 
                     # After invalidating update_file_info applies the correct emblem.
                     #
                     item.invalidate_extension_info()
-        
+    
     def get_text_status(self, path, statuses):
         """
         This is a helper function for update_file_info to figure out
@@ -289,8 +353,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         # Use the selected path to determine Nautilus's cwd
         # If more than one files are selected, make sure to use get_common_directory
-        path_to_use = (len(paths) > 1 and get_common_directory(paths) or paths[0])
-        os.chdir(os.path.split(path_to_use)[0])
+        #path_to_use = (len(paths) > 1 and get_common_directory(paths) or paths[0])
+        #os.chdir(os.path.split(path_to_use)[0])
         
         return MainContextMenu(paths, self).construct_menu()
     
@@ -317,7 +381,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         log.debug("get_background_items() called")
         
-        os.chdir(path)
+        #os.chdir(path)
         return MainContextMenu([path], self).construct_menu()
     
     #
@@ -426,6 +490,26 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
         # Add our callback function on a 1 second timeout
         gobject.timeout_add(1000, is_process_still_alive)
+        
+    # 
+    # Some other methods
+    # 
+    
+    def reload_settings(self, pid):
+        """
+        Used to re-load settings after the settings dialog has been closed.
+        
+        FIXME: This probably doesn't belong here, ideally the settings manager
+        does this itself and make sure everything is reloaded properly 
+        after the settings dialogs saves.
+        """
+    
+        def do_reload_settings():
+            globals()["settings"] = SettingsManager()
+            globals()["log"] = reload_log_settings()("nautilussvn.lib.extensions.nautilus")
+            log.debug("Re-scanning settings")
+            
+        self.execute_after_process_exit(pid, do_reload_settings)
     
 class MainContextMenu:
     """
@@ -1563,7 +1647,8 @@ class MainContextMenu:
         launch_ui_window("about")
         
     def callback_settings(self, menu_item, paths):
-        launch_ui_window("settings")
+        pid = launch_ui_window("settings")
+        self.nautilussvn_extension.reload_settings(pid)
     
     def callback_ignore_filename(self, menu_item, paths):
         from nautilussvn.ui.ignore import Ignore
