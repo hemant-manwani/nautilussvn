@@ -1,15 +1,34 @@
 #summary Installation instructions
 #labels Featured,Phase-Deploy
 
-  <font color="#00F">_*NOTE: installing from the latest-snapshot tag is currently [http://code.google.com/p/nautilussvn/wiki/v012_Installation the recommended method] for installing !NautilusSvn.*_</font>
-
 As !NautilusSvn is under active development it's advised to keep track of [http://groups.google.com/group/nautilussvn/ the mailing list] and/or the [http://cobradragon.com/nautilussvn/ blog].
 
 == Packages ==
 
+  <font color="#00F">_*NOTE: this page is under construction, packages are not yet available.*_</font>
+
 We're currently working on a new version of !NautilusSvn and intend to release easy to install packages (including a Debian package) in the very near future. You will be able to find the packages in the [http://code.google.com/p/nautilussvn/downloads/list downloads section].
 
-Installing NautilusSvn is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros. You can find them [http://code.google.com/p/nautilussvn/wiki/v012_Installation here].
+Installing NautilusSvn is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
+
+<table border="0" cellpadding="5">
+<tr>
+<td>[http://nautilussvn.googlecode.com/svn/wiki/media/ubuntu.png]</td>
+<td>
+*Debian package for Ubuntu 8.10*
+
+Download this if you are running Ubuntu, no need to follow any instructions.
+</td>
+</tr>
+<tr>
+<td>[http://nautilussvn.googlecode.com/svn/wiki/media/tarball.png]</td>
+<td>
+*Tarball for manual installation*
+
+Download this if you are running another distro. Follow the [http://code.google.com/p/nautilussvn/wiki/v012_Installation manual installation instructions].
+</td>
+</tr>
+</table>
 
 == Development snapshots ==
 
