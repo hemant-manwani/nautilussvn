@@ -3,6 +3,7 @@
 
 = !NautilusSvn 0.12 =
 
+  * Improved status checking and emblem support.
   * Complete rewrite of extension and user interface layer.
   * An entirely new context menu in Nautilus including submenus.
   * New UIs: Add, Copy/Branch, Cleanup, Export, Import, Lock, Merge, Relocate, Revert, Rename, Settings, Switch, Unlock, Update-to-Revision.
