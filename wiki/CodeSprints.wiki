@@ -4,6 +4,10 @@
 
 = 15 march 2009 =
 
+== When committing (and sending changes) state of dialog isn't clear ==
+
+When you commit and you're sending a big chance or something the dialog isn't really giving any feedback.
+
 == Settings aren't instant apply? ==
 
 See title.
