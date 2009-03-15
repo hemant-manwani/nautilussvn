@@ -7,6 +7,8 @@ Obviously all bugs in our [http://code.google.com/p/nautilussvn/issues/list?can=
 
 = Known issues =
 
+<wiki:toc max_depth="3" />
+
 == The main context menu will appear with items in incorrect places ==
 
   See: [http://code.google.com/p/nautilussvn/issues/detail?id=96 Issue #96]
