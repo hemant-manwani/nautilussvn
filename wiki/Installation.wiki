@@ -9,7 +9,7 @@ As !NautilusSvn is under active development it's advised to keep track of [http:
 
 == Latest beta release ==
 
-  <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1*_</font>
+  <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1 (16 march 2009)*_</font>
 
 Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
 
