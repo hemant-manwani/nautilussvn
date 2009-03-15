@@ -4,6 +4,11 @@
 
 = 15 march 2009 =
 
+== Functions I don't/didn't know how to use ==
+
+  * Branch/merge (well, I haven't used it properly yet)
+  * Relocate. I tried relocating Nautilus from http://svn.gnome.org/svn/nautilus/branches/gnome-2-24 to http://svn.gnome.org/svn/nautilus/trunk and got "Relocate can only change the repository part of an URL", well uh.... turns out that's because it shouldn't be a relocate but an actual switch. Would it be a good idea to make some kind of friendly dialog informing the user of this?
+
 == GUI ideas ==
 
 I'm wondering if it's a good idea to add something like a Days column in the log viewer that says "x days ago" to allow you to much quicker see if something is fresh.
