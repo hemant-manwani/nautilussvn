@@ -9,13 +9,13 @@ As !NautilusSvn is under active development it's advised to keep track of [http:
 
 == Latest beta release ==
 
-  <font color="#00F">_*NOTE: this page is under construction, packages are not yet available.*_</font>
+  <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1.*_</font>
 
 Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
 
 <table border="0" cellpadding="5">
 <tr>
-<td>[http://nautilussvn.googlecode.com/svn/wiki/media/ubuntu.png]</td>
+<td>[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu1_all.deb http://nautilussvn.googlecode.com/svn/wiki/media/ubuntu.png]</td>
 <td>
 *Debian package for Ubuntu 8.10*
 
@@ -23,7 +23,7 @@ Download this if you are running Ubuntu, no need to follow any instructions.
 </td>
 </tr>
 <tr>
-<td>[http://nautilussvn.googlecode.com/svn/wiki/media/tarball.png]</td>
+<td>[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-beta1.tar.gz http://nautilussvn.googlecode.com/svn/wiki/media/tarball.png]</td>
 <td>
 *Tarball for manual installation*
 
