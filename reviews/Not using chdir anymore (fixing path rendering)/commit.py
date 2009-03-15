@@ -33,6 +33,7 @@ import nautilussvn.ui.widget
 import nautilussvn.ui.dialog
 import nautilussvn.lib
 import nautilussvn.lib.helper
+from nautilussvn.lib.helper import get_common_directory
 from nautilussvn.lib.log import Log
 
 log = Log("nautilussvn.ui.commit")
@@ -122,7 +123,8 @@ class Commit(InterfaceView):
             index += 1
     
     def get_last_path(self):
-        return self.files_table.get_row(self.last_row_clicked)[1]
+        return os.path.join(get_common_directory(self.paths), 
+            self.files_table.get_row(self.last_row_clicked)[1])
     
     def get_last_status(self):
         path = self.get_last_path()
@@ -148,7 +150,7 @@ class Commit(InterfaceView):
             
             self.files_table.append([
                 checked,
-                item.path, 
+                item.path.replace(get_common_directory(self.paths) + "/", ""), 
                 nautilussvn.lib.helper.get_file_extension(item.path),
                 item.text_status,
                 item.prop_status
@@ -165,7 +167,8 @@ class Commit(InterfaceView):
         self.close()
         
     def on_ok_clicked(self, widget, data=None):
-        items = self.files_table.get_activated_rows(1)
+        items = [os.path.join(get_common_directory(self.paths), path) 
+            for path in self.files_table.get_activated_rows(1)]
         self.hide()
 
         if len(items) == 0:
@@ -345,7 +348,9 @@ class Commit(InterfaceView):
         self.refresh_row_status()
 
     def on_context_diff_activated(self, widget, data=None):
-        nautilussvn.lib.helper.launch_diff_tool(data[1])
+        nautilussvn.lib.helper.launch_diff_tool(
+            os.path.join(get_common_directory(self.paths), data[1])
+        )
 
     def on_context_open_activated(self, widget, data=None):
         nautilussvn.lib.helper.open_item(data[1])
