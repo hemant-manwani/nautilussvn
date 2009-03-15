@@ -32,4 +32,15 @@ Download this if you are running another distro. Follow the [http://code.google.
 
 == Development snapshots ==
 
-Currently we're regularly creating snapshots of our development version which we consider stable enough for actual usage, the instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/v012_Installation here].
+Currently we're regularly creating snapshots of our development version (trunk) which we consider stable enough for actual usage. 
+
+<table border="0" cellpadding="5">
+<tr>
+<td>[http://nautilussvn.googlecode.com/svn/wiki/media/development.png]</td>
+<td>
+*Development snapshots*
+
+The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation here], be sure to install all dependencies as explained [http://code.google.com/p/nautilussvn/wiki/v012_Installation here].
+</td>
+</tr>
+</table>
