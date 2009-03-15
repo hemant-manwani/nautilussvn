@@ -187,7 +187,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         else:
             # Using try...except because it might not even be monitored
             try:
-                self.monitor_files.remove(item)
+                self.monitored_files.remove(item)
+                log.debug("update_file_info() removed %s from monitored_files" % path)
             except: pass
         
         # We have to make sure the statuses for all parent paths are set
@@ -562,8 +563,7 @@ class MainContextMenu:
                         "signals": {
                             "activate": {
                                 "callback": self.callback_refresh_status,
-                                "args": None,
-                                "kwargs": {"recurse": True}
+                                "args": None
                             }
                         },
                         "condition": (lambda: True),
@@ -619,23 +619,6 @@ class MainContextMenu:
                             
                         ]
                     },
-                    {
-                        "identifier": "NautilusSvn::Debug_Allow_Unmount",
-                        "label": _("Allow Unmount"),
-                        # TODO: figure out automatically whether it should be path or paths
-                        "tooltip": _("Recursively remove all references to VFSFiles for selected path(s)"),
-                        "icon": "nautilussvn-drive",
-                        "signals": {
-                            "activate": {
-                                "callback": self.callback_debug_allow_unmount,
-                                "args": None
-                            }
-                        }, 
-                        "condition": (lambda: True),
-                        "submenus": [
-                            
-                        ]
-                    }
                 ]
             },
             {
@@ -1503,18 +1486,12 @@ class MainContextMenu:
         window.add(scrolled_window)
         window.show()
     
-    def callback_refresh_status(self, menu_item, paths, recurse=False):
+    def callback_refresh_status(self, menu_item, paths):
         """
-        Refreshes an item status, so it will always bypass the cache.
-        
-        TODO:
-        Add should only go downwards. Lower is added, up is modified. 
-        Revert should go downwards. Check on highest folder?
-        Commit should go downwards. Check on highest folder?
-        Update should go downwards. Only conflicts matter?
+        Refreshes an item status, which is actually just invalidate.
         """
         
-        pass
+        self.callback_debug_invalidate(menu_item, paths)
     
     def callback_debug_revert(self, menu_item, paths):
         client = pysvn.Client()
@@ -1544,18 +1521,6 @@ class MainContextMenu:
             
         gobject.idle_add(add_emblem_dialog)
     
-    def callback_debug_allow_unmount(self, menu_item, paths):
-        log.debug("callback_debug_allow_unmount() called")
-        
-        nautilusVFSFile_table = self.nautilussvn_extension.nautilusVFSFile_table
-        
-        for path in paths:
-            for path_to_check in nautilusVFSFile_table.keys():
-                if path_to_check.find(path) != -1:
-                    item = nautilusVFSFile_table.pop(path_to_check)
-                    del item
-                    log.debug("Removed %s from file_table" % path_to_check)
-        
     # End debugging callbacks
 
     def callback_checkout(self, menu_item, paths):
