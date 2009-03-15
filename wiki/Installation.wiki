@@ -34,7 +34,7 @@ Download this if you are running another distro. Follow the [http://code.google.
 
 == Development snapshots ==
 
-Currently we're regularly creating snapshots of our development version (trunk) which we consider stable enough for actual usage. 
+Currently we're regularly creating snapshots of our development version (trunk). We consider these snapshotss stable enough for actual usage, heck we personally run trunk and have yet to lose any precious modifications `*knocks on wood*` ;-). 
 
 <table border="0" cellpadding="5">
 <tr>
