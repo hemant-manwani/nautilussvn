@@ -1,4 +1,6 @@
 #summary Installation instructions
 #labels Featured,Phase-Deploy
 
-  <font color="#F00">_*NOTE: We're working on a new release and advising against installing any version of NautilusSvn for the time being. See [http://cobradragon.com/nautilussvn/archives/60 this blog post].*_</font>
+  <font color="#00F">_*NOTE: installing from the latest-snapshot tag is currently [http://code.google.com/p/nautilussvn/wiki/v012_Installation the recommended method] for installing NautilusSvn.*_</font>
+
+We're currently working on a new version of NautilusSvn v0.12 and intend to release easy to install packages (including a Debian package) in the very near future. Currently we're regularly creating snapshots of our development version which we consider stable enough for actual usage, the instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/v012_Installation here].
