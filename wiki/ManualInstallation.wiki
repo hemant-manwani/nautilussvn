@@ -5,32 +5,8 @@
 You can install the extension globally using the setup script (setup.py), here's how:
 
 {{{
-svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
-cd ~/nautilussvn
 sudo python setup.py install
 nautilus -q && nautilus &
 }}}
 
 And you're done.
-
-= Installing locally from trunk =
-{{{
-svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
-
-mkdir -p ~/.nautilus/python-extensions
-ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
-mkdir -p ~/.icons
-ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
-}}}
-
-Add the following line to to /etc/environment (replace $USER with your username):
-
-{{{
-PYTHONPATH="/home/$USER/nautilussvn/"
-}}} 
-
-Note that /etc/environment is only parsed when X is started, but you can load the extension immediately using:
-{{{
-export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
-nautilus -q && nautilus &
-}}}
