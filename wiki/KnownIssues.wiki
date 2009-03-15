@@ -1,0 +1,32 @@
+#summary Known issues with the latest release.
+#labels Featured,Phase-Deploy,Phase-QA
+
+= Introduction =
+
+Obviously all bugs in our [http://code.google.com/p/nautilussvn/issues/list?can=2&q=-status%3ANew+type%3ADefect issue tracker] are known issues, however here are some of the really important ones.
+
+= Known issues =
+
+== The main context menu will appear with items in incorrect places ==
+
+  See: [http://code.google.com/p/nautilussvn/issues/detail?id=96 Issue #96]
+
+This is a bug in Nautilus (we think) and so far we haven’t found a workaround. If you get this, most of the time you can click away (in the Nautilus background) and then click back on the original item, and this will give you a correct menu. 
+
+If you want to try to find a workaround for us, we’ve created a simple test extension at http://nautilussvn.googlecode.com/files/contextmenubugtest.py. Put this in your ~/.nautilus/python-extensions folder and type ‘nautilus -q && nautilus --no-desktop’ to load it up.  If you can find a workaround, you will be a hero!
+
+== Limitations of the current status checker ==
+
+There seem to be two situations where we can’t keep emblems up-to-date:
+
+=== When any file that isn't visible is modified ===
+
+  * An example: if you’re in /foo and the file /foo/bar/baz is modified (e.g. edited and saved) the status for /foo and /foo/bar will be incorrect. Nautilus doesn’t inform us about these modifications (which makes sense for normal extensions). We have been working on a new status monitor so in the future we will be able to do this.
+
+=== Adding items ===
+
+  * Another example: if you’re in /foo and /foo/bar is “normal” and you add /foo/bar/baz by selecting NautilusSvn -> Add from the context menu of /foo the statuses for /foo and /foo/bar willbe incorrect. We’re only rechecking the paths you originally selected and any item you saw that was either “added”,  “deleted”, “replaced”, “modified”, “missing”, “unversioned”, or “incomplete”. There might be something I can think up here that might not impact performance all too badly.
+
+=== Using the command-line svn client ===
+
+  * We've currently implemented something similar to a callback system for any functions called from the context menu. Once a function is done, we'll recheck the status for the relevant items. This obviously doesn't work when one uses the command-line client. With the exception of svn revert we currently cannot keep emblems up-to-date when you use the command-line client, you'll have to use F5 to refresh. Again, the new status monitor will eliminate this problem.
