@@ -1,0 +1,27 @@
+#summary Installation from SVN
+#labels Phase-Implementation
+
+= Local installation from SVN =
+
+Installing globally is precisely the same as described in ManualInstallation, however if you want to install NautilusSvn locally and be able to update with a simple 'svn update' command you'll have to follow these instructions: 
+
+{{{
+svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
+
+mkdir -p ~/.nautilus/python-extensions
+ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
+mkdir -p ~/.icons
+ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
+}}}
+
+Add the following line to to /etc/environment (replace $USER with your username):
+
+{{{
+PYTHONPATH="/home/$USER/nautilussvn/"
+}}} 
+
+Note that /etc/environment is only parsed when X is started, but you can load the extension immediately using:
+{{{
+export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
+nautilus -q && nautilus &
+}}}
