@@ -3,13 +3,15 @@
 
 As !NautilusSvn is under active development it's advised to keep track of [http://groups.google.com/group/nautilussvn/ the mailing list] and/or the [http://cobradragon.com/nautilussvn/ blog].
 
-== Packages ==
+== Official releases ==
+
+  _*There are no official releases as of yet*_
+
+== Latest beta release ==
 
   <font color="#00F">_*NOTE: this page is under construction, packages are not yet available.*_</font>
 
-We're currently working on a new version of !NautilusSvn and intend to release easy to install packages (including a Debian package) in the very near future. You will be able to find the packages in the [http://code.google.com/p/nautilussvn/downloads/list downloads section].
-
-Installing NautilusSvn is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
+Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
 
 <table border="0" cellpadding="5">
 <tr>
