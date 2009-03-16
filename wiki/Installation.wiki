@@ -11,7 +11,7 @@ As !NautilusSvn is under active development it's advised to keep track of [http:
 
   <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1-2 (17 march 2009). See [http://code.google.com/p/nautilussvn/source/diff?spec=svn1087&old=1065&r=1087&format=unidiff&path=%2Ftrunk%2Fpackages%2Fubuntu%2Fdebian%2Fchangelog changelog].*_</font>
 
-Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu, however we've written up extensive installation instructions for users of other Linux distros.
+Installing the !NautilusSvn beta release is currently the easiest for users of Ubuntu, however we've written up extensive installation instructions for users of other Linux distros.
 
 <table border="0" cellpadding="5">
 <tr>
