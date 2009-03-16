@@ -17,6 +17,10 @@ This is a bug in Nautilus (we think) and so far we haven’t found a workaround.
 
 If you want to try to find a workaround for us, we’ve created a simple test extension at http://nautilussvn.googlecode.com/files/contextmenubugtest.py. Put this in your ~/.nautilus/python-extensions folder and type ‘nautilus -q && nautilus --no-desktop’ to load it up.  If you can find a workaround, you will be a hero!
 
+== Dialogs display full paths, not relative ==
+
+The dialogs should ideally only display the paths relative to the in Nautilus currently visible directory. This behavior was implemented before, however the way it was (using os.chdir calls) was causing Nautilus to reject to unmount removable devices ([http://code.google.com/p/nautilussvn/issues/detail?id=89 Issue #89]) so we removed it and are working on a replacement.
+
 == Limitations of the current status checker ==
 
 There are three situations where we currently can’t keep emblems up-to-date:
