@@ -9,27 +9,25 @@ As !NautilusSvn is under active development it's advised to keep track of [http:
 
 == Latest beta release ==
 
-  <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1 (16 march 2009)*_</font>
+  <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1-2 (17 march 2009). See [http://code.google.com/p/nautilussvn/source/diff?spec=svn1087&old=1065&r=1087&format=unidiff&path=%2Ftrunk%2Fpackages%2Fubuntu%2Fdebian%2Fchangelog changelog].*_</font>
 
-  <font color="#f00">_*README: for some users emblems are not being displayed after installing, if so please execute: `sudo gtk-update-icon-cache /usr/share/icons/hicolor/`. We'll update the Debian package and the setup script ASAP to do this automatically.*_</font> (thanks to darkstar6262 for letting us know this, see [http://code.google.com/p/nautilussvn/issues/detail?id=87 Issue #87])
-
-Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
+Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu, however we've written up extensive installation instructions for users of other Linux distros.
 
 <table border="0" cellpadding="5">
 <tr>
-<td>[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu1_all.deb http://nautilussvn.googlecode.com/svn/wiki/media/ubuntu.png]</td>
+<td>[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu2_all.deb http://nautilussvn.googlecode.com/svn/wiki/media/ubuntu.png]</td>
 <td>
-*Debian package for Ubuntu 8.10*
+*Debian package for Ubuntu 8.10 and 8.04*
 
-[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu1_all.deb Download this] if you are running Ubuntu, no need to follow any instructions apart from enabling the community repository.
+[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu2_all.deb Download this] if you are running Ubuntu, no need to follow any instructions apart from enabling the community repository.
 </td>
 </tr>
 <tr>
-<td>[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-beta1.tar.gz http://nautilussvn.googlecode.com/svn/wiki/media/tarball.png]</td>
+<td>[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-beta1-2.tar.gz http://nautilussvn.googlecode.com/svn/wiki/media/tarball.png]</td>
 <td>
 *Tarball for manual installation*
 
-[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-beta1.tar.gz Download this] if you are running another distro. Follow the [http://code.google.com/p/nautilussvn/wiki/v012_Installation manual installation instructions].
+[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-beta1-2.tar.gz Download this] if you are running another distro. Follow the [http://code.google.com/p/nautilussvn/wiki/v012_Installation manual installation instructions].
 </td>
 </tr>
 </table>
