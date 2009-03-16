@@ -64,6 +64,8 @@ yum install nautilus-python pysvn python-configobj subversion meld
 
 == CentOS 5.2 ==
 
+Note: Even with no dbus requirement, still doesn't work well.  The nautilus-python (0.5.0) doesn't work very well.
+
 1. Add the RPMForge Repositories.  Instructions are at http://wiki.centos.org/AdditionalResources/Repositories/RPMForge
 
 2. Install Packages:
@@ -80,6 +82,7 @@ yum install pygtk2 subversion subversion-devel gcc gcc-c++ neon-devel python-dev
  * Uncompress the pysvn tar.gz file then run the following commands:
 {{{
 cd Source
+python setup.py backport
 python setup.py configure
 make
 mkdir /usr/lib/python2.4/site-packages/pysvn
