@@ -21,7 +21,7 @@ Installing the NautilusSvn beta release is currently the easiest for users of Ub
 <td>
 *Debian package for Ubuntu 8.10*
 
-[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu1_all.deb Download this] if you are running Ubuntu, no need to follow any instructions.
+[http://nautilussvn.googlecode.com/files/nautilussvn_0.12-1ubuntu1_all.deb Download this] if you are running Ubuntu, no need to follow any instructions apart from enabling the community repository.
 </td>
 </tr>
 <tr>
