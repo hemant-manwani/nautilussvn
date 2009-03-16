@@ -4,6 +4,7 @@
 = Viewing and searching issues =
 
   * [http://code.google.com/p/nautilussvn/issues/list A list of all open issues (defects and feature requests).]
+  * [http://code.google.com/p/nautilussvn/issues/list?can=2&q=-priority%3ALow+-milestone%3AFuture A list of important open issues] (filtered out less important ones, should bring the list down quite a bit)
   * [http://code.google.com/p/nautilussvn/issues/advsearch The advanced search page.]
 
 = Submitting issues =
