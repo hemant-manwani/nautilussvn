@@ -11,6 +11,8 @@ As !NautilusSvn is under active development it's advised to keep track of [http:
 
   <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1 (16 march 2009)*_</font>
 
+  <font color="#f00">_*README: for some users emblems are not being displayed after installing, if so please execute: `sudo gtk-update-icon-cache /usr/share/icons/hicolor/`. We'll update the Debian package and the setup script ASAP to do this automatically.*_</font> (thanks to darkstar6262 for letting us know this, see [http://code.google.com/p/nautilussvn/issues/detail?id=87 Issue #87])
+
 Installing the NautilusSvn beta release is currently the easiest for users of Ubuntu (specifically Intrepid Ibex, or 8.10), however we've written up extensive installation instructions for users of other Linux distros.
 
 <table border="0" cellpadding="5">
