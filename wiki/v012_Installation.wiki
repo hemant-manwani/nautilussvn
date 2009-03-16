@@ -5,7 +5,7 @@
 
 = Dependencies =
 
-Here is a basic set of dependencies that you will need to install before you can install NautilusSvn.  The actual package names are different for each distribution.  For now, NautilusSvn is Linux only, because we rely on the pyinotify module, which uses inotify, a linux kernel feature.  In the future, we hope to use GIO to watch for file changes.
+Here is a basic set of dependencies that you will need to install before you can install NautilusSvn.  The actual package names are different for each distribution.  
 
 || *Program* || *Description* ||
 || [http://svn.gnome.org/viewvc/nautilus-python/ nautilus-python] || Nautilus extension python bindings ||
