@@ -32,6 +32,8 @@ Installing the NautilusSvn beta release is currently the easiest for users of Ub
 </tr>
 </table>
 
+Be sure to restart Nautilus (nautilus -q && nautilus &) for NautilusSvn to get loaded.
+
 == Development snapshots ==
 
 Currently we're regularly creating snapshots of our development version (trunk). We consider these snapshots stable enough for actual usage, heck we personally run trunk and have yet to lose any precious modifications `*knocks on wood*` ;-). 
