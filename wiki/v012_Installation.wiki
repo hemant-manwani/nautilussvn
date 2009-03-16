@@ -10,9 +10,7 @@ Here is a basic set of dependencies that you will need to install before you can
 || *Program* || *Description* ||
 || [http://svn.gnome.org/viewvc/nautilus-python/ nautilus-python] || Nautilus extension python bindings ||
 || [http://www.voidspace.org.uk/python/configobj.html configobj] || Python configuration module ||
-|| [http://pyinotify.sourceforge.net/ pyinotify] || Python bindings for monitoring filesystems changes ||
 || [http://www.pygtk.org/ pygtk] || GTK+ python bindings ||
-|| [http://www.freedesktop.org/wiki/Software/DBusBindings python-dbus] || Dbus python bindings ||
 || [http://pysvn.tigris.org/ pysvn] || Subversion python bindings ||
 || [http://subversion.tigris.org/ subversion] || Subversion, duh! ||
 || [http://meld.sourceforge.net/ meld] || A GTK+ diff tool ||
@@ -23,7 +21,7 @@ Here is a basic set of dependencies that you will need to install before you can
 
 1. Install the following packages through your package manager.
 {{{
-sudo apt-get install python-nautilus python-configobj python-pyinotify python-gtk2 python-glade2 python-dbus python-svn subversion meld
+sudo apt-get install python-nautilus python-configobj python-gtk2 python-glade2 python-svn subversion meld
 }}}
 
 2. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
@@ -34,17 +32,13 @@ sudo apt-get install python-nautilus python-configobj python-pyinotify python-gt
 
 2. Install packages:
 {{{
-zypper install python-nautilus dbus-1-python dbus-1-python-devel python-gtk python-gtk-devel python-pysvn gcc subversion meld
+zypper install python-nautilus python-gtk python-gtk-devel python-pysvn subversion meld
 }}}
 
-3. Get python-pyinotify http://pyinotify.sourceforge.net/
-    # Must get v0.7.1, as 0.8.x doesn't work atm
-    # Uncompress the bz2 file and in the pyinotify folder type: sudo python setup.py install
-
-4. Get python-configobj at http://www.voidspace.org.uk/python/configobj.html#files
+3. Get python-configobj at http://www.voidspace.org.uk/python/configobj.html#files
     * Copy configobj.py to /usr/lib/python2.6/site-packages/
 
-5. Edit the file /usr/lib/python2.6/site-packages/pysvn/__init__.py
+4. Edit the file /usr/lib/python2.6/site-packages/pysvn/__init__.py
     There is a place where it says:
 {{{
 elif maj_min == (2,5):
@@ -57,44 +51,31 @@ elif maj_min == (2,6):
     _pysvn = _pysvn_2_6
 }}}
 
-6. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
+5. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == Fedora 10 ==
 
 1. Install Packages:
 {{{
-yum install nautilus-python dbus-python pysvn python-configobj gnome-python2-devel subversion meld gcc
+yum install nautilus-python pysvn python-configobj subversion meld
 }}}
-
-2. Get python-pyinotify http://pyinotify.sourceforge.net/
-  # Must get v0.7.1, as 0.8.x doesn't work atm
-  # Can get a Fedora 9 RPM from here: http://rpmfind.net/linux/rpm2html/search.php?query=python-inotify
-
-  Note: I couldn't get the bz2 file from the pyinotify site to install, but the Fedora 9 0.7.1 RPMs linked to above will install and work for F10.
 
 3. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == CentOS 5.2 ==
 
-*Note: Does not yet work due to issues with dbus-python.*
-
 1. Add the RPMForge Repositories.  Instructions are at http://wiki.centos.org/AdditionalResources/Repositories/RPMForge
 
 2. Install Packages:
 {{{
-yum install pygtk2 dbus-python subversion subversion-devel gcc gcc-c++ neon-devel python-devel pygtk2-devel eel2 eel2-devel python-configobj nautilus-devel meld
+yum install pygtk2 subversion subversion-devel gcc gcc-c++ neon-devel python-devel pygtk2-devel eel2 eel2-devel python-configobj nautilus-devel meld
 }}}
 
 3. Download nautilus-python bindings at http://ftp.acc.umu.se/pub/GNOME/sources/nautilus-python
  * Make sure you get v0.5.0, NOT v0.5.1
  * Build/install with: su -c './configure ; make ; make install'
 
-4. Get python-pyinotify at http://pyinotify.sourceforge.net/
- * Don't install the version in rpmforge.  It's too old.
- * Must get v0.7.1, as 0.8.x doesn't work atm
- * Uncompress the bz2 file and in the pyinotify folder type: su -c 'python setup.py install'
-
-5. Download and build the pysvn extension source kit.
+5. Download and build the pysvn extension source kit.  You'll need one built to work for subversion 1.4.
  * http://pysvn.tigris.org/project_downloads.html
  * Uncompress the pysvn tar.gz file then run the following commands:
 {{{
@@ -115,7 +96,7 @@ All of the packages required to run nautilussvn can be found in Arch Linux User-
 1. Install packages using yaourt:
 
 {{{
-yaourt -S python-nautilus python-configobj pyinotify pygtk dbus-python pysvn subversion meld
+yaourt -S python-nautilus python-configobj pygtk pysvn subversion meld
 }}}
 
 2. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
