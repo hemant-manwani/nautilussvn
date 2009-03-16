@@ -17,7 +17,7 @@ Here is a basic set of dependencies that you will need to install before you can
 
 = Distro-specific instructions =
 
-== Ubuntu 8.10 ==
+== Ubuntu 8.10 or 8.04 ==
 
 1. Install the following packages through your package manager.
 {{{
