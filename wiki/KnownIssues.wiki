@@ -21,6 +21,10 @@ If you want to try to find a workaround for us, we’ve created a simple test ex
 
 The dialogs should ideally only display the paths relative to the in Nautilus currently visible directory. This behavior was implemented before, however the way it was (using os.chdir calls) was causing Nautilus to reject to unmount removable devices ([http://code.google.com/p/nautilussvn/issues/detail?id=89 Issue #89]) so we removed it and are working on a replacement.
 
+== No submenu for NautilusSvn menu item on background or File menu ==
+
+This problem only occurs on older versions of Nautilus e.g. 2.22.2 (or everything <= 2.24.1). Nautilus 2.22.2 is the version included with Ubuntu 8.04.
+
 == Limitations of the current status checker ==
 
 There are three situations where we currently can’t keep emblems up-to-date:
