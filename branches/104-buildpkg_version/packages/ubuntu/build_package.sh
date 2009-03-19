@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
 # TODO:
-# . make the script less stateful -- use () and/or absolute paths
 # . give the script a proper usage() function
-# . some of the double-quotes below may not be necessary
 
-# SOURCEDIR is needed to copy the changelog back later
 SOURCEDIR=`pwd`
 if [ ! -d ${SOURCEDIR}/packages ]; then
     echo "ERROR:"
@@ -40,8 +37,8 @@ cp -R $BUILDSRC{/packages/ubuntu/debian/,/}
 (cd $BUILDSRC && debuild)
 
 # Let the user know he should commit
-echo ""
+echo 
 echo "================================================================="
 echo " PLEASE COMMIT THE NEW CHANGELOG"
 echo "================================================================="
-echo ""
+echo 
