@@ -48,12 +48,16 @@ class NautilusSvnTest(TestCase):
     def test_package_version(self):
         """Make sure the package version is reported properly."""
         result = nautilussvn.package_version()
-        self.assertEqual(result, "0.12")
+        for character in result:
+            if not (character.isdigit() or character == '.'):
+                self.fail("Not all characters in package version "
+                          "'%s' were digits or dots." % result)
 
     def test_package_identifier(self):
         """Make sure the package identifier is reported properly."""
         result = nautilussvn.package_identifier()
-        self.assertEqual(result, "nautilussvn-0.12")
+        version = nautilussvn.package_version()
+        self.assertEqual(result, "nautilussvn-%s" % version)
 
 
 if __name__ == "__main__":
