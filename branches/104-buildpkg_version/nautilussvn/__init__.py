@@ -43,10 +43,11 @@ _gettext.textdomain(APP_NAME)
 
 gettext = _gettext.translation(APP_NAME, LOCALE_DIR, languages=langs, fallback=True)
 
+
 def package_name():
     """
     Report the application name in a form appropriate for building
     package files.
 
     """
-    return lower(APP_NAME)
+    return APP_NAME.lower()
