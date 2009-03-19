@@ -25,6 +25,12 @@ Unit tests for the top-level nautilussvn package.
 
 """
 
+# make sure the current working copy is in sys.path before anything else
+from os.path import abspath, dirname, join, normpath
+import sys
+toplevel = normpath(join(dirname(abspath(__file__)), '..', '..'))
+sys.path.insert(0, toplevel)
+
 from unittest import TestCase, main
 import nautilussvn
 
