@@ -39,6 +39,16 @@ class NautilusSvnTest(TestCase):
         result = nautilussvn.package_name()
         self.assertEqual(result, "nautilussvn")
 
+    def test_package_version(self):
+        """Make sure the package version is reported properly."""
+        result = nautilussvn.package_version()
+        self.assertEqual(result, "0.12")
+
+    def test_package_identifier(self):
+        """Make sure the package identifier is reported properly."""
+        result = nautilussvn.package_identifier()
+        self.assertEqual(result, "nautilussvn-0.12")
+
 
 if __name__ == "__main__":
     main()
