@@ -145,15 +145,11 @@ class Commit(InterfaceView):
             if (not item.is_versioned 
                     or item.text_status == self.vcs.STATUS["missing"]):
                 checked = False
-            
-            ext = ""
-            if os.path.isfile(item.path):
-                ext = nautilussvn.lib.helper.get_file_extension(item.path)
-            
+
             self.files_table.append([
                 checked,
                 item.path, 
-                ext,
+                nautilussvn.lib.helper.get_file_extension(item.path),
                 item.text_status,
                 item.prop_status
             ])
