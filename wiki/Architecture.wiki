@@ -2,7 +2,6 @@
 #labels Phase-Implementation
 
 = Introduction =
-In this page we'll look at what exactly a Nautilus extension is (the interface etc.) and dive into the NautilusSvn specifics.
 
 The main concerns for NautilusSvn are:
 
@@ -10,25 +9,6 @@ The main concerns for NautilusSvn are:
     * Eventually we'll want to be able to support multiple version control systems, but at the moment we'll just focus on Subversion
   * Separation from the actual implementation (e.g. Nautilus, Thunar, Dolphin, PCManFM etc.)
   * Minimizing repetition (repeating statements, logic etc.)
-
-= General =
-
-== The basics of a Nautilus extension ==
-NautilusSvn is a Nautilus extension written in Python using the [http://svn.gnome.org/viewvc/nautilus-python/trunk/ Python bindings for the Nautilus extension library] (nautilus-python in short). For an extensive introduction see [http://www.campd.org/stuff/docs/extending-nautilus/NautilusExtensions.html Nautilus Extensions].
-
-A Nautilus extension can implement a couple of providers (interfaces), namely: 
-
-  * NautilusInfoProvider: Information providers are used to add data to a NautilusFileInfo object and keep it up to date.
-  * NautilusColumnProvider: Column providers add information to display in the list and icon views.
-  * NautilusMenuProvider: Menu providers add menu items. Menu items can be added in three places: Per-file (shown in the file's context menu and the Edit menu), per-folder (shown in the background context menu and the File menu), and the toolbar.
-  * NautilusPropertyPageProvider: Property providers add a property page to the file properties dialog.
-
-Each of these providers come with their own set of functions one has to implement which in turn Nautilus will call to get 'things done'. We'll take a look specifically at NautilusInfoProvider.
-
-== NautilusInfoProvider ==
-When implementing the NautilusInfoProvider interface one has to implement the update_file_info function. 
-
-  * TODO: write something about when update_file_info is exactly called and the relation with invalidate_extension_info on a GnomeVFSFileInfo. 
 
 = Specifics =
 
