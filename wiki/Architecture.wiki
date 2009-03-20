@@ -3,6 +3,8 @@
 
 = Introduction =
 
+For a general introduction to developing Nautilus extensions see http://live.gnome.org/Nautilus/Development/Extensions.
+
 The main concerns for NautilusSvn are:
 
   * Separation of actual version control logic and UI logic
