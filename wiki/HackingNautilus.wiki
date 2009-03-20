@@ -1,4 +1,4 @@
 #summary This page shows you how to work on Nautilus
 #labels Phase-Implementation
 
- _*Moved to http://live.gnome.org/Nautilus/HackingNautilus.*_
+ _*Moved to [http://live.gnome.org/Nautilus/HackingNautilus].*_
