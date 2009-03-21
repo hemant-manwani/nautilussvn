@@ -31,6 +31,7 @@ import os
 import os.path
 import subprocess
 import re
+import datetime
 import time
 import shutil
 
@@ -315,7 +316,8 @@ def launch_diff_tool(path1, path2=None):
     
 def get_file_extension(path):
     """
-    Wrapper that retrieves a file path's extension
+    Wrapper that retrieves a file path's extension.  If the given path is not
+    a file, don't try to find an extension, because it would be invalid.
     
     @type   path:   string
     @param  path:   A filename or path.
@@ -325,7 +327,7 @@ def get_file_extension(path):
     
     """
     
-    return os.path.splitext(path)[1]
+    return (os.path.isfile(path) and os.path.splitext(path)[1] or "")
     
 def open_item(path):
     """
@@ -481,3 +483,32 @@ def abspaths(paths):
         index += 1
     
     return paths
+
+def pretty_timedelta(time1, time2, resolution=None):
+    """
+    Calculate time delta between two C{datetime} objects.
+    (the result is somewhat imprecise, only use for prettyprinting).
+    
+    Copied from: http://trac.edgewall.org/browser/trunk/trac/util/datefmt.py
+    """
+    
+    if time1 > time2:
+        time2, time1 = time1, time2
+    units = ((3600 * 24 * 365, 'year',   'years'),
+             (3600 * 24 * 30,  'month',  'months'),
+             (3600 * 24 * 7,   'week',   'weeks'),
+             (3600 * 24,       'day',    'days'),
+             (3600,            'hour',   'hours'),
+             (60,              'minute', 'minutes'))
+    diff = time2 - time1
+    age_s = int(diff.days * 86400 + diff.seconds)
+    if resolution and age_s < resolution:
+        return ''
+    if age_s <= 60 * 1.9:
+        return '%i second%s' % (age_s, age_s != 1 and 's' or '')
+    for u, unit, unit_plural in units:
+        r = float(age_s) / float(u)
+        if r >= 1.9:
+            r = int(round(r))
+            return '%d %s' % (r, r == 1 and unit or unit_plural)
+    return ''
