@@ -1,5 +1,5 @@
 #summary Describe the installation procedure for NautilusSvn
-#labels Phase-Deploy
+#labels Phase-Deploy,Deprecated
 
 <wiki:toc max_depth="2" />
 
