@@ -1,5 +1,5 @@
 #summary NautilusSvn has several configuration options
-#labels Phase-Deploy
+#labels Phase-Deploy,Deprecated
 
 There are several user-definable switches in the file [http://code.google.com/p/nautilussvn/source/browse/trunk/helper.py helper.py] that change the behaviour of the extension.
 
