@@ -2,28 +2,28 @@
 
 == End-user documentation ==
 
-|| *[Screenshots]* || Screenshots of NautilusSvn hard at work   ||
-|| *[Installation]* || Installation instructions ||
-|| *[KnownIssues Known issues]* || Known issues with the latest release ||
-|| *[Issues]* || Everything you need to know about submitting issues ||
-|| *[FAQ]* || Frequently Asked Questions (FAQ) ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/photos.png] *[Screenshots]* || Screenshots of NautilusSvn hard at work   ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/install.png] *[Installation]* || Installation instructions ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/gtk-stop.png] *[KnownIssues Known issues]* || Known issues with the latest release ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/bug.png] *[Issues]* || Everything you need to know about submitting issues ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/faq.png] *[FAQ]* || Frequently Asked Questions (FAQ) ||
 
 == Project management ==
 
-|| *[Roadmap]* || The future of NautilusSvn ||
-|| *[CodeSprints Code sprints]* || Used to scribble down notes when doing sprints ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/calendar.png] *[Roadmap]* || The future of NautilusSvn ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/logout.png] *[CodeSprints Code sprints]* || Used to scribble down notes when doing sprints ||
 
 == Release management ==
 
-|| *[Packaging]* || Describes how NautilusSvn is packaged for several distributions  ||
-  
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/package.png] *[Packaging]* || Describes how NautilusSvn is packaged for several distributions  ||
+
 == Development ==
 
-|| *[CodingStyle Coding style]* || Introduction to the style we use for our code. ||
-|| *[Architecture]* || Describes the architecture of NautilusSvn ||
-|| *[Development Installation]* || Installing NautilusSvn from SVN ||
-|| *[Translating]* || A guide for contributing translations to the NautilusSvn project  ||
-|| *[Testing]* || Describes everything testing related  ||
-|| *[Debugging]* || Describes everything about debugging  ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/graphics.png] *[CodingStyle Coding style]* || Introduction to the style we use for our code. ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/page-setup.png] *[Architecture]* || Describes the architecture of NautilusSvn ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/install.png] *[Development Installation]* || Installing NautilusSvn from SVN ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/language.png] *[Translating]* || A guide for contributing translations to the NautilusSvn project  ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/joystick.png] *[Testing]* || Describes everything testing related  ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/bug.png] *[Debugging]* || Describes everything about debugging  ||
 
 [http://code.google.com/p/nautilussvn/w/list View the complete list].
