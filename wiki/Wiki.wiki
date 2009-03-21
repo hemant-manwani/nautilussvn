@@ -6,16 +6,8 @@
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/install.png] *[Installation]* || Installation instructions ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/gtk-stop.png] *[KnownIssues Known issues]* || Known issues with the latest release ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/bug.png] *[Issues]* || Everything you need to know about submitting issues ||
-|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/faq.png] *[FAQ]* || Frequently Asked Questions (FAQ) ||
-
-== Project management ==
-
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/calendar.png] *[Roadmap]* || The future of NautilusSvn ||
-|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/logout.png] *[CodeSprints Code sprints]* || Used to scribble down notes when doing sprints ||
-
-== Release management ==
-
-|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/package.png] *[Packaging]* || Describes how NautilusSvn is packaged for several distributions  ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/faq.png] *[FAQ]* || Frequently Asked Questions (FAQ) ||
 
 == Development ==
 
@@ -25,5 +17,7 @@
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/language.png] *[Translating]* || A guide for contributing translations to the NautilusSvn project  ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/joystick.png] *[Testing]* || Describes everything testing related  ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/bug.png] *[Debugging]* || Describes everything about debugging  ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/package.png] *[Packaging]* || Describes how NautilusSvn is packaged for several distributions  ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/logout.png] *[CodeSprints Code sprints]* || Used to scribble down notes when doing sprints ||
 
 [http://code.google.com/p/nautilussvn/w/list View the complete list].
