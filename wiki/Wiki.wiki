@@ -4,7 +4,7 @@
 
 || *[Screenshots]* || Screenshots of NautilusSvn hard at work   ||
 || *[Installation]* || Installation instructions ||
-|| *[Known issues]* || Known issues with the latest release ||
+|| *[KnownIssues Known issues]* || Known issues with the latest release ||
 || *[Issues]* || Everything you need to know about submitting issues ||
 || *[FAQ]* || Frequently Asked Questions (FAQ) ||
 
