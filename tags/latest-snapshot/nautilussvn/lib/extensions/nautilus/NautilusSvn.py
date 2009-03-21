@@ -30,6 +30,7 @@ import traceback
 import copy
 import os.path
 from os.path import isdir, isfile, realpath, basename
+import datetime
 
 import gnomevfs
 import nautilus
@@ -39,7 +40,9 @@ import gtk
 
 from nautilussvn.lib.vcs.svn import SVN
 
-from nautilussvn.lib.helper import launch_ui_window, launch_diff_tool, get_file_extension, get_common_directory
+from nautilussvn.lib.helper import launch_ui_window, launch_diff_tool
+from nautilussvn.lib.helper import get_file_extension, get_common_directory
+from nautilussvn.lib.helper import pretty_timedelta
 from nautilussvn.lib.decorators import timeit, disable
 
 from nautilussvn.lib.log import Log, reload_log_settings
@@ -165,6 +168,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
                 "author",
                 "SVN Author",
                 "The SVN author"
+            ),
+            nautilus.Column(
+                "NautilusSvn::age_column",
+                "age",
+                "SVN Age",
+                "The SVN age"
             )
         )
     
@@ -219,7 +228,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             "status": "",
             "revision": "",
             "url": "",
-            "author": ""
+            "author": "",
+            "age": ""
         }
         
         try:
@@ -233,6 +243,12 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             values["revision"] = str(info["commit_revision"].number)
             values["url"] = str(info["url"])
             values["author"] = str(info["commit_author"])
+            values["age"] = str(
+                pretty_timedelta(
+                    datetime.datetime.fromtimestamp(info["commit_time"]), 
+                    datetime.datetime.now()
+                )
+            )
         except: 
             log.exception()
             
@@ -248,7 +264,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if self.statuses[path] in self.STATUSES_TO_MONITOR:
             self.monitored_files.append(item)
         else:
-            # Using try...except because it might not even be monitored
+            # This file doesn't interest us remove it from the monitored_files
+            # list using try...except because it might not even be monitored.
             try:
                 self.monitored_files.remove(item)
                 log.debug("update_file_info() removed %s from monitored_files" % path)
@@ -1290,10 +1307,12 @@ class MainContextMenu:
         
         for definition_item in menu_definition:
             is_last = (index + 1 == length)
+            
+            # Execute the condition associated with the definition_item
+            # which will figure out whether or not to display this item.
             if definition_item["condition"]():
-
                 # If the item is a separator, don't show it if this is the first
-                # or last item, or if the previous item was a separator
+                # or last item, or if the previous item was a separator.
                 if (definition_item["label"] == self.SEPARATOR and
                         (is_first or is_last or previous_label == self.SEPARATOR)):
                     index += 1
@@ -1311,6 +1330,7 @@ class MainContextMenu:
                 if (definition_item["label"] == self.SEPARATOR): 
                   menu_item.set_property("sensitive", False)
                 
+                # Make sure all the signals are connected.
                 for signal, value in definition_item["signals"].items():
                     if value["callback"] != None:
                         # FIXME: the adding of arguments need to be done properly
@@ -1345,6 +1365,7 @@ class MainContextMenu:
             index += 1
             
         return menu
+    
     #
     # Conditions
     #
