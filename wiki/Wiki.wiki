@@ -1,0 +1,29 @@
+#summary Landing page
+
+== End-user documentation ==
+
+|| *[Screenshots]* || Screenshots of NautilusSvn hard at work   ||
+|| *[Installation]* || Installation instructions ||
+|| *[Known issues]* || Known issues with the latest release ||
+|| *[Issues]* || Everything you need to know about submitting issues ||
+|| *[FAQ]* || Frequently Asked Questions (FAQ) ||
+
+== Project management ==
+
+|| *[Roadmap]* || The future of NautilusSvn ||
+|| *[CodeSprints Code sprints]* || Used to scribble down notes when doing sprints ||
+
+== Release management ==
+
+|| *[Packaging]* || Describes how NautilusSvn is packaged for several distributions  ||
+  
+== Development ==
+
+|| *[CodingStyle Coding style]* || Introduction to the style we use for our code. ||
+|| *[Architecture]* || Describes the architecture of NautilusSvn ||
+|| *[Development Installation]* || Installing NautilusSvn from SVN ||
+|| *[Translating]* || A guide for contributing translations to the NautilusSvn project  ||
+|| *[Testing]* || Describes everything testing related  ||
+|| *[Debugging]* || Describes everything about debugging  ||
+
+[http://code.google.com/p/nautilussvn/w/list View the complete list].
