@@ -4,6 +4,15 @@
 
 = 22 march 2009 =
 
+== VCS terminology ==
+
+|| *Subversion* || *Bazaar* || *Git* || *Monotone* ||
+|| Create       || Init     ||       ||            ||
+|| Checkout     || Branch   || Clone ||            ||
+|| Commit       || Commit   ||       ||            ||
+||              || Push     ||       ||            ||
+|| Update       || Pull     ||       ||            ||
+
 == Organizing modules for VCS abstraction ==
 
 I'm thinking about organizing everything as such:
