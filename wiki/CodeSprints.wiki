@@ -2,6 +2,27 @@
 
 <wiki:toc max_depth="2" />
 
+= 22 march 2009 =
+
+== Organizing modules for VCS abstraction ==
+
+I'm thinking about organizing everything as such:
+
+{{{
+nautilussvn.base.util
+nautilussvn.base.ui
+
+nautilussvn.svn.util
+nautilussvn.svn.ui
+nautilussvn.svn.extensions.nautilus
+
+nautilussvn.git.util
+nautilussvn.git.ui
+nautilussvn.git.extensions.nautilus
+}}}
+
+
+
 = 15 march 2009 =
 
 == Show log messages when updating ==
