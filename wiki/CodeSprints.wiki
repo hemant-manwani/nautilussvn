@@ -26,7 +26,8 @@ Instead of trying to generalize everything we would simply offer a base infrastr
   * watch manager
   * utility functions
   * settings manager (back-end)
-  * logging, context menu (generation)
+  * logging
+  * context menu (generation)
   * generic widgets
 
 And then each VCS would implement: 
