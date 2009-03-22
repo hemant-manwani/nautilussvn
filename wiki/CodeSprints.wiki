@@ -21,7 +21,7 @@ nautilussvn.git.ui
 nautilussvn.git.extensions.nautilus
 }}}
 
-
+Instead of trying to generalize everything we would simply offer a base infrastructure for VCS extensions with: watch manager, utility functions, settings manager (back-end), logging, context menu (generation) and generic widgets. And then each VCS would implement: supported columns, emblem handler, context menu (definitions, conditions and callbacks), a property page, all needed dialogs etc. Where possible we might generalize though. I'm still thinking this through.
 
 = 15 march 2009 =
 
