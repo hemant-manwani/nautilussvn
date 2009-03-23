@@ -45,4 +45,4 @@ Not yet, but this is definitely something on our minds. We've abstracted the ver
 
 = Does this run on FreeBSD? =
 
-At the moment we're using pyinotify (inotify) which is the Python interface to inotify, a Linux kernel subsystem. BSD systems use kqueue. So no. But we're planning to use gio.FileMonitor which will abstract the file watching process and is available on BSD. See [http://code.google.com/p/nautilussvn/issues/detail?id=20 Issue #20].
+We haven't tried it yet, but if you'd like to do some testing, please let us know!
