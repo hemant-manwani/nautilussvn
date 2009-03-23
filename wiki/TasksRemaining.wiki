@@ -1,7 +1,0 @@
-#summary Tasks remaining for the upcoming release
-#labels Phase-Requirements
-
-= Future =
-
-  * Dialogs should always be centered relative to their parent (in our case Nautilus). These dialogs are transient (see set_transient_for, which we cannot use). -- adamplumb
-  * Add missing merge options to the final page of the merge wizard (This needs to wait until we do further testing with the merge wizard) -- adamplumb
