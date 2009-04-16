@@ -1,4 +1,5 @@
 #summary Landing page
+#labels Featured
 
 == End-user documentation ==
 
@@ -13,7 +14,7 @@
 
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/graphics.png] *[CodingStyle Coding style]* || Introduction to the style we use for our code. ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/page-setup.png] *[Architecture]* || Describes the architecture of NautilusSvn ||
-|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/install.png] *[Development Installation]* || Installing NautilusSvn from SVN ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/install.png] *[DevelopmentInstallation Development Installation]* || Installing NautilusSvn from SVN ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/language.png] *[Translating]* || A guide for contributing translations to the NautilusSvn project  ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/joystick.png] *[Testing]* || Describes everything testing related  ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/bug.png] *[Debugging]* || Describes everything about debugging  ||
