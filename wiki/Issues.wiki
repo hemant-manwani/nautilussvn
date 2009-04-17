@@ -14,6 +14,8 @@ First use the [http://code.google.com/p/nautilussvn/issues/list?can=2&q=type:Def
 
   * Make sure you're running the latest release of `NautilusSvn`. 
 
+  * Enable debug mode in NautilusSvn -> Settings
+
   * Start up a terminal inside a working copy and restart Nautilus using the following command:
 
 {{{
