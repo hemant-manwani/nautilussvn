@@ -2,6 +2,10 @@
 
 <wiki:toc max_depth="2" />
 
+= 3 may 2009 =
+
+I want to refactor NautilusSvn and work on the performance issue. However this would really require re-implementing the StatusMonitor (including the DBus service). This was moved to Release 0.13 and I should probably work on just fixing some of the remaining bugs with 0.12 and do an actual release. But I'm not that interested in doing that right now.
+
 = 22 march 2009 =
 
 == VCS terminology ==
