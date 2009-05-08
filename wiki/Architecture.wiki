@@ -5,16 +5,30 @@
 
 [http://nautilussvn.googlecode.com/svn/wiki/images/architecture/overall_architecture.png]
 
-== Terminology ==
+== Components ==
 
-  * The word item refers to both files and directories.
+=== Extension ===
 
-== Observations ==
+`[..]`
 
-  * The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories).
+=== GUI ===
 
-== Unsorted ideas ==
+`[..]`
+
+=== D-Bus Service ===
+
+==== Status Monitor ====
+
+The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories).
+
+==== Cache ====
+
+`[..]`
+
+=== VCS Abstraction Layer ===
+
+`[..]`
+
+== Unsorted ==
 
   * Skipping intensive operations while on battery power may be a good idea.
-
-== Open questions ==
