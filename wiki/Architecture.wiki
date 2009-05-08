@@ -19,7 +19,7 @@
 
 ==== Status Monitor ====
 
-The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories).
+The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories). The mechanism used to actually monitor the working copies will likely be gio.GFileMonitor (see [http://code.google.com/p/nautilussvn/issues/detail?id=20 Issue #20]).
 
 ==== Cache ====
 
@@ -32,3 +32,5 @@ The only way to have the status for items stay up-to-date is by monitoring all i
 == Unsorted ==
 
   * Skipping intensive operations while on battery power may be a good idea.
+
+  * It may well be possible to do some magic and determine the status of a particular item without having to do an svn status check, but this looks really hard.
