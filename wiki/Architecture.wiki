@@ -1,6 +1,10 @@
 #summary This page, as the title implies, describes the architecture of NautilusSvn.
 #labels Phase-Implementation
 
+== Overall architecture ==
+
+[http://nautilussvn.googlecode.com/svn/wiki/images/architecture/overall_architecture.png]
+
 == Terminology ==
 
   * The word item refers to both files and directories.
@@ -14,4 +18,3 @@
   * Skipping intensive operations while on battery power may be a good idea.
 
 == Open questions ==
-
