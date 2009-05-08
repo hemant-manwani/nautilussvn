@@ -1,8 +1,7 @@
 #summary Anything publicity related to NautilusSvn
 #labels Community
 
-This is just a unorganized collection of sites where NautilusSvn was brought up.
-
+This is just a unorganized collection of sites where NautilusSvn was brought up. Feel free to add your own using the commentary functionality.
 
   * [http://www.google.com/url?sa=t&source=web&ct=res&cd=3&url=http%3A%2F%2Fdrjermy.co.uk%2F2008%2F11%2Fnautilussvn%2F&ei=bi1ZSc61B4mt-gblw-DIDw&usg=AFQjCNEyPFjxe4-LI0BIV8KXhetstjuw-w&sig2=iu-_bX5GQk8s4gyIr0RiSw The Jones family » NautilusSVN]
   * [http://blog.cafarelli.fr/post/2008/02/07/If-youre-looking-for-a-TortoiseSVN-clone-for-Gnome If you&#39;re looking for a TortoiseSVN clone for Gnome... - Voyageur&#39;s corner]
