@@ -3,7 +3,7 @@
 
 == Project related ==
 
-|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/mic.png] *[http://cobradragon.com/nautilussvn/ Development blog]* || The development blog. ||
+|| [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/mic.png] *[http://cobradragon.com/nautilussvn/ Development blog]* || The development blog ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/mail.png] *[http://groups.google.com/group/nautilussvn/ Mailing list]* || The mailing list for NautilusSvn ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/chat.png] *IRC Channel* || #nautilussvn at chat.freenode.net ||
 || [http://nautilussvn.googlecode.com/svn/wiki/images/wiki/news.png] *[Publicity]* || Anything publicity related to NautilusSvn ||
