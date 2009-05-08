@@ -9,4 +9,9 @@
 
   * The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories).
 
+== Unsorted ideas ==
+
+  * Skipping intensive operations while on battery power may be a good idea.
+
 == Open questions ==
+
