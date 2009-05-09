@@ -33,7 +33,7 @@ Then when the status monitor returns to an idle state the queue is processed, st
 
 == VCS Abstraction Layer ==
 
-`[..]`
+  _See [http://bitbucket.org/RonnyPfannschmidt/anyvc/ anyvc]_
 
 = Unsorted =
 
