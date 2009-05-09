@@ -1,3 +1,9 @@
+"""
+
+Our module for everything related to the Nautilus extension.
+  
+"""
+
 import os
 from os.path import isdir, isfile, realpath, basename
 
@@ -16,8 +22,10 @@ class NautilusSvn(nautilus.InfoProvider):
     EMBLEMS = {
         "added" :       "nautilussvn-added",
         "deleted":      "nautilussvn-deleted",
+        "removed":      "nautilussvn-deleted",
         "modified":     "nautilussvn-modified",
         "conflicted":   "nautilussvn-conflicted",
+        "missing":      "nautilussvn-conflicted",
         "normal":       "nautilussvn-normal",
         "clean":        "nautilussvn-normal",
         "ignored":      "nautilussvn-ignored",
@@ -99,7 +107,7 @@ class NautilusSvn(nautilus.InfoProvider):
             # A directory should have a modified status when any of its children
             # have a certain status (see modified_statuses above). Jason thought up 
             # of a nifty way to do this by using sets and the bitwise AND operator (&).
-            if len(set(self.MODIFIED_STATUSES) & set(statuses)):
+            if len(set(self.MODIFIED_STATUSES) & set(statuses[1:])):
                 return "modified"
         
         # If we're not a directory we end up here.
