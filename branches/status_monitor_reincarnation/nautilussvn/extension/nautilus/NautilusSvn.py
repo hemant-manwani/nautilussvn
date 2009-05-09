@@ -15,7 +15,7 @@ from anyvc.workdir import get_workdir_manager_for_path
 
 from nautilussvn.util.decorators import timeit
 
-class NautilusSvn(nautilus.InfoProvider):
+class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
     #: Maps statuses to emblems.
     #: TODO: should probably be possible to create this dynamically
@@ -43,6 +43,20 @@ class NautilusSvn(nautilus.InfoProvider):
         "modified",
         "missing"
     ]
+    
+    #: This is our lookup table for C{NautilusVFSFile}s which we need for attaching
+    #: emblems. This is mostly a workaround for not being able to turn a path/uri
+    #: into a C{NautilusVFSFile}. It looks like:::
+    #: 
+    #:     nautilusVFSFile_table = {
+    #:        "/foo/bar/baz": <NautilusVFSFile>
+    #:     
+    #:     }
+    #: 
+    #: Keeping track of C{NautilusVFSFile}s is a little bit complicated because
+    #: when an item is moved (renamed) C{update_file_info} doesn't get called. So
+    #: we also add C{NautilusVFSFile}s to this table from C{get_file_items} etc.
+    nautilusVFSFile_table = {}
     
     def __init__(self):
         print "Initializing nautilussvn extension"
@@ -128,3 +142,42 @@ class NautilusSvn(nautilus.InfoProvider):
         if not uri.startswith("file://"): return False
         
         return True
+    
+    def get_file_items(self, window, items):
+        """
+        Menu activated with items selected. Nautilus also calls this function
+        when rendering submenus, even though this is not needed since the entire
+        menu has already been returned.
+        
+        Note that calling C{nautilusVFSFile.invalidate_extension_info()} will 
+        also cause get_file_items to be called.
+        
+        @type   window: NautilusNavigationWindow
+        @param  window:
+        
+        @type   items:  list of NautilusVFSFile
+        @param  items:
+        
+        @rtype:         list of MenuItems
+        @return:        The context menu entries to add to the menu.
+        
+        """
+        pass
+        
+    def get_background_items(self, window, item):
+        """
+        Menu activated on entering a directory. Builds context menu for File
+        menu and for window background.
+        
+        @type   window: NautilusNavigationWindow
+        @param  window:
+        
+        @type   item:   NautilusVFSFile
+        @param  item:
+        
+        @rtype:         list of MenuItems
+        @return:        The context menu entries to add to the menu.
+        
+        """
+        pass
+        
