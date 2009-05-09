@@ -1,5 +1,5 @@
 #summary This page, as the title implies, describes the architecture of NautilusSvn.
-#labels Phase-Implementation
+#labels Phase-Design
 
 == Overall architecture ==
 
@@ -21,7 +21,11 @@
 
 The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories). The mechanism used to actually monitor the working copies is gio.GFileMonitor.
 
-The status monitor will notice all changes to all files/directories and the .svn/entries file (which is the only file modified when doing SVN operations). It will then add all of the modified paths to a queue which is handled when the status monitor returns to an idle state to prevent too many checks from being done and conflicting. 
+Upon encountering a working copy for the first time a recursive status check is done to build the status tree for that working copy. The status monitor will watch for any changes to all files/directories and the .svn/entries file (which is the only file modified when doing SVN operations) and modify the status tree accordingly. 
+
+Say you have a directory /foo containing bar and baz, where bar is added and baz is svn added. This results in changes for /foo/bar and /foo/.svn/entries. If we could figure out by comparing the previous entries file what item was modified we could then add /foo/bar and /foo/baz to the queue for later processing (to prevent too many checks from being done and conflicting). 
+
+Then when the status monitor returns to an idle state the queue is processed, status checks are done for /foo/bar and /foo/baz and their status in the tree is updated accordingly, the parent directories will then update their own status based on any children in the tree.
 
 ==== Cache ====
 
