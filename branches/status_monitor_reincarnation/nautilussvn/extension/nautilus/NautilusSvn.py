@@ -41,6 +41,25 @@ class NautilusSvn(nautilus.InfoProvider):
     
     @timeit
     def update_file_info(self, item):
+        """
+        
+        C{update_file_info} is called only when:
+        
+          - When you enter a directory (once for each item but only when the
+            item was modified since the last time it was listed)
+          - When you refresh (once for each item visible)
+          - When an item viewable from the current window is created or modified
+          
+        This is insufficient for our purpose because:
+        
+          - You're not notified about items you don't see (which is needed to 
+            keep the emblem for the directories above the item up-to-date)
+        
+        @type   item: NautilusVFSFile
+        @param  item: 
+        
+        """
+        
         if not self.valid_uri(item.get_uri()): return
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         
