@@ -1,23 +1,23 @@
 #summary This page, as the title implies, describes the architecture of NautilusSvn.
 #labels Phase-Design
 
-== Overall architecture ==
+= Overall architecture =
 
 [http://nautilussvn.googlecode.com/svn/wiki/images/architecture/overall_architecture.png]
 
-== Components ==
+= Components =
 
-=== Extension ===
-
-`[..]`
-
-=== GUI ===
+== Extension =
 
 `[..]`
 
-=== D-Bus Service ===
+== GUI ==
 
-==== Status Monitor ====
+`[..]`
+
+== D-Bus Service ==
+
+=== Status Monitor ===
 
 The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories). The mechanism used to actually monitor the working copies is gio.GFileMonitor.
 
@@ -27,15 +27,15 @@ Say you have a directory /foo containing bar and baz, where bar is added and baz
 
 Then when the status monitor returns to an idle state the queue is processed, status checks are done for /foo/bar and /foo/baz and their status in the tree is updated accordingly, the parent directories will then update their own status based on any children in the tree.
 
-==== Cache ====
+=== Cache ===
 
 `[..]`
 
-=== VCS Abstraction Layer ===
+== VCS Abstraction Layer ==
 
 `[..]`
 
-== Unsorted ==
+= Unsorted =
 
   * Skipping intensive operations while on battery power may be a good idea.
 
