@@ -3,7 +3,7 @@
 
 = Introduction =
 
-Obviously all bugs in our [http://code.google.com/p/nautilussvn/issues/list?can=2&q=-status%3ANew+type%3ADefect issue tracker] are known issues, however here are some of the really important ones.
+Obviously all bugs in our [http://code.google.com/p/nautilussvn/issues/list?can=2&q=-status%3ANew+-status%3ANeedInfo+type%3ADefect issue tracker] are known issues, however here are some of the really important ones.
 
 = Known issues =
 
