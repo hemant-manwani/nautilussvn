@@ -23,7 +23,7 @@ The only way to have the status for items stay up-to-date is by monitoring all i
 
 Upon encountering a working copy for the first time a recursive status check is done to build the status tree for that working copy. The status monitor will watch for any changes to all files/directories and the .svn/entries file (which is the only file modified when doing SVN operations) and modify the status tree accordingly. 
 
-Say you have a directory /foo containing bar and baz, where bar is added and baz is svn added. This results in changes for /foo/bar and /foo/.svn/entries. If we could figure out by comparing the previous entries file what item was modified we could then add /foo/bar and /foo/baz to the queue for later processing (to prevent too many checks from being done and conflicting). 
+Say you have a directory /foo containing bar and baz. The user then svn adds bar and modifies baz. This results in changes for /foo/bar and /foo/.svn/entries. If we could figure out by comparing the previous entries file what item was modified we could then add /foo/bar and /foo/baz to the queue for later processing (to prevent too many checks from being done and conflicting). 
 
 Then when the status monitor returns to an idle state the queue is processed, status checks are done for /foo/bar and /foo/baz and their status in the tree is updated accordingly, the parent directories will then update their own status based on any children in the tree.
 
