@@ -39,6 +39,4 @@ Then when the status monitor returns to an idle state the queue is processed, st
 
   * Skipping intensive operations while on battery power may be a good idea.
 
-  * It may well be possible to do some magic and determine the status of a particular item without having to do an svn status check, but this looks really hard.
-
   * I wonder if it's possible to analyze the .svn/entries file to determine precisely what files were modified.
