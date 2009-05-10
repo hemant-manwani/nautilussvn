@@ -286,7 +286,7 @@ class StatusMonitor:
       - When somebody adds a watch and if there's not already a watch for this 
         item it will add one.
     
-      - Use inotify to keep track of modifications of any watched items.
+      - Use gio.FileMonitor to keep track of modifications of any watched items.
         
       - Either on request, or when something interesting happens, it checks
         the status for an item which means:
@@ -352,6 +352,9 @@ class StatusMonitor:
         """
         Request a watch to be added for path. This function will figure out
         the best spot to add the watch (most likely a parent directory).
+        
+        It's only interesting to add a watch for what we think the user
+        may actually be looking at.
         """
         
         path_to_check = path
@@ -363,7 +366,7 @@ class StatusMonitor:
                 break;
                 
             path_to_check = os.path.split(path_to_check)[0]
-            
+        
         if not watch_is_already_set:
             self.watches.append(path)
             self.register_watches(path)
