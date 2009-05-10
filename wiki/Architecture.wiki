@@ -38,7 +38,7 @@ Initial:
 
 Consecutive:
 
-  * User do some operation
+  * User does some operation
   * Monitor notices changes
   * Monitor calls client back with the result
 
