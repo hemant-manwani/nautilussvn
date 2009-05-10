@@ -85,6 +85,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         if not self.valid_uri(item.get_uri()): return
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         
+        # Always replace the item in the table with the one we receive, because
+        # for example if an item is deleted and recreated the NautilusVFSFile
+        # we had before will be invalid (think pointers and such).
+        self.nautilusVFSFile_table[path] = item
+        
         workdir_manager = get_workdir_manager_for_path(path)
         if workdir_manager:
             status = self.get_text_status(workdir_manager, path)
@@ -162,7 +167,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         @return:        The context menu entries to add to the menu.
         
         """
-        pass
+        
+        paths = []
+        for item in items:
+            if self.valid_uri(item.get_uri()):
+                path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
+                paths.append(path)
+                self.nautilusVFSFile_table[path] = item
+
+        if len(paths) == 0: return []
         
     def get_background_items(self, window, item):
         """
@@ -179,5 +192,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         @return:        The context menu entries to add to the menu.
         
         """
-        pass
         
+        if not self.valid_uri(item.get_uri()): return
+        path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
+        self.nautilusVFSFile_table[path] = item
