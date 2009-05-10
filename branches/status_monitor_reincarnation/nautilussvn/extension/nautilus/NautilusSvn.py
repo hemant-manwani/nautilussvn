@@ -119,7 +119,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         # to figure out whether or not we should do a status check.
         has_watch = self.status_monitor.has_watch(path)
         is_in_a_or_a_working_copy = get_workdir_manager_for_path(path)
-
+        
         if not has_watch and is_in_a_or_a_working_copy:
             self.status_monitor.add_watch(path)
             
@@ -161,7 +161,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
 
         if len(paths) == 0: return []
     
-    @timeit
     def get_background_items(self, window, item):
         """
         Menu activated on entering a directory. Builds context menu for File
@@ -273,6 +272,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         self.set_emblem_by_path(path)
         item.invalidate_extension_info()
 
+import time
+
+import gobject
 import gio
 
 class StatusMonitor:
@@ -321,6 +323,16 @@ class StatusMonitor:
     
     """
     
+    #: A list of statuses which count as modified (for a directory) in 
+    #: TortoiseSVN emblem speak.
+    MODIFIED_STATUSES = [
+        "added",
+        "deleted",
+        "replaced",
+        "modified",
+        "missing"
+    ]
+    
     #: A list to keep track of the paths we're watching.
     #: 
     #: It looks like:::
@@ -331,15 +343,13 @@ class StatusMonitor:
     #:     
     watches = []
     
-    #: A list of statuses which count as modified (for a directory) in 
-    #: TortoiseSVN emblem speak.
-    MODIFIED_STATUSES = [
-        "added",
-        "deleted",
-        "replaced",
-        "modified",
-        "missing"
-    ]
+    #: 
+    status_queue = set()
+    status_queue_last_accessed = None
+    status_queue_is_active = False
+    
+    #: 
+    status_tree = {}
     
     def __init__(self, watch_callback, status_callback):
         self.watch_callback = watch_callback
@@ -355,8 +365,6 @@ class StatusMonitor:
         
         It's only interesting to add a watch for what we think the user
         may actually be looking at.
-        
-        TODO: this is quite ugly
         """
         
         # Check whether or not a watch is already added
@@ -382,7 +390,10 @@ class StatusMonitor:
             # And actually register the watches
             self.register_watches(path_to_attach)
             if path not in self.watches: self.watches.append(path)
-            self.watch_callback(path)
+        
+        # TODO: should we always call the client back even if a watch
+        # wasn't attached?
+        self.watch_callback(path)
     
     def register_watches(self, path):
         """
@@ -400,20 +411,9 @@ class StatusMonitor:
                 file = gio.File(path_to_attach)
                 monitor = file.monitor_directory()
                 monitor.connect("changed", self.process_event)
-                print "watch added for %s" % path_to_attach
         
     def status(self, path, recursive=True):
-        """
-        
-        This function doesn't return anything but calls the callback supplied
-        to C{StatusMonitor} by the caller.
-        
-        """
-        
-        workdir_manager = get_workdir_manager_for_path(path)
-        if workdir_manager:
-            status = self.get_text_status(workdir_manager, path, recursive=recursive)
-            self.status_callback(path, status)
+        self.add_to_queue((path, recursive))
 
     def get_text_status(self, workdir_manager, path, recursive=True):
         """
@@ -477,3 +477,28 @@ class StatusMonitor:
                 self.status(path, recursive=False)
         else:
             self.status(path)
+    
+    
+    def add_to_queue(self, item):
+        self.status_queue.add(item)
+        self.status_queue_last_accessed = time.time()
+        
+        # Register a timeout handler to start processing the queue
+        if not self.status_queue_is_active:
+            self.status_queue_is_active = True
+            gobject.timeout_add(1000, self.process_queue)
+        
+    def process_queue(self):
+        if (time.time() - self.status_queue_last_accessed) > 0.1:
+            
+            while len(self.status_queue) > 0:
+                path, recursive = self.status_queue.pop()
+                workdir_manager = get_workdir_manager_for_path(path)
+                if workdir_manager:
+                    status = self.get_text_status(workdir_manager, path, recursive=recursive)
+                    self.status_callback(path, status)
+                    
+            self.status_queue_is_active = False
+            return False
+            
+        return True
