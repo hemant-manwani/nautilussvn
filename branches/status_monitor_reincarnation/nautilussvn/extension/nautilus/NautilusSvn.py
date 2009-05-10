@@ -344,7 +344,7 @@ class StatusMonitor:
     watches = []
     
     #: 
-    status_queue = set()
+    status_queue = []
     status_queue_last_accessed = None
     status_queue_is_active = False
     
@@ -482,13 +482,18 @@ class StatusMonitor:
             paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
             for path in paths:
                 # FIXME: this ignores propchanges for the moment
-                if not isdir(path): self.status(path, invalidate=True, recursive=False)
+                if not isdir(path): 
+                    self.status(path, invalidate=True, recursive=False)
+            self.status(working_dir, recursive=False)
         else:
-            self.status(path, invalidate=True)
+            self.status(path, invalidate=True, recursive=False)
+            self.status(os.path.split(path)[0], recursive=False)
+       
     
     def add_to_queue(self, path, invalidate, recursive):
+        if (path, invalidate, recursive) in self.status_queue: return
         print "added %s to queue" % path
-        self.status_queue.add((path, invalidate, recursive))
+        self.status_queue.append((path, invalidate, recursive))
         self.status_queue_last_accessed = time.time()
         
         # Register a timeout handler to start processing the queue
@@ -500,11 +505,11 @@ class StatusMonitor:
         if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
             print "processing queue"
             while len(self.status_queue) > 0:
-                path, invalidate, recursive = self.status_queue.pop()
+                path, invalidate, recursive = self.status_queue.pop(0)
                 workdir_manager = get_workdir_manager_for_path(path)
                 if workdir_manager:
                     statuses = []
-                    
+                    print "processing %s" % path
                     # Let's take a look and see if we have already collected
                     # this path previously, if so no need to actually try
                     # and found out the status
