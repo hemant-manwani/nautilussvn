@@ -422,7 +422,7 @@ class StatusMonitor:
         """
         This is a helper function to figure out the textual representation 
         for a set of statuses in TortoiseSVN speak where a directory is
-        regarded as modified when any of its children are eitehr added, 
+        regarded as modified when any of its children are either added, 
         deleted, replaced, modified or missing so you can quickly see if 
         your working copy has local changes.
         """
