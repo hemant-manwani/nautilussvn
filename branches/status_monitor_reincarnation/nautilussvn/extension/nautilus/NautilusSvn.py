@@ -276,6 +276,8 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         self.set_emblem_by_path(path)
         item.invalidate_extension_info()
 
+import gio
+
 class StatusMonitor:
     """
     
@@ -371,14 +373,30 @@ class StatusMonitor:
             
         if not watch_is_already_set and path_to_attach:
             self.watches.append(path_to_attach)
+            self.register_watches(path_to_attach)
             
         # Make sure we also attach watches for the path itself
         if (not path in self.watches and 
                 get_workdir_manager_for_path(path)):
                     self.watches.append(path)
                     self.watch_callback(path)
-
-    def status(self, path):
+    
+    def register_watches(self, path):
+        """
+        Recursively add watches to all directories.
+        """
+        
+        paths_to_attach = [path]
+        for root, dirs, files in os.walk(path):
+            for dir in dirs:
+                paths_to_attach.append(os.path.join(root, dir))
+        
+        for path_to_attach in paths_to_attach:
+            file = gio.File(path_to_attach)
+            monitor = file.monitor_directory()
+            monitor.connect("changed", self.process_event)
+        
+    def status(self, path, recursive=True):
         """
         
         This function doesn't return anything but calls the callback supplied
@@ -388,16 +406,16 @@ class StatusMonitor:
         
         workdir_manager = get_workdir_manager_for_path(path)
         if workdir_manager:
-            status = self.get_text_status(workdir_manager, path)
+            status = self.get_text_status(workdir_manager, path, recursive=recursive)
             self.status_callback(path, status)
 
-    def get_text_status(self, workdir_manager, path):
+    def get_text_status(self, workdir_manager, path, recursive=True):
         """
         This is a helper function for update_file_info to figure out
         the textual representation for a set of statuses.
         """
         
-        statuses = [status.state for status in workdir_manager.status(paths=(path,))]
+        statuses = [status.state for status in workdir_manager.status(paths=(path,), recursive=recursive)]
         
         # If no statuses are returned but we do have a workdir_manager
         # it means that an error occured, most likely a working copy
@@ -426,3 +444,24 @@ class StatusMonitor:
         
         # If we're not a directory we end up here.
         return statuses[0]
+        
+    def process_event(self, monitor, file, other_file, event_type):
+        if event_type not in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, 
+            gio.FILE_MONITOR_EVENT_DELETED,
+            gio.FILE_MONITOR_EVENT_CREATED): return
+        
+        path = file.get_path()
+        
+        # The administration area is modified a lot, but only the 
+        # entries file really matters.
+        if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
+        
+        # TODO: if we can actually figure out specifically what file was
+        # changed by looking at the entries file this would be a lot easier
+        if path.endswith(".svn/entries"):
+            working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
+            paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
+            for path in paths:
+                self.status(path, recursive=False)
+        else:
+            self.status(path)
