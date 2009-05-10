@@ -427,12 +427,14 @@ class StatusMonitor:
         your working copy has local changes.
         """
         
-        statuses = [status.state for status in workdir_manager.status(paths=(path,), recursive=recursive)]
+        statuses = [(status.abspath, status.state) for status in 
+            workdir_manager.status(paths=(path,), recursive=recursive)]
+        text_statuses = [status[1] for status in statuses]
         
         # If no statuses are returned but we do have a workdir_manager
         # it means that an error occured, most likely a working copy
         # administration area (.svn directory) went missing
-        if not statuses: 
+        if not text_statuses: 
             # FIXME: figure out a way to make only the directory that
             # is missing display conflicted and the rest unkown.
             return "conflicted"
@@ -440,22 +442,22 @@ class StatusMonitor:
         # We need to take special care of directories
         if isdir(path):
             # These statuses take precedence.
-            if "conflicted" in statuses: return "conflicted"
-            if "obstructed" in statuses: return "obstructed"
+            if "conflicted" in text_statuses: return "conflicted"
+            if "obstructed" in text_statuses: return "obstructed"
             
             # The following statuses take precedence over the status
             # of children.
-            if statuses[0] in ["added", "modified", "deleted"]:
-                return statuses[0]
+            if text_statuses[0] in ["added", "modified", "deleted"]:
+                return text_statuses[0]
             
             # A directory should have a modified status when any of its children
             # have a certain status (see modified_statuses above). Jason thought up 
             # of a nifty way to do this by using sets and the bitwise AND operator (&).
-            if len(set(self.MODIFIED_STATUSES) & set(statuses[1:])):
+            if len(set(self.MODIFIED_STATUSES) & set(text_statuses[1:])):
                 return "modified"
         
         # If we're not a directory we end up here.
-        return statuses[0]
+        return text_statuses[0]
         
     def process_event(self, monitor, file, other_file, event_type):
         # Ignore any events we're not interested in
