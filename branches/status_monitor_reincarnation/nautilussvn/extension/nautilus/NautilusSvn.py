@@ -392,10 +392,10 @@ class StatusMonitor:
             
             # And actually register the watches
             self.register_watches(path_to_attach)
-            if path not in self.watches: self.watches.append(path)
-        
+            
         # TODO: should we always call the client back even if a watch
         # wasn't attached?
+        if path not in self.watches: self.watches.append(path)
         self.watch_callback(path)
     
     def register_watches(self, path):
@@ -416,7 +416,7 @@ class StatusMonitor:
                 monitor.connect("changed", self.process_event)
         
     def status(self, path, recursive=True):
-        self.add_to_queue((path, recursive))
+        self.add_to_queue(path, recursive)
 
     def get_text_status(self, workdir_manager, path, recursive=True):
         """
@@ -467,10 +467,14 @@ class StatusMonitor:
         
         path = file.get_path()
         
-        # The administration area is modified a lot, but only the 
+        # Some of the files we should ignore
+        # For SVN the administration area is modified a lot, but only the 
         # entries file really matters.
         if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
+        if path.find(".git") != -1: return
+        
         print os.path.basename(path), event_type
+        
         # TODO: if we can actually figure out specifically what file was
         # changed by looking at the entries file this would be a lot easier
         if path.endswith(".svn/entries"):
@@ -482,8 +486,9 @@ class StatusMonitor:
             self.status(path)
     
     
-    def add_to_queue(self, item):
-        self.status_queue.add(item)
+    def add_to_queue(self, path, recursive):
+        print "added %s to queue" % path
+        self.status_queue.add((path, recursive))
         self.status_queue_last_accessed = time.time()
         
         # Register a timeout handler to start processing the queue
@@ -493,7 +498,7 @@ class StatusMonitor:
         
     def process_queue(self):
         if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
-            
+            print "processing queue"
             while len(self.status_queue) > 0:
                 path, recursive = self.status_queue.pop()
                 workdir_manager = get_workdir_manager_for_path(path)
