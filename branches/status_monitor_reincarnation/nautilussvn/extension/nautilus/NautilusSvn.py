@@ -355,25 +355,33 @@ class StatusMonitor:
         
         It's only interesting to add a watch for what we think the user
         may actually be looking at.
+        
+        TODO: this is quite ugly
         """
         
+        # Check whether or not a watch is already added
         path_to_check = path
-        path_to_attach = path
         watch_is_already_set = False
-        
         while path_to_check != "/":
             if path_to_check in self.watches:
                 watch_is_already_set = True
                 break;
                 
             path_to_check = os.path.split(path_to_check)[0]
-            if get_workdir_manager_for_path(path_to_check):
-                path_to_attach = path_to_check
-                break;
         
-        self.watches.append(path)
-        
+        # If not, figure out where the watch should be added
         if not watch_is_already_set:
+            path_to_check = path
+            path_to_attach = path
+            while path_to_check != "/":    
+                path_to_check = os.path.split(path_to_check)[0]
+                if get_workdir_manager_for_path(path_to_check):
+                    path_to_attach = path_to_check
+                    break;
+            
+            # And actually register the watches
+            print "watch added for %s" % path_to_attach
+            self.watches.extend([path, path_to_attach])
             self.register_watches(path_to_attach)
             self.watch_callback(path)
     
@@ -445,16 +453,17 @@ class StatusMonitor:
         return statuses[0]
         
     def process_event(self, monitor, file, other_file, event_type):
+        # Ignore any events we're not interested in, note that CHANGES_DONE_HINT
+        # is also fired when anything is CREATED.
         if event_type not in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, 
-            gio.FILE_MONITOR_EVENT_DELETED,
-            gio.FILE_MONITOR_EVENT_CREATED): return
+            gio.FILE_MONITOR_EVENT_DELETED): return
         
         path = file.get_path()
         
         # The administration area is modified a lot, but only the 
         # entries file really matters.
         if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
-        
+        print os.path.basename(path), event_type
         # TODO: if we can actually figure out specifically what file was
         # changed by looking at the entries file this would be a lot easier
         if path.endswith(".svn/entries"):
