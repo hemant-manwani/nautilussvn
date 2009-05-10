@@ -358,6 +358,7 @@ class StatusMonitor:
         """
         
         path_to_check = path
+        path_to_attach = path
         watch_is_already_set = False
         
         while path_to_check != "/":
@@ -366,10 +367,14 @@ class StatusMonitor:
                 break;
                 
             path_to_check = os.path.split(path_to_check)[0]
+            if get_workdir_manager_for_path(path_to_check):
+                path_to_attach = path_to_check
+                break;
+        
+        self.watches.append(path)
         
         if not watch_is_already_set:
-            self.watches.append(path)
-            self.register_watches(path)
+            self.register_watches(path_to_attach)
             self.watch_callback(path)
     
     def register_watches(self, path):
