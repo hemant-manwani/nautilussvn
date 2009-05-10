@@ -61,7 +61,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
     def __init__(self):
         print "Initializing nautilussvn extension"
-        self.status_monitor = StatusMonitor(self.cb_status)
+        self.status_monitor = StatusMonitor(
+            watch_callback=self.cb_watch_added,
+            status_callback=self.cb_status
+        )
     
     @timeit
     def update_file_info(self, item):
@@ -117,11 +120,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         has_watch = self.status_monitor.has_watch(path)
         is_in_a_or_a_working_copy = get_workdir_manager_for_path(path)
 
-        # TODO: eventually this will need to be replaced with something
-        # that looks similar to what is uncommented below
-        self.status_monitor.status(path)
-        
-        """
         if not has_watch and is_in_a_or_a_working_copy:
             self.status_monitor.add_watch(path)
             
@@ -133,7 +131,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
             self.status_monitor.status(path)
-        """
     
     def get_file_items(self, window, items):
         """
@@ -322,7 +319,6 @@ class StatusMonitor:
                |   | set_emblem_for_path(path)
                |<--+                        |
                |                            |
-
     
     """
     
@@ -346,8 +342,9 @@ class StatusMonitor:
         "missing"
     ]
     
-    def __init__(self, callback):
-        self.callback = callback
+    def __init__(self, watch_callback, status_callback):
+        self.watch_callback = watch_callback
+        self.status_callback = status_callback
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -379,6 +376,7 @@ class StatusMonitor:
         if (not path in self.watches and 
                 get_workdir_manager_for_path(path)):
                     self.watches.append(path)
+                    self.watch_callback(path)
 
     def status(self, path):
         """
@@ -391,7 +389,7 @@ class StatusMonitor:
         workdir_manager = get_workdir_manager_for_path(path)
         if workdir_manager:
             status = self.get_text_status(workdir_manager, path)
-            self.callback(path, status)
+            self.status_callback(path, status)
 
     def get_text_status(self, workdir_manager, path):
         """
