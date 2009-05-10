@@ -380,9 +380,8 @@ class StatusMonitor:
                     break;
             
             # And actually register the watches
-            print "watch added for %s" % path_to_attach
-            self.watches.extend([path, path_to_attach])
             self.register_watches(path_to_attach)
+            if path not in self.watches: self.watches.append(path)
             self.watch_callback(path)
     
     def register_watches(self, path):
@@ -397,9 +396,11 @@ class StatusMonitor:
         
         for path_to_attach in paths_to_attach:
             if path_to_attach not in self.watches:
+                self.watches.append(path_to_attach)
                 file = gio.File(path_to_attach)
                 monitor = file.monitor_directory()
                 monitor.connect("changed", self.process_event)
+                print "watch added for %s" % path_to_attach
         
     def status(self, path, recursive=True):
         """
@@ -454,10 +455,12 @@ class StatusMonitor:
         return statuses[0]
         
     def process_event(self, monitor, file, other_file, event_type):
-        # Ignore any events we're not interested in, note that CHANGES_DONE_HINT
-        # is also fired when anything is CREATED.
+        # Ignore any events we're not interested in
+        # FIXME: creating a file will fire both CHANGES_DONE and EVENT_CREATED
+        # so it's probably a good idea to throttle.
         if event_type not in (gio.FILE_MONITOR_EVENT_CHANGES_DONE_HINT, 
-            gio.FILE_MONITOR_EVENT_DELETED): return
+            gio.FILE_MONITOR_EVENT_DELETED,
+            gio.FILE_MONITOR_EVENT_CREATED): return
         
         path = file.get_path()
         
