@@ -348,6 +348,9 @@ class StatusMonitor:
     status_queue_last_accessed = None
     status_queue_is_active = False
     
+    STATUS_QUEUE_TIMEOUT = 100
+    STATUS_QUEUE_PROCESS_TIMEOUT = 100
+    
     #: 
     status_tree = {}
     
@@ -486,10 +489,10 @@ class StatusMonitor:
         # Register a timeout handler to start processing the queue
         if not self.status_queue_is_active:
             self.status_queue_is_active = True
-            gobject.timeout_add(1000, self.process_queue)
+            gobject.timeout_add(self.STATUS_QUEUE_TIMEOUT, self.process_queue)
         
     def process_queue(self):
-        if (time.time() - self.status_queue_last_accessed) > 0.1:
+        if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
             
             while len(self.status_queue) > 0:
                 path, recursive = self.status_queue.pop()
