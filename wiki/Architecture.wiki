@@ -29,7 +29,7 @@ Then when the status monitor returns to an idle state the queue is processed, st
 
 ==== Status queue ====
 
-When a status check is requested it is not immediately executed, instead the path and the type of check requested (recursive/non-recursive) are stored in a queue. Any duplicate requests will not be added to the queue and recursive status checks invalidates all related requests. Once the queue manager determines that an idle state has been reached it will start processing the queue.
+When a status check is requested it is not immediately executed, instead the path and the type of check requested (recursive/non-recursive) are stored in a queue. Any duplicate requests will not be added to the queue and recursive status checks invalidate all related requests. Once the queue manager determines that an idle state has been reached it will start processing the queue.
 
 ==== Status tree ====
 
