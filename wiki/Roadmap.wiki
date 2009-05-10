@@ -35,4 +35,5 @@
   
 = !NautilusSvn 0.16 =
   
-  * Context menu reordering support in settings manager.
+  * Modify the context menu to use the Freedesktop.org [http://standards.freedesktop.org/menu-spec/latest Desktop Menu Specification] and the [http://standards.freedesktop.org/desktop-entry-spec/latest/ Desktop Entry Specification].
+  * Context menu reordering support in settings manager, basically this would be an embedded version of [http://en.wikipedia.org/wiki/Alacarte Alacarte]. 
