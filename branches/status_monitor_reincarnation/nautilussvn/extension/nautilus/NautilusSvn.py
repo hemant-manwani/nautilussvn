@@ -418,18 +418,14 @@ class StatusMonitor:
     def status(self, path, recursive=True):
         self.add_to_queue(path, recursive)
 
-    def get_text_status(self, workdir_manager, path, recursive=True):
+    def get_text_status(self, path, text_statuses):
         """
         This is a helper function to figure out the textual representation 
-        for a set of statuses in TortoiseSVN speak where a directory is
+        for a set of statuses. In TortoiseSVN speak a directory is
         regarded as modified when any of its children are either added, 
         deleted, replaced, modified or missing so you can quickly see if 
         your working copy has local changes.
         """
-        
-        statuses = [(status.abspath, status.state) for status in 
-            workdir_manager.status(paths=(path,), recursive=recursive)]
-        text_statuses = [status[1] for status in statuses]
         
         # If no statuses are returned but we do have a workdir_manager
         # it means that an error occured, most likely a working copy
@@ -505,7 +501,10 @@ class StatusMonitor:
                 path, recursive = self.status_queue.pop()
                 workdir_manager = get_workdir_manager_for_path(path)
                 if workdir_manager:
-                    status = self.get_text_status(workdir_manager, path, recursive=recursive)
+                    statuses = [(status.abspath, status.state) for status in 
+                        workdir_manager.status(paths=(path,), recursive=recursive)]
+                    text_statuses = [status[1] for status in statuses]
+                    status = self.get_text_status(path, text_statuses)
                     self.status_callback(path, status)
                     
             self.status_queue_is_active = False
