@@ -181,9 +181,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         if not self.valid_uri(item.get_uri()): return
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         self.nautilusVFSFile_table[path] = item
-        
-        if not self.status_monitor.has_watch(path):
-            self.status_monitor.add_watch(path)
     
     #
     # Helper functions
@@ -358,28 +355,19 @@ class StatusMonitor:
         """
         
         path_to_check = path
-        path_to_attach = None
         watch_is_already_set = False
         
         while path_to_check != "/":
-            if get_workdir_manager_for_path(path_to_check):
-                path_to_attach = path_to_check
-                
             if path_to_check in self.watches:
                 watch_is_already_set = True
                 break;
                 
             path_to_check = os.path.split(path_to_check)[0]
             
-        if not watch_is_already_set and path_to_attach:
-            self.watches.append(path_to_attach)
-            self.register_watches(path_to_attach)
-            
-        # Make sure we also attach watches for the path itself
-        if (not path in self.watches and 
-                get_workdir_manager_for_path(path)):
-                    self.watches.append(path)
-                    self.watch_callback(path)
+        if not watch_is_already_set:
+            self.watches.append(path)
+            self.register_watches(path)
+            self.watch_callback(path)
     
     def register_watches(self, path):
         """
