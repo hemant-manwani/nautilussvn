@@ -415,10 +415,10 @@ class StatusMonitor:
                 monitor = file.monitor_directory()
                 monitor.connect("changed", self.process_event)
         
-    def status(self, path, recursive=True):
-        self.add_to_queue(path, recursive)
+    def status(self, path, invalidate=False, recursive=True):
+        self.add_to_queue(path, invalidate=invalidate, recursive=recursive)
 
-    def get_text_status(self, path, text_statuses):
+    def get_text_status(self, path, statuses):
         """
         This is a helper function to figure out the textual representation 
         for a set of statuses. In TortoiseSVN speak a directory is
@@ -426,6 +426,8 @@ class StatusMonitor:
         deleted, replaced, modified or missing so you can quickly see if 
         your working copy has local changes.
         """
+        
+        text_statuses = [status[1] for status in statuses]
         
         # If no statuses are returned but we do have a workdir_manager
         # it means that an error occured, most likely a working copy
@@ -479,14 +481,14 @@ class StatusMonitor:
             working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
             paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
             for path in paths:
-                self.status(path, recursive=False)
+                # FIXME: this ignores propchanges for the moment
+                if not isdir(path): self.status(path, invalidate=True, recursive=False)
         else:
-            self.status(path)
+            self.status(path, invalidate=True)
     
-    
-    def add_to_queue(self, path, recursive):
+    def add_to_queue(self, path, invalidate, recursive):
         print "added %s to queue" % path
-        self.status_queue.add((path, recursive))
+        self.status_queue.add((path, invalidate, recursive))
         self.status_queue_last_accessed = time.time()
         
         # Register a timeout handler to start processing the queue
@@ -498,16 +500,33 @@ class StatusMonitor:
         if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
             print "processing queue"
             while len(self.status_queue) > 0:
-                path, recursive = self.status_queue.pop()
+                path, invalidate, recursive = self.status_queue.pop()
                 workdir_manager = get_workdir_manager_for_path(path)
                 if workdir_manager:
-                    statuses = [(status.abspath, status.state) for status in 
-                        workdir_manager.status(paths=(path,), recursive=recursive)]
-                    text_statuses = [status[1] for status in statuses]
-                    status = self.get_text_status(path, text_statuses)
+                    statuses = []
+                    
+                    # Let's take a look and see if we have already collected
+                    # this path previously, if so no need to actually try
+                    # and found out the status
+                    if not invalidate and path in self.status_tree:
+                        for another_path in self.status_tree.keys():
+                            if another_path.startswith(path):
+                                statuses.append((another_path, self.status_tree[another_path]))
+                    else:
+                        # It wasn't in the tree or an invalidation was
+                        # requested so let's do the status check
+                        statuses = [(status.abspath, status.state) for status in 
+                            workdir_manager.status(paths=(path,), recursive=recursive)]
+                        self.update_status_tree(statuses)
+                    
+                    status = self.get_text_status(path, statuses)
                     self.status_callback(path, status)
                     
             self.status_queue_is_active = False
             return False
             
         return True
+
+    def update_status_tree(self, statuses):
+        for path, status in statuses:
+            self.status_tree[path] = status
