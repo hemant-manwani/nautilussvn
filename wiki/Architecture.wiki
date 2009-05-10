@@ -67,5 +67,3 @@ Consecutive:
   * Skipping intensive operations while on battery power may be a good idea.
 
   * I wonder if it's possible to analyze the .svn/entries file to determine precisely what files were modified.
-
-  * It would be interesting if instead of Subversion 
