@@ -27,6 +27,25 @@ Say you have a directory /foo containing bar and baz and you then svn add bar an
 
 Then when the status monitor returns to an idle state the queue is processed, status checks are done for /foo/bar and /foo/baz and their status in the tree is updated accordingly, the parent directories will then update their own status based on any children in the tree.
 
+==== Communication with the client ====
+
+Initial:
+
+  * User enters directory
+  * Client requests a watch to be added
+  * Status check is done by the monitor
+  * Monitor calls client back with the result
+
+Consecutive:
+
+  * User do some operation
+  * Monitor notices changes
+  * Monitor calls client back with the result
+
+Consecutive:
+
+  
+
 === Cache ===
 
 `[..]`
