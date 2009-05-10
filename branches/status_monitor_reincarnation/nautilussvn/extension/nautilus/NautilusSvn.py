@@ -396,9 +396,10 @@ class StatusMonitor:
                 paths_to_attach.append(os.path.join(root, dir))
         
         for path_to_attach in paths_to_attach:
-            file = gio.File(path_to_attach)
-            monitor = file.monitor_directory()
-            monitor.connect("changed", self.process_event)
+            if path_to_attach not in self.watches:
+                file = gio.File(path_to_attach)
+                monitor = file.monitor_directory()
+                monitor.connect("changed", self.process_event)
         
     def status(self, path, recursive=True):
         """
