@@ -67,6 +67,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     def __init__(self):
         print "Initializing nautilussvn extension"
         
+        # We need this to for the client to be able to do asynchronous calls
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        
         # Start up our DBus service if it's not already started, if this fails
         # we can't really do anything.
         nautilussvn.dbus.service.start()
