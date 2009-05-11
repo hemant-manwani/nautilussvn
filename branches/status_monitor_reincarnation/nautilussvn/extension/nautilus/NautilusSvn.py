@@ -14,7 +14,6 @@ import gobject
 import anyvc
 from anyvc.workdir import get_workdir_manager_for_path
 
-import nautilussvn.dbus.service
 from nautilussvn.util.decorators import timeit, disable
 from nautilussvn.util.path import get_file_extension
 from nautilussvn.ui import launch_ui_window
@@ -24,6 +23,7 @@ _ = gettext.gettext
 
 use_dbus = False
 if use_dbus:
+    import nautilussvn.dbus.service
     import dbus.mainloop.glib
     from nautilussvn.dbus.status_monitor import StatusMonitorStub as StatusMonitor
 
