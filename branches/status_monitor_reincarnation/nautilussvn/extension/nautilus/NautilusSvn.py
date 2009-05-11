@@ -11,14 +11,26 @@ import nautilus
 import gnomevfs
 import gobject
 
-import dbus.mainloop.glib
-
 import anyvc
 from anyvc.workdir import get_workdir_manager_for_path
 
 import nautilussvn.dbus.service
-from nautilussvn.dbus.status_monitor import StatusMonitorStub as StatusMonitor
+
 from nautilussvn.util.decorators import timeit, disable
+
+use_dbus = False
+if use_dbus == True:
+    import dbus.mainloop.glib
+    from nautilussvn.dbus.status_monitor import StatusMonitorStub as StatusMonitor
+
+    # We need this to for the client to be able to do asynchronous calls
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+    # Start up our DBus service if it's not already started, if this fails
+    # we can't really do anything.
+    nautilussvn.dbus.service.start()
+else:
+    from nautilussvn.statusmonitor import StatusMonitor
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
@@ -66,13 +78,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
     def __init__(self):
         print "Initializing nautilussvn extension"
-        
-        # We need this to for the client to be able to do asynchronous calls
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        
-        # Start up our DBus service if it's not already started, if this fails
-        # we can't really do anything.
-        nautilussvn.dbus.service.start()
         
         # Create a StatusMonitor and register all sorts of callbacks with it
         self.status_monitor = StatusMonitor(
