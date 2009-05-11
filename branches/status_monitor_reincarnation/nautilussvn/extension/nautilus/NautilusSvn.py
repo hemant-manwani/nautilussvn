@@ -343,7 +343,9 @@ class StatusMonitor:
     #:     
     watches = []
     
-    #: 
+    #: This is a queue to make sure status checks are done in a orderly
+    #: manner. It hasn't been completely implemented yet (and I'm wondering
+    #: if it's really necessary, but ok).
     status_queue = []
     status_queue_last_accessed = None
     status_queue_is_active = False
@@ -351,7 +353,23 @@ class StatusMonitor:
     STATUS_QUEUE_TIMEOUT = 100
     STATUS_QUEUE_PROCESS_TIMEOUT = 100
     
-    #: 
+    #: This tree stores the status of the items. We monitor working copy
+    #: for changes and modify this tree in-place accordingly. This way
+    #: apart from an intial recursive check we don't have to do any
+    #: and the speed is increased because the tree is in memory.
+    #:
+    #: This isn't a tree (yet) and looks like:::
+    #:
+    #:     status_tree = {
+    #:         "/foo": "normal",
+    #:         "/foo/bar": normal",
+    #:         "/foo/bar/baz": "added"
+    #:     }
+    #:
+    #: As you can see it's not a tree (yet) and the way statuses are 
+    #: collected as by iterating through the dictionary. This is 
+    #: obviously going to cause issues once the user has collected a 
+    #: great deal of paths.
     status_tree = {}
     
     def __init__(self, watch_callback, status_callback):
