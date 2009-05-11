@@ -508,7 +508,7 @@ class StatusMonitor:
             self.status(path, invalidate=True, recursive=False)
         
         # Refresh the status for all parents
-        path_to_check = path
+        path_to_check = parent_dir
         while path_to_check != "/":
             if not get_workdir_manager_for_path(path_to_check): break
             self.status(path_to_check, recursive=False)
@@ -528,6 +528,11 @@ class StatusMonitor:
     def process_queue(self):
         if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
             print "processing queue"
+            # FIXME: this is a temporary hack to make sure that lower 
+            # files are checked before the directories are (so status is
+            # figured out correctly. 
+            self.status_queue.sort(reverse=True)
+            
             while len(self.status_queue) > 0:
                 path, invalidate, recursive = self.status_queue.pop(0)
                 workdir_manager = get_workdir_manager_for_path(path)
