@@ -10,6 +10,7 @@ from os.path import isdir, isfile, realpath, basename
 import nautilus
 import gnomevfs
 import gobject
+import gtk
 
 import anyvc
 from anyvc.workdir import get_workdir_manager_for_path
@@ -206,7 +207,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         self.nautilusVFSFile_table[path] = item
         
-        return MainContextMenu(path, self).construct_menu()
+        return MainContextMenu([path], self).construct_menu()
     
     #
     # Helper functions
@@ -1112,7 +1113,7 @@ class MainContextMenu:
             
             # Execute the condition associated with the definition_item
             # which will figure out whether or not to display this item.
-            if not definition_item.has_key("condition") or definition_item["condition"]():
+            if not definition_item.has_key("condition") or True:
                 # If the item is a separator, don't show it if this is the first
                 # or last item, or if the previous item was a separator.
                 if (definition_item["label"] == self.SEPARATOR and
@@ -1457,19 +1458,57 @@ class MainContextMenu:
         launch_ui_window("checkout", paths)
     
     def callback_update(self, menu_item, paths):
-        launch_ui_window("update", paths)
+        if not launch_ui_window("update", paths):
+            for path in paths:
+                workdir_manager = get_workdir_manager_for_path(path)
+                workdir_manager.update(paths=(path,))
 
     def callback_commit(self, menu_item, paths):
-        launch_ui_window("commit", paths)
+        if not launch_ui_window("commit", paths):
+            dialog = gtk.Dialog(
+                _("Commit"), 
+                None,
+                gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+                (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK)
+            )
+            
+            dialog.set_icon_name("nautilussvn")
+            dialog.set_default_response(gtk.RESPONSE_OK)
+
+            message_entry = gtk.Entry()
+            message_entry.set_activates_default(True)
+            dialog_label = gtk.Label(_("Add Message"))
+            
+            dialog.vbox.add(dialog_label)
+            dialog.vbox.add(message_entry)
+            
+            message_entry.grab_focus()
+            dialog.show_all()
+            if dialog.run() == gtk.RESPONSE_OK:
+                message = message_entry.get_text()
+                if len(message) > 0:
+                    workdir_manager = get_workdir_manager_for_path(paths[0])
+                    print paths[0]
+                    workdir_manager.commit(paths=paths, message=message)
+            dialog.destroy()
 
     def callback_add(self, menu_item, paths):
-        launch_ui_window("add", paths)
+        if not launch_ui_window("add", paths):
+            for path in paths:
+                workdir_manager = get_workdir_manager_for_path(path)
+                workdir_manager.add(paths=(path,))
 
     def callback_delete(self, menu_item, paths):
-        launch_ui_window("delete", paths)
+        if not launch_ui_window("delete", paths):
+            for path in paths:
+                workdir_manager = get_workdir_manager_for_path(path)
+                workdir_manager.remove(paths=(path,), recursive=True)
 
     def callback_revert(self, menu_item, paths):
-        launch_ui_window("revert", paths)
+        if not launch_ui_window("revert", paths):
+            for path in paths:
+                workdir_manager = get_workdir_manager_for_path(path)
+                workdir_manager.revert(paths=(path,), recursive=True)
 
     def callback_diff(self, menu_item, paths):
         launch_diff_tool(*paths)
