@@ -497,10 +497,10 @@ class StatusMonitor:
         path = file.get_path()
         
         # Some of the files we should ignore
-        # For SVN the administration area is modified a lot, but only the 
-        # entries file really matters.
+        # When using SVN the administration area is modified a lot, but 
+        # only the entries file really matters.
         if path.find(".svn") != -1 and not path.endswith(".svn/entries"): return
-        if path.find(".git") != -1: return
+        if path.find(".git") != -1: return # FIXME: not handling Git right now
         
         print os.path.basename(path), event_type
         
