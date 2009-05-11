@@ -477,18 +477,24 @@ class StatusMonitor:
         
         # TODO: if we can actually figure out specifically what file was
         # changed by looking at the entries file this would be a lot easier
+        parent_dir = ""
         if path.endswith(".svn/entries"):
-            working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
+            parent_dir = working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
             paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
             for path in paths:
                 # FIXME: this ignores propchanges for the moment
                 if not isdir(path): 
                     self.status(path, invalidate=True, recursive=False)
-            self.status(working_dir, recursive=False)
         else:
+            parent_dir = os.path.split(path)[0]
             self.status(path, invalidate=True, recursive=False)
-            self.status(os.path.split(path)[0], recursive=False)
-       
+        
+        # Refresh the status for all parents
+        path_to_check = path
+        while path_to_check != "/":
+            if not get_workdir_manager_for_path(path_to_check): break
+            self.status(path_to_check, recursive=False)
+            path_to_check = os.path.split(path_to_check)[0]
     
     def add_to_queue(self, path, invalidate, recursive):
         if (path, invalidate, recursive) in self.status_queue: return
