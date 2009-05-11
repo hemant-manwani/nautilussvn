@@ -26,7 +26,7 @@ use_dbus = False
 if use_dbus:
     import nautilussvn.dbus.service
     import dbus.mainloop.glib
-    from nautilussvn.dbus.status_monitor import StatusMonitorStub as StatusMonitor
+    from nautilussvn.dbus.statusmonitor import StatusMonitorStub as StatusMonitor
 
     # We need this to for the client to be able to do asynchronous calls
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
