@@ -19,6 +19,8 @@ def launch_ui_window(filename, args=[]):
     # Construct a path to the actual python file
     basedir = os.path.dirname(os.path.realpath(__file__))
     path = "%s/ui/%s.py" % (basedir, filename)
-    print path
+    
     if os.path.exists(path): 
         return subprocess.Popen(["/usr/bin/python", path] + args).pid
+    else:
+        return False
