@@ -17,7 +17,7 @@ import dbus.glib # FIXME: this might actually already set the default loop
 import dbus.mainloop.glib
 import dbus.service
 
-from nautilussvn.dbus.status_monitor import StatusMonitor
+from nautilussvn.dbus.statusmonitor import StatusMonitor
 
 INTERFACE = "org.google.code.nautilussvn.Service"
 OBJECT_PATH = "/org/google/code/nautilussvn/Service"
