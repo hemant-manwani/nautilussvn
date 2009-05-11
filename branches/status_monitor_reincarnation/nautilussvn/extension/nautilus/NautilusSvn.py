@@ -19,7 +19,7 @@ import nautilussvn.dbus.service
 from nautilussvn.util.decorators import timeit, disable
 
 use_dbus = False
-if use_dbus == True:
+if use_dbus:
     import dbus.mainloop.glib
     from nautilussvn.dbus.status_monitor import StatusMonitorStub as StatusMonitor
 
