@@ -33,6 +33,8 @@ sudo apt-get install python-nautilus python-configobj python-gtk2 python-glade2 
 yum install nautilus-python pysvn python-configobj subversion meld
 }}}
 
+Note for x86_64: As root, run *ln -s /usr/lib64/libpython2.5.so /usr/lib/libpython2.5.so*.  Otherwise you will get various import errors for libpython and libpyglib.
+
 3. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == Arch Linux ==
