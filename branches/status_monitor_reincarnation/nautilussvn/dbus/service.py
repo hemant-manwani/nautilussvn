@@ -13,7 +13,7 @@ import time
 import gobject
 
 import dbus
-import dbus.glib
+import dbus.glib # FIXME: this might actually already set the default loop
 import dbus.mainloop.glib
 import dbus.service
 
@@ -43,6 +43,7 @@ def start():
     @rtype: boolean
     @return: Whether or not the service was successfully started.
     """
+    
     try:
         session_bus = dbus.SessionBus()
         session_bus.get_object(SERVICE, OBJECT_PATH)
@@ -71,6 +72,9 @@ def exit():
         traceback.print_exc()
 
 if __name__ == "__main__":
+    # We need this to for the client to be able to do asynchronous calls
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    
     # This seems to be important for PySVN
     from nautilussvn.util.helpers import initialize_locale
     initialize_locale()
@@ -85,7 +89,5 @@ if __name__ == "__main__":
     name = dbus.service.BusName(SERVICE, session_bus) 
     service = Service(session_bus)
     
-    # We need this to for the client to be able to do asynchronous calls
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     loop = gobject.MainLoop()
     loop.run()
