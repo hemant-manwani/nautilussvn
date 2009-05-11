@@ -13,7 +13,7 @@ import gnomevfs
 import anyvc
 from anyvc.workdir import get_workdir_manager_for_path
 
-from nautilussvn.util.decorators import timeit
+from nautilussvn.util.decorators import timeit, disable
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
@@ -66,7 +66,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
             status_callback=self.cb_status
         )
     
-    @timeit
     def update_file_info(self, item):
         """
         
@@ -416,6 +415,7 @@ class StatusMonitor:
         if path not in self.watches: self.watches.append(path)
         self.watch_callback(path)
     
+    @timeit
     def register_watches(self, path):
         """
         Recursively add watches to all directories.
@@ -526,7 +526,8 @@ class StatusMonitor:
         if not self.status_queue_is_active:
             self.status_queue_is_active = True
             gobject.timeout_add(self.STATUS_QUEUE_TIMEOUT, self.process_queue)
-        
+    
+    @timeit
     def process_queue(self):
         if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
             print "processing queue"
