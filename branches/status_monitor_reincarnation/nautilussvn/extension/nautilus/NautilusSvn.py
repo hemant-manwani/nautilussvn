@@ -37,6 +37,7 @@ if use_dbus:
     nautilussvn.dbus.service.start()
 else:
     from nautilussvn.statusmonitor import StatusMonitor
+    from nautilussvn.statuschecker import StatusChecker
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
@@ -84,6 +85,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
     def __init__(self):
         print "Initializing nautilussvn extension"
+        
+        # Create our StatusChecker to requests statuses
+        self.status_checker = StatusChecker(
+            status_callback=self.cb_status
+        )
         
         # Create a StatusMonitor and register all sorts of callbacks with it
         self.status_monitor = StatusMonitor(
@@ -155,9 +161,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         elif (has_watch and
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
-            self.status_monitor.status(path)
+            self.status_checker.status(path)
     
-    @timeit
+    @disable
     def get_file_items(self, window, items):
         """
         Menu activated with items selected. Nautilus also calls this function
@@ -189,7 +195,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         
         return MainContextMenu(paths, self).construct_menu()
     
-    @timeit
+    @disable
     def get_background_items(self, window, item):
         """
         Menu activated on entering a directory. Builds context menu for File
@@ -270,7 +276,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         @param  path:   The path for which a watch was added
         """
         
-        self.status_monitor.status(path)
+        self.status_checker.status(path)
     
     def cb_status(self, path, status):
         """
@@ -321,42 +327,6 @@ class MainContextMenu:
     def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
         self.nautilussvn_extension = nautilussvn_extension
-        
-        self.path_dict = {}
-        self.path_dict["length"] = len(paths)
-        
-        checks = {
-            "is_dir"                        : isdir,
-            "is_file"                       : isfile,
-            "is_working_copy"               : is_working_copy,
-            "is_in_a_or_a_working_copy"     : is_in_a_or_a_working_copy,
-            "is_versioned"                  : is_versioned,
-            "is_normal"                     : lambda path: is_(path, "clean"),
-            "is_added"                      : lambda path: is_(path, "added"),
-            "is_modified"                   : lambda path: is_(path, "modified"),
-            "is_deleted"                    : lambda path: is_(path, "deleted"),
-            "is_ignored"                    : lambda path: is_(path, "ignored"),
-            "is_locked"                     : lambda path: is_(path, "locked"),
-            "is_missing"                    : lambda path: is_(path, "missing"),
-            "is_conflicted"                 : lambda path: is_(path, "conflicted"),
-            "is_obstructed"                 : lambda path: is_(path, "obstructed"),
-            "has_unversioned"               : lambda path: has_(path, "unversioned"),
-            "has_added"                     : lambda path: has_(path, "added"),
-            "has_modified"                  : lambda path: has_(path, "modified"),
-            "has_deleted"                   : lambda path: has_(path, "deleted"),
-            "has_ignored"                   : lambda path: has_(path, "ignored"),
-            "has_locked"                    : lambda path: has_(path, "locked"),
-            "has_missing"                   : lambda path: has_(path, "missing"),
-            "has_conflicted"                : lambda path: has_(path, "conflicted"),
-            "has_obstructed"                : lambda path: has_(path, "obstructed"),
-        }
-
-        # Each path gets tested for each check
-        # If a check has returned True for any path, skip it for remaining paths
-        for path in paths:
-            for key, func in checks.items():
-                if key not in self.path_dict or self.path_dict[key] is not True:
-                    self.path_dict[key] = func(path)
         
     def construct_menu(self):
         """
