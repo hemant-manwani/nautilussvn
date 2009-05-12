@@ -21,9 +21,9 @@ And you're done.
 
   _*<font color="red">Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot</font>*_
 
-== Directory structure ==
+It's a good idea organize your code in the following way, this makes it easy to switch between branches and whatnot without fiddling too much. 
 
-If you tend to switch a lot between branches it's a good idea to have something like this:
+== Directory structure ==
 
 {{{
 mkdir -p ~/Development/nautilussvn/branches
