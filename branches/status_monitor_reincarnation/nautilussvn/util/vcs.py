@@ -18,8 +18,11 @@ def get_summarized_status(path, statuses):
     deleted, replaced, modified or missing so you can quickly see if 
     your working copy has local changes.
     
-    @type   path:   list
-    @param  path:   A list of (abspath, state) tuples
+    @type   path:       string
+    @param  path:       The path for which to summarize
+    
+    @type   statuses:   list
+    @param  statuses:   A list of (abspath, state) tuples
     """
     
     # Unlike Subversion most VCS's don't have the concept of statuses
