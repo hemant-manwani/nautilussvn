@@ -13,12 +13,20 @@ There are a couple of pages in the wiki relevant for developers:
   * [http://code.google.com/p/nautilussvn/wiki/Architecture Architecture] is used for discussion and decisions related mostly to the architecture of NautilusSvn. Also see pages labeled [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Implementation Phase-Implementation] and [http://code.google.com/p/nautilussvn/w/list?q=label:Phase-Design Phase-Design].
 
 = Tips =
-When modifying !NautilusSvn you'll have to restart Nautilus quite often. Before Nautilus 2.24.1 one was able to run two Nautilus instances next to each other by changing the TMPDIR. It seems that starting with 2.24.1 you have to quit nautilus (nautilus -q) for this to work. 
+
+== Organizing your code ==
+
+  _See DevelopmentInstallation_
+
+== Starting Nautilus ==
+When modifying !NautilusSvn you'll have to restart Nautilus quite often. So when you're working on !NautilusSvn quit Nautilus first (nautilus -q) and then start it up with:
 
 You can start Nautilus using this alias by:
 {{{
 $ nautilus --no-desktop <directory to start in>
 }}}
+
+Whenever you want to reload any changes, simply close the window and start it back up again once you're done.
 
 = Patches =
 
