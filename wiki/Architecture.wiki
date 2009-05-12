@@ -31,11 +31,11 @@ Then when the status monitor returns to an idle state the queue is processed, st
 
 When a status check is requested it is not immediately executed, instead the path and the type of check requested (recursive/non-recursive) are stored in a queue. Any duplicate requests will not be added to the queue and recursive status checks invalidate all related requests. Once the queue manager determines that an idle state has been reached it will start processing the queue.
 
+==== Handling changes ====
+
+When the monitor detects a change has  occured, either to a versioned item itself or the associated metadata, it will process the event. If the item in question is not versioned it will skip it (this handles temporary files etc. quite nicely), if the item is however versioned it will add an invalidating status request to the queue for this file and non-invalidating ones for all parent directories.
+
 ==== Status tree ====
-
-`[..]`
-
-==== Adding watches ====
 
 `[..]`
 
