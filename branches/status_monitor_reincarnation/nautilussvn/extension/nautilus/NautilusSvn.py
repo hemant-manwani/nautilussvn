@@ -18,6 +18,7 @@ from anyvc.workdir import get_workdir_manager_for_path
 from nautilussvn.util.decorators import timeit, disable
 from nautilussvn.util.path import get_file_extension
 from nautilussvn.ui import launch_ui_window
+from nautilussvn.util.vcs import *
 
 from nautilussvn.util.locale import gettext
 _ = gettext.gettext
@@ -156,6 +157,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
                 is_in_a_or_a_working_copy):
             self.status_monitor.status(path)
     
+    @timeit
     def get_file_items(self, window, items):
         """
         Menu activated with items selected. Nautilus also calls this function
@@ -187,6 +189,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         
         return MainContextMenu(paths, self).construct_menu()
     
+    @timeit
     def get_background_items(self, window, item):
         """
         Menu activated on entering a directory. Builds context menu for File
@@ -325,27 +328,27 @@ class MainContextMenu:
         checks = {
             "is_dir"                        : isdir,
             "is_file"                       : isfile,
-            "is_working_copy"               : lambda path: True,
-            "is_in_a_or_a_working_copy"     : lambda path: True,
-            "is_versioned"                  : lambda path: True,
-            "is_normal"                     : lambda path: True,
-            "is_added"                      : lambda path: True,
-            "is_modified"                   : lambda path: True,
-            "is_deleted"                    : lambda path: True,
-            "is_ignored"                    : lambda path: True,
-            "is_locked"                     : lambda path: True,
-            "is_missing"                    : lambda path: True,
-            "is_conflicted"                 : lambda path: True,
-            "is_obstructed"                 : lambda path: True,
-            "has_unversioned"               : lambda path: True,
-            "has_added"                     : lambda path: True,
-            "has_modified"                  : lambda path: True,
-            "has_deleted"                   : lambda path: True,
-            "has_ignored"                   : lambda path: True,
-            "has_locked"                    : lambda path: True,
-            "has_missing"                   : lambda path: True,
-            "has_conflicted"                : lambda path: True,
-            "has_obstructed"                : lambda path: True,
+            "is_working_copy"               : is_working_copy,
+            "is_in_a_or_a_working_copy"     : is_in_a_or_a_working_copy,
+            "is_versioned"                  : is_versioned,
+            "is_normal"                     : is_normal,
+            "is_added"                      : is_added,
+            "is_modified"                   : is_modified,
+            "is_deleted"                    : is_deleted,
+            "is_ignored"                    : is_ignored,
+            "is_locked"                     : is_locked,
+            "is_missing"                    : is_missing,
+            "is_conflicted"                 : is_conflicted,
+            "is_obstructed"                 : is_obstructed,
+            "has_unversioned"               : has_unversioned,
+            "has_added"                     : has_added,
+            "has_modified"                  : has_modified,
+            "has_deleted"                   : has_deleted,
+            "has_ignored"                   : has_ignored,
+            "has_locked"                    : has_locked,
+            "has_missing"                   : has_missing,
+            "has_conflicted"                : has_conflicted,
+            "has_obstructed"                : has_obstructed,
         }
 
         # Each path gets tested for each check
@@ -1113,7 +1116,7 @@ class MainContextMenu:
             
             # Execute the condition associated with the definition_item
             # which will figure out whether or not to display this item.
-            if not definition_item.has_key("condition") or True:
+            if not definition_item.has_key("condition") or definition_item["condition"]():
                 # If the item is a separator, don't show it if this is the first
                 # or last item, or if the previous item was a separator.
                 if (definition_item["label"] == self.SEPARATOR and
