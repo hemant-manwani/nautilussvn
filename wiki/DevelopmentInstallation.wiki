@@ -27,7 +27,7 @@ It's a good idea organize your code in the following way, this makes it easy to 
 
 {{{
 mkdir -p ~/Development/nautilussvn/branches
-ln -s ~/Development/nautilussvn/current ~/Development/nautilussvn/trunk
+ln -s ~/Development/nautilussvn/trunk ~/Development/nautilussvn/current
 }}}
 
 You'll notice later that this will make it easy to switch between branches, you simply have to change the directory current is pointing to (as long as the branch doesn't deviate too much).
