@@ -224,18 +224,16 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         """
         Check whether or not it's a good idea to have NautilusSvn do
         its magic for this URI. Some examples of URI schemes:
-        
+
         x-nautilus-desktop:/// # e.g. mounted devices on the desktop
-        
+
+        For now, only file:// URIs are permitted.
+
         """
-        
         # TODO: integrate this into the settings manager and allow people
         # to add custom rules etc.
-        
-        if not uri.startswith("file://"): return False
-        
-        return True
-        
+        return uri.startswith("file://")
+
     def set_emblem_by_path(self, path):
         """
         Set the emblem for a path (looks up the status in C{statuses}).
