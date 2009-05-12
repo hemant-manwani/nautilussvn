@@ -4,7 +4,6 @@ import gobject
 
 from anyvc.workdir import get_workdir_manager_for_path
 
-from nautilussvn.util.vcs import get_summarized_status
 from nautilussvn.util.decorators import timeit, disable
 
 class StatusChecker:
@@ -38,16 +37,13 @@ class StatusChecker:
     #: great deal of paths.
     status_tree = {}
     
-    def __init__(self, status_callback):
-        self.status_callback = status_callback
+    def status(self, paths=(), invalidate=False, recursive=True, status_callback=None):
+        self.add_to_queue(paths, invalidate=invalidate, recursive=recursive, status_callback=status_callback)
     
-    def status(self, path, invalidate=False, recursive=True):
-        self.add_to_queue(path, invalidate=invalidate, recursive=recursive)
-        
-    def add_to_queue(self, path, invalidate, recursive):
-        if (path, invalidate, recursive) in self.status_queue: return
-        print "added %s to queue" % path
-        self.status_queue.append((path, invalidate, recursive))
+    def add_to_queue(self, paths, invalidate, recursive, status_callback):
+        if (paths, invalidate, recursive, status_callback) in self.status_queue: return
+        print "added %s to queue" % paths
+        self.status_queue.append((paths, invalidate, recursive, status_callback))
         self.status_queue_last_accessed = time.time()
         
         # Register a timeout handler to start processing the queue
@@ -65,34 +61,40 @@ class StatusChecker:
             self.status_queue.sort(reverse=True)
             
             while len(self.status_queue) > 0:
-                path, invalidate, recursive = self.status_queue.pop(0)
+                paths, invalidate, recursive, status_callback = self.status_queue.pop(0)
                 
-                workdir_manager = get_workdir_manager_for_path(path)
-                if workdir_manager:
-                    statuses = []
-                    print "processing %s" % path
-                    # Let's take a look and see if we have already collected
-                    # this path previously, if so no need to actually try
-                    # and found out the status
-                    if not invalidate and path in self.status_tree:
-                        for another_path in self.status_tree.keys():
-                            if another_path.startswith(path):
-                                statuses.append((another_path, self.status_tree[another_path]))
-                    else:
-                        # It wasn't in the tree or an invalidation was
-                        # requested so let's do the status check
-                        # FIXME: stupid temporary files that get create on vcs
-                        # operations and whatnot, I don't know to handle these
-                        # properly yet 
-                        try:
-                            statuses = [(status.abspath, status.state) for status in 
-                                workdir_manager.status(paths=(path,), recursive=recursive)]
-                            self.update_status_tree(statuses)
-                        except OSError:
-                            pass
-                    
-                    status = get_summarized_status(path, statuses)
-                    self.status_callback(path, status)
+                for path in paths:
+                    workdir_manager = get_workdir_manager_for_path(path)
+                    if workdir_manager:
+                        statuses = []
+                        print "processing %s" % path
+                        # Let's take a look and see if we have already collected
+                        # this path previously, if so no need to actually try
+                        # and found out the status
+                        if not invalidate and path in self.status_tree:
+                            for another_path in self.status_tree.keys():
+                                if another_path.startswith(path):
+                                    statuses.append((another_path, self.status_tree[another_path]))
+                        else:
+                            # It wasn't in the tree or an invalidation was
+                            # requested so let's do the status check
+                            # FIXME: stupid temporary files that get create on vcs
+                            # operations and whatnot, I don't know to handle these
+                            # properly yet 
+                            try:
+                                statuses = [(status.abspath, status.state) for status in 
+                                    workdir_manager.status(paths=(path,), recursive=recursive)]
+                                self.update_status_tree(statuses)
+                            except OSError:
+                                pass
+                        
+                # Call the client back with the results
+                results = []
+                for path in paths:
+                    for another_path in self.status_tree.keys():
+                        if another_path.startswith(path):
+                            results.append((another_path, self.status_tree[another_path]))
+                status_callback(paths, results)
                     
             self.status_queue_is_active = False
             return False

@@ -67,11 +67,10 @@ class StatusMonitor:
     def __init__(self, watch_callback, status_callback):
         # The callbacks
         self.watch_callback = watch_callback
+        self.status_callback = status_callback
         
         # Create a status checker we can use to request status checks
-        self.status_checker = StatusChecker(
-            status_callback=status_callback
-        )
+        self.status_checker = StatusChecker()
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -155,8 +154,12 @@ class StatusMonitor:
         if path.endswith(".svn/entries"):
             parent_dir = working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
             paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
-            for path in paths:
-                self.status_checker.status(path, invalidate=True, recursive=False)
+            self.status_checker.status(
+                paths, 
+                invalidate=True, 
+                recursive=False, 
+                status_callback=self.status_callback
+            )
         else:
             # Let's try and do some fancy stuff to detect if we were 
             # dealing with an unversioned file, this is a little bit
@@ -170,7 +173,12 @@ class StatusMonitor:
             ])
             
             if isdir(path) or path in statuses_dictionary:
-                self.status_checker.status(path, invalidate=True, recursive=False)
+                self.status_checker.status(
+                    (path,), 
+                    invalidate=True, 
+                    recursive=False, 
+                    status_callback=self.status_callback
+                )
                 parent_dir = os.path.split(path)[0]
         
         # Refresh the status for all parents
@@ -178,5 +186,9 @@ class StatusMonitor:
             path_to_check = parent_dir
             while path_to_check != "/":
                 if not get_workdir_manager_for_path(path_to_check): break
-                self.status_checker.status(path_to_check, recursive=False)
+                self.status_checker.status(
+                    (path_to_check,), 
+                    recursive=False, 
+                    status_callback=self.status_callback
+                )
                 path_to_check = os.path.split(path_to_check)[0]
