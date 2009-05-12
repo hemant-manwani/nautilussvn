@@ -280,8 +280,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         """
         This is the callback that C{StatusMonitor} calls. 
         
-        @type   statuses:   list
-        @param  statuses:   A list of (abspath, state) tuples
+        @type   requested_paths:    tuple
+        @param  requested_paths:    A tuple of paths for which the status check was requested
+        
+        @type   statuses:           list
+        @param  statuses:           A list of (abspath, state) tuples
         """
         
         for path in requested_paths:
