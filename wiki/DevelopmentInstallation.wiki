@@ -9,35 +9,69 @@
 You can install the extension globally using the setup script (setup.py), here's how:
 
 {{{
-svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
-cd ~/nautilussvn
+svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/Development/nautilussvn
+cd ~/Development/nautilussvn
 sudo python setup.py install
 nautilus -q && nautilus &
 }}}
 
 And you're done.
 
-= Installing locally manually =
+= For actual development =
 
-Iif you want to install NautilusSvn locally and be able to update with a simple SVN Update you'll have to follow these instructions: 
+  _*<font color="red">Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot</font>*_
+
+== Directory structure ==
+
+If you tend to switch a lot between branches it's a good idea to have something like this:
 
 {{{
-svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/nautilussvn
-
-mkdir -p ~/.nautilus/python-extensions
-ln -s ~/nautilussvn/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
-mkdir -p ~/.icons
-ln -s ~/nautilussvn/nautilussvn/data/icons/hicolor ~/.icons/ 
+mkdir -p ~/Development/nautilussvn/branches
+ln -s ~/Development/nautilussvn/current ~/Development/nautilussvn/trunk
 }}}
 
-Add the following line to to /etc/environment (replace $USER with your username):
+You'll notice later that this will make it easy to switch between branches, you simply have to change the directory current is pointing to (as long as the branch doesn't deviate too much).
+
+== Checking out NautilusSvn ==
 
 {{{
-PYTHONPATH="/home/$USER/nautilussvn/"
-}}} 
+svn checkout http://nautilussvn.googlecode.com/svn/trunk ~/Development/nautilussvn/trunk
+}}}
 
-Note that /etc/environment is only parsed when X is started, but you can load the extension immediately using:
+Let's link everything to the current directory:
+
 {{{
-export PYTHONPATH="$PYTHONPATH:/home/$USER/nautilussvn/"
+mkdir -p ~/.nautilus/python-extensions
+ln -s ~/Development/nautilussvn/current/nautilussvn/lib/extensions/nautilus/NautilusSvn.py ~/.nautilus/python-extensions/NautilusSvn.py
+mkdir -p ~/.icons
+ln -s ~/Development/nautilussvn/current/nautilussvn/data/icons/hicolor ~/.icons/ 
+}}}
+
+== Setting up a local PYTHONPATH ==
+
+{{{
+~/Development/python 
+~/Development/python/nautilussvn symbolic link to ~/Development/nautilussvn/current
+}}}
+
+Change {{{~/.profile}}} to include the line:
+
+{{{
+export PYTHONPATH="/home/bruce/Development/python"
+}}}
+
+And parse this file in your {{{~/.bashrc}}} so this environment variable is also available to Bash:
+
+{{{
+# Source .profile
+if [ -f ~/.profile ]; then
+  . ~/.profile
+fi
+}}}
+
+Placing it in {{{~/.profile}}} is needed because your GNOME session isn't started from a shell, so {{{~/.bashrc}}} etc. is not parsed. You'll have to restart your session (logout/login) for the changes to take effect. Or you can load the extension immediately using (it won't be available to any programs not started from the shell though):
+
+{{{
+export PYTHONPATH="$PYTHONPATH:/home/$USER/Development/python/"
 nautilus -q && nautilus &
 }}}
