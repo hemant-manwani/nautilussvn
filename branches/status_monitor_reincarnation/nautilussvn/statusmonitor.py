@@ -245,9 +245,7 @@ class StatusMonitor:
             parent_dir = working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
             paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
             for path in paths:
-                # FIXME: this ignores propchanges on the directory for the moment
-                if not isdir(path): 
-                    self.status(path, invalidate=True, recursive=False)
+                self.status(path, invalidate=True, recursive=False)
         else:
             # Let's try and do some fancy stuff to detect if we were 
             # dealing with an unversioned file, this is a little bit
