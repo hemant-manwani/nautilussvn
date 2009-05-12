@@ -18,7 +18,7 @@ from anyvc.workdir import get_workdir_manager_for_path
 from nautilussvn.util.decorators import timeit, disable
 from nautilussvn.util.path import get_file_extension
 from nautilussvn.ui import launch_ui_window
-from nautilussvn.util.vcs import get_summarized_status
+from nautilussvn.util.vcs import *
 
 from nautilussvn.util.locale import gettext
 _ = gettext.gettext
@@ -87,7 +87,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         print "Initializing nautilussvn extension"
         
         # Create our StatusChecker to requests statuses
-        self.status_checker = StatusChecker()
+        self.status_checker = StatusChecker(
+            status_callback=self.cb_status
+        )
         
         # Create a StatusMonitor and register all sorts of callbacks with it
         self.status_monitor = StatusMonitor(
@@ -159,7 +161,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         elif (has_watch and
                 not path in self.statuses and
                 is_in_a_or_a_working_copy):
-            self.status_checker.status((path,), status_callback=self.cb_status)
+            self.status_checker.status(path)
     
     @disable
     def get_file_items(self, window, items):
@@ -224,16 +226,18 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         """
         Check whether or not it's a good idea to have NautilusSvn do
         its magic for this URI. Some examples of URI schemes:
-
+        
         x-nautilus-desktop:/// # e.g. mounted devices on the desktop
-
-        For now, only file:// URIs are permitted.
-
+        
         """
+        
         # TODO: integrate this into the settings manager and allow people
         # to add custom rules etc.
-        return uri.startswith("file://")
-
+        
+        if not uri.startswith("file://"): return False
+        
+        return True
+        
     def set_emblem_by_path(self, path):
         """
         Set the emblem for a path (looks up the status in C{statuses}).
@@ -272,41 +276,38 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         @param  path:   The path for which a watch was added
         """
         
-        self.status_checker.status((path,), status_callback=self.cb_status)
+        self.status_checker.status(path)
     
-    def cb_status(self, requested_paths=(), statuses=[]):
+    def cb_status(self, path, status):
         """
         This is the callback that C{StatusMonitor} calls. 
         
-        @type   requested_paths:    tuple
-        @param  requested_paths:    A tuple of paths for which the status check was requested
+        @type   path:   string
+        @param  path:   The path of the item something interesting happend to.
         
-        @type   statuses:           list
-        @param  statuses:           A list of (abspath, state) tuples
+        @type   status: string
+        @param  status: A string indicating the status of an item (see: EMBLEMS).
         """
         
-        for path in requested_paths:
-            state = get_summarized_status(path, statuses)
-            
-            # We might not have a NautilusVFSFile (which we need to apply an
-            # emblem) but we can already store the status for when we do.
-            self.statuses[path] = state
+        # We might not have a NautilusVFSFile (which we need to apply an
+        # emblem) but we can already store the status for when we do.
+        self.statuses[path] = status
 
-            if not path in self.nautilusVFSFile_table: return
-            item = self.nautilusVFSFile_table[path]
-            
-            # We need to invalidate the extension info for only one reason:
-            #
-            # - Invalidating the extension info will cause Nautilus to remove all
-            #   temporary emblems we applied so we don't have overlay problems
-            #   (with ourselves, we'd still have some with other extensions).
-            #
-            # After invalidating update_file_info applies the correct emblem.
-            #
-            # FIXME: added set_emblem_by_path_call because Nautilus doesn't
-            # seem to invalidate the extension info
-            self.set_emblem_by_path(path)
-            item.invalidate_extension_info()
+        if not path in self.nautilusVFSFile_table: return
+        item = self.nautilusVFSFile_table[path]
+        
+        # We need to invalidate the extension info for only one reason:
+        #
+        # - Invalidating the extension info will cause Nautilus to remove all
+        #   temporary emblems we applied so we don't have overlay problems
+        #   (with ourselves, we'd still have some with other extensions).
+        #
+        # After invalidating update_file_info applies the correct emblem.
+        #
+        # FIXME: added set_emblem_by_path_call because Nautilus doesn't
+        # seem to invalidate the extension info
+        self.set_emblem_by_path(path)
+        item.invalidate_extension_info()
 
 class MainContextMenu:
     """
