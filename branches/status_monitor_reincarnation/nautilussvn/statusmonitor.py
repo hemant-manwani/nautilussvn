@@ -1,13 +1,11 @@
 import os
 from os.path import isdir, isfile, realpath, basename
-import time
 
-import gobject
 import gio
 
-import anyvc
 from anyvc.workdir import get_workdir_manager_for_path
 
+from nautilussvn.statuschecker import StatusChecker
 from nautilussvn.util.decorators import timeit, disable
 
 class StatusMonitor:
@@ -56,16 +54,6 @@ class StatusMonitor:
     
     """
     
-    #: A list of statuses which count as modified (for a directory) in 
-    #: TortoiseSVN emblem speak.
-    MODIFIED_STATUSES = [
-        "added",
-        "deleted",
-        "replaced",
-        "modified",
-        "missing"
-    ]
-    
     #: A list to keep track of the paths we're watching.
     #: 
     #: It looks like:::
@@ -76,38 +64,14 @@ class StatusMonitor:
     #:     
     watches = []
     
-    #: This is a queue to make sure status checks are done in a orderly
-    #: manner. It hasn't been completely implemented yet (and I'm wondering
-    #: if it's really necessary, but ok).
-    status_queue = []
-    status_queue_last_accessed = None
-    status_queue_is_active = False
-    
-    STATUS_QUEUE_TIMEOUT = 100
-    STATUS_QUEUE_PROCESS_TIMEOUT = 100
-    
-    #: This tree stores the status of the items. We monitor working copy
-    #: for changes and modify this tree in-place accordingly. This way
-    #: apart from an intial recursive check we don't have to do any
-    #: and the speed is increased because the tree is in memory.
-    #:
-    #: This isn't a tree (yet) and looks like:::
-    #:
-    #:     status_tree = {
-    #:         "/foo": "normal",
-    #:         "/foo/bar": normal",
-    #:         "/foo/bar/baz": "added"
-    #:     }
-    #:
-    #: As you can see it's not a tree (yet) and the way statuses are 
-    #: collected as by iterating through the dictionary. This is 
-    #: obviously going to cause issues once the user has collected a 
-    #: great deal of paths.
-    status_tree = {}
-    
     def __init__(self, watch_callback, status_callback):
+        # The callbacks
         self.watch_callback = watch_callback
-        self.status_callback = status_callback
+        
+        # Create a status checker we can use to request status checks
+        self.status_checker = StatusChecker(
+            status_callback=status_callback
+        )
     
     def has_watch(self, path):
         return (path in self.watches)
@@ -166,60 +130,7 @@ class StatusMonitor:
                 file = gio.File(path_to_attach)
                 monitor = file.monitor_directory()
                 monitor.connect("changed", self.process_event)
-        
-    def status(self, path, invalidate=False, recursive=True):
-        self.add_to_queue(path, invalidate=invalidate, recursive=recursive)
 
-    def get_text_status(self, path, statuses):
-        """
-        This is a helper function to figure out the textual representation 
-        for a set of statuses. In TortoiseSVN speak a directory is
-        regarded as modified when any of its children are either added, 
-        deleted, replaced, modified or missing so you can quickly see if 
-        your working copy has local changes.
-        
-        @type   path:   list
-        @param  path:   A list of (abspath, state) tuples
-        """
-        
-        # Unlike Subversion most VCS's don't have the concept of statuses
-        # on directories, so make sure to take this into account.
-        # FIXME: but why are we doing this:
-        statuses = [(status[0], status[1]) for status in statuses if status[0].startswith(path)]
-        text_statuses = [status[1] for status in statuses]
-        statuses_dictionary = dict(statuses)
-        
-        # If no statuses are returned but we do have a workdir_manager
-        # it means that an error occured, most likely a working copy
-        # administration area (.svn directory) went missing but it could
-        # be pretty much anything.
-        if not statuses: 
-            # FIXME: figure out a way to make only the directory that
-            # is missing display conflicted and the rest unkown.
-            return "unknown"
-
-        # We need to take special care of directories
-        if isdir(path):
-            # These statuses take precedence.
-            if "conflicted" in text_statuses: return "conflicted"
-            if "obstructed" in text_statuses: return "obstructed"
-            
-            # The following statuses take precedence over the status
-            # of children.
-            if (path in statuses_dictionary and 
-                    statuses_dictionary[path] in ["added", "modified", "deleted"]):
-                return statuses_dictionary[path]
-            
-            # A directory should have a modified status when any of its children
-            # have a certain status (see modified_statuses above). Jason thought up 
-            # of a nifty way to do this by using sets and the bitwise AND operator (&).
-            if len(set(self.MODIFIED_STATUSES) & set(text_statuses)):
-                return "modified"
-        
-        # If we're not a directory we end up here.
-        if path in statuses_dictionary: return statuses_dictionary[path]
-        return "normal"
-        
     def process_event(self, monitor, file, other_file, event_type):
         # Ignore any events we're not interested in
         # FIXME: creating a file will fire both CHANGES_DONE and EVENT_CREATED
@@ -245,7 +156,7 @@ class StatusMonitor:
             parent_dir = working_dir = os.path.abspath(os.path.join(os.path.dirname(path), ".."))
             paths = [os.path.join(working_dir, basename) for basename in os.listdir(working_dir)]
             for path in paths:
-                self.status(path, invalidate=True, recursive=False)
+                self.status_checker.status(path, invalidate=True, recursive=False)
         else:
             # Let's try and do some fancy stuff to detect if we were 
             # dealing with an unversioned file, this is a little bit
@@ -259,7 +170,7 @@ class StatusMonitor:
             ])
             
             if isdir(path) or path in statuses_dictionary:
-                self.status(path, invalidate=True, recursive=False)
+                self.status_checker.status(path, invalidate=True, recursive=False)
                 parent_dir = os.path.split(path)[0]
         
         # Refresh the status for all parents
@@ -267,64 +178,5 @@ class StatusMonitor:
             path_to_check = parent_dir
             while path_to_check != "/":
                 if not get_workdir_manager_for_path(path_to_check): break
-                self.status(path_to_check, recursive=False)
+                self.status_checker.status(path_to_check, recursive=False)
                 path_to_check = os.path.split(path_to_check)[0]
-    
-    def add_to_queue(self, path, invalidate, recursive):
-        if (path, invalidate, recursive) in self.status_queue: return
-        print "added %s to queue" % path
-        self.status_queue.append((path, invalidate, recursive))
-        self.status_queue_last_accessed = time.time()
-        
-        # Register a timeout handler to start processing the queue
-        if not self.status_queue_is_active:
-            self.status_queue_is_active = True
-            gobject.timeout_add(self.STATUS_QUEUE_TIMEOUT, self.process_queue)
-    
-    @timeit
-    def process_queue(self):
-        if (time.time() - self.status_queue_last_accessed) > (self.STATUS_QUEUE_PROCESS_TIMEOUT / 1000):
-            print "processing queue"
-            # FIXME: this is a temporary hack to make sure that lower 
-            # files are checked before the directories are (so status is
-            # figured out correctly. 
-            self.status_queue.sort(reverse=True)
-            
-            while len(self.status_queue) > 0:
-                path, invalidate, recursive = self.status_queue.pop(0)
-                
-                workdir_manager = get_workdir_manager_for_path(path)
-                if workdir_manager:
-                    statuses = []
-                    print "processing %s" % path
-                    # Let's take a look and see if we have already collected
-                    # this path previously, if so no need to actually try
-                    # and found out the status
-                    if not invalidate and path in self.status_tree:
-                        for another_path in self.status_tree.keys():
-                            if another_path.startswith(path):
-                                statuses.append((another_path, self.status_tree[another_path]))
-                    else:
-                        # It wasn't in the tree or an invalidation was
-                        # requested so let's do the status check
-                        # FIXME: stupid temporary files that get create on vcs
-                        # operations and whatnot, I don't know to handle these
-                        # properly yet 
-                        try:
-                            statuses = [(status.abspath, status.state) for status in 
-                                workdir_manager.status(paths=(path,), recursive=recursive)]
-                            self.update_status_tree(statuses)
-                        except OSError:
-                            pass
-                    
-                    status = self.get_text_status(path, statuses)
-                    self.status_callback(path, status)
-                    
-            self.status_queue_is_active = False
-            return False
-            
-        return True
-
-    def update_status_tree(self, statuses):
-        for path, status in statuses:
-            self.status_tree[path] = status
