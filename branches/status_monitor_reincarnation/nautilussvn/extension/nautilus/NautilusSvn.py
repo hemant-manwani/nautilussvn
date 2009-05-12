@@ -1433,7 +1433,6 @@ class MainContextMenu:
         nautilussvn_extension = self.nautilussvn_extension
         nautilusVFSFile_table = nautilussvn_extension.nautilusVFSFile_table
         for path in paths:
-            log.debug("callback_debug_invalidate() called for %s" % path)
             if path in nautilusVFSFile_table:
                 nautilusVFSFile_table[path].invalidate_extension_info()
     
