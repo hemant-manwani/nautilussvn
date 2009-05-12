@@ -1,0 +1,9 @@
+#summary Some instructions for performance testing NautilusSvn
+#labels Phase-Support
+
+= How fast is svn status? =
+
+{{{
+sudo bash -c "sync; echo 3 > /proc/sys/vm/drop_caches"
+time svn status > /dev/null .
+}}}
