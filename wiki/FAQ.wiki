@@ -43,6 +43,6 @@ Git support is on [http://code.google.com/p/nautilussvn/wiki/Roadmap our roadmap
 
 Not yet, but this is definitely something on our minds. We've abstracted the versioning and Nautilus extension bits so much that this'll be a cakewalk in the near future. This won't be in v0.12 though.
 
-= Does this run on *BSD? =
+= Does this run on `*`BSD? =
 
 We haven't tried it yet, but if you'd like to do some testing, please let us know!
