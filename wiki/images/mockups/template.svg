@@ -16568,7 +16568,7 @@
        xlink:href="#linearGradient2820"
        id="linearGradient7941"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,0.868216,-8.6945986e-6,3.914793)"
+       gradientTransform="matrix(1,0,0,0.868216,-8.6945985e-6,3.914793)"
        x1="22.75"
        y1="27.739614"
        x2="22.75"
@@ -17460,7 +17460,7 @@
        xlink:href="#linearGradient4656"
        id="radialGradient8118"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.5,0,0,1,0,2.3245814e-6)"
+       gradientTransform="matrix(1.5,0,0,1,0,2.3245815e-6)"
        cx="4"
        cy="39"
        fx="4"
@@ -19817,9 +19817,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.64318948"
-     inkscape:cx="15.23427"
-     inkscape:cy="-571.2502"
+     inkscape:zoom="0.72122243"
+     inkscape:cx="-388.45988"
+     inkscape:cy="-400.63928"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
@@ -21813,7 +21813,7 @@
     </g>
     <g
        id="g12586"
-       transform="matrix(0.5563762,0,0,0.5563762,-498.3155,530.77564)"
+       transform="matrix(0.5563762,0,0,0.5563762,-498.3155,525.38329)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -22082,7 +22082,7 @@
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        x="-463.69882"
-       y="547.76984"
+       y="542.3775"
        id="text12632"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -22090,12 +22090,12 @@
          sodipodi:role="line"
          id="tspan12634"
          x="-463.69882"
-         y="547.76984"
+         y="542.3775"
          style="font-size:13px">Scheduled</tspan></text>
     <g
        id="g13037"
        inkscape:label="Livello 1"
-       transform="matrix(0.5971344,0,0,0.5971344,-497.62618,382.01605)"
+       transform="matrix(0.5971344,0,0,0.5971344,-497.62618,376.6237)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -22250,7 +22250,7 @@
     </g>
     <text
        id="text13059"
-       y="400.52747"
+       y="395.1351"
        x="-461.01883"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
@@ -22258,7 +22258,7 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:13px"
-         y="400.52747"
+         y="395.1351"
          x="-461.01883"
          id="tspan13061"
          sodipodi:role="line">Inbox</tspan></text>
@@ -22278,7 +22278,7 @@
          style="font-size:18px;fill:#9ca9c1;fill-opacity:1">Collect</tspan></text>
     <text
        id="text13067"
-       y="446.8316"
+       y="441.43924"
        x="-500.85727"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#9ca9c1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
@@ -22286,14 +22286,14 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:18px;fill:#9ca9c1;fill-opacity:1"
-         y="446.8316"
+         y="441.43924"
          x="-500.85727"
          id="tspan13069"
          sodipodi:role="line">Focus</tspan></text>
     <g
        inkscape:label="Layer 1"
        id="g13837"
-       transform="matrix(0.5306225,0,0,0.5306225,-495.44271,467.62691)"
+       transform="matrix(0.5306225,0,0,0.5306225,-495.44271,462.23456)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -22320,7 +22320,7 @@
     </g>
     <text
        id="text13844"
-       y="483.23663"
+       y="477.84427"
        x="-463.69882"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
@@ -22328,13 +22328,13 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:13px"
-         y="483.23663"
+         y="477.84427"
          x="-463.69882"
          id="tspan13846"
          sodipodi:role="line">Today</tspan></text>
     <text
        id="text13848"
-       y="578.93982"
+       y="573.54749"
        x="-463.69882"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
@@ -22342,13 +22342,13 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:13px"
-         y="578.93982"
+         y="573.54749"
          x="-463.69882"
          id="tspan13850"
          sodipodi:role="line">Waiting for</tspan></text>
     <g
        id="g13963"
-       transform="matrix(0.6152627,0,0,0.6152627,-52.99804,213.27486)"
+       transform="matrix(0.6152627,0,0,0.6152627,-52.99804,207.88251)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -22428,7 +22428,7 @@
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        x="-463.69882"
-       y="515.84827"
+       y="510.4559"
        id="text13984"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -22436,7 +22436,7 @@
          sodipodi:role="line"
          id="tspan13986"
          x="-463.69882"
-         y="515.84827"
+         y="510.4559"
          style="font-size:13px">Next</tspan></text>
     <rect
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
@@ -24490,7 +24490,7 @@
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#9ca9c1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        x="-500.85727"
-       y="658.20856"
+       y="652.81622"
        id="text17453"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -24498,13 +24498,13 @@
          sodipodi:role="line"
          id="tspan17455"
          x="-500.85727"
-         y="658.20856"
+         y="652.81622"
          style="font-size:18px;fill:#9ca9c1;fill-opacity:1">Active Projects</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        x="-463.69882"
-       y="694.61353"
+       y="689.22119"
        id="text17465"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -24512,11 +24512,11 @@
          sodipodi:role="line"
          id="tspan17467"
          x="-463.69882"
-         y="694.61353"
+         y="689.22119"
          style="font-size:13px">RabbitVCS</tspan></text>
     <text
        id="text17493"
-       y="727.22516"
+       y="721.83282"
        x="-463.69882"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
@@ -24524,12 +24524,12 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:13px"
-         y="727.22516"
+         y="721.83282"
          x="-463.69882"
          id="tspan17495"
          sodipodi:role="line">Hamster</tspan></text>
     <g
-       transform="matrix(0.5590969,0,0,0.5590969,-498.57136,676.53007)"
+       transform="matrix(0.5590969,0,0,0.5590969,-498.57136,671.13772)"
        id="g18890"
        inkscape:label="Vectors"
        style="display:inline"
@@ -24619,7 +24619,7 @@
        style="display:inline"
        inkscape:label="Vectors"
        id="g18873"
-       transform="matrix(0.5590969,0,0,0.5590969,-498.57136,710.17315)"
+       transform="matrix(0.5590969,0,0,0.5590969,-498.57136,704.7808)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -24706,7 +24706,7 @@
        inkscape:export-ydpi="91.470001"
        inkscape:export-xdpi="91.470001"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
-       transform="matrix(0.5230546,0,0,0.5230546,-498.24434,593.70882)"
+       transform="matrix(0.5230546,0,0,0.5230546,-498.24434,588.31647)"
        id="g5199"
        inkscape:label="Vectors"
        style="display:inline">
@@ -24799,17 +24799,17 @@
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        x="-462.81839"
-       y="611.14734"
+       y="605.755"
        id="text5227"><tspan
          sodipodi:role="line"
          id="tspan5229"
          x="-462.81839"
-         y="611.14734"
+         y="605.755"
          style="font-size:13px">Someday</tspan></text>
     <g
        inkscape:label="Layer 1"
        id="g5438"
-       transform="matrix(0.4714412,0,0,0.4714412,-496.67919,563.62932)"
+       transform="matrix(0.4714412,0,0,0.4714412,-496.67919,558.23697)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
