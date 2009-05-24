@@ -1,0 +1,5 @@
+#summary Triaging issues
+#labels Phase-Support
+
+= Stock responses =
+  _See [http://live.gnome.org/Bugsquad/TriageGuide/StockResponses StockRespones at live.gnome.org]_
