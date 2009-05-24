@@ -21776,9 +21776,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.69292051"
-     inkscape:cx="-27.037575"
-     inkscape:cy="-686.76284"
+     inkscape:zoom="0.6670249"
+     inkscape:cx="-292.87753"
+     inkscape:cy="-891.10433"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      width="48px"
@@ -26196,7 +26196,7 @@
        y="656.97131"
        x="-329.05588"
        height="13.463482"
-       width="15.756188"
+       width="14.088469"
        id="rect17399"
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
@@ -26257,7 +26257,7 @@
     <rect
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect13992"
-       width="15.756188"
+       width="14.088469"
        height="13.463482"
        x="-329.05588"
        y="551.66089"
@@ -26333,7 +26333,7 @@
     <rect
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect17383"
-       width="15.756188"
+       width="14.088469"
        height="13.463482"
        x="-329.05588"
        y="621.86786"
@@ -26396,7 +26396,7 @@
        y="586.76434"
        x="-329.05588"
        height="13.463482"
-       width="15.756188"
+       width="14.088469"
        id="rect17367"
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
@@ -26895,7 +26895,7 @@
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect5712"
-       width="15.756188"
+       width="14.088469"
        height="13.463482"
        x="-329.05588"
        y="692.83575" />
@@ -26955,7 +26955,7 @@
        y="728.7002"
        x="-329.05588"
        height="13.463482"
-       width="15.756188"
+       width="14.088469"
        id="rect5726"
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#9e9e9e;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
@@ -27359,7 +27359,7 @@
          y="1076.8621"
          style="font-size:13px">Useful icons</tspan></text>
     <g
-       transform="matrix(0.3682398,0,0,0.3682398,-304.05459,550.12922)"
+       transform="matrix(0.3682398,0,0,0.3682398,-306.67818,550.12922)"
        inkscape:label="Livello 1"
        id="g8889"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
@@ -27493,7 +27493,7 @@
     <g
        id="g8947"
        inkscape:label="Livello 1"
-       transform="matrix(0.3682398,0,0,0.3682398,-304.05459,585.56444)"
+       transform="matrix(0.3682398,0,0,0.3682398,-306.67818,585.56444)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -27623,7 +27623,7 @@
          sodipodi:type="arc" />
     </g>
     <g
-       transform="matrix(0.3682398,0,0,0.3682398,-304.05459,619.81849)"
+       transform="matrix(0.3682398,0,0,0.3682398,-306.67818,619.81849)"
        inkscape:label="Livello 1"
        id="g9005"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
@@ -27757,7 +27757,7 @@
     <g
        id="g9063"
        inkscape:label="Livello 1"
-       transform="matrix(0.3682398,0,0,0.3682398,-304.05459,655.25372)"
+       transform="matrix(0.3682398,0,0,0.3682398,-306.67818,655.25372)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -27887,7 +27887,7 @@
          sodipodi:type="arc" />
     </g>
     <g
-       transform="matrix(0.3682398,0,0,0.3682398,-304.05459,690.68895)"
+       transform="matrix(0.3682398,0,0,0.3682398,-306.67818,690.68895)"
        inkscape:label="Livello 1"
        id="g9121"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
@@ -28021,7 +28021,7 @@
     <g
        id="g9179"
        inkscape:label="Livello 1"
-       transform="matrix(0.3682398,0,0,0.3682398,-304.05459,727.30535)"
+       transform="matrix(0.3682398,0,0,0.3682398,-306.67818,727.30535)"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -28155,14 +28155,14 @@
        id="rect9587"
        width="23.62801"
        height="22.600704"
-       x="-306.59775"
+       x="-309.22134"
        y="547.81885"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001" />
     <rect
        y="582.23358"
-       x="-306.59775"
+       x="-309.22134"
        height="22.600704"
        width="23.62801"
        id="rect10361"
@@ -28175,14 +28175,14 @@
        id="rect10363"
        width="23.62801"
        height="22.600704"
-       x="-306.59775"
+       x="-309.22134"
        y="616.64832"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001" />
     <rect
        y="652.09033"
-       x="-306.59775"
+       x="-309.22134"
        height="22.600704"
        width="23.62801"
        id="rect10365"
@@ -28195,14 +28195,14 @@
        id="rect10367"
        width="23.62801"
        height="22.600704"
-       x="-306.59775"
+       x="-309.22134"
        y="688.55963"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001" />
     <rect
        y="724.00165"
-       x="-306.59775"
+       x="-309.22134"
        height="22.600704"
        width="23.62801"
        id="rect10369"
