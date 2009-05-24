@@ -2,4 +2,4 @@
 #labels Phase-Support
 
 = Stock responses =
-  _See [http://live.gnome.org/Bugsquad/TriageGuide/StockResponses StockRespones at live.gnome.org]_
+  _See [http://live.gnome.org/Bugsquad/TriageGuide/StockResponses StockResponses at live.gnome.org]_
