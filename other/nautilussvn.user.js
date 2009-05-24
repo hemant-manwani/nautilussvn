@@ -11,7 +11,12 @@ var saved_searches = {
     "All": "",
     "New bugs": "type:Defect+status:New",
     "Bugs": "type:Defect",
-    "Enhancements":  "type:Enhancement"
+    "Enhancements":  "type:Enhancement",
+    "New enhancements": "type:Enhancement+status:New",
+    "Release 0.12": "milestone:Release0.12",
+    "Release 0.13": "milestone:Release0.13",
+    "Release 0.14": "milestone:Release0.14",
+    "Release 0.15": "milestone:Release0.15"
 }
 
 // Change the default tab to point to a customized query
