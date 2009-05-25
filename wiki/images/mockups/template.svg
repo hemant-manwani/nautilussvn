@@ -31,9 +31,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.63043261"
-     inkscape:cx="458.82087"
-     inkscape:cy="384.4458"
+     inkscape:zoom="0.82784289"
+     inkscape:cx="492.97064"
+     inkscape:cy="418.18884"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      width="48px"
@@ -21983,7 +21983,7 @@
        xlink:href="#linearGradient7916"
        inkscape:collect="always" />
     <linearGradient
-       gradientTransform="translate(417.6857,-329.4264)"
+       gradientTransform="translate(-304.63859,2.5735715)"
        y2="1737.9382"
        x2="1554.6263"
        y1="1854.3119"
@@ -22186,7 +22186,7 @@
        xlink:href="#linearGradient9579"
        id="linearGradient21359"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.6831838,0,0,1,890.72586,-92.578435)"
+       gradientTransform="matrix(0.6831838,0,0,1,168.4016,239.42154)"
        x1="1554.6263"
        y1="1854.3119"
        x2="1554.6263"
@@ -24175,7 +24175,7 @@
        xlink:href="#linearGradient4656"
        id="radialGradient22855"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.5,0,0,1,0,2.324581e-6)"
+       gradientTransform="matrix(1.5,0,0,1,0,2.3245811e-6)"
        cx="4"
        cy="39"
        fx="4"
@@ -27576,7 +27576,7 @@
      inkscape:label="Mockup"
      transform="translate(437.22189,-365.46252)">
     <g
-       transform="translate(-108.61441,-56.265217)"
+       transform="translate(-124.01588,-128.13876)"
        id="g10201">
       <rect
          transform="matrix(0.9065836,0,0,0.3078976,2.0328621,30.266006)"
@@ -27720,7 +27720,7 @@
          sodipodi:nodetypes="ccccccccc" />
     </g>
     <g
-       transform="matrix(1.1377863,0,0,1.1377863,-382.95371,-122.72982)"
+       transform="matrix(1.1377863,0,0,1.1377863,-398.35518,-194.60336)"
        id="g9860">
       <path
          sodipodi:type="arc"
@@ -27905,7 +27905,7 @@
          transform="matrix(1.3480519,0,0,1.3532467,-11.219695,-6.5884651)" />
     </g>
     <g
-       transform="translate(-380.27621,-54.312717)"
+       transform="translate(-395.67768,-126.18626)"
        id="g13390">
       <g
          id="g3438"
@@ -28047,7 +28047,7 @@
          ry="0.6875" />
     </g>
     <g
-       transform="translate(116.66327,-112.82992)"
+       transform="translate(101.2618,-184.70346)"
        id="g9591">
       <g
          id="g12444">
@@ -28127,7 +28127,7 @@
       </g>
     </g>
     <g
-       transform="translate(39.92698,-115.73202)"
+       transform="translate(24.525508,-187.60556)"
        id="g9544">
       <path
          style="fill:url(#linearGradient9548);fill-opacity:1;fill-rule:evenodd;stroke:#cca800;stroke-width:0.99999988px;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
@@ -28168,7 +28168,7 @@
        transform="matrix(1.0990136,5.234983e-2,-5.2352773e-2,1.0989518,-163.49289,101.33042)"
        d="" />
     <g
-       transform="translate(-41.17091,-116.80122)"
+       transform="translate(-56.572382,-188.67476)"
        id="g12612">
       <path
          sodipodi:type="arc"
@@ -32646,7 +32646,7 @@
          id="tspan5736"
          sodipodi:role="line">Programming</tspan></text>
     <g
-       transform="translate(-309.75971,-117.96892)"
+       transform="translate(-325.16118,-189.84246)"
        inkscape:label="Livello 1"
        id="g5861">
       <g
@@ -32775,7 +32775,7 @@
          transform="matrix(1.522916,0,0,1.521443,-2.753783e-2,-2.871404)" />
     </g>
     <g
-       transform="matrix(1.0589044,0,0,1.0589044,-240.49231,-120.40612)"
+       transform="matrix(1.0589044,0,0,1.0589044,-255.89378,-192.27966)"
        id="g5959"
        inkscape:label="Layer 1">
       <path
@@ -32864,7 +32864,7 @@
          transform="matrix(2.936984e-4,-1,1,-2.764896e-4,0,0)" />
     </g>
     <g
-       transform="translate(-171.58401,-118.24882)"
+       transform="translate(-186.98548,-190.12236)"
        id="g7680"
        inkscape:label="Layer 1">
       <path
@@ -32953,7 +32953,7 @@
          id="path6095" />
     </g>
     <g
-       transform="translate(-544.60571,-355.23157)"
+       transform="translate(-560.00718,-427.10511)"
        id="g7855">
       <g
          transform="translate(429.16639,248.65336)"
@@ -32993,13 +32993,13 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-filename="/home/bruce/Desktop/main-window-mockup.png"
        id="text8885"
-       y="-142.88495"
-       x="-381.50864"
+       y="-214.75848"
+       x="-396.91016"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"><tspan
-         style="font-size:13px"
-         y="-142.88495"
-         x="-381.50864"
+         style="font-size:13px;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold"
+         y="-214.75848"
+         x="-396.91016"
          id="tspan8887"
          sodipodi:role="line">Useful icons</tspan></text>
     <g
@@ -33901,7 +33901,7 @@
          x="-330.54391"
          y="998.52399" /></text>
     <g
-       transform="translate(-308.32111,-51.763017)"
+       transform="translate(-323.72258,-123.63656)"
        id="g14615"
        inkscape:label="Layer 1">
       <g
@@ -33952,7 +33952,7 @@
       </g>
     </g>
     <g
-       transform="translate(1027.6183,-1181.3943)"
+       transform="translate(1012.2168,-1253.2678)"
        id="g14869">
       <g
          id="g10112"
@@ -34178,7 +34178,7 @@
       </g>
     </g>
     <g
-       transform="translate(822.8434,-1401.5596)"
+       transform="translate(807.44193,-1473.4331)"
        id="g6504">
       <path
          style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#204a87;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
@@ -35196,7 +35196,7 @@
       </g>
     </g>
     <g
-       transform="translate(-43.54941,-58.206217)"
+       transform="translate(-58.950882,-130.07976)"
        id="g7194">
       <g
          id="layer2"
@@ -36670,7 +36670,7 @@
        style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999988px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <g
        id="g10984"
-       transform="translate(974.17399,-1219.747)">
+       transform="translate(958.77252,-1291.6205)">
       <g
          transform="translate(-934.71951,1163.4818)"
          id="g10812">
@@ -36891,17 +36891,17 @@
     </g>
     <text
        id="text9890"
-       y="1116.7361"
-       x="1693.1323"
+       y="1448.7361"
+       x="970.80804"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          style="font-weight:bold"
-         y="1116.7361"
-         x="1693.1323"
+         y="1448.7361"
+         x="970.80804"
          id="tspan9892"
          sodipodi:role="line">GNOME Do</tspan></text>
     <g
-       transform="matrix(1,0,0,0.972983,417.6857,-282.47096)"
+       transform="matrix(1,0,0,0.972983,-304.63859,49.529012)"
        id="g10457"
        style="display:inline"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
@@ -36930,7 +36930,7 @@
     <path
        sodipodi:nodetypes="cccczccc"
        id="rect10420"
-       d="M 1694.9646,1408.5808 L 2258.7895,1408.5808 C 2267.0995,1408.5808 2273.7895,1415.2708 2273.7895,1423.5808 L 2273.7895,1494.357 C 2273.7895,1494.357 2061.8554,1474.6604 1972.8647,1474.6734 C 1883.874,1474.6864 1680.5183,1494.4446 1680.5183,1494.4446 L 1679.9646,1423.5808 C 1679.9646,1415.2708 1686.6546,1408.5808 1694.9646,1408.5808 z"
+       d="M 972.64034,1740.5808 L 1536.4652,1740.5808 C 1544.7752,1740.5808 1551.4652,1747.2708 1551.4652,1755.5808 L 1551.4652,1826.357 C 1551.4652,1826.357 1339.5311,1806.6604 1250.5404,1806.6734 C 1161.5497,1806.6864 958.19404,1826.4446 958.19404,1826.4446 L 957.64034,1755.5808 C 957.64034,1747.2708 964.33034,1740.5808 972.64034,1740.5808 z"
        style="opacity:1;fill:url(#linearGradient11188);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -36938,8 +36938,8 @@
     <rect
        ry="14.999999"
        rx="14.999999"
-       y="1429.4313"
-       x="1889.4082"
+       y="1761.4313"
+       x="1167.084"
        height="162.09813"
        width="176.19362"
        id="rect10404"
@@ -36952,8 +36952,8 @@
        id="rect10410"
        width="176.19362"
        height="162.09813"
-       x="1699.0118"
-       y="1429.4312"
+       x="976.68756"
+       y="1761.4312"
        rx="14.999999"
        ry="14.999999"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
@@ -36962,8 +36962,8 @@
     <rect
        ry="14.999999"
        rx="14.999999"
-       y="1430.2338"
-       x="2079.1885"
+       y="1762.2338"
+       x="1356.8643"
        height="162.09813"
        width="176.19362"
        id="rect10412"
@@ -36973,55 +36973,55 @@
        inkscape:export-ydpi="91.470001" />
     <text
        id="text10439"
-       y="1583.7925"
-       x="1779.6139"
+       y="1915.7925"
+       x="1057.2897"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:12px;text-align:center;text-anchor:middle;fill:#ffffff"
-         y="1583.7925"
-         x="1779.6139"
+         y="1915.7925"
+         x="1057.2897"
          id="tspan10441"
          sodipodi:role="line">New Action</tspan></text>
     <text
        id="text10447"
-       y="1583.7925"
-       x="2173.8936"
+       y="1915.7925"
+       x="1451.5693"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:12px;text-align:center;text-anchor:middle;fill:#ffffff"
-         y="1583.7925"
-         x="2173.8936"
+         y="1915.7925"
+         x="1451.5693"
          id="tspan10449"
          sodipodi:role="line">Ideal Time...</tspan></text>
     <path
        id="path10453"
-       d="M 2245.1065,1414.2903 L 2249.0795,1418.1882 L 2253.0525,1414.2903 L 2245.1065,1414.2903 z"
+       d="M 1522.7822,1746.2903 L 1526.7552,1750.1882 L 1530.7282,1746.2903 L 1522.7822,1746.2903 z"
        style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001" />
     <text
        id="text10461"
-       y="1610.9166"
-       x="1977.1077"
+       y="1942.9166"
+       x="1254.7834"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:12px;text-align:center;text-anchor:middle;fill:#ffffff"
-         y="1610.9166"
-         x="1977.1077"
+         y="1942.9166"
+         x="1254.7834"
          id="tspan10463"
          sodipodi:role="line">Ideal Time Management Application</tspan></text>
     <g
-       transform="matrix(2.8990252,0,0,2.8990252,4424.8928,-1943.298)"
+       transform="matrix(2.8990252,0,0,2.8990252,3702.5685,-1611.298)"
        id="g11190"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -37256,7 +37256,7 @@
        width="596.23224"
        id="rect11845"
        style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;filter:url(#filter10400);enable-background:accumulate"
-       transform="matrix(0.9959623,0,0,0.972983,422.22824,-538.28114)" />
+       transform="matrix(0.9959623,0,0,0.972983,-300.09599,-206.28117)" />
     <image
        inkscape:export-ydpi="91.470001"
        inkscape:export-xdpi="91.470001"
@@ -37265,23 +37265,23 @@
        width="589"
        height="212"
        id="image11839"
-       x="1677.0026"
-       y="1152.476" />
+       x="954.67828"
+       y="1484.476" />
     <rect
        inkscape:export-ydpi="91.470001"
        inkscape:export-xdpi="91.470001"
        inkscape:export-filename="/home/bruce/Desktop/RTM-NewTask2.png"
        ry="15.000001"
        rx="15"
-       y="1151.6373"
-       x="1660.4373"
+       y="1483.6373"
+       x="938.11298"
        height="241.31689"
        width="633.18011"
        id="rect11855"
        style="opacity:0;fill:#adaeab;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <g
        id="g21205"
-       transform="matrix(2.8990252,0,0,2.8990252,4814.0091,-1943.298)"
+       transform="matrix(2.8990252,0,0,2.8990252,4091.6848,-1611.298)"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -37473,7 +37473,7 @@
     <g
        style="display:inline"
        id="g21327"
-       transform="matrix(0.6831838,0,0,0.972983,890.72586,-45.622995)"
+       transform="matrix(0.6831838,0,0,0.972983,168.4016,286.37698)"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -37499,7 +37499,7 @@
     </g>
     <path
        style="opacity:1;fill:url(#linearGradient21359);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="M 1763.3422,1645.4288 L 2148.5382,1645.4288 C 2154.2155,1645.4288 2158.786,1652.1188 2158.786,1660.4288 L 2158.786,1731.205 C 2158.786,1731.205 2013.996,1711.5084 1953.199,1711.5214 C 1892.402,1711.5344 1753.4727,1731.2926 1753.4727,1731.2926 L 1753.0944,1660.4288 C 1753.0944,1652.1188 1757.6649,1645.4288 1763.3422,1645.4288 z"
+       d="M 1041.0179,1977.4288 L 1426.2139,1977.4288 C 1431.8912,1977.4288 1436.4617,1984.1188 1436.4617,1992.4288 L 1436.4617,2063.205 C 1436.4617,2063.205 1291.6717,2043.5084 1230.8747,2043.5214 C 1170.0777,2043.5344 1031.1484,2063.2926 1031.1484,2063.2926 L 1030.7701,1992.4288 C 1030.7701,1984.1188 1035.3406,1977.4288 1041.0179,1977.4288 z"
        id="path21333"
        sodipodi:nodetypes="cccczccc"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
@@ -37508,8 +37508,8 @@
     <rect
        ry="14.999999"
        rx="14.999999"
-       y="1666.2792"
-       x="1772.1416"
+       y="1998.2792"
+       x="1049.8174"
        height="162.09813"
        width="176.19362"
        id="rect21337"
@@ -37522,8 +37522,8 @@
        id="rect21339"
        width="176.19362"
        height="162.09813"
-       x="1965.2018"
-       y="1667.0818"
+       x="1242.8776"
+       y="1999.0818"
        rx="14.999999"
        ry="14.999999"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
@@ -37532,34 +37532,34 @@
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-       x="1852.7437"
-       y="1820.6405"
+       x="1130.4194"
+       y="2152.6404"
        id="text21341"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan21343"
-         x="1852.7437"
-         y="1820.6405"
+         x="1130.4194"
+         y="2152.6404"
          style="font-size:12px;text-align:center;text-anchor:middle;fill:#ffffff">Track Time</tspan></text>
     <text
        id="text21345"
-       y="1820.6405"
-       x="2050.2375"
+       y="2152.6404"
+       x="1327.9133"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:12px;text-align:center;text-anchor:middle;fill:#ffffff"
-         y="1820.6405"
-         x="2050.2375"
+         y="2152.6404"
+         x="1327.9133"
          id="tspan21347"
          sodipodi:role="line">Design entire...</tspan></text>
     <path
        style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="M 2131.4302,1651.1383 L 2135.4032,1655.0362 L 2139.3762,1651.1383 L 2131.4302,1651.1383 z"
+       d="M 1409.1059,1983.1383 L 1413.0789,1987.0362 L 1417.0519,1983.1383 L 1409.1059,1983.1383 z"
        id="path21353"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -37569,8 +37569,8 @@
        id="rect21361"
        width="354.83273"
        height="223.5869"
-       x="1779.4161"
-       y="1857.7518"
+       x="1057.0919"
+       y="2189.7517"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001" />
@@ -37579,15 +37579,15 @@
        id="rect21473"
        width="350.99152"
        height="38.357548"
-       x="1781.4307"
-       y="1920.0836"
+       x="1059.1064"
+       y="2252.0835"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001" />
     <g
        id="g21363"
        inkscape:label="Livello 1"
-       transform="matrix(2.0231159,0,0,2.0231159,1805.9356,1693.8612)"
+       transform="matrix(2.0231159,0,0,2.0231159,1083.6113,2025.8612)"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -37720,7 +37720,8 @@
        id="g21425"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
-       inkscape:export-ydpi="91.470001">
+       inkscape:export-ydpi="91.470001"
+       transform="translate(-722.32429,331.99997)">
       <rect
          y="1859.8965"
          x="1781.4746"
@@ -37738,41 +37739,41 @@
        inkscape:export-xdpi="91.470001"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        id="text21433"
-       y="1936.8239"
-       x="1826.7429"
+       y="2268.8237"
+       x="1104.4187"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
        xml:space="preserve"><tspan
          style="font-size:13px;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold"
-         y="1936.8239"
-         x="1826.7429"
+         y="2268.8237"
+         x="1104.4187"
          id="tspan21435"
          sodipodi:role="line">Design entire user interface using...</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
-       x="1827.6921"
-       y="1900.6385"
+       x="1105.3679"
+       y="2232.6384"
        id="text21437"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan21439"
-         x="1827.6921"
-         y="1900.6385"
+         x="1105.3679"
+         y="2232.6384"
          style="font-size:13px;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold">Ideal Time Management Application</tspan></text>
     <text
        inkscape:export-ydpi="91.470001"
        inkscape:export-xdpi="91.470001"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        id="text21441"
-       y="2011.3048"
-       x="1826.7429"
+       y="2343.3047"
+       x="1104.4187"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
        xml:space="preserve"><tspan
          style="font-size:13px;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold"
-         y="2011.3048"
-         x="1826.7429"
+         y="2343.3047"
+         x="1104.4187"
          id="tspan21443"
          sodipodi:role="line">Finish up all high-level conceptual...</tspan></text>
     <text
@@ -37781,73 +37782,73 @@
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
-       x="1826.7429"
-       y="1974.0862"
+       x="1104.4187"
+       y="2306.0862"
        id="text21445"><tspan
          sodipodi:role="line"
          id="tspan21447"
-         x="1826.7429"
-         y="1974.0862"
+         x="1104.4187"
+         y="2306.0862"
          style="font-size:13px;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold">Write down all application logic in...</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-       x="1827.7839"
-       y="1914.8601"
+       x="1105.4597"
+       y="2246.8601"
        id="text21457"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan21459"
-         x="1827.7839"
-         y="1914.8601"
+         x="1105.4597"
+         y="2246.8601"
          style="font-size:10px">No description</tspan></text>
     <text
        id="text21461"
-       y="1951.6223"
-       x="1827.7839"
+       y="2283.6223"
+       x="1105.4597"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:10px"
-         y="1951.6223"
-         x="1827.7839"
+         y="2283.6223"
+         x="1105.4597"
          id="tspan21463"
          sodipodi:role="line">No description</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-       x="1827.7839"
-       y="1988.0283"
+       x="1105.4597"
+       y="2320.0283"
        id="text21465"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan21467"
-         x="1827.7839"
-         y="1988.0283"
+         x="1105.4597"
+         y="2320.0283"
          style="font-size:10px">No description</tspan></text>
     <text
        id="text21469"
-       y="2026.4677"
-       x="1827.7839"
+       y="2358.4675"
+       x="1105.4597"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          style="font-size:10px"
-         y="2026.4677"
-         x="1827.7839"
+         y="2358.4675"
+         x="1105.4597"
          id="tspan21471"
          sodipodi:role="line">No description</tspan></text>
     <g
        id="g21617"
-       transform="matrix(0.6470603,0,0,0.6470603,2392.1519,1171.3309)"
+       transform="matrix(0.6470603,0,0,0.6470603,1669.8276,1503.3309)"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -38037,7 +38038,7 @@
       </g>
     </g>
     <g
-       transform="matrix(0.6470603,0,0,0.6470603,2392.1519,1208.5093)"
+       transform="matrix(0.6470603,0,0,0.6470603,1669.8276,1540.5093)"
        id="g21709"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -38229,7 +38230,7 @@
     </g>
     <g
        id="g21785"
-       transform="matrix(0.6470603,0,0,0.6470603,2392.1519,1245.6877)"
+       transform="matrix(0.6470603,0,0,0.6470603,1669.8276,1577.6877)"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -38421,7 +38422,7 @@
     <g
        inkscape:label="Layer 1"
        id="g21932"
-       transform="matrix(1.2667904,0,0,1.2667904,1790.3609,2040.7704)"
+       transform="matrix(1.2667904,0,0,1.2667904,1068.0366,2372.7704)"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001">
@@ -38501,7 +38502,7 @@
          style="opacity:1;fill:#babdb6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     </g>
     <g
-       transform="matrix(2.1142663,0,0,2.1142663,117.57469,-52.459717)"
+       transform="matrix(2.1142663,0,0,2.1142663,102.17322,-124.33326)"
        id="g21956"
        inkscape:label="Layer 1">
       <rect
@@ -38582,36 +38583,36 @@
     <text
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
-       x="1826.7429"
-       y="2052.4565"
+       x="1104.4187"
+       y="2384.4565"
        id="text21982"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan21984"
-         x="1826.7429"
-         y="2052.4565"
+         x="1104.4187"
+         y="2384.4565"
          style="font-size:13px;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold">Programming</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-       x="1827.7839"
-       y="2065.9512"
+       x="1105.4597"
+       y="2397.9512"
        id="text21986"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan21988"
-         x="1827.7839"
-         y="2065.9512"
+         x="1105.4597"
+         y="2397.9512"
          style="font-size:10px">No description</tspan></text>
     <g
        style="display:inline"
        inkscape:label="Vectors"
        id="g22704"
-       transform="translate(-308.85301,17.958983)">
+       transform="translate(-324.25448,-53.914558)">
       <g
          style="opacity:0.5;display:inline"
          transform="matrix(1,0,0,1.5,0,-20.9375)"
@@ -38779,7 +38780,7 @@
          id="g22759" />
     </g>
     <g
-       transform="matrix(0.5590969,0,0,0.5590969,1789.9401,1887.2578)"
+       transform="matrix(0.5590969,0,0,0.5590969,1067.6158,2219.2578)"
        id="g22783"
        inkscape:label="Vectors"
        style="opacity:1;display:inline"
@@ -38866,7 +38867,7 @@
          id="g22809" />
     </g>
     <g
-       transform="matrix(2.8990252,0,0,2.8990252,4688.5577,-1705.8665)"
+       transform="matrix(2.8990252,0,0,2.8990252,3966.2334,-1373.8665)"
        id="g23003"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-track-time-mockup.png"
        inkscape:export-xdpi="91.470001"
@@ -39059,16 +39060,16 @@
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-       x="1898.8988"
-       y="1455.2565"
+       x="1176.5746"
+       y="1787.2565"
        id="text23079"
        inkscape:export-filename="/home/bruce/Desktop/gnome-do-new-action-mockup.png"
        inkscape:export-xdpi="91.470001"
        inkscape:export-ydpi="91.470001"><tspan
          sodipodi:role="line"
          id="tspan23081"
-         x="1898.8988"
-         y="1455.2565"
+         x="1176.5746"
+         y="1787.2565"
          style="font-size:10px">Finish GNOME Do mockup</tspan></text>
     <rect
        inkscape:export-ydpi="91.470001"
@@ -41059,7 +41060,7 @@
          id="tspan26721">0 h 24 min </tspan></text>
     <g
        id="g26763"
-       transform="translate(964.57265,-1220.3871)">
+       transform="translate(949.17118,-1292.2606)">
       <path
          d="M 39.774755,19.008621 A 8.6620579,8.6620579 0 1 1 22.45064,19.008621 A 8.6620579,8.6620579 0 1 1 39.774755,19.008621 z"
          sodipodi:ry="8.6620579"
@@ -41187,7 +41188,7 @@
        inkscape:export-ydpi="91.470001"
        inkscape:export-xdpi="91.470001"
        inkscape:export-filename="/home/bruce/Desktop/overview-mockup.png"
-       transform="matrix(1.7828224,0,0,1.7828224,-236.05741,22.390483)"
+       transform="matrix(1.7828224,0,0,1.7828224,-251.45888,-49.483058)"
        inkscape:label="Vrstva 1"
        id="g26795">
       <rect
