@@ -21,27 +21,18 @@ def bug_lookup(phenny, input):
     url = issue_url + str(bug_number)
 
     # Tidy up the document and convert to XHTML
-    # TODO: we should really cache the result and next time somebody
-    # requests the same report check the Modified-Since header.
+    # TODO: we should really check the Modified-Since header.
     if not bug_number in bugs_cache: 
         try:
-            document = lxml.html.parse(urllib2.urlopen(url))
-        
             # Alright let's parse it (the status one is a bit strange)
-            title = document.xpath("string(id('issueheader')//span[@class='h3'])")
-            reporter = document.xpath("string(//div[@class='author']/a)")
-            status = re.sub("\s+", "", document.xpath("string(id('issuemeta')//td[preceding-sibling::*[contains(., 'Status')]])"))
-            priority = document.xpath("string(id('issuemeta')//a[contains(., 'Priority')])").replace("Priority-", "")
-            type = document.xpath("string(id('issuemeta')//a[contains(., 'Type')])").replace("Type-", "")
-            
-            # Add it to the cache
+            document = lxml.html.parse(urllib2.urlopen(url))
             bugs_cache[bug_number] = {
                 "url": url,
-                "title": title,
-                "reporter": reporter,
-                "status": status,
-                "priority": priority,
-                "type": type
+                "title": document.xpath("string(id('issueheader')//span[@class='h3'])"),
+                "reporter": document.xpath("string(//div[@class='author']/a)"),
+                "status": re.sub("\s+", "", document.xpath("string(id('issuemeta')//td[preceding-sibling::*[contains(., 'Status')]])")),
+                "priority": document.xpath("string(id('issuemeta')//a[contains(., 'Priority')])").replace("Priority-", ""),
+                "type": document.xpath("string(id('issuemeta')//a[contains(., 'Type')])").replace("Type-", "")
             }
         except HTTPError:
             pass
