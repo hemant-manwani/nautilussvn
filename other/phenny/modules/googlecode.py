@@ -20,11 +20,10 @@ def bug_lookup(phenny, input):
     issue_url = "http://code.google.com/p/nautilussvn/issues/detail?id="
     url = issue_url + str(bug_number)
 
-    # Tidy up the document and convert to XHTML
-    # TODO: we should really check the Modified-Since header.
     if not bug_number in bugs_cache: 
         try:
             # Alright let's parse it (the status one is a bit strange)
+            # TODO: we should really check the Modified-Since header.
             document = lxml.html.parse(urllib2.urlopen(url))
             bugs_cache[bug_number] = {
                 "url": url,
