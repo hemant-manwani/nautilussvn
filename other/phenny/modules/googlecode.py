@@ -34,10 +34,11 @@ def bug_lookup(phenny, input):
                 "priority": document.xpath("string(id('issuemeta')//a[contains(., 'Priority')])").replace("Priority-", ""),
                 "type": document.xpath("string(id('issuemeta')//a[contains(., 'Type')])").replace("Type-", "")
             }
-            
-            phenny.say("Bug %(url)s %(type)s %(priority)s %(reporter)s %(status)s, %(title)s" % bugs_cache[bug_number])
         except HTTPError:
             phenny.say("No bug found")
+            return
+            
+    phenny.say("Bug %(url)s %(type)s %(priority)s %(reporter)s %(status)s, %(title)s" % bugs_cache[bug_number])
    
 bug_lookup.rule = r"(?i).*Bug #?(?P<bug_number>[0-9]+).*"
 
