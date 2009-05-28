@@ -34,15 +34,10 @@ def bug_lookup(phenny, input):
                 "priority": document.xpath("string(id('issuemeta')//a[contains(., 'Priority')])").replace("Priority-", ""),
                 "type": document.xpath("string(id('issuemeta')//a[contains(., 'Type')])").replace("Type-", "")
             }
+            
+            phenny.say("Bug %(url)s %(type)s %(priority)s %(reporter)s %(status)s, %(title)s" % bugs_cache[bug_number])
         except HTTPError:
-            pass
-
-    # And we're done!
-    # Might have been an error so let's take a peek and see if it's in the cache
-    if bug_number in bugs_cache:
-        phenny.say("Bug %(url)s %(type)s %(priority)s %(reporter)s %(status)s, %(title)s" % bugs_cache[bug_number])
-    else:
-        phenny.say("No bug found")
+            phenny.say("No bug found")
    
 bug_lookup.rule = r"(?i).*Bug #?(?P<bug_number>[0-9]+).*"
 
