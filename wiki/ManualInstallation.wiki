@@ -1,6 +1,8 @@
 #summary Describes the manual installation
 #labels Phase-Deploy
 
+Here are the instructions for manually installing from the tarball from [http://code.google.com/p/nautilussvn/downloads/list the downloads section].
+
 = Installing using the setup script =
 You can install the extension globally using the setup script (setup.py), here's how:
 
