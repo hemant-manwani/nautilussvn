@@ -1,7 +1,7 @@
 #summary How to install development snapshots
 #labels Phase-Support
 
-Whenever we want to share our work and consider trunk or the latest branch stable enough we make a snapshot. You can pull this snapshot from our repository and install the extension globally using the setup script (setup.py), here's how:
+You can pull the development snapshot from our repository and install the extension globally using the setup script (setup.py), here's how:
 
 {{{
 svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/Development/nautilussvn
@@ -9,3 +9,5 @@ cd ~/Development/nautilussvn
 sudo python setup.py install
 nautilus -q && nautilus &
 }}}
+
+After that you only have to svn update to get the latest snapshot.
