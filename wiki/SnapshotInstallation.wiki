@@ -4,6 +4,7 @@
 You can pull the development snapshot from our repository and install the extension globally using the setup script (setup.py), here's how:
 
 {{{
+mkdir ~/Development
 svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/Development/nautilussvn
 cd ~/Development/nautilussvn
 sudo python setup.py install
