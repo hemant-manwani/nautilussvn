@@ -1,25 +1,8 @@
-#summary Installation from SVN
+#summary Installation for hacking on NautilusSvn only
 #labels Phase-Implementation
 
-= Requirements =
 
-  See: http://code.google.com/p/nautilussvn/wiki/v012_Installation
-
-= Installing using the setup script =
-You can install the extension globally using the setup script (setup.py), here's how:
-
-{{{
-svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/Development/nautilussvn
-cd ~/Development/nautilussvn
-sudo python setup.py install
-nautilus -q && nautilus &
-}}}
-
-And you're done.
-
-= For actual development =
-
-  _*<font color="red">Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot</font>*_
+  _*<font color="red">WARNING: Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot. If you are an end-user please do not follow these instructions.</font>*_
 
 It's a good idea organize your code in the following way, this makes it easy to switch between branches and whatnot without fiddling too much. 
 
