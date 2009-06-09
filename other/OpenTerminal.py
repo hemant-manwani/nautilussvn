@@ -37,7 +37,7 @@ class OpenTerminalExtension(nautilus.MenuProvider):
             elif item.get_uri().startswith("sftp://"):
                 hostname, path = re.match("sftp://([^/]+)(/.*)", uri).groups()
                 dirname = os.path.dirname(path) # might have selected a file
-                ssh_command = 'ssh %s -t \'cd \\"%s\\" || cd \\"%s\\"; $SHELL -l\'' % (hostname, path, dirname)
+                ssh_command = 'ssh %s -t \'cd "%s" || cd "%s"; $SHELL -l\'' % (hostname, path, dirname)
                 Popen(["gnome-terminal", "-e", ssh_command]).pid
 
         menu_item.connect("activate", open_terminal)
