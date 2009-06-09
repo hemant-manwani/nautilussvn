@@ -27,9 +27,9 @@ class OpenTerminalExtension(nautilus.MenuProvider):
             Ignore the ugliness, quick hack.
             """
             uri = urllib.unquote(item.get_uri())
-
+            
             if item.get_uri().startswith("x-nautilus-desktop://"):
-                Popen(["gnome-terminal", "--working-directory", "~/Desktop"]).pid
+                Popen(["gnome-terminal", "--working-directory", "%s/Desktop" % os.path.expanduser("~")]).pid
             elif item.get_uri().startswith("file://"):
                 path = uri.replace("file://", "")
                 if not isdir(path): path = os.path.dirname(path)
