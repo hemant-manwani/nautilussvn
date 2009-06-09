@@ -46,7 +46,7 @@ Currently we're regularly creating snapshots of our development version (trunk).
 <td>
 *Development snapshots*
 
-The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation here].
+The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/SnapshotInstallation here].
 </td>
 </tr>
 </table>
