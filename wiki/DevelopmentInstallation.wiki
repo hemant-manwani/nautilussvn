@@ -43,7 +43,7 @@ Change {{{~/.profile}}} to include the line:
 export PYTHONPATH="/home/bruce/Development/python"
 }}}
 
-And parse this file in your {{{~/.bashrc}}} so this environment variable is also available to Bash:
+And parse this file in your {{{~/.bashrc}}} so this environment variable is also available to Bash (note that ~/.profile needs to executable):
 
 {{{
 # Source .profile
