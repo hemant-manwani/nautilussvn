@@ -21,7 +21,9 @@
 
   _Responsibilities: manage watches, process events, request status checks, do status checks, maintain status tree_
 
-The only way to have the status for items stay up-to-date is by monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories). The mechanism used to actually monitor the working copies is gio.GFileMonitor.
+The only way to have the status for items stay up-to-date is by actively monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories). The mechanism used to actually monitor the working copies is gio.GFileMonitor.
+
+
 
   * Upon encountering a working copy for the first time a recursive status check is done in the background to build the status tree for that working copy. 
   * The status monitor will watch for any changes to all files/directories and the .svn/entries file (which is the only file modified when doing SVN operations) and modify the status tree accordingly. 
