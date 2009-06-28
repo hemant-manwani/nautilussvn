@@ -2,10 +2,10 @@
 
 """
 
+from __future__ import with_statement
+
 import threading
 from Queue import Queue
-
-from __future__ import with_statement
 
 import pysvn
 
@@ -18,10 +18,21 @@ class StatusChecker(threading.Thread):
     #: (path, recurse, invalidate, callback).
     __paths_to_check = Queue()
     
-    #: This tree stores the status of the items. We monitor working copies
+    #: This tree stores the status of the items. We monitor working copy
     #: for changes and modify this tree in-place accordingly. This way
-    #: we don't have to do any intensive status checks apart from the initial
-    #: one and the speed is increased because the tree is in memory.
+    #: apart from an intial recursive check we don't have to do any
+    #: and the speed is increased because the tree is in memory.
+    #:
+    #: This isn't a tree (yet) and looks like:::
+    #:
+    #:     __status_tree = {
+    #:         "/foo": "normal",
+    #:         "/foo/bar": normal",
+    #:         "/foo/bar/baz": "added"
+    #:     }
+    #:
+    #: As you can see it's not a tree (yet) and the way statuses are 
+    #: collected as by iterating through the dictionary.
     __status_tree = dict()
     
     #: Need a re-entrant lock here, look at check_status/add_path_to_check
@@ -92,7 +103,7 @@ class StatusChecker(threading.Thread):
             (path, recurse, invalidate, callback) = self.__paths_to_check.get()
             self.__update_path_status(path, recurse, invalidate, callback)
     
-    def __get_path_statuses(self, path)
+    def __get_path_statuses(self, path):
         with self.__status_tree_lock:
             # Need to change this for different structure.
             statuses = __status_tree[path]
