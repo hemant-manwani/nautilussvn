@@ -108,7 +108,6 @@ class StatusChecker(threading.Thread):
     def __get_path_statuses(self, path):
         statuses = []
         with self.__status_tree_lock:
-            # Because status_tree is not a tree w
             for another_path in self.__status_tree.keys():
                 if another_path.startswith(path):
                     statuses.append((another_path, self.__status_tree[another_path]))
