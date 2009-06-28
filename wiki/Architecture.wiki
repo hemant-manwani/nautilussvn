@@ -9,7 +9,11 @@
 
 == Extension =
 
-`[...]`
+=== Context menu ===
+
+A context menu is generated for one or more paths. 
+
+See the page ContextMenuStructure for a description of the conditions.
 
 == GUI ==
 
