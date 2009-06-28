@@ -9,6 +9,8 @@ from Queue import Queue
 
 import pysvn
 
+import nautilussvn.util.vcs
+
 class StatusChecker(threading.Thread):
     #: The queue will be populated with 4-ples of
     #: (path, recurse, invalidate, callback).
@@ -60,12 +62,16 @@ class StatusChecker(threading.Thread):
         """
         
         with self.__status_tree_lock:
-            if not invalidate and path in self.__status_tree:
-                statuses = self.__get_path_statuses(path)
-                callback(path, statuses)
+            if nautilussvn.util.vcs.is_in_a_or_a_working_copy(path):
+                if not invalidate and path in self.__status_tree:
+                    statuses = self.__get_path_statuses(path)
+                    callback(path, statuses)
+                else:
+                    statuses = None
+                    self.__paths_to_check.put((path, recurse, invalidate, callback))
             else:
-                statuses = None
-                self.__paths_to_check.put((path, recurse, invalidate, callback))
+                statuses = [(path, "unknown")]
+                callback(path, statuses)
                 
         return statuses
         
@@ -94,14 +100,20 @@ class StatusChecker(threading.Thread):
         return statuses
         
     def __update_path_status(self, path, recurse=False, invalidate=False, callback=None):
-        """
-        TODO: I removed the sanity checking for now to clean up the code a bit
-        but we'll probably have to add it back in later. -- Bruce
-        """
+        statuses = []
         
+        # Another status check which includes this path may have completed in
+        # the meantime so let's do a sanity check.
+        with self.__status_tree_lock:
+            if not invalidate and path in self.__status_tree:
+                statuses = self.__get_path_statuses(path)
+                callback(path, statuses)
+                return
+        
+        # Otherwise actually do a status check
         statuses = [(status.path, str(status.text_status)) 
                         for status in self.vcs_client.status(path, recurse=recurse)]
-            
+        
         with self.__status_tree_lock:
             for path, status in statuses:
                 self.__status_tree[path] = status
