@@ -50,6 +50,15 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     #: gets called when an item is selected.
     nautilusVFSFile_table = {}
     
+    #: Keep track of item statuses locally. Due to the way everything works
+    #: if we didn't do this we'd request statuses from the daemon too often.
+    #: 
+    #:     statuses = {
+    #:         "/foo/bar/baz": "modified"
+    #:     }
+    #: 
+    statuses = {}
+    
     def __init__(self):
         # Create our StatusChecker to requests statuses
         self.status_checker = StatusChecker()
@@ -75,12 +84,13 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         # we had before will be invalid (think pointers and such).
         self.nautilusVFSFile_table[path] = item
         
-        # TODO: 
-        #   1. Request the statuses for the item from the daemon
-        #   2. Calculate a summarized status
-        #   3. Add an emblem
-        # (we could possibly skip the first two if we kept a cache too)
+        # If we are able to set an emblem that means we have a local status
+        # available. The StatusMonitor will keep us up-to-date through the 
+        # C{cb_status} callback.
+        if self.set_emblem_by_path(path): return
         
+        # Otherwise request a status check to be done.
+        # TODO: may want to check if the item in question is versioned
         self.status_checker.check_status(path, callback=self.cb_status)
         
         
@@ -157,9 +167,57 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         
         return True
         
+    def set_emblem_by_path(self, path):
+        """
+        Set the emblem for a path (looks up the status in C{statuses}).
+        
+        @type   path: string
+        @param  path: The path for which to set the emblem.
+        
+        @rtype:       boolean
+        @return:      Whether the emblem was set successfully.
+        """
+        
+        # Try and lookup the NautilusVFSFile in the lookup table since 
+        # we need it.
+        if not path in self.statuses: return False
+        if not path in self.nautilusVFSFile_table: return False
+        item = self.nautilusVFSFile_table[path]
+        
+        status = self.statuses[path]
+        
+        if status in self.EMBLEMS:
+            item.add_emblem(self.EMBLEMS[status])
+            return True
+            
+        return False
+        
     #=== CALLBACKS =============================================================
     
     def cb_status(self, path, statuses):
-        if not path in self.nautilusVFSFile_table: return
-        item = self.nautilusVFSFile_table[path]
-        item.add_emblem(self.EMBLEMS[get_summarized_status(path, statuses)])
+        """
+        This is the callback that C{StatusMonitor} calls. 
+        
+        @type   path:   string
+        @param  path:   The path of the item something interesting happend to.
+        
+        @type   statuses: tuple of (path, status)
+        @param  statuses: 
+        """
+        
+        for path, status in statuses:
+            # We might not have a NautilusVFSFile (which we need to apply an
+            # emblem) but we can already store the status for when we do.
+            self.statuses[path] = status
+            
+            if not path in self.nautilusVFSFile_table: return
+            item = self.nautilusVFSFile_table[path]
+            
+            # We need to invalidate the extension info for only one reason:
+            #
+            # - Invalidating the extension info will cause Nautilus to remove all
+            #   temporary emblems we applied so we don't have overlay problems
+            #   (with ourselves, we'd still have some with other extensions).
+            #
+            # After invalidating C{update_file_info} applies the correct emblem.
+            item.invalidate_extension_info()
