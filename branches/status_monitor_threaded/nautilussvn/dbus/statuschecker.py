@@ -29,13 +29,14 @@ class StatusChecker(dbus.service.Object):
         return self.status_checker.check_status(str(path), recurse=recurse, invalidate=invalidate, callback=self.CheckFinished)
         
 class StatusCheckerStub:
-    def __init__(self, status_callback):
+    def __init__(self, status_callback=None):
         self.session_bus = dbus.SessionBus()
         self.status_callback = status_callback
         
         try:
             self.status_checker = self.session_bus.get_object(SERVICE, OBJECT_PATH)
-            self.status_checker.connect_to_signal("CheckFinished", self.status_callback, dbus_interface=INTERFACE)
+            if self.status_callback:
+                self.status_checker.connect_to_signal("CheckFinished", self.status_callback, dbus_interface=INTERFACE)
         except dbus.DBusException:
             traceback.print_exc()
     
