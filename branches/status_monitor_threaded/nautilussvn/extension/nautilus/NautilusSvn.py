@@ -11,8 +11,15 @@ from os.path import realpath
 import nautilus
 import gnomevfs
 
-from nautilussvn.daemon.statuschecker import StatusChecker
 from nautilussvn.util.vcs import get_summarized_status
+
+import dbus.mainloop.glib
+import nautilussvn.dbus.service
+from nautilussvn.dbus.statuschecker import StatusCheckerStub as StatusChecker
+
+# Start up our DBus service if it's not already started, if this fails
+# we can't really do anything.
+nautilussvn.dbus.service.start()
 
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
 
@@ -63,9 +70,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     statuses = {}
     
     def __init__(self):
-        # Create our StatusChecker to requests statuses
-        self.status_checker = StatusChecker()
-        self.status_checker.start()
+        self.status_checker = StatusChecker(self.cb_status)
         
     def update_file_info(self, item):
         """
@@ -93,9 +98,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         if self.set_emblem_by_path(path): return
         
         # Otherwise request a status check to be done.
-        # TODO: may want to check if the item in question is versioned
-        self.status_checker.check_status(path, callback=self.cb_status)
-        
+        self.status_checker.check_status(path, recurse=True)
         
     def get_file_items(self, window, items):
         """
