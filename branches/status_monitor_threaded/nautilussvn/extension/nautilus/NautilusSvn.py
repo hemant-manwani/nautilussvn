@@ -38,8 +38,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         "locked":       "nautilussvn-locked",
         "read_only":    "nautilussvn-read_only",
         "obstructed":   "nautilussvn-obstructed",
+        "unversioned":  "nautilussvn-unversioned",
         "unknown":      "nautilussvn-unknown",
-        "unversioned":  "nautilussvn-unknown"
+        "calculating":  "nautilussvn-calculating"
     }
     
     #: This is our lookup table for C{NautilusVFSFile}s which we need for attaching
@@ -97,7 +98,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         # C{cb_status} callback.
         if self.set_emblem_by_path(path): return
         
-        # Otherwise request a status check to be done.
+        # Otherwise request an initial status check to be done.
         self.status_checker.check_status(path, recurse=True)
         
     def get_file_items(self, window, items):

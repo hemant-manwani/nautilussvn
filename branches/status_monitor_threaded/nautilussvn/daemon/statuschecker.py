@@ -10,26 +10,6 @@ from Queue import Queue
 import pysvn
 
 class StatusChecker(threading.Thread):
-    """ 
-    Pre-conditions for proper operation:
-    
-      - A recursive status check should always be done to build up a valid
-        status_tree. Otherwise recursive and non-recursive checks would 
-        conflict.
-    
-    Communication with the client:
-    
-       1. client calls check_status
-       2a. if the statuses are in the tree and invalid=False return those
-       2b. else return None and schedule a status check
-       
-    Todo:
-    
-      - Might be handy to have some sort of debugging output to see how
-        the checker is operating (how many requests come in etc.)
-       
-    """
-    
     #: The queue will be populated with 4-ples of
     #: (path, recurse, invalidate, callback).
     __paths_to_check = Queue()
@@ -65,9 +45,7 @@ class StatusChecker(threading.Thread):
         
     def check_status(self, path, recurse=False, invalidate=False, callback=None):
         """
-        Checks the status of the given path. Must be thread safe. Unless
-        specified, if the path is not in the stored status tree, we add it to
-        the list of things to look up.
+        Checks the status of the given path. Must be thread safe.
         
         This can go two ways:
         
@@ -88,7 +66,7 @@ class StatusChecker(threading.Thread):
             else:
                 statuses = None
                 self.__paths_to_check.put((path, recurse, invalidate, callback))
-        
+                
         return statuses
         
     def run(self):
@@ -123,7 +101,7 @@ class StatusChecker(threading.Thread):
         
         statuses = [(status.path, str(status.text_status)) 
                         for status in self.vcs_client.status(path, recurse=recurse)]
-        
+            
         with self.__status_tree_lock:
             for path, status in statuses:
                 self.__status_tree[path] = status
@@ -131,3 +109,4 @@ class StatusChecker(threading.Thread):
         # Remember: these callbacks will block THIS thread from calculating the
         # next path on the "to do" list.
         if callback: callback(path, self.__get_path_statuses(path))
+    
