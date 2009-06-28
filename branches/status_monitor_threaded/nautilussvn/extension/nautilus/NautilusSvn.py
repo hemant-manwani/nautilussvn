@@ -54,7 +54,10 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     #: if we didn't do this we'd request statuses from the daemon too often.
     #: 
     #:     statuses = {
-    #:         "/foo/bar/baz": "modified"
+    #:         "/foo/bar/baz": [
+    #:             ("/foo/bar/baz", "normal"),
+    #:             ("/foo/bar/baz/quux", "modified")
+    #:         ]
     #:     }
     #: 
     statuses = {}
@@ -166,7 +169,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         if not uri.startswith("file://"): return False
         
         return True
-        
+    
     def set_emblem_by_path(self, path):
         """
         Set the emblem for a path (looks up the status in C{statuses}).
@@ -184,10 +187,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         if not path in self.nautilusVFSFile_table: return False
         item = self.nautilusVFSFile_table[path]
         
-        status = self.statuses[path]
+        statuses = self.statuses[path]
+        summarized_status = get_summarized_status(path, statuses)
         
-        if status in self.EMBLEMS:
-            item.add_emblem(self.EMBLEMS[status])
+        if summarized_status in self.EMBLEMS:
+            item.add_emblem(self.EMBLEMS[summarized_status])
             return True
             
         return False
@@ -205,19 +209,18 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         @param  statuses: 
         """
         
-        for path, status in statuses:
-            # We might not have a NautilusVFSFile (which we need to apply an
-            # emblem) but we can already store the status for when we do.
-            self.statuses[path] = status
-            
-            if not path in self.nautilusVFSFile_table: return
-            item = self.nautilusVFSFile_table[path]
-            
-            # We need to invalidate the extension info for only one reason:
-            #
-            # - Invalidating the extension info will cause Nautilus to remove all
-            #   temporary emblems we applied so we don't have overlay problems
-            #   (with ourselves, we'd still have some with other extensions).
-            #
-            # After invalidating C{update_file_info} applies the correct emblem.
-            item.invalidate_extension_info()
+        # We might not have a NautilusVFSFile (which we need to apply an
+        # emblem) but we can already store the status for when we do.
+        self.statuses[path] = statuses
+        
+        if not path in self.nautilusVFSFile_table: return
+        item = self.nautilusVFSFile_table[path]
+        
+        # We need to invalidate the extension info for only one reason:
+        #
+        # - Invalidating the extension info will cause Nautilus to remove all
+        #   temporary emblems we applied so we don't have overlay problems
+        #   (with ourselves, we'd still have some with other extensions).
+        #
+        # After invalidating C{update_file_info} applies the correct emblem.
+        item.invalidate_extension_info()

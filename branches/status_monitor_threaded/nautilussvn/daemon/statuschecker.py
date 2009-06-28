@@ -11,7 +11,23 @@ import pysvn
 
 class StatusChecker(threading.Thread):
     """ 
-    Represents our status checking 'peon' thread.
+    Pre-conditions for proper operation:
+    
+      - A recursive status check should always be done to build up a valid
+        status_tree. Otherwise recursive and non-recursive checks would 
+        conflict.
+    
+    Communication with the client:
+    
+       1. client calls check_status
+       2a. if the statuses are in the tree and invalid=False return those
+       2b. else return None and schedule a status check
+       
+    Todo:
+    
+      - Might be handy to have some sort of debugging output to see how
+        the checker is operating (how many requests come in etc.)
+       
     """
     
     #: The queue will be populated with 4-ples of
@@ -64,29 +80,15 @@ class StatusChecker(threading.Thread):
              status_tree is locked OR if the queue is blocking. In the meantime,
              the thread will pop the path from the queue and look it up.
         """
+        
         with self.__status_tree_lock:
-            if path in self.__status_tree:
+            if not invalidate and path in self.__status_tree:
                 statuses = self.__get_path_statuses(path)
             else:
                 statuses = None
-                self.add_path_to_check(path, recurse, invalidate, callback)
+                self.__paths_to_check.put((path, recurse, invalidate, callback))
         
         return statuses
-    
-    def add_path_to_check(self, path, recurse=False, invalidate=False, callback=None):
-        """
-        This adds a file to have its status checked. Note that we remove this
-        path from the status tree.
-        
-        """
-        with self.__status_tree_lock:
-            if path in self.__status_tree:
-                # Also need to sort this out for different data structure.
-                del self.__status_tree[path]
-        
-        # Like this:
-        # callback(path, [STATUS.CALCULATING])
-        self.__paths_to_check.put((path, recurse, invalidate, callback))        
         
     def run(self):
         """
@@ -104,44 +106,28 @@ class StatusChecker(threading.Thread):
             self.__update_path_status(path, recurse, invalidate, callback)
     
     def __get_path_statuses(self, path):
+        statuses = []
         with self.__status_tree_lock:
-            # Need to change this for different structure.
-            statuses = __status_tree[path]
+            # Because status_tree is not a tree w
+            for another_path in self.__status_tree.keys():
+                if another_path.startswith(path):
+                    statuses.append((another_path, self.__status_tree[another_path]))
         
         return statuses
         
     def __update_path_status(self, path, recurse=False, invalidate=False, callback=None):
         """
-        
+        TODO: I removed the sanity checking for now to clean up the code a bit
+        but we'll probably have to add it back in later. -- Bruce
         """
         
-        do_status_check = False
-        statuses = []
+        statuses = [(status.path, str(status.text_status)) 
+                        for status in self.vcs_client.status(path, recurse=recurse)]
         
-        with self.__status_tree_lock:
-            do_status_check = invalidate or path not in self.__status_tree
-            # If we're not doing the status check, get the cached results NOW,
-            # in case they are deleted during the next statement
-            # DO NOT USE check_status
-            if not do_status_check:
-                statuses = self.__get_path_statuses(path)
-        
-        if do_status_check:
-            statuses = self.vcs_client.status(path, recurse=recurse)
-
-        with self.__status_tree_lock:
-            for another_path in self.__status_tree.keys():
-                if another_path.startswith(path):
-                    statuses.append((another_path, self.__status_tree[another_path]))
-            self.__update_status_tree(
-                [(status.path, str(status.text_status)) for status in statuses]
-            )
-
-        # Remember: these callbacks will block THIS thread from calculating the
-        # next path on the "to do" list.
-        if callback: callback(path, statuses)
-        
-    def __update_status_tree(self, statuses):
         with self.__status_tree_lock:
             for path, status in statuses:
                 self.__status_tree[path] = status
+        
+        # Remember: these callbacks will block THIS thread from calculating the
+        # next path on the "to do" list.
+        if callback: callback(path, self.__get_path_statuses(path))
