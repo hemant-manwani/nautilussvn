@@ -1,4 +1,7 @@
+import os.path
 from os.path import isdir, isfile, realpath, basename
+
+import pysvn
 
 #: A list of statuses which count as modified (for a directory) in 
 #: TortoiseSVN emblem speak.
@@ -22,10 +25,6 @@ def get_summarized_status(path, statuses):
     @param  path:   A list of (abspath, state) tuples
     """
     
-    # Unlike Subversion most VCS's don't have the concept of statuses
-    # on directories, so make sure to take this into account.
-    # FIXME: but why are we doing this:
-    statuses = [(status[0], status[1]) for status in statuses if status[0].startswith(path)]
     text_statuses = [status[1] for status in statuses]
     statuses_dictionary = dict(statuses)
     
@@ -59,3 +58,27 @@ def get_summarized_status(path, statuses):
     # If we're not a directory we end up here.
     if path in statuses_dictionary: return statuses_dictionary[path]
     return "normal"
+
+def is_working_copy(path):
+    vcs_client = pysvn.Client()
+    
+    try:
+        # when a versioned directory is removed and replaced with a
+        # non-versioned directory (one that doesn't have a working copy
+        # administration area, or .svn directory) you can't do a status 
+        # call on that item itself (results in an exception).
+        # 
+        # Note that this is not a conflict, it's more of a corruption. 
+        # And it's associated with the status "obstructed". The only
+        # way to make sure that we're dealing with a working copy
+        # is by verifying the SVN administration area exists.
+        if (isdir(path) and
+                vcs_client.info(path) and
+                isdir(os.path.join(path, ".svn"))):
+            return True
+        return False
+    except Exception, e:
+        return False
+    
+def is_in_a_or_a_working_copy(path):
+    return is_working_copy(path) or is_working_copy(os.path.split(path)[0])

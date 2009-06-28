@@ -11,6 +11,7 @@ from os.path import realpath
 import nautilus
 import gnomevfs
 
+import nautilussvn.util.vcs
 from nautilussvn.util.vcs import get_summarized_status
 
 import dbus.mainloop.glib
@@ -38,6 +39,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         "locked":       "nautilussvn-locked",
         "read_only":    "nautilussvn-read_only",
         "obstructed":   "nautilussvn-obstructed",
+        "incomplete":   "nautilussvn-incomplete",
         "unversioned":  "nautilussvn-unversioned",
         "unknown":      "nautilussvn-unknown",
         "calculating":  "nautilussvn-calculating"
@@ -96,10 +98,20 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         # If we are able to set an emblem that means we have a local status
         # available. The StatusMonitor will keep us up-to-date through the 
         # C{cb_status} callback.
-        if self.set_emblem_by_path(path): return
+        if path in self.statuses:
+            statuses = self.statuses[path]
+            summarized_status = get_summarized_status(path, statuses)
+            
+            # We may not have an emblem available for this specific status
+            # but that doesn't really matter, return so we don't go into
+            # a never-ending loop.
+            if summarized_status in self.EMBLEMS:
+                item.add_emblem(self.EMBLEMS[summarized_status])
+            return
         
         # Otherwise request an initial status check to be done.
-        self.status_checker.check_status(path, recurse=True)
+        if not self.status_checker.check_status(path, recurse=True):
+            item.add_emblem(self.EMBLEMS["calculating"])
         
     def get_file_items(self, window, items):
         """
@@ -154,6 +166,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         self.nautilusVFSFile_table[path] = item
         
         # TODO:
+        statuses = self.status_checker.check_status(path, recurse=True)
         return []
     
     #=== HELPER FUNCTIONS ======================================================
@@ -173,32 +186,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         if not uri.startswith("file://"): return False
         
         return True
-    
-    def set_emblem_by_path(self, path):
-        """
-        Set the emblem for a path (looks up the status in C{statuses}).
-        
-        @type   path: string
-        @param  path: The path for which to set the emblem.
-        
-        @rtype:       boolean
-        @return:      Whether the emblem was set successfully.
-        """
-        
-        # Try and lookup the NautilusVFSFile in the lookup table since 
-        # we need it.
-        if not path in self.statuses: return False
-        if not path in self.nautilusVFSFile_table: return False
-        item = self.nautilusVFSFile_table[path]
-        
-        statuses = self.statuses[path]
-        summarized_status = get_summarized_status(path, statuses)
-        
-        if summarized_status in self.EMBLEMS:
-            item.add_emblem(self.EMBLEMS[summarized_status])
-            return True
-            
-        return False
         
     #=== CALLBACKS =============================================================
     
