@@ -23,7 +23,7 @@
 
 Status checks can only be requested on items that a or in a working copy. If that is not the case then the result [(path, "unknown")] will be returned. However, it's a good idea for the client to check this themselves before requesting a status check.
 
-A recursive status check should always be done to build up a valid status_tree. Otherwise recursive and non-recursive checks would conflict.
+A recursive status check should always be done first to build up a valid status_tree, otherwise recursive and non-recursive checks would conflict.
 
 === Status Monitor ===
 
