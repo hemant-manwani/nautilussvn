@@ -84,6 +84,7 @@ class StatusChecker(threading.Thread):
         with self.__status_tree_lock:
             if not invalidate and path in self.__status_tree:
                 statuses = self.__get_path_statuses(path)
+                callback(path, statuses)
             else:
                 statuses = None
                 self.__paths_to_check.put((path, recurse, invalidate, callback))
