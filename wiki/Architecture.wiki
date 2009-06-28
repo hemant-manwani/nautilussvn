@@ -17,42 +17,21 @@
 
 == D-Bus Service ==
 
+=== Status checker ===
+
+  _Responsibilities: do status checks, maintain status tree_
+
+`[...]`
+
 === Status Monitor ===
 
-  _Responsibilities: manage watches, process events, request status checks, do status checks, maintain status tree_
+  _Responsibilities: manage watches, process events, request status checks, notify clients_
 
 The only way to have the status for items stay up-to-date is by actively monitoring all items within a working copy and the related metadata (contained in the working copy administration areas, the .svn directories). The mechanism we use for this is gio.GFileMonitor.
 
 Upon encountering a working copy for the first time a recursive status check is done in the background to build the status tree for that working copy. After that the status monitor will watch for any changes to all files/directories and the .svn/entries file (which is the only file modified when doing SVN operations) and modify the status tree accordingly. 
 
 When the monitor detects a change has  occurred, either to a versioned item itself or the associated metadata, it will process the event. If the item in question is not versioned it will skip it (this handles temporary files etc. quite nicely), if the item is however versioned it will add an invalidating status request to the queue for this file and non-invalidating ones for all parent directories.
-
-==== Status tree ====
-
-`[..]`
-
-==== Status queue ====
-
-When a status check is requested it is not immediately executed, instead the path and the type of check requested (recursive/non-recursive) are stored in a queue. Any duplicate requests will not be added to the queue and recursive status checks invalidate all related requests. Once the queue manager determines that an idle state has been reached it will start processing the queue.
-
-
-==== Communication with the client ====
-
-Initial:
-
-  * User enters directory
-  * Client requests a watch to be added
-  * Client is notified the watch has been added
-  * Client requests status information
-  * Status monitor calls client back with the result
-
-Consecutive:
-
-  * User does some operation
-  * Status monitor notices changes
-  * Status monitor updates status tree
-  * Status monitor notifies client about any changes
-
 
 == VCS Abstraction Layer ==
 
