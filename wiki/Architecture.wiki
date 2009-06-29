@@ -25,7 +25,11 @@ See the page ContextMenuStructure for a description of the conditions.
 
   _Responsibilities: do status checks, maintain status tree_
 
-Status checks can only be requested on items that a or in a working copy. If that is not the case then the result [(path, "unknown")] will be returned. However, it's a good idea for the client to check this themselves before requesting a status check.
+A status check can go three ways:
+
+  # If we've already looked the path up, return the statuses associated with it. 
+  # If we haven't already got the path, return [(path, "calculating")]. 
+  # If the item a status check is being requested for is not a or in a working copy then the result [(path, "unknown")] will be returned.
 
 A recursive status check should always be done first to build up a valid status_tree, otherwise recursive and non-recursive checks would conflict.
 
