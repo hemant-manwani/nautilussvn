@@ -55,10 +55,10 @@ class StatusChecker(threading.Thread):
              with it. This will block for as long as any other thread has our
              status_tree locked.
         
-          2. If we haven't already got the path, return "None" (can change this
-             if necessary). This will also block for max of (1) as long as the
-             status_tree is locked OR if the queue is blocking. In the meantime,
-             the thread will pop the path from the queue and look it up.
+          2. If we haven't already got the path, return [(path, "calculating")]. 
+             This will also block for max of (1) as long as the status_tree is 
+             locked OR if the queue is blocking. In the meantime, the thread 
+             will pop the path from the queue and look it up.
         """
         
         with self.__status_tree_lock:
@@ -67,7 +67,7 @@ class StatusChecker(threading.Thread):
                     statuses = self.__get_path_statuses(path)
                     callback(path, statuses)
                 else:
-                    statuses = None
+                    statuses = [(path, "calculating")]
                     self.__paths_to_check.put((path, recurse, invalidate, callback))
             else:
                 statuses = [(path, "unknown")]

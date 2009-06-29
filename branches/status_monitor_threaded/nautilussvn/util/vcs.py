@@ -61,7 +61,7 @@ def get_summarized_status(path, statuses):
 
 def is_working_copy(path):
     vcs_client = pysvn.Client()
-    
+
     try:
         # when a versioned directory is removed and replaced with a
         # non-versioned directory (one that doesn't have a working copy
@@ -82,3 +82,15 @@ def is_working_copy(path):
     
 def is_in_a_or_a_working_copy(path):
     return is_working_copy(path) or is_working_copy(os.path.split(path)[0])
+
+def is_versioned(path):
+    if is_working_copy(path):
+        return True
+    else:
+        # info will return nothing for an unversioned file inside a working copy
+        vcs_client = pysvn.Client()
+        if (is_working_copy(os.path.split(path)[0]) and
+                vcs_client.info(path)): 
+            return True
+            
+        return False
