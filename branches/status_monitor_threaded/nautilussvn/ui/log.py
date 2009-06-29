@@ -39,7 +39,7 @@ from nautilussvn.lib.decorators import gtk_unsafe
 from nautilussvn.util.locale import gettext
 _ = gettext.gettext
 
-DATETIME_FORMAT = nautilussvn.lib.helper.LOCAL_DATETIME_FORMAT
+from nautilussvn.util.locale import LOCAL_DATETIME_FORMAT as DATETIME_FORMAT
 
 class Log(InterfaceView):
     """
