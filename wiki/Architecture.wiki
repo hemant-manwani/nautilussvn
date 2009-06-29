@@ -11,7 +11,9 @@
 
 === Context menu ===
 
-A context menu is generated for one or more paths. 
+A context menu is generated for one or more paths and will be build as following:
+
+`[...]`
 
 See the page ContextMenuStructure for a description of the conditions.
 
