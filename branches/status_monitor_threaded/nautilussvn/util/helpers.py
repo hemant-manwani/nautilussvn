@@ -4,6 +4,19 @@ All sorts of helper functions.
 
 """
 
+import locale
+import os
+import os.path
+import subprocess
+import re
+import datetime
+import time
+import shutil
+
+import nautilussvn
+from nautilussvn.util.path import get_home_folder
+from nautilussvn.util.locale import DATETIME_FORMAT
+
 def launch_ui_window(filename, args=[]):
     """
     Launches a UI window in a new process, so that we don't have to worry about
@@ -20,7 +33,7 @@ def launch_ui_window(filename, args=[]):
     """
     
     # Construct a path to the actual python file
-    basedir = os.path.dirname(os.path.realpath(__file__))
+    basedir = os.path.dirname(os.path.realpath(nautilussvn.__file__))
     path = "%s/ui/%s.py" % (basedir, filename)
     
     if os.path.exists(path): 
@@ -206,7 +219,7 @@ def get_diff_tool():
     @return:    A dictionary with the diff tool path and swap boolean value.
     """
     
-    sm = nautilussvn.lib.settings.SettingsManager()
+    sm = nautilussvn.util.settings.SettingsManager()
     diff_tool = sm.get("external", "diff_tool")
     diff_tool_swap = sm.get("external", "diff_tool_swap")
     
@@ -370,11 +383,11 @@ def save_repository_path(path):
     f.close()
     
 def get_log_messages_limit():
-    sm = nautilussvn.lib.settings.SettingsManager()
+    sm = nautilussvn.util.settings.SettingsManager()
     return int(sm.get("cache", "number_messages"))
 
 def get_repository_paths_limit():
-    sm = nautilussvn.lib.settings.SettingsManager()
+    sm = nautilussvn.util.settings.SettingsManager()
     return int(sm.get("cache", "number_repositories"))
     
 def pretty_timedelta(time1, time2, resolution=None):

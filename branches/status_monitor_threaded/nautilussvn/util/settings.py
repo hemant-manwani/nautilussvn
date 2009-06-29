@@ -33,34 +33,7 @@ import shutil
 import configobj
 import validate
 
-def get_home_folder():
-    """ 
-    Returns the location of the hidden folder we use in the home dir.
-    This is used for storing things like previous commit messages and
-    previously used repositories.
-    
-    FIXME: This is a copy of the helper module's function, because I can't
-    have a circular module reference (helper imports Settings right now).
-    
-    @rtype:     string
-    @return:    The location of our main user storage folder.
-    
-    """
-    
-    # Make sure we adher to the freedesktop.org XDG Base Directory 
-    # Specifications. $XDG_CONFIG_HOME if set, by default ~/.config 
-    xdg_config_home = os.environ.get(
-        "XDG_CONFIG_HOME", 
-        os.path.join(os.path.expanduser("~"), ".config")
-    )
-    config_home = os.path.join(xdg_config_home, "nautilussvn")
-    
-    # Make sure the directories are there
-    if not os.path.isdir(config_home):
-        # FIXME: what if somebody places a file in there?
-        os.makedirs(config_home, 0700)
-
-    return config_home
+from nautilussvn.util.path import get_home_folder
 
 SETTINGS_FILE = "%s/settings.conf" % get_home_folder()
 
