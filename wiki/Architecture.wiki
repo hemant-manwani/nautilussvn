@@ -28,8 +28,8 @@ See the page ContextMenuStructure for a description of the conditions.
 A status check can go three ways:
 
   # If we've already looked the path up, return the statuses associated with it. 
-  # If we haven't already got the path, return [(path, "calculating")]. 
-  # If the item a status check is being requested for is not a or in a working copy then the result [(path, "unknown")] will be returned.
+  # If we haven't already got the path, return `[(path, "calculating")]`. 
+  # If the item a status check is being requested for is not a or in a working copy then the result `[(path, "unknown")]` will be returned.
 
 A recursive status check should always be done first to build up a valid status_tree, otherwise recursive and non-recursive checks would conflict.
 
