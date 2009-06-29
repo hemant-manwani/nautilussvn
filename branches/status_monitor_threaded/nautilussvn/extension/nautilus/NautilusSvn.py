@@ -173,6 +173,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         self.nautilusVFSFile_table[path] = item
         
+        # This is the easiest way to store the directory the user is looking at
+        # on a per window basis. We can then retrieve it in get_file_items as
+        # well so we can eventually pass it to the GUI dialogs.
+        window.set_data("current_working_directory", path)
+        
         return MainContextMenu([path], self).construct_menu()
     
     #=== HELPER FUNCTIONS ======================================================
@@ -237,6 +242,48 @@ class MainContextMenu:
         self.paths = paths
         self.nautilussvn_extension = nautilussvn_extension
         self.status_checker = StatusChecker()
+        
+        self.statuses = []
+        for path in self.paths:
+            self.statuses.extend(self.status_checker.check_status(path, recurse=True))
+        self.text_statuses = [status[1] for status in self.statuses]
+        self.statuses = dict(self.statuses)
+        
+        self.path_dict = {}
+        self.path_dict["length"] = len(paths)
+        
+        checks = {
+            "is_dir"                        : isdir,
+            "is_file"                       : isfile,
+            "is_working_copy"               : is_working_copy,
+            "is_in_a_or_a_working_copy"     : is_in_a_or_a_working_copy,
+            "is_versioned"                  : is_versioned,
+            "is_normal"                     : lambda path: self.statuses[path] is "normal",
+            "is_added"                      : lambda path: self.statuses[path] is "added",
+            "is_modified"                   : lambda path: self.statuses[path] is "modified",
+            "is_deleted"                    : lambda path: self.statuses[path] is "deleted",
+            "is_ignored"                    : lambda path: self.statuses[path] is "ignored",
+            "is_locked"                     : lambda path: self.statuses[path] is "locked",
+            "is_missing"                    : lambda path: self.statuses[path] is "missing",
+            "is_conflicted"                 : lambda path: self.statuses[path] is "conflicted",
+            "is_obstructed"                 : lambda path: self.statuses[path] is "obstructed",
+            "has_unversioned"               : lambda path: "unversioned" in self.text_statuses,
+            "has_added"                     : lambda path: "added" in self.text_statuses,
+            "has_modified"                  : lambda path: "modified" in self.text_statuses,
+            "has_deleted"                   : lambda path: "deleted" in self.text_statuses,
+            "has_ignored"                   : lambda path: "ignored" in self.text_statuses,
+            "has_locked"                    : lambda path: "locked" in self.text_statuses,
+            "has_missing"                   : lambda path: "missing" in self.text_statuses,
+            "has_conflicted"                : lambda path: "conflicted" in self.text_statuses,
+            "has_obstructed"                : lambda path: "obstructed" in self.text_statuses
+        }
+
+        # Each path gets tested for each check
+        # If a check has returned True for any path, skip it for remaining paths
+        for path in paths:
+            for key, func in checks.items():
+                if key not in self.path_dict or self.path_dict[key] is not True:
+                    self.path_dict[key] = func(path)
 
     def construct_menu(self):
         """
@@ -639,38 +686,40 @@ class MainContextMenu:
                             
                         ]
                     },
-                    #~ {
-                        #~ "identifier": "NautilusSvn::GetLock",
-                        #~ "label": _("Get Lock..."),
-                        #~ "tooltip": _("Locally lock items"),
-                        #~ "icon": "nautilussvn-lock",
-                        #~ "signals": {
-                            #~ "activate": {
-                                #~ "callback": self.callback_lock,
-                                #~ "args": None
-                            #~ }
-                        #~ }, 
-                        #~ "condition": self.condition_lock,
-                        #~ "submenus": [
-                            #~ 
-                        #~ ]
-                    #~ },
-                    #~ {
-                        #~ "identifier": "NautilusSvn::Unlock",
-                        #~ "label": _("Release Lock..."),
-                        #~ "tooltip": _("Release lock on an item"),
-                        #~ "icon": "nautilussvn-unlock",
-                        #~ "signals": {
-                            #~ "activate": {
-                                #~ "callback": self.callback_unlock,
-                                #~ "args": None
-                            #~ }
-                        #~ }, 
-                        #~ "condition": self.condition_unlock,
-                        #~ "submenus": [
-                            #~ 
-                        #~ ]
-                    #~ },
+                    # TODO: fix this item
+                    {
+                        "identifier": "NautilusSvn::GetLock",
+                        "label": _("Get Lock..."),
+                        "tooltip": _("Locally lock items"),
+                        "icon": "nautilussvn-lock",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_lock,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: False), # disabled
+                        "submenus": [
+                            
+                        ]
+                    },
+                    # TODO: fix this item
+                    {
+                        "identifier": "NautilusSvn::Unlock",
+                        "label": _("Release Lock..."),
+                        "tooltip": _("Release lock on an item"),
+                        "icon": "nautilussvn-unlock",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_unlock,
+                                "args": None
+                            }
+                        }, 
+                        "condition": (lambda: False), # disabled
+                        "submenus": [
+                            
+                        ]
+                    },
                     {
                         "identifier": "NautilusSvn::Cleanup",
                         "label": _("Cleanup"),
@@ -835,7 +884,8 @@ class MainContextMenu:
                         "condition": (lambda: True),
                         "submenus": []
                     },
-                   {
+                    # TODO: fix this item
+                    {
                         "identifier": "NautilusSvn::CreatePatch",
                         "label": _("Create Patch..."),
                         "tooltip": _("Creates a unified diff file with all changes you made"),
@@ -846,11 +896,12 @@ class MainContextMenu:
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: False),
+                        "condition": (lambda: False), # disabled
                         "submenus": [
                             
                         ]
                     },
+                    # TODO: fix this item
                     {
                         "identifier": "NautilusSvn::ApplyPatch",
                         "label": _("Apply Patch..."),
@@ -862,7 +913,7 @@ class MainContextMenu:
                                 "args": None
                             }
                         }, 
-                        "condition": (lambda: False),
+                        "condition": (lambda: False), # disabled
                         "submenus": [
                             
                         ]
@@ -1056,88 +1107,167 @@ class MainContextMenu:
     #=== CONDITIONS ============================================================
     
     def condition_checkout(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                self.path_dict["is_dir"] and
+                not self.path_dict["is_working_copy"])
                 
     def condition_update(self):
-        return True
+        return (self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"] and
+                not self.path_dict["is_added"])
                         
     def condition_commit(self):
-        return True
+        if self.path_dict["is_in_a_or_a_working_copy"]:
+            if (self.path_dict["is_added"] or
+                    self.path_dict["is_modified"] or
+                    self.path_dict["is_deleted"] or
+                    not self.path_dict["is_versioned"]):
+                return True
+            elif (self.path_dict["is_dir"] and
+                    (self.path_dict["has_added"] or
+                    self.path_dict["has_modified"] or
+                    self.path_dict["has_deleted"] or
+                    self.path_dict["has_unversioned"] or
+                    self.path_dict["has_missing"])):
+                return True
+        return False
         
     def condition_diff(self):
-        return True
+        if self.path_dict["length"] == 2:
+            return True
+        elif (self.path_dict["length"] == 1 and
+                self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_modified"]):
+            return True        
+        return False
         
     def condition_show_log(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"] and
+                not self.path_dict["is_added"])
         
     def condition_add(self):
-        return True
+        if (self.path_dict["is_dir"] and
+                self.path_dict["is_in_a_or_a_working_copy"]):
+            return True
+        elif (not self.path_dict["is_dir"] and
+                self.path_dict["is_in_a_or_a_working_copy"] and
+                not self.path_dict["is_versioned"]):
+            return True
+        return False
         
     def condition_add_to_ignore_list(self):
-        return True
+        return self.path_dict["is_versioned"]
         
     def condition_rename(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"] and
+                not self.path_dict["is_added"])
         
     def condition_delete(self):
-        return True
+        # FIXME: This should be False for the top-level WC folder
+        return self.path_dict["is_versioned"]
         
     def condition_revert(self):
-        return True
+        if self.path_dict["is_in_a_or_a_working_copy"]:
+            if (self.path_dict["is_added"] or
+                    self.path_dict["is_modified"] or
+                    self.path_dict["is_deleted"]):
+                return True
+            else:
+                if (self.path_dict["is_dir"] and
+                        (self.path_dict["has_added"] or
+                        self.path_dict["has_modified"] or
+                        self.path_dict["has_deleted"] or
+                        self.path_dict["has_missing"])):
+                    return True
+        return False
         
     def condition_annotate(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                not self.path_dict["is_dir"] and
+                self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"] and
+                not self.path_dict["is_added"])
         
     def condition_properties(self):
-        return True
+        return (self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"])
 
     def condition_createpatch(self):
-        return True
+        if self.path_dict["is_in_a_or_a_working_copy"]:
+            if (self.path_dict["is_added"] or
+                    self.path_dict["is_modified"] or
+                    self.path_dict["is_deleted"] or
+                    not self.path_dict["is_versioned"]):
+                return True
+            elif (self.path_dict["is_dir"] and
+                    (self.path_dict["has_added"] or
+                    self.path_dict["has_modified"] or
+                    self.path_dict["has_deleted"] or
+                    self.path_dict["has_unversioned"] or
+                    self.path_dict["has_missing"])):
+                return True
+        return False
     
     def condition_applypatch(self):
-        return True
+        if self.path_dict["is_in_a_or_a_working_copy"]:
+            return True
+        return False
     
     def condition_add_to_ignore_list(self):
-        return True
+        return (self.path_dict["length"] == 1 and 
+                self.path_dict["is_in_a_or_a_working_copy"] and
+                not self.path_dict["is_versioned"])
     
     def condition_ignore_ext(self):
-        return True
+        return (self.path_dict["length"] == 1 and self.path_dict["is_file"])
 
     def condition_lock(self):
-        return True
+        return self.path_dict["is_versioned"]
 
     def condition_branch(self):
-        return True
+        return self.path_dict["is_versioned"]
 
     def condition_relocate(self):
-        return True
+        return self.path_dict["is_versioned"]
 
     def condition_switch(self):
-        return True
+        return self.path_dict["is_versioned"]
 
     def condition_merge(self):
-        return True
+        return self.path_dict["is_versioned"]
 
     def condition_import(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                not self.path_dict["is_in_a_or_a_working_copy"])
 
     def condition_export(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                not self.path_dict["is_in_a_or_a_working_copy"])
    
     def condition_update_to(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                self.path_dict["is_in_a_or_a_working_copy"])
     
     def condition_resolve(self):
-        return True
+        return (self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"] and
+                self.path_dict["is_conflicted"])
             
     def condition_create(self):
-        return True
+        return (self.path_dict["length"] == 1 and
+                not self.path_dict["is_in_a_or_a_working_copy"])
 
     def condition_unlock(self):
-        return True
+        return (self.path_dict["is_in_a_or_a_working_copy"] and
+                self.path_dict["is_versioned"] and
+                self.path_dict["has_locked"])
 
     def condition_cleanup(self):
-        return True
+        return self.path_dict["is_versioned"]
 
     #=== CALLBACKS =============================================================
     
@@ -1254,28 +1384,22 @@ class MainContextMenu:
     # End debugging callbacks
 
     def callback_checkout(self, menu_item, paths):
-        pid = launch_ui_window("checkout", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("checkout", paths)
     
     def callback_update(self, menu_item, paths):
-        pid = launch_ui_window("update", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("update", paths)
 
     def callback_commit(self, menu_item, paths):
-        pid = launch_ui_window("commit", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("commit", paths)
 
     def callback_add(self, menu_item, paths):
-        pid = launch_ui_window("add", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("add", paths)
 
     def callback_delete(self, menu_item, paths):
-        pid = launch_ui_window("delete", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("delete", paths)
 
     def callback_revert(self, menu_item, paths):
-        pid = launch_ui_window("revert", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("revert", paths)
 
     def callback_diff(self, menu_item, paths):
         launch_diff_tool(*paths)
@@ -1287,11 +1411,10 @@ class MainContextMenu:
         launch_ui_window("rename", paths)
 
     def callback_createpatch(self, menu_item, paths):
-        pid = launch_ui_window("createpatch", paths)
+        launch_ui_window("createpatch", paths)
     
     def callback_applypatch(self, menu_item, paths):
-        pid = launch_ui_window("applypatch", paths)
-        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+        launch_ui_window("applypatch", paths)
     
     def callback_properties(self, menu_item, paths):
         launch_ui_window("properties", paths)
@@ -1300,7 +1423,7 @@ class MainContextMenu:
         launch_ui_window("about")
         
     def callback_settings(self, menu_item, paths):
-        pid = launch_ui_window("settings")
+        launch_ui_window("settings")
         self.nautilussvn_extension.reload_settings(pid)
     
     def callback_ignore_filename(self, menu_item, paths):
