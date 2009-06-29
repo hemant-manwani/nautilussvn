@@ -3,9 +3,13 @@ from __future__ import absolute_import
 import os
 
 import gettext as _gettext
+import locale
 from locale import getdefaultlocale
 
 from nautilussvn import APP_NAME
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S" # for log files
+LOCAL_DATETIME_FORMAT = locale.nl_langinfo(locale.D_T_FMT) # for UIs
 
 LOCALE_DIR = "%s/locale" % os.path.dirname(os.path.abspath(__file__))
 if not os.path.exists(LOCALE_DIR):

@@ -4,8 +4,6 @@ Our module for everything related to the Nautilus extension.
   
 """
 
-from __future__ import with_statement
-
 import os
 from os.path import isdir, isfile, realpath, basename
 
@@ -23,7 +21,6 @@ settings = SettingsManager()
 from nautilussvn.util.locale import gettext
 _ = gettext.gettext
 
-import dbus.mainloop.glib
 import nautilussvn.dbus.service
 from nautilussvn.dbus.statuschecker import StatusCheckerStub as StatusChecker
 
@@ -1424,7 +1421,6 @@ class MainContextMenu:
         
     def callback_settings(self, menu_item, paths):
         launch_ui_window("settings")
-        self.nautilussvn_extension.reload_settings(pid)
     
     def callback_ignore_filename(self, menu_item, paths):
         from nautilussvn.ui.ignore import Ignore
