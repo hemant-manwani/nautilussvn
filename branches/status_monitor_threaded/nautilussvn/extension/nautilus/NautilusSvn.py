@@ -121,7 +121,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         # Otherwise request an initial status check to be done.
         statuses = self.status_checker.check_status(path, recurse=True)
         if statuses[0][1] == "calculating": item.add_emblem(self.EMBLEMS["calculating"])
-            
         
     def get_file_items(self, window, items):
         """
