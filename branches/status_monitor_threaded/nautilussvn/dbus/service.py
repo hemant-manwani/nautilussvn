@@ -17,6 +17,7 @@ import dbus.glib # FIXME: this might actually already set the default loop
 import dbus.mainloop.glib
 import dbus.service
 
+import nautilussvn.util.locale
 from nautilussvn.dbus.statuschecker import StatusChecker
 
 INTERFACE = "org.google.code.nautilussvn.Service"
@@ -72,6 +73,8 @@ def exit():
         traceback.print_exc()
 
 if __name__ == "__main__":
+    nautilussvn.util.locale.initialize_locale()
+    
     # We need this to for the client to be able to do asynchronous calls
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     
