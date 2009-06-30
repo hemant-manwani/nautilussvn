@@ -2,6 +2,10 @@
 
 <wiki:toc max_depth="2" />
 
+= 30 june 2009 =
+
+  * If DBus signals are global (and I think they are) then we shouldn't be using those for notifying a specific client that the results for a status check have been calculated. Can we do anything else? Not sure if we can use async reply handlers.
+
 = 3 may 2009 =
 
 I want to refactor NautilusSvn and work on the performance issue. However this would really require re-implementing the StatusMonitor (including the DBus service). This was moved to Release 0.13 and I should probably work on just fixing some of the remaining bugs with 0.12 and do an actual release. But I'm not that interested in doing that right now.
