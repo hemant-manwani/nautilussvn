@@ -79,6 +79,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     statuses = {}
     
     def __init__(self):
+        nautilussvn.util.locale.initialize_locale()
         self.status_checker = StatusChecker(self.cb_status)
         
     def update_file_info(self, item):
@@ -94,7 +95,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         """
         
         if not self.valid_uri(item.get_uri()): return
-        path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
+        path = u"" + realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         
         # Always replace the item in the table with the one we receive, because
         # for example if an item is deleted and recreated the NautilusVFSFile
@@ -142,7 +143,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         paths = []
         for item in items:
             if self.valid_uri(item.get_uri()):
-                path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
+                path = u"" + realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
                 paths.append(path)
                 self.nautilusVFSFile_table[path] = item
 
@@ -167,7 +168,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         """
         
         if not self.valid_uri(item.get_uri()): return
-        path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
+        path = u"" + realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         self.nautilusVFSFile_table[path] = item
         
         # This is the easiest way to store the directory the user is looking at
@@ -255,15 +256,15 @@ class MainContextMenu:
             "is_working_copy"               : is_working_copy,
             "is_in_a_or_a_working_copy"     : is_in_a_or_a_working_copy,
             "is_versioned"                  : is_versioned,
-            "is_normal"                     : lambda path: self.statuses[path] is "normal",
-            "is_added"                      : lambda path: self.statuses[path] is "added",
-            "is_modified"                   : lambda path: self.statuses[path] is "modified",
-            "is_deleted"                    : lambda path: self.statuses[path] is "deleted",
-            "is_ignored"                    : lambda path: self.statuses[path] is "ignored",
-            "is_locked"                     : lambda path: self.statuses[path] is "locked",
-            "is_missing"                    : lambda path: self.statuses[path] is "missing",
-            "is_conflicted"                 : lambda path: self.statuses[path] is "conflicted",
-            "is_obstructed"                 : lambda path: self.statuses[path] is "obstructed",
+            "is_normal"                     : lambda path: self.statuses[path] == "normal",
+            "is_added"                      : lambda path: self.statuses[path] == "added",
+            "is_modified"                   : lambda path: self.statuses[path] == "modified",
+            "is_deleted"                    : lambda path: self.statuses[path] == "deleted",
+            "is_ignored"                    : lambda path: self.statuses[path] == "ignored",
+            "is_locked"                     : lambda path: self.statuses[path] == "locked",
+            "is_missing"                    : lambda path: self.statuses[path] == "missing",
+            "is_conflicted"                 : lambda path: self.statuses[path] == "conflicted",
+            "is_obstructed"                 : lambda path: self.statuses[path] == "obstructed",
             "has_unversioned"               : lambda path: "unversioned" in self.text_statuses,
             "has_added"                     : lambda path: "added" in self.text_statuses,
             "has_modified"                  : lambda path: "modified" in self.text_statuses,
