@@ -17,7 +17,7 @@ Here is a basic set of dependencies that you will need to install before you can
 
 = Distro-specific instructions =
 
-== Ubuntu 8.10 or 8.04 ==
+== Ubuntu 8.04 and later ==
 
 1. Install the following packages through your package manager.
 {{{
@@ -75,6 +75,15 @@ elif maj_min == (2,6):
 }}}
 
 5. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
+
+== Mandriva 2009.0 and 2009.1 ==
+
+1. 
+{{{
+urpmi nautilus-python python-pysvn python-configobj subversion meld 
+}}}
+
+2. [http://code.google.com/p/nautilussvn/wiki/ManualInstallation Install the Extension]
 
 == CentOS 5.2 ==
 
