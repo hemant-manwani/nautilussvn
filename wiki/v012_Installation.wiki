@@ -30,7 +30,7 @@ sudo apt-get install python-nautilus python-configobj python-gtk2 python-glade2 
 
 1. Install Packages:
 {{{
-yum install nautilus-python pysvn python-configobj subversion meld
+yum install nautilus-python pysvn python-configobj python-devel subversion meld
 }}}
 
 Note for x86_64: As root, run *ln -s /usr/lib64/libpython2.5.so /usr/lib/libpython2.5.so*.  Otherwise you will get various import errors for libpython and libpyglib.
