@@ -25,8 +25,8 @@ class StatusChecker(dbus.service.Object):
         pass
         
     @dbus.service.method(INTERFACE)
-    def CheckStatus(self, path, recurse=False, invalidate=False):
-        return self.status_checker.check_status(u"" + path, recurse=recurse, invalidate=invalidate, callback=self.CheckFinished)
+    def Status(self, path, recurse=False, invalidate=False):
+        return self.status_checker.status(u"" + path, recurse=recurse, invalidate=invalidate, callback=self.CheckFinished)
         
 class StatusCheckerStub:
     def __init__(self, status_callback=None):
@@ -41,4 +41,4 @@ class StatusCheckerStub:
             traceback.print_exc()
     
     def check_status(self, path, recurse=False, invalidate=False):
-        return self.status_checker.CheckStatus(path, recurse, invalidate, dbus_interface=INTERFACE)
+        return self.status_checker.Status(path, recurse, invalidate, dbus_interface=INTERFACE)
