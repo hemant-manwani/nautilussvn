@@ -12,7 +12,7 @@ import gnomevfs
 
 from nautilussvn.util.decorators import timeit, disable
 from nautilussvn.util.path import get_file_extension
-from nautilussvn.util.helpers import launch_ui_window
+from nautilussvn.util.helpers import launch_ui_window, launch_diff_tool
 from nautilussvn.util.vcs import *
 
 from nautilussvn.util.settings import SettingsManager
