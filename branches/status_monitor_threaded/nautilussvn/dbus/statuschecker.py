@@ -40,5 +40,5 @@ class StatusCheckerStub:
         except dbus.DBusException:
             traceback.print_exc()
     
-    def check_status(self, path, recurse=False, invalidate=False):
+    def status(self, path, recurse=False, invalidate=False):
         return self.status_checker.Status(path, recurse, invalidate, dbus_interface=INTERFACE)

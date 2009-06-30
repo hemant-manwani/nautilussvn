@@ -19,6 +19,7 @@ import dbus.service
 
 import nautilussvn.util.locale
 from nautilussvn.dbus.statuschecker import StatusChecker
+from nautilussvn.dbus.statusmonitor import StatusMonitor
 
 INTERFACE = "org.google.code.nautilussvn.Service"
 OBJECT_PATH = "/org/google/code/nautilussvn/Service"
@@ -31,6 +32,7 @@ class Service(dbus.service.Object):
         
         # Register our objects with the session bus by instantiating them
         self.status_checker = StatusChecker(connection)
+        self.status_monitor = StatusMonitor(connection)
     
     @dbus.service.method(INTERFACE, in_signature="", out_signature="")
     def Exit(self):
