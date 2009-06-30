@@ -5,7 +5,7 @@ import thread
 import dbus
 import dbus.service
 
-from nautilussvn.daemon.statuschecker import StatusChecker as RealStatusChecker
+from nautilussvn.statuschecker import StatusChecker as RealStatusChecker
 
 INTERFACE = "org.google.code.nautilussvn.StatusChecker"
 OBJECT_PATH = "/org/google/code/nautilussvn/StatusChecker"
