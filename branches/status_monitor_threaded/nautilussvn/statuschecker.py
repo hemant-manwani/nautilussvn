@@ -45,7 +45,7 @@ class StatusChecker(threading.Thread):
         # there are problems, we will need to add a flag to manually kill it.
         self.setDaemon(True)
         
-    def status(self, path, recurse=False, invalidate=False, callback=None):
+    def check_status(self, path, recurse=False, invalidate=False, callback=None):
         """
         Checks the status of the given path. Must be thread safe.
         
