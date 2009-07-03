@@ -23,7 +23,6 @@ _ = gettext.gettext
 
 import nautilussvn.dbus.service
 from nautilussvn.dbus.statuschecker import StatusCheckerStub as StatusChecker
-from nautilussvn.dbus.statusmonitor import StatusMonitorStub as StatusMonitor
 
 # Start up our DBus service if it's not already started, if this fails
 # we can't really do anything.
@@ -81,17 +80,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
     
     def __init__(self):
         nautilussvn.util.locale.initialize_locale()
-        
-        # Create our StatusChecker to requests statuses
-        self.status_checker = StatusChecker(
-            status_callback=self.cb_status
-        )
-        
-        # Create a StatusMonitor and register all sorts of callbacks with it
-        self.status_monitor = StatusMonitor(
-            watch_callback=self.cb_watch_added,
-            status_callback=self.cb_status
-        )
+        self.status_checker = StatusChecker(self.cb_status)
         
     def update_file_info(self, item):
         """
@@ -127,8 +116,9 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
                 item.add_emblem(self.EMBLEMS[summarized_status])
             return
         
-        if is_in_a_or_a_working_copy(path):
-            self.status_monitor.add_watch(path)
+        # Otherwise request an initial status check to be done.
+        statuses = self.status_checker.check_status(path, recurse=True)
+        if statuses[0][1] == "calculating": item.add_emblem(self.EMBLEMS["calculating"])
         
     def get_file_items(self, window, items):
         """
@@ -208,17 +198,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider):
         
     #=== CALLBACKS =============================================================
     
-    def cb_watch_added(self, path):
-        """
-        This callback is called by C{StatusMonitor} when a watch is added
-        for a particular path.
-        
-        @type   path:   string
-        @param  path:   The path for which a watch was added
-        """
-        
-        self.status_checker.status(path, recurse=True)
-    
     def cb_status(self, path, statuses):
         """
         This is the callback that C{StatusMonitor} calls. 
@@ -264,7 +243,7 @@ class MainContextMenu:
         
         self.statuses = []
         for path in self.paths:
-            self.statuses.extend(self.status_checker.status(path, recurse=True))
+            self.statuses.extend(self.status_checker.check_status(path, recurse=True))
         self.text_statuses = [status[1] for status in self.statuses]
         self.statuses = dict(self.statuses)
         
