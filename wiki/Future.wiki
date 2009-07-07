@@ -8,6 +8,7 @@ This page contains detailed ideas of what we'll be working on for future release
   * Think up of a new approach to recognizing contributors ([http://code.google.com/p/nautilussvn/issues/detail?id=151 Issue #151])
   * Improve tools for diagnosing problems ([http://code.google.com/p/nautilussvn/issues/detail?id=152 Issue #152])
   * Module reorganization
+  * Setup PPA for distributing releases for Ubuntu
 
 = !NautilusSvn 0.13 =
 
