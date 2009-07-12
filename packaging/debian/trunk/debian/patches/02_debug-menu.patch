@@ -1,6 +1,6 @@
 diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/lib/configspec/configspec.ini trunk.new/nautilussvn/lib/configspec/configspec.ini
 --- trunk/nautilussvn/lib/configspec/configspec.ini	1970-01-01 08:00:00.000000000 +0800
-+++ trunk.new/nautilussvn/lib/configspec/configspec.ini	2009-07-02 19:46:44.000000000 +0800
++++ trunk.new/nautilussvn/lib/configspec/configspec.ini	2009-07-08 17:45:45.000000000 +0800
 @@ -0,0 +1,19 @@
 +[general]
 +language = string(default="English")
@@ -22,8 +22,8 @@ diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/lib/configspec/configspec.ini tr
 +type = option("None", "File", "Console", "Both", default="File")
 +level = option("Debug", "Warning", "Info", "Error", "Critical", default="Error")
 diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/lib/extensions/nautilus/NautilusSvn.py trunk.new/nautilussvn/lib/extensions/nautilus/NautilusSvn.py
---- trunk/nautilussvn/lib/extensions/nautilus/NautilusSvn.py	2009-07-02 19:46:20.000000000 +0800
-+++ trunk.new/nautilussvn/lib/extensions/nautilus/NautilusSvn.py	2009-07-02 19:46:44.000000000 +0800
+--- trunk/nautilussvn/lib/extensions/nautilus/NautilusSvn.py	2009-07-08 17:45:45.000000000 +0800
++++ trunk.new/nautilussvn/lib/extensions/nautilus/NautilusSvn.py	2009-07-08 17:45:45.000000000 +0800
 @@ -590,7 +590,7 @@
                          "args": None
                      }
@@ -35,7 +35,7 @@ diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/lib/extensions/nautilus/Nautilus
                          "identifier": "NautilusSvn::Bugs",
 diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/lib/settings.py trunk.new/nautilussvn/lib/settings.py
 --- trunk/nautilussvn/lib/settings.py	2009-06-01 15:16:33.000000000 +0800
-+++ trunk.new/nautilussvn/lib/settings.py	2009-07-02 19:47:00.000000000 +0800
++++ trunk.new/nautilussvn/lib/settings.py	2009-07-08 17:45:45.000000000 +0800
 @@ -27,9 +27,11 @@
  """
  
@@ -195,7 +195,7 @@ diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/lib/settings.py trunk.new/nautil
      pass
 diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/ui/glade/settings.glade trunk.new/nautilussvn/ui/glade/settings.glade
 --- trunk/nautilussvn/ui/glade/settings.glade	2009-06-01 15:16:33.000000000 +0800
-+++ trunk.new/nautilussvn/ui/glade/settings.glade	2009-07-02 19:46:44.000000000 +0800
++++ trunk.new/nautilussvn/ui/glade/settings.glade	2009-07-08 17:45:45.000000000 +0800
 @@ -1,6 +1,6 @@
  <?xml version="1.0" encoding="UTF-8" standalone="no"?>
  <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
@@ -228,7 +228,7 @@ diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/ui/glade/settings.glade trunk.ne
                                  <property name="expand">False</property>
 diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/ui/settings.py trunk.new/nautilussvn/ui/settings.py
 --- trunk/nautilussvn/ui/settings.py	2009-06-01 15:16:33.000000000 +0800
-+++ trunk.new/nautilussvn/ui/settings.py	2009-07-02 19:46:44.000000000 +0800
++++ trunk.new/nautilussvn/ui/settings.py	2009-07-08 17:46:37.000000000 +0800
 @@ -61,6 +61,9 @@
          self.get_widget("enable_recursive").set_active(
              int(self.settings.get("general", "enable_recursive"))
@@ -239,6 +239,23 @@ diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/ui/settings.py trunk.new/nautilu
          self.get_widget("diff_tool").set_text(
              self.settings.get("external", "diff_tool")
          )
+@@ -68,13 +71,13 @@
+             int(self.settings.get("external", "diff_tool_swap"))
+         )
+         self.get_widget("repo_browser").set_text(
+-            self.settings.get("external", "repo_browser")
++            str(self.settings.get("external", "repo_browser"))
+         )
+         self.get_widget("cache_number_repositories").set_text(
+-            self.settings.get("cache", "number_repositories")
++            str(self.settings.get("cache", "number_repositories"))
+         )
+         self.get_widget("cache_number_messages").set_text(
+-            self.settings.get("cache", "number_messages")
++            str(self.settings.get("cache", "number_messages"))
+         )
+         
+         self.logging_type = nautilussvn.ui.widget.ComboBox(
 @@ -126,6 +129,10 @@
              self.get_widget("enable_recursive").get_active()
          )
@@ -252,7 +269,7 @@ diff -Nur -x '*.orig' -x '*~' trunk/nautilussvn/ui/settings.py trunk.new/nautilu
          )
 diff -Nur -x '*.orig' -x '*~' trunk/setup.py trunk.new/setup.py
 --- trunk/setup.py	2009-06-07 14:35:47.000000000 +0800
-+++ trunk.new/setup.py	2009-07-02 19:46:44.000000000 +0800
++++ trunk.new/setup.py	2009-07-08 17:45:45.000000000 +0800
 @@ -116,6 +116,13 @@
  # Icons
  icons = include_by_pattern("nautilussvn/data/icons/hicolor", icon_theme_directory, ".svg")
