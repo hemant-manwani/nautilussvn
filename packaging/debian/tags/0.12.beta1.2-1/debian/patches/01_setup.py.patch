@@ -1,0 +1,46 @@
+diff -Nur -x '*.orig' -x '*~' trunk/setup.py trunk.new/setup.py
+--- trunk/setup.py	2009-03-17 08:08:25.000000000 +0900
++++ trunk.new/setup.py	2009-05-31 19:34:29.000000000 +0800
+@@ -117,14 +117,18 @@
+ icons = include_by_pattern("nautilussvn/data/icons/hicolor", icon_theme_directory, ".svg")
+ 
+ # Update notifier
++# Not used for Debian package
++"""
+ update_notifier = [("/usr/share/nautilussvn", [
+     "packages/ubuntu/debian/nautilussvn-restart-required.update-notifier",
+     "packages/ubuntu/debian/do-nautilussvn-restart-nautilus"
+ ])]
++"""
+ 
+ # Documentation
+ documentation = [("/usr/share/doc/nautilussvn", [
+-    "README",
++# This will cause lintian errors if left in.
++#    "README",
+     "AUTHORS",
+     "MAINTAINERS",
+     "CREDITS",
+@@ -164,7 +168,7 @@
+             "ui/glade/*.glade"
+         ]
+     },
+-    data_files=nautilus_extension + command_line_tool + translations + icons + documentation + update_notifier
++    data_files=nautilus_extension + command_line_tool + translations + icons + documentation # + update_notifier
+ )
+ 
+ #
+@@ -172,6 +176,8 @@
+ #
+ 
+ # Make sure the icon cache is deleted and recreated
++# Debian: this is not needed since hicolor-icon-cache (0.10-2)
++"""
+ if sys.argv[1] == "install":
+     print "Running gtk-update-icon-cache"
+     
+@@ -179,3 +185,4 @@
+         ["gtk-update-icon-cache", icon_theme_directory], 
+         stdout=subprocess.PIPE
+     ).communicate()[0]
++"""
