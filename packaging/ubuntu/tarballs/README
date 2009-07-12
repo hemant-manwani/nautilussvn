@@ -1,0 +1,5 @@
+NOTE ABOUT PACKAGING:
+
+Because of the version string in the changelog it is necessary to have the "nautilussvn_0.12.orig" tarball in here, to be detected by svn-buildpackage. It should be replaced by whatever version is current, and packagers will have to manually rename the tarballs if they are building old releases.
+
+-- Jason Heeris <jason.heeris@gmail.com>
