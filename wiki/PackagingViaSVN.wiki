@@ -1,6 +1,8 @@
 #summary Directions, notes and tips for packaging NautilusSVN for various distributions
 #labels Phase-Implementation
 
+*WARNING!* - This page is a work in progress! Stick with the current [Packaging packaging directions] until we've sorted it out.
+
 = Introduction =
 
 While it is possible to run NautilusSVN from our tarball releases or even the SVN trunk, most users will probably want to install a package that conforms to the requirements of their particular GNU/Linux distribution.
