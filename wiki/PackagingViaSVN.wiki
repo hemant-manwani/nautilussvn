@@ -15,6 +15,7 @@ To build a particular Debian package (eg. 0.12.1beta.2-3):
 
   * Check out */packages/debian/tags/0.12.1beta.2-3*
   * Run `svn-buildpackage --svn-download-orig`
+    * an alternative to `--svn-download-orig` is to merge with a tagged release
 
 To build a deb of the trunk for Debian Squeeze:
 
