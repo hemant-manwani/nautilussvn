@@ -9,6 +9,8 @@ While it is possible to run NautilusSVN from our tarball releases or even the SV
 
 This page details the methods we use to maintain the packages. There are specific tools for Debian and Ubuntu that make it easy (or at least safe) to perform a lot of common tasks, and these are also given an overview.
 
+_Note: there are also similar tools for Fedora, but I haven't researched them yet._
+
 = In Short =
 
 To build a particular Debian package (eg. 0.12.1.beta2-3):
