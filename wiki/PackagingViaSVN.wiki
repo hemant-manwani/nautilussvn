@@ -13,21 +13,30 @@ _Note: there are also similar tools for Fedora, but I haven't researched them ye
 
 = In Short =
 
+== Tagged Release ==
+
 To build a particular Debian package (eg. 0.12.1.beta2-3):
 
   # Check out */packages/debian/tags/0.12.1.beta2-3* to (eg) *nautilussvn*
   # Check out */packages/debian/tarballs/* to (literally) *tarballs*
-  # Change to the directory in step (1) and run `svn-buildpackage`
+  # Change to the directory in step (1) and run `svn-buildpackage -us -uc`
+
+== Build From Trunk ==
 
 To build a deb of the trunk for Debian Squeeze:
 
-  * Check out */trunk*
+  * Check out */trunk* (or just be using your working copy)
   * Merge with */packaging/debian/nautilussvn/trunk*
     * (on the command line, this is `svn merge http://...repo.../packaging/debian/nautilussvn/trunk`)
     * under svn 1.6, you can just do `svn merge ^/packaging/debian/nautilussvn/trunk`
     * you can do this the other way around - check out packaging, merge with trunk
-  * Run `svn propdel mergeWithUpstream debian` (this is necessary to stop it trying to look for a tarball - *make sure it isn't committed!*)
-  * Run `svn-buildpackage --svn-ignore`
+  * Run `svn propdel mergeWithUpstream debian` (this is necessary to stop it trying to look for a tarball - *make sure it isn't committed!* ... I'll try to find out if there's a better tool)
+  * Run `svn-buildpackage -us -uc --svn-ignore`
+
+== Notes ==
+
+  * *svn-buildpackage* will put things in *../build-area*
+  * If you don't want to use *svn-buildpackage*, export your working copy (`svn export . ../nsvn-export`) and use (eg.) *debuild* from your exported dir.
 
 = Tools =
 
