@@ -15,7 +15,7 @@ To build a particular Debian package (eg. 0.12.1beta.2-3):
 
   * Check out */packages/debian/tags/0.12.1beta.2-3*
   * Run `svn-buildpackage --svn-download-orig`
-    * an alternative to `--svn-download-orig` is to merge with a tagged release
+    * an alternative to `--svn-download-orig` is to merge with the equivalent tagged release
 
 To build a deb of the trunk for Debian Squeeze:
 
@@ -23,7 +23,7 @@ To build a deb of the trunk for Debian Squeeze:
   * Merge with */packaging/debian/nautilussvn/trunk*
     * (on the command line, this is `svn merge http://...repo.../packaging/debian/nautilussvn/trunk`)
     * under svn 1.6, you can just do `svn merge ^/packaging/debian/nautilussvn/trunk`
-    * you can do this the other way around - check out trunk, merge with packaging
+    * you can do this the other way around - check out packaging, merge with trunk
   * Run `svn-buildpackage`
 
 = Tools =
