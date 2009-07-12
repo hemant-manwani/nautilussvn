@@ -1,0 +1,45 @@
+#summary Directions, notes and tips for packaging NautilusSVN for various distributions
+#labels Phase-Implementation
+
+= Introduction =
+
+While it is possible to run NautilusSVN from our tarball releases or even the SVN trunk, most users will probably want to install a package that conforms to the requirements of their particular GNU/Linux distribution.
+
+This page details the methods we use to maintain the packages. There are specific tools for Debian and Ubuntu that make it easy (or at least safe) to perform a lot of common tasks, and these are also given an overview.
+
+= In Short =
+
+To build a particular Debian package (eg. 0.12.1beta.2-3):
+
+  * Check out */svn/packages/debian/tags/0.12.1beta.2-3*
+  * Run `svn-buildpackage`
+
+To build a deb of the trunk for Debian Squeeze:
+
+  * Check out */trunk*
+  * Merge with */packaging/debian/nautilussvn/trunk*
+    * (on the command line, this is `svn merge ^/packaging/debian/nautilussvn/trunk`)
+  * Run `svn-buildpackage`
+
+= Tools =
+
+== Debian and Ubuntu ==
+
+[http://www.debianpaket.de/svn-buildpackage/index.html svn-buildpackage] - allows you to build packages straight out of a working copy (if you just invoke debuild, it will choke on the .svn dirs). We use the [http://www.debianpaket.de/svn-buildpackage/ch-import.html#s3.2 merge-with-upstream mode].
+
+[http://www.netfort.gr.jp/~dancer/software/pbuilder-doc/pbuilder-doc.html pbuilder] - personal package builder. This creates and maintains a chroot jail for building packages targeted at a specific Debian-like distribution. For example, if you run Debian Squeeze you could use pbuilder to build packages for Debian Sid (unstable) and Ubuntu Jaunty, without needing any other changes to your system. Pbuilder 'starts from scratch' before every build, so it is especially useful for checking that you have all the right build dependencies.
+
+[http://workaround.org/debian-subversion-pbuilder svn-buildpackage + pbuilder] - these can be used together, and with a bit of tweaking can really streamline package development. Use svn-buildpackage to maintain the repository, and make it call pbuilder to actually do the build.
+
+This can be facilitated with the following lines in *~/.bashrc* (or wherever you like). The first does a proper build for a maintainer to sign and release, the second does a "quick and dirty" build, not making a fuss if you haven't committed changes yet.
+
+{{{
+alias svn-bld='svn-buildpackage --svn-builder="pdebuild --buildresult `pwd`/../build-area --auto-debsign"'
+alias svn-bld-q='svn-buildpackage --svn-ignore --svn-builder="pdebuild --buildresult `pwd`/../build-area"'
+}}}
+
+= Repository Structure =
+
+The *packaging* directory, found in the root of the repository, contains subdirectories corresponding to the various distributions we can package for. Depending on the tools used to maintain the various packages, there will be varying structures underneath.
+
+In general though, the packaging directories should contain the upstream tarballs and packaging information ONLY (eg, only the debian dir), if at all possible. Official releases should be tagged.
