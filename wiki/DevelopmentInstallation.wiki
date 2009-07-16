@@ -1,5 +1,5 @@
-#summary Installation for hacking on NautilusSvn only
 #labels Phase-Implementation
+   #summary Installation for hacking on NautilusSvn only
 
 
   _*<font color="red">WARNING: Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot. If you are an end-user please do not follow these instructions.</font>*_
@@ -34,7 +34,7 @@ ln -s ~/Development/nautilussvn/current/nautilussvn/data/icons/hicolor ~/.icons/
 
 {{{
 ~/Development/python 
-~/Development/python/nautilussvn symbolic link to ~/Development/nautilussvn/current
+~/Development/python/nautilussvn symbolic link to ~/Development/nautilussvn/current/nautilussvn
 }}}
 
 Change {{{~/.profile}}} to include the line:
