@@ -27,8 +27,8 @@ To build a deb of the trunk for Debian Squeeze:
 
   * Check out */trunk* (or just be using your working copy)
   * Merge with */packaging/debian/nautilussvn/trunk*
-    * (on the command line, this is `svn merge http://...repo.../packaging/debian/nautilussvn/trunk`)
-    * under svn 1.6, you can just do `svn merge ^/packaging/debian/nautilussvn/trunk`
+    * (on the command line, this is `svn merge http://...repo.../packaging/debian/trunk`)
+    * under svn 1.6, you can just do `svn merge ^/packaging/debian/trunk`
     * you can do this the other way around - check out packaging, merge with trunk
   * Run `svn propdel mergeWithUpstream debian` (this is necessary to stop it trying to look for a tarball - *make sure it isn't committed!* ... I'll try to find out if there's a better tool)
   * Run `svn-buildpackage -us -uc --svn-ignore`
