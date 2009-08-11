@@ -1,5 +1,5 @@
+#summary Installation for hacking on NautilusSvn only
 #labels Phase-Implementation
-   #summary Installation for hacking on NautilusSvn only
 
 
   _*<font color="red">WARNING: Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot. If you are an end-user please do not follow these instructions.</font>*_
@@ -73,13 +73,13 @@ nautilus -q ; pgrep -f service.py | xargs kill
 nautilus --no-desktop . ; pgrep -f service.py | xargs kill
 }}}
 
-I recommend either logging to console, or running
+I recommend either logging to console (set in the settings menu for NautilusSVN), or my preference: running
 
 {{{
 tail -n 0 -f ~/.config/nautilussvn/NautilusSvn.log
 }}}
 
-...in a nice, wide console.
+...in a separate nice, wide console.
 
 When you're done, just run
 
