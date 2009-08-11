@@ -56,5 +56,35 @@ Placing it in {{{~/.profile}}} is needed because your GNOME session isn't starte
 
 {{{
 export PYTHONPATH="$PYTHONPATH:/home/$USER/Development/python/"
-nautilus -q && nautilus &
+[run nautilus now]
 }}}
+
+== Running for Debugging ==
+
+Firstly, you need to terminate Nautilus itself and the status checker service...
+
+{{{
+nautilus -q ; pgrep -f service.py | xargs kill
+}}}
+
+...and then start it up:
+
+{{{
+nautilus --no-desktop . ; pgrep -f service.py | xargs kill
+}}}
+
+I recommend either logging to console, or running
+
+{{{
+tail -n 0 -f ~/.config/nautilussvn/NautilusSvn.log
+}}}
+
+...in a nice, wide console.
+
+When you're done, just run
+
+{{{
+nohup nautilus > /dev/null &
+}}}
+
+...and you can close the terminal.
