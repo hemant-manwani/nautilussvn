@@ -8,7 +8,7 @@ If you are more at the level of tinkering with the core of things, then once you
 
 Either way, contact the developers, post to the [http://groups.google.com/group/rabbitvcs-devel devel group] or ask on IRC (#nautilussvn on chat.freenode.net) if you have any questions or patches to contribute. There aren't any hoops to jump through for commit access or anything like that, but it's good for us to know where things are coming from first.
 
-Any contributions should be compatible with the GPLv2 or later.
+Any contributions should be compatible with the [http://www.gnu.org/licenses/gpl-2.0.html GPLv2] or later.
 
 = Checklist =
 
