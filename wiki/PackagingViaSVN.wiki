@@ -31,6 +31,7 @@ To build a deb of the trunk for Debian Squeeze:
     * under svn 1.6, you can just do `svn merge ^/packaging/debian/trunk`
     * you can do this the other way around - check out packaging, merge with trunk
   * Run `svn propdel mergeWithUpstream debian` (this is necessary to stop it trying to look for a tarball - *make sure it isn't committed!* ... I'll try to find out if there's a better tool)
+  * I recommend running `dch -i` or `dch --local myname` to bump the version up and make it obvious that it's a local build
   * Run `svn-buildpackage -us -uc --svn-ignore`
 
 == Notes ==
