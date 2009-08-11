@@ -15,4 +15,4 @@ Any contributions should be compatible with the GPLv2 or later.
 General tips for contributing:
   * Use a [DevelopmentInstallation development installation] for working on
   * Check the [CodingStyle coding style]
-  * Don't forget about [Translation translation] efforts when adding strings (especially to the UI)
+  * Don't forget about [Translating translation] efforts when adding strings (especially to the UI)
