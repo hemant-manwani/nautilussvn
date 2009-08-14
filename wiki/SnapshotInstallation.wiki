@@ -13,7 +13,6 @@ You can pull the development snapshot from our repository and install the extens
 mkdir ~/Development
 svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/Development/nautilussvn
 cd ~/Development/nautilussvn
-# D
 sudo python setup.py install
 nautilus -q && nautilus &
 }}}
