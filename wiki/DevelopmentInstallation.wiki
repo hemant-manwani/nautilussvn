@@ -28,7 +28,7 @@ svn checkout http://nautilussvn.googlecode.com/svn/tags/latest-snapshot ~/Develo
 }}}
 
 
-Of course, you can replace `~/Development` with wherever you want it to reside. We recommend that development snapshots aren't installed system wide, though. Let's link everything to the current directory:
+Of course, you can replace `~/Development` with wherever you want it to reside. Let's link everything to the current directory:
 
 {{{
 mkdir -p ~/.nautilus/python-extensions
