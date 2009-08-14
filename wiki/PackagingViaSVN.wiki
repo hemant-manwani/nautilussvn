@@ -1,7 +1,7 @@
 #summary Directions, notes and tips for packaging NautilusSVN for various distributions
 #labels Phase-Implementation
 
-*WARNING!* - This page is a work in progress! Stick with the current [Packaging packaging directions] until we've sorted it out.
+*WARNING!* - This page is a work in progress, but is mostly correct except where indicated.
 
 = Introduction =
 
@@ -11,9 +11,7 @@ This page details the methods we use to maintain the packages. There are specifi
 
 _Note: there are also similar tools for Fedora, but I haven't researched them yet._
 
-= In General =
-
-The examples below are Debian-centric, because that's what I use. Just replaced the *first* occurrence (not all) of `debian` with your distribution:
+The examples below are Debian-centric, because that's what I (Jason H) use. Just replaced the *first* occurrence (not all) of `debian` with your distribution:
   * Packaging for Ubuntu (currently Jaunty) is in `/svn/packaging/ubuntu/trunk`
   * Packaging for Debian (always Sid) is in `/svn/packaging/debian/trunk`
   * Packaging for Fedora may be coming soon
@@ -22,7 +20,7 @@ The examples below are Debian-centric, because that's what I use. Just replaced 
 
 *WARNING:* right now, I would recommend checking out from SVN HEAD as a single user [DevelopmentInstallation development install]. These instructions will *NOT* work until I sort out some details of packaging and organise the repo. [—Jason]
 
-If you want to build a development snapshot, you don't really need to bother about a checkout (since you're packaging the results anyway). Better to do an export, as per below. If you want to keep things up to date, see the *Build From Trunk* section below (and use the snapshot tag instead).
+If you want to build a development snapshot, you don't really need to bother about a checkout (since you're packaging the results anyway). Better to do an export, as per below. If you do this often, see the *Build From Trunk* section below (and use the snapshot tag instead, like in step 1 right here).
 
 1. Check out the development snapshot (I'm assuming your working dir is :
 {{{
@@ -31,7 +29,7 @@ svn --force export http://nautilussvn.googlecode.com/svn/tags/latest-snapshot .
 svn --force export http://nautilussvn.googlecode.com/svn/packaging/distribution/snapshot .
 }}}
 
-2. Install build dependencies. Instructions coming soon, I promise. Usually it's:
+2. Install build dependencies. Proper instructions coming soon, I promise. Usually it's:
 {{{
 sudo aptitude build-dep nautilussvn
 }}}
