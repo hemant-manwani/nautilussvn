@@ -21,4 +21,4 @@ After that you only have to svn update to get the latest snapshot.
 
 == System-Wide Install: Packaged ==
 
-If you do want to install a development snapshot system wide, but don't want to bypass your distribution's packaging system, you can follow the instructions for [PackagingViaSvn packaging from SVN].
+If you do want to install a development snapshot system wide, but don't want to bypass your distribution's packaging system, you can build your own package, but it's a little bit more involved. Follow the instructions for [PackagingViaSVN packaging from SVN].
