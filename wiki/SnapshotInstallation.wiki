@@ -1,7 +1,9 @@
 #summary How to install development snapshots
 #labels Phase-Support
 
-We tag development snapshots as we go, so people can try "testing" versions of NautilusSVN. If you don't want to install things system-wide (wise for a single user system), check out the [DevelopmentInstallation development installation] instructions.
+== Personal Copy ==
+
+We tag development snapshots as we go, so people can try "testing" versions of NautilusSVN. If you don't want to install things system-wide (wise for a single user system), check out the [DevelopmentInstallation development installation] instructions, and remember to substitute *trunk* with *tags/latest-snapshot*.
 
 *Please note* that even though these are testing snapshots, they're still not releases. In fact, they're emphatically NOT release ready. If you have problems, we'd really appreciate the feedback.
 
@@ -21,4 +23,4 @@ After that you only have to svn update to get the latest snapshot.
 
 == System-Wide Install: Packaged ==
 
-If you do want to install a development snapshot system wide, but don't want to bypass your distribution's packaging system, you can build your own package, but it's a little bit more involved. Follow the instructions for [PackagingViaSVN packaging from SVN].
+If you do want to install a development snapshot system wide, but don't want to bypass your distribution's packaging system, you can build your own package, but it's a little bit more involved. Follow the instructions for [PackagingViaSVN packaging from SVN] — there is a *snapshot* section under there.
