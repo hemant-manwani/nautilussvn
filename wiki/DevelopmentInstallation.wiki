@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 
 
-  _*<font color="red">WARNING: Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the development snapshot. If you are an end-user please do not follow these instructions.</font>*_
+  _*<font color="red">WARNING: Only follow these instructions if you actually want to hack on NautilusSvn, otherwise stick to installing the [SnapshotInstallation development snapshot]. If you are an end-user please do not follow these instructions.</font>*_
 
 It's a good idea organize your code in the following way, this makes it easy to switch between branches and whatnot without fiddling too much. 
 
