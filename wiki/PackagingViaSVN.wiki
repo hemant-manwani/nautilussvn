@@ -26,8 +26,10 @@ If you want to build a development snapshot, you don't really need to bother abo
 {{{
 cd ~/Development/nautilussvn
 svn --force export http://nautilussvn.googlecode.com/svn/tags/latest-snapshot .
-svn --force export http://nautilussvn.googlecode.com/svn/packaging/distribution/snapshot .
+svn --force export http://nautilussvn.googlecode.com/svn/packaging/distribution/tags/snapshot .
 }}}
+
+...replace *distribution* with ubuntu, debian or whatever else.
 
 2. Install build dependencies. Proper instructions coming soon, I promise. Usually it's:
 {{{
