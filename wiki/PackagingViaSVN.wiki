@@ -39,6 +39,10 @@ To build a deb of the trunk for Debian Squeeze:
   * I recommend running `dch -i` or `dch --local myname` to bump the version up and make it obvious that it's a local build
   * Run `svn-buildpackage -us -uc --svn-ignore`
 
+== Build a Snapshot ==
+
+See the notes for using a [SnapshotInstallation].
+
 == Notes ==
 
   * *svn-buildpackage* will put things in *../build-area*
