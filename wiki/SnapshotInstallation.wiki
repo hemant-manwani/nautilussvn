@@ -33,12 +33,12 @@ svn --force export http://nautilussvn.googlecode.com/svn/packaging/distribution/
 
 ...replace *distribution* with ubuntu, debian or whatever else.
 
-2. Install build dependencies. Proper instructions coming soon, I promise. Usually it's:
+2. Install build dependencies. For an installed package it's:
 {{{
 sudo aptitude build-dep nautilussvn
 }}}
 
-...but I need to confirm. If you're using [http://www.netfort.gr.jp/~dancer/software/pbuilder-doc/pbuilder-doc.html pbuilder], skip this step.
+...but I don't think this works for uninstalled packages. If you're using [http://www.netfort.gr.jp/~dancer/software/pbuilder-doc/pbuilder-doc.html pbuilder], skip this step.
 
 3. Change the version:
 
