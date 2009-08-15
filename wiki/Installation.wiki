@@ -38,7 +38,7 @@ Be sure to restart Nautilus (nautilus -q && nautilus &) for NautilusSvn to get l
 
 == Development snapshots ==
 
-Whenever !NautilusSvn is under active development we regularly create snapshots of our development version (trunk). We consider these snapshots stable enough for actual usage.
+Whenever !NautilusSvn is under active development we regularly create snapshots of our development version (trunk). We consider these snapshots stable enough for actual usage, but remember they may have known issues that we feel are minor enough, or even that we can't address at the time.
 
 <table border="0" cellpadding="5">
 <tr>
@@ -46,7 +46,7 @@ Whenever !NautilusSvn is under active development we regularly create snapshots 
 <td>
 *Development snapshots*
 
-The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/SnapshotInstallation here].
+The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation here].
 </td>
 </tr>
 </table>
