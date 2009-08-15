@@ -16,42 +16,6 @@ The examples below are Debian-centric, because that's what I (Jason H) use. Just
   * Packaging for Debian (always Sid) is in `/svn/packaging/debian/trunk`
   * Packaging for Fedora may be coming soon
 
-= Snapshots =
-
-If you want to build a development snapshot, you don't really need to bother about a checkout (since you're packaging the results anyway). Better to do an export, as per below. If you do this often, see the *Build From Trunk* section below (and use the snapshot tag instead, like in step 1 right here).
-
-1. Check out the development snapshot (I'm assuming your working dir is :
-{{{
-cd ~/Development/nautilussvn
-svn --force export http://nautilussvn.googlecode.com/svn/tags/latest-snapshot .
-svn --force export http://nautilussvn.googlecode.com/svn/packaging/distribution/tags/snapshot .
-}}}
-
-...replace *distribution* with ubuntu, debian or whatever else.
-
-2. Install build dependencies. Proper instructions coming soon, I promise. Usually it's:
-{{{
-sudo aptitude build-dep nautilussvn
-}}}
-
-...but I need to confirm. If you're using [http://www.netfort.gr.jp/~dancer/software/pbuilder-doc/pbuilder-doc.html pbuilder], skip this step.
-
-3. Change the version:
-
-{{{
-dch --local snapshot "Snapshot build."
-}}}
-
-3. Build the package:
-
-Personally, I like [http://www.netfort.gr.jp/~dancer/software/pbuilder-doc/pbuilder-doc.html pbuilder]. But these instructions use *debuild*:
-
-{{{
-debuild -us -uc -b
-}}}
-
-4. Install the package. Ubuntu users have a graphical interface for that (I think), and Debian users can tough it out until someone writes one (I use a local repo in /var/repository, STW for instructions or just use `dpkg -i` and sort out dependencies later).
-
 = In Short =
 
 == Tagged Release ==
