@@ -23,7 +23,7 @@ After that you only have to svn update to get the latest snapshot.
 
 == System-Wide Install: Packaged ==
 
-If you want to build a development snapshot, you don't really need to bother about a checkout (since you're packaging the results anyway). Better to do an export, as per below. If you do this often, see the *Build From Trunk* section below (and use the snapshot tag instead, like in step 1 right here).
+If you want to build a development snapshot, you don't really need to bother about a checkout (since you're packaging the results anyway). Better to do an export, as per below. See also the [PackagingViaSvn packaging from SVN] instructions.
 
 1. Change to your working dir and export the development snapshot :
 {{{
