@@ -22,7 +22,7 @@ UPDATENOTIFIERDIR=/var/lib/update-notifier/user.d
 # This should be fixed via the added binary-install target in debian/rules
 # chmod +x /usr/share/nautilussvn/do-nautilussvn-restart-nautilus
 
-echo "You need to run 'nautilus -q && nautilus &' to restart Nautilus."
+echo "You need to run 'nautilus -q && nohup nautilus > /dev/null &' to restart Nautilus."
 
 # FIXME: this only works after running apt-get update (so it doesn't when 
 # somebody manually installs the Debian package using dpkg -i).
