@@ -3,11 +3,11 @@
 
 As !NautilusSvn is under active development it's advised to keep track of [http://groups.google.com/group/nautilussvn/ the mailing list] and/or the [http://cobradragon.com/nautilussvn/ blog].
 
-== Official releases ==
+== Official Releases ==
 
   _*There are no official releases as of yet*_
 
-== Latest beta release ==
+== Latest Beta Release ==
 
   <font color="#00F">_*NOTE: the latest beta release is v0.12-beta1-2 (17 march 2009). See [http://code.google.com/p/nautilussvn/source/diff?spec=svn1087&old=1065&r=1087&format=unidiff&path=%2Ftrunk%2Fpackages%2Fubuntu%2Fdebian%2Fchangelog changelog].*_</font>
   
@@ -36,17 +36,23 @@ Installing the !NautilusSvn beta release is currently the easiest for users of U
 
 Be sure to restart Nautilus (nautilus -q && nautilus &) for NautilusSvn to get loaded.
 
-== Development snapshots ==
+== Snapshots ==
 
 Whenever !NautilusSvn is under active development we regularly create snapshots of our development version (trunk). We consider these snapshots stable enough for actual usage, but remember they may have known issues that we feel are minor enough, or even that we can't address at the time.
 
 <table border="0" cellpadding="5">
 <tr>
-<td>[http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation http://nautilussvn.googlecode.com/svn/wiki/media/development.png]</td>
+<td>[http://code.google.com/p/nautilussvn/wiki/SnapshotInstallation http://nautilussvn.googlecode.com/svn/wiki/media/development.png]</td>
 <td>
 *Development snapshots*
 
-The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/DevelopmentInstallation here].
+The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/SnapshotInstallation here].
 </td>
 </tr>
 </table>
+
+== Development ==
+
+If you're really daring, or want to tinker with !NautilusSVN, you can run it straight out of the SVN HEAD. This is by no means guaranteed to be working, reliable or safe, so please *know what you're in for* before you try it out. We strongly advise that you don't install this system-wise.
+
+Here are the instructions for a [DevelopmentInstallation development installation].
