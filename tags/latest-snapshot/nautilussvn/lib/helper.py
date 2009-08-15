@@ -40,7 +40,11 @@ import nautilussvn.lib.settings
 from nautilussvn.lib.log import Log
 log = Log("nautilussvn.lib.helper")
 
-DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+from nautilussvn import gettext
+ngettext = gettext.ngettext
+
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S" # for log files
+LOCAL_DATETIME_FORMAT = locale.nl_langinfo(locale.D_T_FMT) # for UIs
 
 def initialize_locale():
     _locale, encoding = locale.getdefaultlocale()
@@ -381,6 +385,17 @@ def save_log_message(message):
     if os.path.exists(path):
         limit = get_log_messages_limit()
         messages = get_previous_messages()
+
+        # If the current message already exists, delete the old one
+        # The new one will take it's place at the top
+        tmp = []
+        for i, m in enumerate(messages):
+            if message != m[1]:
+                tmp.append(m)
+        
+        messages = tmp
+             
+        # Don't allow the number of messages to pile up past the limit
         while len(messages) > limit:
             messages.pop()
 
@@ -423,22 +438,20 @@ def save_repository_path(path):
     f.write("\n".join(paths).encode("utf-8"))
     f.close()
     
-def launch_ui_window(filename, args=[], return_immmediately=True):
+def launch_ui_window(filename, args=[]):
     """
     Launches a UI window in a new process, so that we don't have to worry about
     nautilus and threading.
     
-    TODO: return_immmediately is no longer used.
+    @type   filename:   string
+    @param  filename:   The filename of the window, without the extension
     
-    @type   filename: string
-    @param  filename: The filename of the window, without the extension
+    @type   args:       list
+    @param  args:       A list of arguments to be passed to the window.
     
-    @type   args: list
-    @param  args: A list of arguments to be passed to the window.
-    
+    @rtype:             integer
+    @return:            The pid of the process (if launched)
     """
-    
-    from subprocess import Popen
     
     # Hackish.  Get's the helper module's path, then assumes it is in
     # the lib folder.  Removes the /lib part of the path.
@@ -447,15 +460,8 @@ def launch_ui_window(filename, args=[], return_immmediately=True):
     # Puts the whole path together.
     path = "%s/ui/%s.py" % (basedir, filename)
 
-    if not os.path.exists(path):
-        return
-        
-    popen_args = ["/usr/bin/python", path]
-    for arg in args:
-        popen_args.append(arg)
-        
-    return Popen(popen_args).pid
-    
+    if os.path.exists(path): 
+        return subprocess.Popen(["/usr/bin/python", path] + args).pid
 
 def get_log_messages_limit():
     sm = nautilussvn.lib.settings.SettingsManager()
@@ -489,26 +495,67 @@ def pretty_timedelta(time1, time2, resolution=None):
     Calculate time delta between two C{datetime} objects.
     (the result is somewhat imprecise, only use for prettyprinting).
     
-    Copied from: http://trac.edgewall.org/browser/trunk/trac/util/datefmt.py
+    Was originally based on the function pretty_timedelta from:
+	http://trac.edgewall.org/browser/trunk/trac/util/datefmt.py
     """
     
     if time1 > time2:
         time2, time1 = time1, time2
-    units = ((3600 * 24 * 365, 'year',   'years'),
-             (3600 * 24 * 30,  'month',  'months'),
-             (3600 * 24 * 7,   'week',   'weeks'),
-             (3600 * 24,       'day',    'days'),
-             (3600,            'hour',   'hours'),
-             (60,              'minute', 'minutes'))
     diff = time2 - time1
     age_s = int(diff.days * 86400 + diff.seconds)
     if resolution and age_s < resolution:
-        return ''
+        return ""
+    
+    # I do not see a way to make this less repetitive - to make the 
+    # strings fully translatable (i.e. also for languages that have more
+    # or less than two plural forms) we have to state all the strings
+    # explicitely within an ngettext call
     if age_s <= 60 * 1.9:
-        return '%i second%s' % (age_s, age_s != 1 and 's' or '')
-    for u, unit, unit_plural in units:
-        r = float(age_s) / float(u)
-        if r >= 1.9:
-            r = int(round(r))
-            return '%d %s' % (r, r == 1 and unit or unit_plural)
-    return ''
+        return ngettext("%i second", "%i seconds",age_s) % age_s
+    elif age_s <= 3600 * 1.9:
+        r = age_s / 60
+        return ngettext("%i minute", "%i minutes",r) % r
+    elif age_s <= 3600 * 24 * 1.9:
+        r = age_s / 3600
+        return ngettext("%i hour", "%i hours",r) % r        		
+    elif age_s <= 3600 * 24 * 7 * 1.9:
+        r = age_s / (3600 * 24)
+        return ngettext("%i day", "%i days",r) % r
+    elif age_s <= 3600 * 24 * 30 * 1.9:
+        r = age_s / (3600 * 24 * 7)
+        return ngettext("%i week", "%i weeks",r) % r
+    elif age_s <= 3600 * 24 * 365 * 1.9:
+        r = age_s / (3600 * 24 * 30)
+        return ngettext("%i month", "%i months",r) % r
+    else:
+        r = age_s / (3600 * 24 * 365)
+        return ngettext("%i year", "%i years",r) % r        
+
+def _commonpath(l1, l2, common=[]):
+    """
+    Helper method for the get_relative_path method
+    """
+    if len(l1) < 1: return (common, l1, l2)
+    if len(l2) < 1: return (common, l1, l2)
+    if l1[0] != l2[0]: return (common, l1, l2)
+    return _commonpath(l1[1:], l2[1:], common+[l1[0]])
+    
+def get_relative_path(p1, p2):
+    """
+    Method that returns the relative path between the specified paths
+    """
+    (common,l1,l2) = _commonpath(p1.split(os.path.sep), p2.split(os.path.sep))
+    p = []
+    if len(l1) > 0:
+        p = [ '../' * len(l1) ]
+    p = p + l2
+    return os.path.join( *p )
+    
+def initialize_locale():
+    _locale, encoding = locale.getdefaultlocale()
+    if _locale is None:
+        _locale = "en_US"
+    if encoding is None:
+        encoding = "utf8"
+        
+    locale.setlocale(locale.LC_ALL, (_locale, encoding))

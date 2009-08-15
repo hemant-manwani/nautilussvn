@@ -185,6 +185,7 @@ class SVN:
     
     def __init__(self):
         self.client = pysvn.Client()
+        self.interface = "pysvn"
     
     def status(self, path, recurse=True):
         """
@@ -201,6 +202,7 @@ class SVN:
             #~ log.exception("Exception occured in SVN.status() for %s" % path)
             return [pysvn.PysvnStatus({
                 "text_status": pysvn.wc_status_kind.none,
+                "prop_status": pysvn.wc_status_kind.none,
                 "path": os.path.abspath(path)
             })]
     
@@ -228,32 +230,27 @@ class SVN:
                        for the path being the first item in the list.
         
         """
+
+        if (not invalidate and path in self.status_cache):
+            return self.status_cache[path]  
+
+        # The cache was bypassed or does not contain the requested path.
+        statuses = self.status(path, recurse=recurse)
         
-        if (invalidate or 
-                path not in self.status_cache):
-            log.debug("status_with_cache() invalidated %s" % path)
-            statuses = self.status(path, recurse=recurse)
-        else:
-            return self.status_cache[path]
+        # Empty out all the caches
+        for status in statuses:
+            current_path = os.path.join(path, status.data["path"].encode("utf-8"))
+            while current_path != "/":
+                self.status_cache[current_path] = []
+                current_path = os.path.split(current_path)[0]
         
-        # If we do end up here the cache was bypassed.
-        if recurse and len(statuses) > 1:
-            # Empty out all the caches
-            for status in statuses:
-                current_path = os.path.join(path, status.data["path"].encode("utf-8"))
-                while current_path != "/":
-                    self.status_cache[current_path] = []
-                    current_path = os.path.split(current_path)[0]
-            
-            # Fill them back up
-            for status in statuses:
-                current_path = os.path.join(path, status.data["path"].encode("utf-8"))
-                while current_path != "/":
-                    if current_path not in self.status_cache: break;
-                    self.status_cache[current_path].append(status)
-                    current_path = os.path.split(current_path)[0]
-        else:
-            return statuses
+        # Fill them back up
+        for status in statuses:
+            current_path = os.path.join(path, status.data["path"].encode("utf-8"))
+            while current_path != "/":
+                if current_path not in self.status_cache: break;
+                self.status_cache[current_path].append(status)
+                current_path = os.path.split(current_path)[0]
         
         return self.status_cache[path]
         
@@ -306,6 +303,9 @@ class SVN:
         if status.data["text_status"] == text_status:
             return True
         
+        if status.data["prop_status"] == text_status:
+            return True
+        
         return False
 
     def is_versioned(self, path):
@@ -337,7 +337,7 @@ class SVN:
     def is_locked(self, path):
         is_locked = False
         try:
-            is_locked = self.client.info2(path)[0][1].lock is not None
+            is_locked = self.client.info2(path, recurse=False)[0][1].lock is not None
         except pysvn.ClientError, e:
             return False
             #log.exception("is_locked exception for %s" % path)
@@ -366,6 +366,8 @@ class SVN:
         
         for status in statuses:
             if status.data["text_status"] == text_status:
+                return True
+            if status.data["prop_status"] == text_status:
                 return True
                 
         return False
@@ -438,7 +440,8 @@ class SVN:
                 continue
 
             for st_item in st:
-                if statuses and st_item.text_status not in statuses:
+                if statuses and st_item.text_status not in statuses \
+                  and st_item.prop_status not in statuses:
                     continue
 
                 items.append(st_item)
@@ -524,7 +527,7 @@ class SVN:
 
         return path_to_use
         
-    def propset(self, path, prop_name, prop_value, overwrite=False):
+    def propset(self, path, prop_name, prop_value, overwrite=False, recurse=True):
         """
         Adds an svn property to a path.  If the item is unversioned,
         add a recursive property to the parent path
@@ -537,6 +540,10 @@ class SVN:
         
         @type   prop_value: string
         @param  prop_value: An svn property value/pattern.
+        
+        @type   recurse: boolean 
+        @param  recurse: If True, the property will be applied to all
+                subdirectories as well.
         
         """
 
@@ -553,7 +560,7 @@ class SVN:
                 prop_name, 
                 props, 
                 path, 
-                recurse=True
+                recurse=recurse
             )
             returner = True
         except pysvn.ClientError, e:
@@ -618,7 +625,7 @@ class SVN:
             
         return returner
         
-    def propdel(self, path, prop_name):
+    def propdel(self, path, prop_name, recurse=True):
         """
         Removes a property from a given path
         
@@ -627,6 +634,10 @@ class SVN:
         
         @type   prop_name: string or self.PROPERTIES
         @param  prop_name: An svn property name.
+        
+        @type   recurse: boolean
+        @param  recurse: If True, the property will be deleted from any
+                subdirectories also having the property set.
         
         """
         
@@ -637,7 +648,7 @@ class SVN:
             self.client.propdel(
                 prop_name,
                 path,
-                recurse=True
+                recurse=recurse
             )
             returner = True
         except pysvn.ClientError, e:
@@ -1090,6 +1101,13 @@ class SVN:
         """
 
         return self.client.merge_peg2(*args, **kwargs)
+    
+    def has_merge2(self):
+        """
+        Tests whether the user has a later version of pysvn/svn installed
+        with more merge features
+        """
+        return hasattr(self.client, "merge_peg2")
 
     def merge_trees(self, *args, **kwargs):
         """
@@ -1124,3 +1142,90 @@ class SVN:
         """
 
         return self.client.merge(*args, **kwargs)
+
+    def diff(self, *args, **kwargs):
+        """
+        Returns the diff text between the base code and the working copy.
+        
+        @type   tmp_path: string
+        @param  tmp_path: Temporal path to store the diff
+        
+        @type   url_or_path: string
+        @param  url_or_path: From WC/URL location
+        
+        @type   revision1: pysvn.Revision
+        @param  revision1: Indicates the revision of the URL/Path (def: pysvn.Revision( opt_revision_kind.base ))
+        
+        @type   url_or_path2: string
+        @param  url_or_path2: From WC/URL location
+        
+        @type   revision2: pysvn.Revision
+        @param  revision2: Indicates the revision of the URL/Path (def: pysvn.Revision( opt_revision_kind.working ))
+        
+        @type   recurse: boolean
+        @param  recurse: Whether or not to recurse into sub-directories. (def: True)
+        
+        @type   ignore_ancestry: boolean
+        @param  ignore_ancestry: Whether or not to recurse into sub-directories. (def: False)
+        
+        @type   diff_deleted: boolean
+        @param  diff_deleted: Whether or not to recurse into sub-directories. (def: True)
+        
+        @type   ignore_content_type: boolean
+        @param  ignore_content_type: Whether or not to recurse into sub-directories. (def: False)
+        
+        """
+        
+        return self.client.diff(*args, **kwargs)
+    
+    def is_version_less_than(self, version):
+        """
+        @type   version: tuple
+        @param  version: A version tuple to compare pysvn's version to
+        """
+        
+        if version[0] > pysvn.version[0]:
+            return True
+        
+        if ((version[0] == pysvn.version[0])
+                and (version[1] > pysvn.version[1])):
+            return True
+        
+        if ((version[0] == pysvn.version[0])
+                and (version[1] == pysvn.version[1])
+                and (version[2] > pysvn.version[2])):
+            return True
+       
+        if ((version[0] == pysvn.version[0])
+                and (version[1] == pysvn.version[1])
+                and (version[2] == pysvn.version[2])
+                and (version[3] > pysvn.version[3])):
+            return True
+        
+        return False
+
+    def is_version_greater_than(self, version):
+        """
+        @type   version: tuple
+        @param  version: A version tuple to compare pysvn's version to
+        """
+        
+        if version[0] < pysvn.version[0]:
+            return True
+        
+        if ((version[0] == pysvn.version[0])
+                and (version[1] < pysvn.version[1])):
+            return True
+        
+        if ((version[0] == pysvn.version[0])
+                and (version[1] == pysvn.version[1])
+                and (version[2] < pysvn.version[2])):
+            return True
+       
+        if ((version[0] == pysvn.version[0])
+                and (version[1] == pysvn.version[1])
+                and (version[2] == pysvn.version[2])
+                and (version[3] < pysvn.version[3])):
+            return True
+        
+        return False

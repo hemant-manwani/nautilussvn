@@ -61,6 +61,9 @@ class Settings(InterfaceView):
         self.get_widget("enable_recursive").set_active(
             int(self.settings.get("general", "enable_recursive"))
         )
+        self.get_widget("show_debug").set_active(
+            int(self.settings.get("general","show_debug"))
+        )
         self.get_widget("diff_tool").set_text(
             self.settings.get("external", "diff_tool")
         )
@@ -68,13 +71,13 @@ class Settings(InterfaceView):
             int(self.settings.get("external", "diff_tool_swap"))
         )
         self.get_widget("repo_browser").set_text(
-            self.settings.get("external", "repo_browser")
+            str(self.settings.get("external", "repo_browser"))
         )
         self.get_widget("cache_number_repositories").set_text(
-            self.settings.get("cache", "number_repositories")
+            str(self.settings.get("cache", "number_repositories"))
         )
         self.get_widget("cache_number_messages").set_text(
-            self.settings.get("cache", "number_messages")
+            str(self.settings.get("cache", "number_messages"))
         )
         
         self.logging_type = nautilussvn.ui.widget.ComboBox(
@@ -124,6 +127,10 @@ class Settings(InterfaceView):
         self.settings.set(
             "general", "enable_recursive",
             self.get_widget("enable_recursive").get_active()
+        )
+        self.settings.set(
+            "general", "show_debug",
+            self.get_widget("show_debug").get_active()
         )
         self.settings.set(
             "external", "diff_tool",
