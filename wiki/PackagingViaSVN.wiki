@@ -48,6 +48,10 @@ See the notes for using a [SnapshotInstallation].
   * *svn-buildpackage* will put things in *../build-area*
   * If you don't want to use *svn-buildpackage*, export your working copy (`svn export . ../nsvn-export`) and use (eg.) *debuild* from your exported dir.
 
+== Notes for NautilusSVN Developers ==
+
+The trunk of the code and trunk of the packaging should be in sync before taking a snapshot. Don't tag a snapshot of the packaging and then commit changes to that — it should always simply come from the packaging trunk.
+
 = Tools =
 
 == Debian and Ubuntu ==
