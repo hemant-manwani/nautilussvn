@@ -26,11 +26,12 @@ Our module for everything related to the Nautilus extension.
   
 """
 
-import traceback
+from __future__ import with_statement
 import copy
 import os.path
 from os.path import isdir, isfile, realpath, basename
 import datetime
+import threading
 
 import gnomevfs
 import nautilus
@@ -40,6 +41,7 @@ import gtk
 
 from nautilussvn.lib.vcs.svn import SVN
 
+from nautilussvn.util.vcs import *
 from nautilussvn.lib.helper import launch_ui_window, launch_diff_tool
 from nautilussvn.lib.helper import get_file_extension, get_common_directory
 from nautilussvn.lib.helper import pretty_timedelta
@@ -54,6 +56,13 @@ _ = gettext.gettext
 from nautilussvn.lib.settings import SettingsManager
 settings = SettingsManager()
 
+import nautilussvn.dbus.service
+from nautilussvn.dbus.statuschecker import StatusCheckerStub as StatusChecker
+
+# Start up our DBus service if it's not already started, if this fails
+# we can't really do anything.
+nautilussvn.dbus.service.start()
+
 class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnProvider):
     """ 
     This is the main class that implements all of our awesome features.
@@ -65,13 +74,21 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     EMBLEMS = {
         "added" :       "nautilussvn-added",
         "deleted":      "nautilussvn-deleted",
+        "removed":      "nautilussvn-deleted",
         "modified":     "nautilussvn-modified",
         "conflicted":   "nautilussvn-conflicted",
+        "missing":      "nautilussvn-conflicted",
         "normal":       "nautilussvn-normal",
+        "clean":        "nautilussvn-normal",
         "ignored":      "nautilussvn-ignored",
         "locked":       "nautilussvn-locked",
         "read_only":    "nautilussvn-read_only",
-        "obstructed":   "nautilussvn-obstructed"
+        "obstructed":   "nautilussvn-obstructed",
+        "incomplete":   "nautilussvn-incomplete",
+        "unversioned":  "nautilussvn-unversioned",
+        "unknown":      "nautilussvn-unknown",
+        "calculating":  "nautilussvn-calculating",
+        "error":        "nautilussvn-error"
     }
     
     #: A list of statuses which count as modified (for a directory) in 
@@ -106,22 +123,26 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     #: we also add C{NautilusVFSFile}s to this table from C{get_file_items} etc.
     nautilusVFSFile_table = {}
     
-    #: Keep track of item statuses. This is a workaround for the fact that
-    #: emblems added using C{NautilusVFSFile.add_emblem} are removed once the 
-    #: C{NautilusVFSFile} is invalidated (one example of when this happens is
-    #: when an item is modified).::
-    #: 
-    #:     statuses = {
-    #:         "/foo/bar/baz": "modified"
-    #:     }
-    #: 
-    statuses = {}
-    
     #: Without an actual status monitor it's not possible to just keep
     #: track of stuff that happens (e.g. a commit happens, files are added,
     #: such things). So at the moment we just add all interesting items
     #: to this list.
     monitored_files = []
+    
+    #: This is in case we want to permanently enable invalidation of the status
+    #: checker info. We put a path here before we invalidate the item, so that
+    #: we don't enter an endless loop when updating the status.
+    #: The callback should acquire this lock when pushing the path to this.
+    always_invalidate = True
+    paths_from_callback = []
+    #: It appears that the "update_file_info" call that is triggered by the
+    #: "invalidate_extension_info" in the callback function happens
+    #: synchronously (ie. in the same thread). However, given the nature of the
+    #: python/nautilus extensions module, I'm not sure how reliable this is.
+    #: It's certainly supported by debugging statements, but maybe it will
+    #: change in the future? Who knows. This should work for both the current
+    #: situation, and the possibility that they are asynchronous.
+    callback_paths_lock = threading.RLock()
     
     #: A list of statuses that we want to keep track of for when a process
     #: might have done something.
@@ -135,48 +156,54 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
     ])
     
     def __init__(self):
+        threading.currentThread().setName("NautilusSVN extension thread")
+        
         # Create a global client we can use to do VCS related stuff
         self.vcs_client = SVN()
+        
+        self.status_checker = StatusChecker(self.cb_status)
+        
         
     def get_columns(self):
         """
         Return all the columns we support.
         
         """
-            
+        
         return (
             nautilus.Column(
                 "NautilusSvn::status_column",
                 "status",
-                "SVN Status",
-                "The SVN status"
+                _("Status"),
+                ""
             ),
             nautilus.Column(
                 "NautilusSvn::revision_column",
                 "revision",
-                "SVN Revision",
-                "The SVN revision"
+                _("Revision"),
+                ""
             ),
             nautilus.Column(
                 "NautilusSvn::url_column",
                 "url",
-                "SVN URL",
-                "The SVN URL"
+                _("URL"),
+                ""
             ),
             nautilus.Column(
                 "NautilusSvn::author_column",
                 "author",
-                "SVN Author",
-                "The SVN author"
+                _("Author"),
+                ""
             ),
             nautilus.Column(
                 "NautilusSvn::age_column",
                 "age",
-                "SVN Age",
-                "The SVN age"
+                _("Age"),
+                ""
             )
         )
     
+    #~ @timeit
     def update_file_info(self, item):
         """
         
@@ -200,7 +227,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not self.valid_uri(item.get_uri()): return
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         
-        log.debug("update_file_info() called for %s" % path)
+        # log.debug("update_file_info() called for %s" % path)
         
         # Always replace the item in the table with the one we receive, because
         # for example if an item is deleted and recreated the NautilusVFSFile
@@ -214,16 +241,46 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         is_in_a_or_a_working_copy = self.vcs_client.is_in_a_or_a_working_copy(path)
         if not is_in_a_or_a_working_copy: return
         
-        # Do our magic
-        if bool(int(settings.get("general", "enable_attributes"))): self.update_columns(item, path)
-        if bool(int(settings.get("general", "enable_emblems"))): self.update_status(item, path)
+        # Do our magic...
         
-    def update_columns(self, item, path):
-        """
-        Update the columns for a given item. This isn't a very elegant 
-        function but it does work.
-        """
+        # I have added extra logic in cb_status, using a list
+        # (paths_from_callback) that should allow us to work around this for
+        # now. But it'd be good to have an actual status monitor. 
         
+        # Useful for figuring out order of calls. See "cb_status".
+        # log.debug("%s: In update_status" % threading.currentThread())
+        with self.callback_paths_lock:
+            triggered_by_callback = path in self.paths_from_callback
+            if triggered_by_callback:
+                self.paths_from_callback.remove(path)
+
+        # log.debug("US Thread: %s" % threading.currentThread())
+        invalidate_now = self.always_invalidate and not triggered_by_callback
+        statuses = self.status_checker.check_status(path, recurse=True, invalidate=invalidate_now)
+
+        # TODO: using pysvn directly because I don't like the current
+        # SVN class.
+        client = pysvn.Client()
+        client_info = client.info(path)
+
+        assert statuses.has_key(path), "Path not in status list!"
+
+        if bool(int(settings.get("general", "enable_attributes"))): self.update_columns(item, path, statuses, client_info)
+        if bool(int(settings.get("general", "enable_emblems"))): self.update_status(item, path, statuses, client_info)
+
+        # Useful for figuring out order of calls. See "cb_status".
+        # log.debug("%s: Leaving update_status" % threading.currentThread())
+        
+        
+    def update_columns(self, item, path, statuses, client_info):
+        """
+        Update the columns (attributes) for a given Nautilus item,
+        filling them in with information from the version control
+        server.
+
+        """
+        log.debug("update_colums called for %s" % path)
+
         values = {
             "status": "",
             "revision": "",
@@ -231,112 +288,64 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             "author": "",
             "age": ""
         }
-        
+
         try:
-            # TODO: using pysvn directly because I don't like the current
-            # SVN class.
-            client = pysvn.Client()
-            info = client.info(path).data
-            status = client.status(path, recurse=False)[-1].data
-            
-            values["status"] = SVN.STATUS_REVERSE[status["text_status"]]
-            values["revision"] = str(info["commit_revision"].number)
-            values["url"] = str(info["url"])
-            values["author"] = str(info["commit_author"])
-            values["age"] = str(
-                pretty_timedelta(
-                    datetime.datetime.fromtimestamp(info["commit_time"]), 
-                    datetime.datetime.now()
+            if client_info is None:
+                # It IS possible to reach here: ignored files satisfy the "is in
+                # WC" condition, but aren't themselves versioned!
+                log.debug("Unversioned file in WC: %s" % path)
+                values["status"] = SVN.STATUS_REVERSE[pysvn.wc_status_kind.unversioned]
+            else:
+                info = client_info.data
+                # FIXME: replace
+                # status = client.status(path, recurse=False)[-1].data                
+                status = statuses[path]
+    
+                values["status"] = status["text_status"]
+
+                # If the text status shows it isn't modified, but the properties
+                # DO, let them take priority.
+                if status["text_status"] not in NautilusSvn.MODIFIED_TEXT_STATUSES \
+                  and status["prop_status"] in NautilusSvn.MODIFIED_TEXT_STATUSES:
+                    values["status"] = status["prop_status"]
+
+                values["revision"] = str(info["commit_revision"].number)
+                values["url"] = str(info["url"])
+                values["author"] = str(info["commit_author"])
+                values["age"] = str(
+                    pretty_timedelta(
+                        datetime.datetime.fromtimestamp(info["commit_time"]),
+                        datetime.datetime.now()
+                    )
                 )
-            )
-        except: 
+        except:
             log.exception()
-            
+
         for key, value in values.items():
             item.add_string_attribute(key, value)
+
     
-    def update_status(self, item, path):
-        statuses = self.vcs_client.status_with_cache(path, invalidate=True)
-        self.statuses[path] = self.get_text_status(path, statuses)
-        self.set_emblem_by_path(path)
-        
-        # Keep a note of this file object in case we have commits etc.
-        if self.statuses[path] in self.STATUSES_TO_MONITOR:
-            self.monitored_files.append(item)
-        else:
-            # This file doesn't interest us remove it from the monitored_files
-            # list using try...except because it might not even be monitored.
-            try:
-                self.monitored_files.remove(item)
-                log.debug("update_file_info() removed %s from monitored_files" % path)
-            except: pass
-        
-        # We have to make sure the statuses for all parent paths are set
-        # correctly too. If we haven't seen this file before it means
-        # we're probably entering a directory and we don't want to do this.
-        if path in self.statuses:
-            parent_path = path
-            while parent_path != "/":
-                parent_path = os.path.split(parent_path)[0]
+    def update_status(self, item, path, statuses, client_info):
+        # If we are able to set an emblem that means we have a local status
+        # available. The StatusMonitor will keep us up-to-date through the 
+        # C{cb_status} callback.
+        # Warning! If you use invalidate=True here, it will set up an endless
+        # loop:
+        # 1. Update requests status (inv=True)
+        # 2. Status checker returns "calculating"
+        # 3. Status checker calculates status, calls callback
+        # 4. Callback triggers update
                 
-                if parent_path in self.nautilusVFSFile_table: 
-                    item = self.nautilusVFSFile_table[parent_path]
-                    # One important reason to invalidate the extension info (besides
-                    # the fact that otherwise we wouldn't update the status) is that:
-                    #
-                    # - Invalidating the extension info will cause Nautilus to remove all
-                    #   temporary emblems we applied so we don't have overlay problems
-                    #   (with ourselves, we'd still have some with other extensions).
-                    # 
-                    # After invalidating update_file_info applies the correct emblem.
-                    #
-                    item.invalidate_extension_info()
-    
-    def get_text_status(self, path, statuses):
-        """
-        This is a helper function for update_file_info to figure out
-        the textual representation for a set of statuses.
+        # Path == first index or last for old system?
+        if statuses[path]["text_status"] == "calculating":
+            item.add_emblem(self.EMBLEMS["calculating"])
+        else:
+            summarized_status = get_summarized_status(path, statuses)
+            if summarized_status in self.EMBLEMS:
+                item.add_emblem(self.EMBLEMS[summarized_status])
         
-        @type   path:       string
-        @param  path:       The path which the statuses belong to.
-        
-        @type   statuses:   list of PySVN status objects
-        @param  path:       The actual statuses.
-        
-        @rtype:             string
-        @return:            The textual representation of the status (e.g. "modified").
-        """
-        
-        # We need to take special care of directories
-        if isdir(path):
-            text_statuses = set([status.data["text_status"] for status in statuses])
-            
-            # These statuses take precedence.
-            if SVN.STATUS["conflicted"] in text_statuses:
-                return "conflicted"
-            
-            if SVN.STATUS["obstructed"] in text_statuses:
-                return "obstructed"
-            
-            # The following statuses take precedence over the status
-            # of children.
-            if status.data["text_status"] in [
-                    SVN.STATUS["added"],
-                    SVN.STATUS["modified"],
-                    SVN.STATUS["deleted"]
-                ]:
-                return SVN.STATUS_REVERSE[status.data["text_status"]]
-            
-            # A directory should have a modified status when any of its children
-            # have a certain status (see modified_statuses above). Jason thought up 
-            # of a nifty way to do this by using sets and the bitwise AND operator (&).
-            if len(set(self.MODIFIED_STATUSES) & text_statuses):
-                return "modified"
-        
-        # If we're not a directory we end up here.
-        return SVN.STATUS_REVERSE[statuses[-1].data["text_status"]]
-    
     #~ @disable
+    @timeit
     def get_file_items(self, window, items):
         """
         Menu activated with items selected. Nautilus also calls this function
@@ -366,16 +375,16 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
 
         if len(paths) == 0: return []
         
-        log.debug("get_file_items() called")
-        
         # Use the selected path to determine Nautilus's cwd
         # If more than one files are selected, make sure to use get_common_directory
         #path_to_use = (len(paths) > 1 and get_common_directory(paths) or paths[0])
         #os.chdir(os.path.split(path_to_use)[0])
         
         return MainContextMenu(paths, self).construct_menu()
+        
     
     #~ @disable
+    @timeit
     def get_background_items(self, window, item):
         """
         Menu activated on entering a directory. Builds context menu for File
@@ -396,10 +405,11 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         path = realpath(gnomevfs.get_local_path_from_uri(item.get_uri()))
         self.nautilusVFSFile_table[path] = item
         
-        log.debug("get_background_items() called")
+        # log.debug("get_background_items() called")
         
         #os.chdir(path)
         return MainContextMenu([path], self).construct_menu()
+        
     
     #
     # Helper functions
@@ -417,33 +427,6 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         if not uri.startswith("file://"): return False
         
         return True
-    
-    def set_emblem_by_path(self, path):
-        """
-        Set the emblem for a path (looks up the status in C{statuses}).
-        
-        @type   path: string
-        @param  path: The path for which to set the emblem.
-        
-        @rtype:       boolean
-        @return:      Whether the emblem was set successfully.
-        """
-        
-        log.debug("set_emblem_by_path() called for %s" % (path))
-        
-        # Try and lookup the NautilusVFSFile in the lookup table since 
-        # we need it.
-        if not path in self.statuses: return False
-        if not path in self.nautilusVFSFile_table: return False
-        item = self.nautilusVFSFile_table[path]
-        
-        status = self.statuses[path]
-        
-        if status in self.EMBLEMS:
-            item.add_emblem(self.EMBLEMS[status])
-            return True
-            
-        return False
     
     #
     # Some methods to help with keeping emblems up-to-date
@@ -463,25 +446,14 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
         
         def do_check():
             # We'll check the paths first (these were the paths that
-            # were originally passed along from the context menu). 
+            # were originally passed along to the context menu). 
             #
             # This is needed among other things for:
             #
             #   - When a directory is normal and you add files inside it
             #
             for path in paths:
-                if not path in self.nautilusVFSFile_table: continue
-                item = self.nautilusVFSFile_table[path]
-                item.invalidate_extension_info()
-            
-            # The process has completed, so we now want to rescan the 
-            # files we're monitoring to see if their status has changed. We
-            # need to make a copy of monitored_files as the rescanning process
-            # will affect it.
-            check_list = copy.copy(self.monitored_files)
-            while len(check_list):
-                check_list.pop().invalidate_extension_info()
-            return False
+                statuses = self.status_checker.check_status(path, recurse=True, invalidate=True)
             
         self.execute_after_process_exit(pid, do_check)
         
@@ -493,7 +465,7 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             # First we need to see if the commit process is still running
             if os.path.exists("/proc/" + str(pid)):
                 # If so, check its status by reading the status file from /proc
-                f = open("/proc/%d/status"%pid).readlines()
+                f = open("/proc/%d/status" % pid).readlines()
                 # If it's a zombie process, then we can waitpid() on it to end the process
                 if "zombie" in f[1]:
                     os.waitpid(pid, 0)
@@ -527,7 +499,43 @@ class NautilusSvn(nautilus.InfoProvider, nautilus.MenuProvider, nautilus.ColumnP
             log.debug("Re-scanning settings")
             
         self.execute_after_process_exit(pid, do_reload_settings)
+        
+        
+    # 
+    # Callbacks
+    # 
     
+    def cb_status(self, path, statuses):
+        """
+        This is the callback that C{StatusMonitor} calls. 
+        
+        @type   path:   string
+        @param  path:   The path of the item something interesting happened to.
+        
+        @type   statuses: list of tuples of (path, status)
+        @param  statuses: The statuses (we do nothing with this now)
+        """
+        # log.debug("CB Thread: %s" % threading.currentThread())
+        if path in self.nautilusVFSFile_table:
+            item = self.nautilusVFSFile_table[path]
+            # We need to invalidate the extension info for only one reason:
+            #
+            # - Invalidating the extension info will cause Nautilus to remove all
+            #   temporary emblems we applied so we don't have overlay problems
+            #   (with ourselves, we'd still have some with other extensions).
+            #
+            # After invalidating C{update_file_info} applies the correct emblem.
+            
+            # Since invalidation triggers an "update_file_info" call, we can
+            # tell it NOT to invalidate the status checker path.
+            with self.callback_paths_lock:
+                self.paths_from_callback.append(path)
+                # These are useful to establish whether the "update_status" call
+                # happens INSIDE this next call, or later, or in another thread. 
+                # log.debug("%s: Invalidating..." % threading.currentThread())
+                item.invalidate_extension_info()
+                # log.debug("%s: Done invalidate call." % threading.currentThread())
+        
 class MainContextMenu:
     """
     
@@ -541,12 +549,20 @@ class MainContextMenu:
     
     """
     
-    SEPARATOR = "- - - - - - - - - - - - - - -"
+    SEPARATOR = u'\u2015' * 10
     
     def __init__(self, paths, nautilussvn_extension):
         self.paths = paths
         self.nautilussvn_extension = nautilussvn_extension
         self.vcs_client = SVN()
+        
+        self.status_checker = StatusChecker()
+        
+        self.statuses = {}
+        for path in self.paths:
+            self.statuses.update(self.status_checker.check_status(path, recurse=True, callback=False))
+        self.text_statuses = [self.statuses[key]["text_status"] for key in self.statuses.keys()]
+        self.prop_statuses = [self.statuses[key]["prop_status"] for key in self.statuses.keys()]
         
         self.path_dict = {}
         self.path_dict["length"] = len(paths)
@@ -554,33 +570,33 @@ class MainContextMenu:
         checks = {
             "is_dir"                        : isdir,
             "is_file"                       : isfile,
-            "is_working_copy"               : self.vcs_client.is_working_copy,
-            "is_in_a_or_a_working_copy"     : self.vcs_client.is_in_a_or_a_working_copy,
-            "is_versioned"                  : self.vcs_client.is_versioned,
-            "is_normal"                     : self.vcs_client.is_normal,
-            "is_added"                      : self.vcs_client.is_added,
-            "is_modified"                   : self.vcs_client.is_modified,
-            "is_deleted"                    : self.vcs_client.is_deleted,
-            "is_ignored"                    : self.vcs_client.is_ignored,
-            "is_locked"                     : self.vcs_client.is_locked,
-            "is_missing"                    : self.vcs_client.is_missing,
-            "is_conflicted"                 : self.vcs_client.is_conflicted,
-            "is_obstructed"                 : self.vcs_client.is_obstructed,
-            "has_unversioned"               : self.vcs_client.has_unversioned,
-            "has_added"                     : self.vcs_client.has_added,
-            "has_modified"                  : self.vcs_client.has_modified,
-            "has_deleted"                   : self.vcs_client.has_deleted,
-            "has_ignored"                   : self.vcs_client.has_ignored,
-            "has_locked"                    : self.vcs_client.has_locked,
-            "has_missing"                   : self.vcs_client.has_missing,
-            "has_conflicted"                : self.vcs_client.has_conflicted,
-            "has_obstructed"                : self.vcs_client.has_obstructed
+            "is_working_copy"               : is_working_copy,
+            "is_in_a_or_a_working_copy"     : is_in_a_or_a_working_copy,
+            "is_versioned"                  : is_versioned,
+            "is_normal"                     : lambda path: self.statuses[path]["text_status"] == "normal" and self.statuses[path]["prop_status"] == "normal",
+            "is_added"                      : lambda path: self.statuses[path]["text_status"] == "added",
+            "is_modified"                   : lambda path: self.statuses[path]["text_status"] == "modified" or self.statuses[path]["prop_status"] == "modified",
+            "is_deleted"                    : lambda path: self.statuses[path]["text_status"] == "deleted",
+            "is_ignored"                    : lambda path: self.statuses[path]["text_status"] == "ignored",
+            "is_locked"                     : lambda path: self.statuses[path]["text_status"] == "locked",
+            "is_missing"                    : lambda path: self.statuses[path]["text_status"] == "missing",
+            "is_conflicted"                 : lambda path: self.statuses[path]["text_status"] == "conflicted",
+            "is_obstructed"                 : lambda path: self.statuses[path]["text_status"] == "obstructed",
+            "has_unversioned"               : lambda path: "unversioned" in self.text_statuses,
+            "has_added"                     : lambda path: "added" in self.text_statuses,
+            "has_modified"                  : lambda path: "modified" in self.text_statuses or "modified" in self.prop_statuses,
+            "has_deleted"                   : lambda path: "deleted" in self.text_statuses,
+            "has_ignored"                   : lambda path: "ignored" in self.text_statuses,
+            "has_locked"                    : lambda path: "locked" in self.text_statuses,
+            "has_missing"                   : lambda path: "missing" in self.text_statuses,
+            "has_conflicted"                : lambda path: "conflicted" in self.text_statuses,
+            "has_obstructed"                : lambda path: "obstructed" in self.text_statuses
         }
 
         # Each path gets tested for each check
         # If a check has returned True for any path, skip it for remaining paths
         for path in paths:
-            for key,func in checks.items():
+            for key, func in checks.items():
                 if key not in self.path_dict or self.path_dict[key] is not True:
                     self.path_dict[key] = func(path)
         
@@ -607,7 +623,7 @@ class MainContextMenu:
                         "args": None
                     }
                 },
-                "condition": (lambda: True),
+                "condition": (lambda: settings.get("general", "show_debug")),
                 "submenus": [
                     {
                         "identifier": "NautilusSvn::Bugs",
@@ -622,22 +638,7 @@ class MainContextMenu:
                         },
                         "condition": (lambda: True),
                         "submenus": [
-                            {
-                                "identifier": "NautilusSvn::Debug_Asynchronicity",
-                                "label": _("Test Asynchronicity"),
-                                "tooltip": "",
-                                "icon": "nautilussvn-asynchronous",
-                                "signals": {
-                                    "activate": {
-                                        "callback": self.callback_debug_asynchronicity,
-                                        "args": None
-                                    }
-                                },
-                                "condition": (lambda: True),
-                                "submenus": [
-                                    
-                                ]
-                            }
+
                         ]
                     },
                     {
@@ -865,7 +866,7 @@ class MainContextMenu:
                             },
                             {
                                 "identifier": "NautilusSvn::AddToIgnoreExt",
-                                "label": "*%s"%get_file_extension(self.paths[0]),
+                                "label": "*%s" % get_file_extension(self.paths[0]),
                                 "tooltip": _("Ignore all files with this extension"),
                                 "icon": None,
                                 "signals": {
@@ -1181,6 +1182,38 @@ class MainContextMenu:
                         "condition": (lambda: True),
                         "submenus": []
                     },
+                   {
+                        "identifier": "NautilusSvn::CreatePatch",
+                        "label": _("Create Patch..."),
+                        "tooltip": _("Creates a unified diff file with all changes you made"),
+                        "icon": "nautilussvn-createpatch",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_createpatch,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_createpatch,
+                        "submenus": [
+                            
+                        ]
+                    },
+                    {
+                        "identifier": "NautilusSvn::ApplyPatch",
+                        "label": _("Apply Patch..."),
+                        "tooltip": _("Applies a unified diff file to the working copy"),
+                        "icon": "nautilussvn-applypatch",
+                        "signals": {
+                            "activate": {
+                                "callback": self.callback_applypatch,
+                                "args": None
+                            }
+                        }, 
+                        "condition": self.condition_applypatch,
+                        "submenus": [
+                            
+                        ]
+                    },
                     {
                         "identifier": "NautilusSvn::Properties",
                         "label": _("Properties"),
@@ -1310,7 +1343,7 @@ class MainContextMenu:
             
             # Execute the condition associated with the definition_item
             # which will figure out whether or not to display this item.
-            if definition_item["condition"]():
+            if not definition_item.has_key("condition") or definition_item["condition"]():
                 # If the item is a separator, don't show it if this is the first
                 # or last item, or if the previous item was a separator.
                 if (definition_item["label"] == self.SEPARATOR and
@@ -1351,16 +1384,17 @@ class MainContextMenu:
                 # Since we can't just call set_submenu and run the risk of not
                 # having any submenu items later (which would result in the 
                 # menu item not being displayed) we have to check first.
-                submenu = self.create_menu_from_definition(
-                    definition_item["submenus"]
-                )
-                
-                if len(submenu) > 0:
-                    nautilus_submenu = nautilus.Menu()
-                    menu_item.set_submenu(nautilus_submenu)
+                if definition_item.has_key("submenus"):
+                    submenu = self.create_menu_from_definition(
+                        definition_item["submenus"]
+                    )
                     
-                    for submenu_item in submenu:
-                        nautilus_submenu.append_item(submenu_item)
+                    if len(submenu) > 0:
+                        nautilus_submenu = nautilus.Menu()
+                        menu_item.set_submenu(nautilus_submenu)
+                        
+                        for submenu_item in submenu:
+                            nautilus_submenu.append_item(submenu_item)
 
             index += 1
             
@@ -1459,6 +1493,27 @@ class MainContextMenu:
     def condition_properties(self):
         return (self.path_dict["is_in_a_or_a_working_copy"] and
                 self.path_dict["is_versioned"])
+
+    def condition_createpatch(self):
+        if self.path_dict["is_in_a_or_a_working_copy"]:
+            if (self.path_dict["is_added"] or
+                    self.path_dict["is_modified"] or
+                    self.path_dict["is_deleted"] or
+                    not self.path_dict["is_versioned"]):
+                return True
+            elif (self.path_dict["is_dir"] and
+                    (self.path_dict["has_added"] or
+                    self.path_dict["has_modified"] or
+                    self.path_dict["has_deleted"] or
+                    self.path_dict["has_unversioned"] or
+                    self.path_dict["has_missing"])):
+                return True
+        return False
+    
+    def condition_applypatch(self):
+        if self.path_dict["is_in_a_or_a_working_copy"]:
+            return True
+        return False
     
     def condition_add_to_ignore_list(self):
         return (self.path_dict["length"] == 1 and 
@@ -1511,60 +1566,7 @@ class MainContextMenu:
 
     def condition_cleanup(self):
         return self.path_dict["is_versioned"]
-
-    #
-    # Callbacks
-    #
-    
-    def callback_debug_asynchronicity(self, menu_item, paths):
-        """
-        This is a function to test doing things asynchronously.
-        
-        Plain Python threads don't seem to work properly in the context of a
-        Nautilus extension, so this doesn't work out all too well::
-        
-            import thread
-            thread.start_new_thread(asynchronous_function, ())
-        
-        The thread will _only_ run when not idle (e.g. it will run for a short 
-        while when you change the item selection).
-        
-        A few words of advice. Don't be misled, as I was, into thinking that a 
-        function you add using C{gobject.add_idle} is run asynchronously. 
-        
-        Calling C{time.sleep()} or doing something for a long time will simply block 
-        the main thread while the function is running. It's just that Nautilus
-        is idle a lot so it might create that impression.
-        
-        Calling C{gtk.gdk.threads_init()} or C{gobject.threads_init()} is not needed.
-        
-        Also see:
-        
-          - http://www.pygtk.org/pygtk2reference/gobject-functions.html
-          - http://www.pygtk.org/docs/pygtk/gdk-functions.html
-        
-        Interesting links (but not relevant per se): 
-        
-          - http://research.operationaldynamics.com/blogs/andrew/software/gnome-desktop/gtk-thread-awareness.html
-          - http://unpythonic.blogspot.com/2007/08/using-threads-in-pygtk.html
-        
-        """
-    
-        import thread
-        import time
-        
-        def asynchronous_function():
-            log.debug("inside asynchronous_function()")
-            
-            for i in range(0, 100000):
-                print i
-            
-            log.debug("asynchronous_function() finished")
-        
-        # Calling threads_init does not do anything.
-        gobject.threads_init()
-        thread.start_new_thread(asynchronous_function, ())
-        
+       
     def callback_debug_shell(self, menu_item, paths):
         """
         
@@ -1661,6 +1663,13 @@ class MainContextMenu:
     def callback_rename(self, menu_item, paths):
         launch_ui_window("rename", paths)
 
+    def callback_createpatch(self, menu_item, paths):
+        pid = launch_ui_window("createpatch", paths)
+    
+    def callback_applypatch(self, menu_item, paths):
+        pid = launch_ui_window("applypatch", paths)
+        self.nautilussvn_extension.rescan_after_process_exit(pid, paths)
+    
     def callback_properties(self, menu_item, paths):
         launch_ui_window("properties", paths)
 
@@ -1678,7 +1687,7 @@ class MainContextMenu:
 
     def callback_ignore_ext(self, menu_item, paths):
         from nautilussvn.ui.ignore import Ignore
-        ignore = Ignore(paths[0], "*%s" % get_file_extension(paths[0]))
+        ignore = Ignore(paths[0], "*%s" % get_file_extension(paths[0]), glob=True)
         ignore.start()
 
     def callback_lock(self, menu_item, paths):

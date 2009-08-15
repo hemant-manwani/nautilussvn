@@ -116,7 +116,7 @@ class Notification(InterfaceView):
         self.set_title(header)
         gtk.gdk.threads_enter()
         self.get_widget("action").set_markup(
-            "<span font_size=\"xx-large\"><b>%s</b></span>" % header
+            "<span size=\"xx-large\"><b>%s</b></span>" % header
         )
         gtk.gdk.threads_leave()
 
@@ -133,7 +133,7 @@ class VCSAction(threading.Thread):
     def __init__(self, client, register_gtk_quit=False, notification=True):
         threading.Thread.__init__(self)
         
-        self.message = _("Empty Message")
+        self.message = ""
         
         self.client = client
         self.client.set_callback_cancel(self.cancel)
