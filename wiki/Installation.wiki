@@ -48,9 +48,3 @@ The instructions for installing these snapshots can be found [http://code.google
 </td>
 </tr>
 </table>
-
-== Development ==
-
-If you're really daring, or want to tinker with !NautilusSVN, you can run it straight out of the SVN HEAD. This is by no means guaranteed to be working, reliable or safe, so please *know what you're in for* before you try it out. We strongly advise that you don't install this system-wise.
-
-Here are the instructions for a [DevelopmentInstallation development installation].
