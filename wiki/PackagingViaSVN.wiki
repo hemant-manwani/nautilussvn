@@ -35,9 +35,8 @@ To build a deb of the trunk for Debian Squeeze:
     * (on the command line, this is `svn merge http://...repo.../packaging/debian/trunk`)
     * under svn 1.6, you can just do `svn merge ^/packaging/debian/trunk`
     * you can do this the other way around - check out packaging, merge with trunk
-  * Run `svn propdel mergeWithUpstream debian` (this is necessary to stop it trying to look for a tarball - *make sure it isn't committed!* ... I'll try to find out if there's a better tool)
   * I recommend running `dch -i` or `dch --local myname` to bump the version up and make it obvious that it's a local build
-  * Run `svn-buildpackage -us -uc --svn-ignore`
+  * Run `debuild -i -us -uc` (note: not sure that this will properly ignore the svn control dirs)
 
 == Build a Snapshot ==
 
@@ -46,7 +45,7 @@ See the notes for using a [SnapshotInstallation].
 == Notes ==
 
   * *svn-buildpackage* will put things in *../build-area*
-  * If you don't want to use *svn-buildpackage*, export your working copy (`svn export . ../nsvn-export`) and use (eg.) *debuild* from your exported dir.
+  * If you don't want to build from an SVN working copy, export your working copy (`svn export . ../nsvn-export`) and use (eg.) *debuild* from your exported dir.
 
 == Notes for NautilusSVN Developers ==
 
@@ -56,7 +55,7 @@ The trunk of the code and trunk of the packaging should be in sync before taking
 
 == Debian and Ubuntu ==
 
-[http://www.debianpaket.de/svn-buildpackage/index.html svn-buildpackage] - allows you to build packages straight out of a working copy (if you just invoke debuild, it will choke on the .svn dirs). We use the [http://www.debianpaket.de/svn-buildpackage/ch-import.html#s3.2 merge-with-upstream mode].
+[http://www.debianpaket.de/svn-buildpackage/index.html svn-buildpackage] - allows you to work on packaging using SVN. We use the [http://www.debianpaket.de/svn-buildpackage/ch-import.html#s3.2 merge-with-upstream mode].
 
 [http://www.netfort.gr.jp/~dancer/software/pbuilder-doc/pbuilder-doc.html pbuilder] - personal package builder. This creates and maintains a chroot jail for building packages targeted at a specific Debian-like distribution. For example, if you run Debian Squeeze you could use pbuilder to build packages for Debian Sid (unstable) and Ubuntu Jaunty, without needing any other changes to your system. Pbuilder 'starts from scratch' before every build, so it is especially useful for checking that you have all the right build dependencies.
 
