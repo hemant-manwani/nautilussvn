@@ -23,7 +23,12 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 
 == Debugging ==
 
-  * Don't use print statements, use the logging facility, eg. 
+  * Don't use print statements, use the logging facility. At the top of a module, use:
+
+{{{
+from nautilussvn.lib.log import Log
+log = Log("nautilussvn.mymodule") # Replace "mymodule", obviously
+}}}
 
 {{{
 log.debug("Number of items: %i" % len(items))
