@@ -27,6 +27,15 @@
 
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/log_viewer_context_menu.png]
 
+=== Repository Browser ===
+[http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/repo_browser_dialog.png]
+
+[http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/repo_browser.png]
+
+[http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/repo_browser_context_menu_sidebar.png]
+
+[http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/repo_browser_context_menu_working_area.png]
+
 == Context menus ==
 === Context menu for an unversioned file ===
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/context_menu_unversioned_file.png]
