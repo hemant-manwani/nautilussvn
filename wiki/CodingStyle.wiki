@@ -26,7 +26,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
   * Don't use print statements, use the logging facility, eg. 
 
 {{{
-`log.debug("Number of items: %i" % len(items)`
+log.debug("Number of items: %i" % len(items)
 }}}
 
 ...or even:
