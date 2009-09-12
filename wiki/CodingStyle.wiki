@@ -9,7 +9,7 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
 
   _(?) means that we haven't decided on this yet_
 
-== From PEP-8 ===
+== From PEP-8 ==
 
   * Use 4 spaces per indentation level.
   * Never mix tabs and spaces. Spaces only.
@@ -20,6 +20,34 @@ If anything in this document differs from [http://www.python.org/dev/peps/pep-00
     ** 1. standard library imports
     ** 2. related third party imports
     ** 3. local application/library specific imports
+
+== Debugging ==
+
+  * Don't use print statements, use the logging facility, eg. 
+
+{{{
+`log.debug("Number of items: %i" % len(items)`
+}}}
+
+...or even:
+
+{{{
+    try:
+        risky_thing()
+    except Exception, e:
+        log.exception(e)
+}}}
+
+  * Sometimes, if you put in some code for debugging, you could even leave it in as a comment for future maintainers, eg. from the status checker code:
+
+{{{
+    # Uncomment this for useful simulation of a looooong status check :) 
+    # log.debug("Sleeping for 10s...")
+    # time.sleep(5)
+    # log.debug("Done.")
+}}}
+
+  * If you use Eclipse + pydev, use task tags to remind yourself to remove or flesh things out (eg. `#FIXME: simplify code after debugging`)
 
 = Specific =
 
