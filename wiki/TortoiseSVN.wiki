@@ -27,7 +27,7 @@
 
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/log_viewer_context_menu.png]
 
-=== Repository Browser ===
+== Repository Browser ==
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/repo_browser_dialog.png]
 
 [http://nautilussvn.googlecode.com/svn/wiki/images/TortoiseSVN/repo_browser.png]
