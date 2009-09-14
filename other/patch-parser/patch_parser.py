@@ -5,7 +5,20 @@ import sys, os, time, subprocess, re
 PATCHING_RE = re.compile(r"patching file (.*)")
 REJECT_RE = re.compile(r".*saving rejects to file (.*)")
 
-PATCH_PARSE_ERROR = "The output from 'patch' was not able to be parsed"
+PATCH_PARSE_ERROR = "The output from '%s' was not able to be processed. (%s)"
+
+class ExternalParseError(Exception):
+    """ Represents an error caused by unexpected output from an external
+    program.
+    """ 
+        
+    def __init__(self, program, output):
+        """ Initialises the error with
+        """
+        Exception.__init__(self,
+                           PATCH_PARSE_ERROR % (program, output))
+        self.program = program
+        self.output = output
 
 def parse_patch_output(file_like):
     # I will document this properly when it is incorporated into the code.
@@ -39,8 +52,7 @@ def parse_patch_output(file_like):
         # Alternatively, we could throw an exception here (realistically, a
         # rubbish patch is worthy of an exception, I feel). This can be caught
         # by the caller and reported sensibly to the user.
-        current_file = None
-        raise RuntimeError(PATCH_PARSE_ERROR)
+        raise ExternalParseError('patch', line.strip())
     
     any_errors = False
     reject_file = None
@@ -101,7 +113,7 @@ if __name__ == "__main__":
                                    os.getcwd()],
                                    
                               stdout = subprocess.PIPE,
-                              stderr = subprocess.PIPE)
+                              stderr = subprocess.STDOUT)
     
     print "Parsing patch file output"
     
