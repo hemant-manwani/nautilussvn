@@ -18,7 +18,7 @@ The examples below are Debian-centric, because that's what I (Jason H) use. Just
 
 = In Short =
 
-== Tagged Release ==
+== Tagged Release From Tarball ==
 
 To build a particular Debian package (eg. 0.12.1.beta2-3):
 
@@ -26,7 +26,7 @@ To build a particular Debian package (eg. 0.12.1.beta2-3):
   # Check out */packages/debian/tarballs/* to (literally) *tarballs*
   # Change to the directory in step (1) and run `svn-buildpackage -us -uc`
 
-== Build From Trunk ==
+== Build Straight From SVN ==
 
 To build a deb of the trunk for Debian Squeeze:
 
@@ -36,7 +36,7 @@ To build a deb of the trunk for Debian Squeeze:
     * under svn 1.6, you can just do `svn merge ^/packaging/debian/trunk`
     * you can do this the other way around - check out packaging, merge with trunk
   * I recommend running `dch -i` or `dch --local myname` to bump the version up and make it obvious that it's a local build
-  * Run `debuild -i -us -uc` (note: not sure that this will properly ignore the svn control dirs)
+  * Run `debuild -l -us -uc`
 
 == Build a Snapshot ==
 
