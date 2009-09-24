@@ -1,0 +1,24 @@
+#summary Describes the infrastructure that supports development
+#labels Phase-Support
+
+= Requirements =
+
+  * Landing page
+  * Issue tracking
+  * Code review
+  * Wiki
+  * Downloads
+  * Translations
+  * Project activity
+
+= Options =
+
+== Launchpad ==
+
+== Google Code ==
+
+== SourceForge ==
+
+== Host everything ourselves ==
+
+== Mix and match ==
