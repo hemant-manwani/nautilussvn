@@ -14,3 +14,4 @@
 || Create all packages and a tarball                                || || ||
 || Test the above                                                   || || ||
 || Upload the packages and the tarball                              || || ||
+|| QA the user interface dialogs                                    || adamplumb || ||
