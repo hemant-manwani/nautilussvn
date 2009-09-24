@@ -11,8 +11,8 @@
 || Everything with translations                                     || || ||
 || QA the user interface dialogs                                    || adamplumb || ||
 || Create the proper tags in the repository                         || || ||
-|| Create all packages and a tarball                                || || ||
-|| Test the above                                                   || || ||
+|| Create all packages and a tarball                                || jason.heeris || Current HEAD in Debian and Ubuntu should be good. Will check dependencies. Need info from Nushio on Fedora. ||
+|| Test the above                                                   || jason.heeris || ||
 || Upload the packages and the tarball                              || || ||
 || Update the Installation wiki page                                || brucevdkooij || ||
 || Update the KnownIssues page                                      || brucevdkooij || ||
