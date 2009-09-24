@@ -16,7 +16,7 @@
 
 = Possible solutions =
 
-== Adam's Preferences) ==
+== Adam's Preferences ==
 
   * rabbitvcs.org points to a homepage we've put together with links to disparate tools
   * We modify our current wordpress blog to be usable as a homepage
