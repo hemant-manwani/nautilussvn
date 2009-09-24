@@ -3,15 +3,17 @@
 
 = Tasks =
 
+  _Please add tasks in a somewhat logical order._
+
 || *Task*                                                           || *Owner*      || *Status* ||
 || Write a press release to post on the blog                        || brucevdkooij || ||
-|| Update the Installation wiki page                                || brucevdkooij || ||
-|| Update the KnownIssues page                                      || brucevdkooij || ||
-|| Perhaps update the FAQ                                           || brucevdkooij || ||
 || Verify that the v012_installation instructions are still correct || || ||
 || Everything with translations                                     || || ||
+|| QA the user interface dialogs                                    || adamplumb || ||
 || Create the proper tags in the repository                         || || ||
 || Create all packages and a tarball                                || || ||
 || Test the above                                                   || || ||
 || Upload the packages and the tarball                              || || ||
-|| QA the user interface dialogs                                    || adamplumb || ||
+|| Update the Installation wiki page                                || brucevdkooij || ||
+|| Update the KnownIssues page                                      || brucevdkooij || ||
+|| Perhaps update the FAQ                                           || brucevdkooij || ||
