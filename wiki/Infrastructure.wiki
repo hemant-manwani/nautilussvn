@@ -48,14 +48,14 @@
 
 == Hosting Services Ratings ==
 
-|| *Option*               || *Google Code* || *Launchpad* || *!SourceForge* ||
-|| _*Landing Page*_       || A:2 B:1-5 || A:3 B:1-5 || A:1-5 B:1-5 ||
-|| _*Issue Tracking*_     || A:3 B:1-5 || A:3 B:1-5 || A:1-5 B:1-5 ||
-|| _*Code Review*_        || A:4 B:1-5 || A:Notsure B:1-5 || A:1-5 B:1-5 ||
-|| _*Wiki*_               || A:2 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
-|| _*File Hosting*_       || A:3 B:1-5 || A:notsure B:1-5 || A:4 B:1-5 ||
-|| _*Translations*_       || A:1 B:1-5 || A:4 B:1-5 || A:1-5 B:1-5 ||
-|| _*Project Activity*_   || A:5 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
-|| _*Mailing Lists*_      || A:0 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
-|| _*Developer Blog*_     || A:0 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
-|| _*Repository Hosting*_ || A:5 B:1-5 || A:2 B:1-5 || A:1-5 B:1-5 ||
+|| *Option*             || *Google Code* || *Launchpad* || *!SourceForge* ||
+|| _Landing Page_       || A:2 B:1-5 || A:3 B:1-5 || A:1-5 B:1-5 ||
+|| _Issue Tracking_     || A:3 B:1-5 || A:3 B:1-5 || A:1-5 B:1-5 ||
+|| _Code Review_        || A:4 B:1-5 || A:Notsure B:1-5 || A:1-5 B:1-5 ||
+|| _Wiki_               || A:2 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
+|| _File Hosting_       || A:3 B:1-5 || A:notsure B:1-5 || A:4 B:1-5 ||
+|| _Translations_       || A:1 B:1-5 || A:4 B:1-5 || A:1-5 B:1-5 ||
+|| _Project Activity_   || A:5 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
+|| _Mailing Lists_      || A:0 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
+|| _Developer Blog_     || A:0 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
+|| _Repository Hosting_ || A:5 B:1-5 || A:2 B:1-5 || A:1-5 B:1-5 ||
