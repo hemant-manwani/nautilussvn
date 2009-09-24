@@ -3,22 +3,59 @@
 
 = Requirements =
 
-  * Landing page
-  * Issue tracking
-  * Code review
+  * Landing Page
+  * Issue Tracking
+  * Code Review
   * Wiki
-  * Downloads
+  * File Hosting
   * Translations
-  * Project activity
+  * Project Activity
+  * Mailing Lists
+  * Developer Blog
+  * Repository Hosting
 
-= Options =
+= Possible solutions =
 
-== Launchpad ==
+== Adam's Preferences) ==
 
-== Google Code ==
+  * rabbitvcs.org points to a homepage we've put together with links to disparate tools
+  * We modify our current wordpress blog to be usable as a homepage
 
-== SourceForge ==
+  * Landing Page - Our own HTML
+  * Issue Tracking - Mantis or Google Code
+  * Code Review - Review Board or something simple we could develop ourselves, or continue to use Google Code
+  * Wiki - !DokuWiki (it's what I know), !MediaWiki would probably be ok too
+  * File Hosting - Our own HTML
+  * Translations - Continue to use Launchpad, Poedit
+  * Project Activity - Not sure about this one, maybe roll our own feed
+  * Mailing Lists - Continue using what we're using
+  * Developer Blog - Integrate our current !WordPress blog into the site, or base the site on !WordPress
+  * Repository Hosting - Our own SVN server or keep it on Google Code (with new project for RabbitVCS)
+  
+== Bruce's Preferences ==
 
-== Host everything ourselves ==
+  * Landing Page - Anything, preferably something with a nice design
+  * Issue Tracking - Trac or Google Code
+  * Code Review - Review Board or Google Code
+  * Wiki - Trac (with an option to migrate later)
+  * File Hosting - Google Code + Launchpad (PPA)
+  * Translations - Launchpad
+  * Project Activity - Trac or Google Code
+  * Mailing Lists - Google Groups
+  * Developer Blog - Current !WordPress instance with a new theme
+  * Repository Hosting - Preferably a DVCS (Google Code, Launchpad, !GitHub, Bitbucket.org) 
 
-== Mix and match ==
+
+== Hosting Services Ratings ==
+
+|| *Option*               || *Google Code* || *Launchpad* || *!SourceForge* ||
+|| _*Landing Page*_       || A:2 B:1-5 || A:3 B:1-5 || A:1-5 B:1-5 ||
+|| _*Issue Tracking*_     || A:3 B:1-5 || A:3 B:1-5 || A:1-5 B:1-5 ||
+|| _*Code Review*_        || A:4 B:1-5 || A:Notsure B:1-5 || A:1-5 B:1-5 ||
+|| _*Wiki*_               || A:2 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
+|| _*File Hosting*_       || A:3 B:1-5 || A:notsure B:1-5 || A:4 B:1-5 ||
+|| _*Translations*_       || A:1 B:1-5 || A:4 B:1-5 || A:1-5 B:1-5 ||
+|| _*Project Activity*_   || A:5 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
+|| _*Mailing Lists*_      || A:0 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
+|| _*Developer Blog*_     || A:0 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
+|| _*Repository Hosting*_ || A:5 B:1-5 || A:2 B:1-5 || A:1-5 B:1-5 ||
