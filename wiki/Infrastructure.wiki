@@ -45,6 +45,13 @@
   * Developer Blog - Current !WordPress instance with a new theme
   * Repository Hosting - Preferably a DVCS (Google Code, Launchpad, !GitHub, Bitbucket.org) 
 
+== Jason's Preferences ==
+
+  * Landing page - Clean but a good "hub". Need to be able to change layout after an initial period if we realise we've misjudged what we need.
+  * Wiki - I've been using !DokuWiki at work and home for a while, and it's great. Tried !MediaWiki at work, too complicated.
+  * Code download - I think that we should try to have at least the downloads in a globally accessible location. We should aim for this for the source as well, but it's not as easy as that.
+  * Repository Hosting - should we try to keep it as SVN? :P
+  * Mailing lists - as they are, but we need a new rabbitvcs (non dev) group.
 
 == Hosting Services Ratings ==
 
