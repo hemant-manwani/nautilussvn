@@ -13,7 +13,7 @@
 || Create the proper tags in the repository                         || || ||
 || Create all packages and a tarball                                || jason.heeris || Current HEAD in Debian and Ubuntu should be good. Will check dependencies. Need info from Nushio on Fedora. ||
 || Test installation from packages and tarball/source                                                   || jason.heeris || Distros: Debian Squeeze, Ubuntu Hardy, Jaunty, Karmic, Fedora ??, SUSE, ... ||
-|| Upload the packages and the tarball                              || || ||
+|| Upload the packages and the tarball                              || brucevdkooij || If Jason sends me the packages, I'll make sure they get uploaded ||
 || Update the Installation wiki page                                || brucevdkooij || ||
 || Update the KnownIssues page                                      || brucevdkooij || ||
 || Perhaps update the FAQ                                           || brucevdkooij || ||
