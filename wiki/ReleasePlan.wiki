@@ -7,13 +7,12 @@
 
 || *Task*                                                           || *Owner*      || *Status* ||
 || Write a press release to post on the blog                        || brucevdkooij || ||
-|| Verify that the v012_installation instructions are still correct || || ||
 || Everything with translations                                     || brucevdkooij || Mostly done, I'll do one last grep to see if anything has not been marked translatable ||
 || QA the user interface dialogs                                    || adamplumb || ||
 || Close all issues with milestone [http://code.google.com/p/nautilussvn/issues/list?q=milestone:Release0.12 Release0.12]                          || _Everyone_ || Basically done ||
 || Create the proper tags in the repository                         || || ||
 || Create all packages and a tarball                                || jason.heeris || Current HEAD in Debian and Ubuntu should be good. Will check dependencies. Need info from Nushio on Fedora. ||
-|| Test the above                                                   || jason.heeris || ||
+|| Test installation from packages and tarball/source                                                   || jason.heeris || ||
 || Upload the packages and the tarball                              || || ||
 || Update the Installation wiki page                                || brucevdkooij || ||
 || Update the KnownIssues page                                      || brucevdkooij || ||
