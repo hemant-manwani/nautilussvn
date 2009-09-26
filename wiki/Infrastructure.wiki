@@ -86,7 +86,7 @@
 
 = Migration =
 
-== WordPress ==
+== !WordPress ==
 
   * New install on Bruce's server
   * Take notice of all current URLs (write them down)
