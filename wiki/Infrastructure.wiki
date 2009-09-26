@@ -83,3 +83,15 @@
 || _Mailing Lists_      || A:0 B:1-5 || A:notsure B:1-5 || A:1-5 B:1-5 ||
 || _Developer Blog_     || A:0 B:1-5 || A:0 B:1-5 || A:1-5 B:1-5 ||
 || _Repository Hosting_ || A:5 B:1-5 || A:2 B:1-5 || A:1-5 B:1-5 ||
+
+= Migration =
+
+== WordPress ==
+
+* New install on Bruce's server
+* Take notice of all current URLs (write them down)
+* Close old blog (RabbitVCS logo + notice that we're migrating)
+* Database backup
+* Import database in new install
+* Change permalink structure, i.e. /blog/ etc.
+* Create static 301 redirects on Adam's server for all old URLs
