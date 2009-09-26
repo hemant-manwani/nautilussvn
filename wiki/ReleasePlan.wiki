@@ -1,6 +1,8 @@
 #summary Our release plan
 #labels Phase-QA
 
+The next release is planned for the weekend of 3-4 October.
+
 = Tasks =
 
   _Please add tasks in a somewhat logical order._
