@@ -88,7 +88,16 @@
 
 == !WordPress ==
 
-  * New install on Bruce's server
+Sunday September the 27th:
+
+  * In the morning disable the old blog and post a notice that we're migrating the blog to a new server. -- adamplumb
+  * Create a database dump and tar up the old WP install -- adamplumb
+  * New install on Bruce's server, be sure to setup FTPS for clickable updates -- brucevdkooij
+  * ...?
+  * Profit?
+
+Later:
+
   * Take notice of all current URLs (write them down)
   * Close old blog (RabbitVCS logo + notice that we're migrating)
   * Database backup
