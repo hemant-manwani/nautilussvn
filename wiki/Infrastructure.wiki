@@ -60,12 +60,12 @@
 = Chosen solution =
 
   * Landing Page - !WordPress with custom theme
-  * Issue Tracking - 
-  * Code Review - 
-  * Wiki - 
-  * File Hosting - Launchpad (PPA) and ...
+  * Issue Tracking - Trac
+  * Code Review - Review Board + Google Code
+  * Wiki - DokuWiki
+  * File Hosting - Launchpad
   * Translations - Launchpad
-  * Project Activity - 
+  * Project Activity - Trac + Google Code
   * Mailing Lists - Google Groups
   * Developer Blog - !WordPress
-  * Repository Hosting - 
+  * Repository Hosting - Mercurial (Google Code) + mirror with Bitbucket.org
