@@ -7,7 +7,7 @@
 
 = Plans =
 
-== !Migrate WordPress install ==
+== Migrate !WordPress install ==
 
 Sunday September the 27th:
 
