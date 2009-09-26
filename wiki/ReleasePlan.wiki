@@ -8,7 +8,7 @@
 || *Task*                                                           || *Owner*      || *Status* ||
 || Write a press release to post on the blog                        || brucevdkooij || ||
 || Verify that the v012_installation instructions are still correct || || ||
-|| Everything with translations                                     || || ||
+|| Everything with translations                                     || brucevdkooij || Mostly done, I'll do one last grep to see if anything has not been marked translatable ||
 || QA the user interface dialogs                                    || adamplumb || ||
 || Close all issues with milestone [http://code.google.com/p/nautilussvn/issues/list?q=milestone:Release0.12 Release0.12]                          || _Everyone_ || Basically done ||
 || Create the proper tags in the repository                         || || ||
