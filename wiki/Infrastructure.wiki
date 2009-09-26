@@ -7,6 +7,9 @@
   * Issue Tracking
   * Code Review
   * Wiki
+    * Required: per-page permissions
+    * Required: support for hierarchical relations (Page has Children)
+    * Bonus: ability to edit individual sections, not the entire page
   * File Hosting
   * Translations
   * Project Activity
@@ -52,6 +55,19 @@
   * Code download - I think that we should try to have at least the downloads in a globally accessible location. We should aim for this for the source as well, but it's not as easy as that.
   * Repository Hosting - should we try to keep it as SVN? :P
   * Mailing lists - as they are, but we need a new rabbitvcs (non dev) group.
+
+= Chosen solution =
+
+  * Landing Page - !WordPress with custom theme
+  * Issue Tracking - 
+  * Code Review - 
+  * Wiki - 
+  * File Hosting - Launchpad (PPA) and ...
+  * Translations - Launchpad
+  * Project Activity - 
+  * Mailing Lists - Google Groups
+  * Developer Blog - !WordPress
+  * Repository Hosting - 
 
 == Hosting Services Ratings ==
 
