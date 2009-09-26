@@ -62,7 +62,7 @@
   * Landing Page - !WordPress with custom theme
   * Issue Tracking - Trac
   * Code Review - Review Board + Google Code
-  * Wiki - DokuWiki
+  * Wiki - !DokuWiki
   * File Hosting - Launchpad
   * Translations - Launchpad
   * Project Activity - Trac + Google Code
