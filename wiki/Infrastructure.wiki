@@ -10,6 +10,7 @@
     * Required: per-page permissions
     * Required: support for hierarchical relations (Page has Children)
     * Bonus: ability to edit individual sections, not the entire page
+    * Bonus: support for comments on the same page
   * File Hosting
   * Translations
   * Project Activity
