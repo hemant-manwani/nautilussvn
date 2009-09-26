@@ -10,6 +10,7 @@
 || Verify that the v012_installation instructions are still correct || || ||
 || Everything with translations                                     || || ||
 || QA the user interface dialogs                                    || adamplumb || ||
+|| Close all issues with milestone [http://code.google.com/p/nautilussvn/issues/list?q=milestone:Release0.12 Release0.12]                          || _Everyone_ || ||
 || Create the proper tags in the repository                         || || ||
 || Create all packages and a tarball                                || jason.heeris || Current HEAD in Debian and Ubuntu should be good. Will check dependencies. Need info from Nushio on Fedora. ||
 || Test the above                                                   || jason.heeris || ||
