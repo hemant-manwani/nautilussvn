@@ -2,8 +2,9 @@
 
 = Tasks =
 
-|| *Task*                                                           || *Owner*      || *Status* ||
-|| Migrate WordPress install                                        || brucevdkooij/adamplumb || ||
+|| *Task*                                                           || *Owner*                || *Status* ||
+|| Migrate !WordPress install                                       || brucevdkooij/adamplumb || ||
+|| Finish !RabbitVCS !WordPress theme                               || brucevdkooij           || Almost done, but could use some help later with the finishing touches ||
 
 = Plans =
 
