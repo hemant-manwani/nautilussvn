@@ -6,6 +6,9 @@
 || Migrate !WordPress install                                       || brucevdkooij/adamplumb || ||
 || Finish RabbitVCS !WordPress theme                                || brucevdkooij           || Almost done, but could use some help later with the finishing touches ||
 || Rename [http://www.ohloh.net/p/nautilussvn Ohloh project]                                             || brucevdkooij           || ||
+|| Migrate issues from nautilussvn project || || ||
+|| Migrate repository (with history if possible)  || || ||
+|| Update and restructure wiki || brucevdkooij || ||
 
 = Plans =
 
