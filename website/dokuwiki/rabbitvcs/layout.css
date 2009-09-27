@@ -271,6 +271,10 @@ div.secedit {
     margin-bottom: 0.5em;
 }
 
+.summary {
+    clear: both;
+}
+
 .license {
     margin-top: 0.5em;
     color: #aaa;
