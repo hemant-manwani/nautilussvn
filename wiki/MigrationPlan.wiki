@@ -9,6 +9,7 @@
 || Migrate issues from nautilussvn project || || ||
 || Migrate repository (with history if possible)  || || ||
 || Update and restructure wiki || brucevdkooij || ||
+|| Finish website || brucevdkooij || ||
 
 = Plans =
 
