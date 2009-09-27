@@ -59,6 +59,8 @@
 
 = Chosen solution =
 
+  _This is not yet final._
+
   * Landing Page - !WordPress with custom theme
   * Issue Tracking - Trac
   * Code Review - Review Board + Google Code
