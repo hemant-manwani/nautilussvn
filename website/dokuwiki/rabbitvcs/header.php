@@ -26,11 +26,11 @@
                 <div id="page-locationbar" class="wiki">
                     <ul>
                         <li id="link-home"><a href="http://rabbitvcs.org/">Home</a></li>
-                        <li id="link-download"><?php tpl_link('download', 'Download'); ?></li>
-                        <li id="link-about"><?php tpl_link('about', 'About'); ?></li>
+                        <li id="link-download"><?php tpl_link(wl('download'), 'Download'); ?></li>
+                        <li id="link-about"><?php tpl_link(wl('about'), 'About'); ?></li>
                         <li id="link-blog"><a href="http://blog.rabbitvcs.org/">Blog</a></li>
-                        <li id="link-contribute"><?php tpl_link('contribute', 'Contribute'); ?></li>
-                        <li id="link-support"><?php tpl_link('support', 'Support'); ?></li>
+                        <li id="link-contribute"><?php tpl_link(wl('contribute'), 'Contribute'); ?></li>
+                        <li id="link-support"><?php tpl_link(wl('support'), 'Support'); ?></li>
                         <li id="link-wiki"><a href="http://wiki.rabbitvcs.org/wiki">Wiki</a></li>
                     </ul>
                 </div>
