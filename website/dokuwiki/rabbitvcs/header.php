@@ -31,7 +31,7 @@
                         <li id="link-blog"><a href="http://blog.rabbitvcs.org/">Blog</a></li>
                         <li id="link-contribute"><?php tpl_link('contribute', 'Contribute'); ?></li>
                         <li id="link-support"><?php tpl_link('support', 'Support'); ?></li>
-                        <li id="link-wiki"><a href="http://wiki.rabbitvcs.org/">Wiki</a></li>
+                        <li id="link-wiki"><a href="http://wiki.rabbitvcs.org/wiki">Wiki</a></li>
                     </ul>
                 </div>
             </div>
