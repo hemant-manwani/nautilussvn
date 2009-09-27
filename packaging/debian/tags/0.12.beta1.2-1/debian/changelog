@@ -1,5 +1,0 @@
-nautilussvn (0.12.beta1.2-1) unstable; urgency=low
-
-  * Packaged for Debian. Closes: #469181.
-
- -- Jason Heeris <jason.heeris@gmail.com>  Sun, 17 May 2009 22:23:39 +0800
