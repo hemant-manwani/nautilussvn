@@ -33,18 +33,3 @@ Installing the !NautilusSvn beta release is currently the easiest for users of U
 </table>
 
 Be sure to restart Nautilus (nautilus -q && nautilus &) for NautilusSvn to get loaded.
-
-== Snapshots ==
-
-Whenever !NautilusSvn is under active development we regularly create snapshots of our development version (trunk). We consider these snapshots stable enough for actual usage, but remember they may have known issues that we feel are minor enough, or even that we can't address at the time.
-
-<table border="0" cellpadding="5">
-<tr>
-<td>[http://code.google.com/p/nautilussvn/wiki/SnapshotInstallation http://nautilussvn.googlecode.com/svn/wiki/media/development.png]</td>
-<td>
-*Development snapshots*
-
-The instructions for installing these snapshots can be found [http://code.google.com/p/nautilussvn/wiki/SnapshotInstallation here].
-</td>
-</tr>
-</table>
