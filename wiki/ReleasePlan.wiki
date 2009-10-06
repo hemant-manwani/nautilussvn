@@ -14,7 +14,7 @@ The next release is planned for the weekend of 3-4 October.
 || Close all issues with milestone [http://code.google.com/p/nautilussvn/issues/list?q=milestone:Release0.12 Release0.12]                          || _Everyone_ || Basically done ||
 || Create the proper tags in the repository                         || jason.heeris || DONE ||
 || Create all packages and a tarball                                || jason.heeris || Current HEAD in Debian and Ubuntu should be good. Will check dependencies. Need info from Nushio on Fedora. ||
-|| Test installation from packages and tarball/source                                                   || jason.heeris || Distros: Debian Squeeze, Ubuntu Hardy, Jaunty, Karmic, Fedora ??, SUSE, ... ||
+|| Test installation from packages and tarball/source                                                   || jason.heeris || DONE: Debian; Ubuntu Hardy, Jaunty, Karmic; Fedora ||
 || Upload the packages and the tarball                              || brucevdkooij || If Jason sends me the packages, I'll make sure they get uploaded ||
 || Update the Installation wiki page                                || brucevdkooij || ||
 || Update the KnownIssues page                                      || brucevdkooij || ||
