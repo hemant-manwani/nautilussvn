@@ -17,5 +17,5 @@ The next release is planned for the weekend of 3-4 October.
 || Test installation from packages and tarball/source                                                   || jason.heeris || DONE: Debian; Ubuntu Hardy, Jaunty, Karmic; Fedora ||
 || Upload the packages and the tarball                              || brucevdkooij || If Jason sends me the packages, I'll make sure they get uploaded ||
 || Update the Installation wiki page                                || brucevdkooij || ||
-|| Update the KnownIssues page                                      || brucevdkooij || ||
-|| Perhaps update the FAQ                                           || brucevdkooij || ||
+|| Update the KnownIssues page                                      || brucevdkooij || DONE ||
+|| Perhaps update the FAQ                                           || brucevdkooij || DONE ||
