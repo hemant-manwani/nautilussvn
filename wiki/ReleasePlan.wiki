@@ -12,7 +12,7 @@ The next release is planned for the weekend of 3-4 October.
 || Everything with translations                                     || brucevdkooij || Mostly done, I'll do one last grep to see if anything has not been marked translatable ||
 || QA the user interface dialogs                                    || adamplumb || ||
 || Close all issues with milestone [http://code.google.com/p/nautilussvn/issues/list?q=milestone:Release0.12 Release0.12]                          || _Everyone_ || Basically done ||
-|| Create the proper tags in the repository                         || jason.heeris || ||
+|| Create the proper tags in the repository                         || jason.heeris || DONE ||
 || Create all packages and a tarball                                || jason.heeris || Current HEAD in Debian and Ubuntu should be good. Will check dependencies. Need info from Nushio on Fedora. ||
 || Test installation from packages and tarball/source                                                   || jason.heeris || Distros: Debian Squeeze, Ubuntu Hardy, Jaunty, Karmic, Fedora ??, SUSE, ... ||
 || Upload the packages and the tarball                              || brucevdkooij || If Jason sends me the packages, I'll make sure they get uploaded ||
