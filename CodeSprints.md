@@ -1,0 +1,178 @@
+
+
+# 30 june 2009 #
+
+  * If DBus signals are global (and I think they are) then we shouldn't be using those for notifying a specific client that the results for a status check have been calculated. Can we do anything else? Not sure if we can use async reply handlers.
+
+# 3 may 2009 #
+
+I want to refactor NautilusSvn and work on the performance issue. However this would really require re-implementing the StatusMonitor (including the DBus service). This was moved to Release 0.13 and I should probably work on just fixing some of the remaining bugs with 0.12 and do an actual release. But I'm not that interested in doing that right now.
+
+# 22 march 2009 #
+
+## VCS terminology ##
+
+| **Subversion** | **Bazaar** | **Git** | **Monotone** |
+|:---------------|:-----------|:--------|:-------------|
+| Create         | Init       |         |              |
+| Checkout       | Branch     | Clone   |              |
+| Commit         | Commit     |         |              |
+|                | Push       |         |              |
+| Update         | Pull       |         |              |
+
+## Organizing modules for VCS abstraction ##
+
+I'm thinking about organizing everything as such:
+
+```
+nautilussvn.base.util
+nautilussvn.base.ui
+
+nautilussvn.svn.util
+nautilussvn.svn.ui
+nautilussvn.svn.extensions.nautilus
+
+nautilussvn.git.util
+nautilussvn.git.ui
+nautilussvn.git.extensions.nautilus
+```
+
+Instead of trying to generalize everything we would simply offer a base infrastructure for VCS extensions with:
+
+  * watch manager
+  * utility functions
+  * settings manager (back-end)
+  * logging
+  * context menu (generation)
+  * generic widgets
+
+And then each VCS would implement:
+
+  * supported columns
+  * emblem handler
+  * context menu (definitions, conditions and callbacks)
+  * a property page, all needed dialogs etc.
+
+Where possible we might generalize though. I'm still thinking this through.
+
+# 15 march 2009 #
+
+## Show log messages when updating ##
+
+I'm wondering if it's a cool idea to show a collection of log messages when doing an SVN update. That way you can get a quick feel for what happened.
+
+## When committing (and sending changes) state of dialog isn't clear ##
+
+When you commit and you're sending a big change or something the dialog isn't really giving any feedback.
+
+## Settings aren't instant apply? ##
+
+See title.
+
+## Functions I don't/didn't know how to use ##
+
+  * Branch/merge (well, I haven't used it properly yet)
+  * Relocate. I tried relocating Nautilus from http://svn.gnome.org/svn/nautilus/branches/gnome-2-24 to http://svn.gnome.org/svn/nautilus/trunk and got "Relocate can only change the repository part of an URL", well uh.... turns out that's because it shouldn't be a relocate but an actual switch. Would it be a good idea to make some kind of friendly dialog informing the user of this?
+
+## GUI ideas ##
+
+I'm wondering if it's a good idea to add something like a Days column in the log viewer that says "x days ago" to allow you to much quicker see if something is fresh.
+
+# 14 march 2009 #
+
+## Problems with checkout ##
+```
+Exception in thread Thread-1:
+Traceback (most recent call last):
+  File "/usr/lib/python2.5/threading.py", line 486, in __bootstrap_inner
+    self.run()
+  File "./nautilussvn/ui/action.py", line 456, in run
+    self.queue.start()
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/__init__.py", line 103, in start
+    log.exception()
+AttributeError: Log instance has no attribute 'exception'
+```
+
+
+Here's the actual exception:
+```
+Traceback (most recent call last):
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/__init__.py", line 101, in start
+    func.start()
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/__init__.py", line 44, in start
+    self.result = self.func(*self.args, **self.kwargs)
+  File "/home/bruce/Development/nautilussvn/trunk/nautilussvn/lib/vcs/svn/__init__.py", line 806, in checkout
+    return self.client.checkout(*args, **kwargs)
+ClientError: URL 'http://nautilussvn.googlecode.com/svn/trunk/packages/debian' doesn't exist
+```
+
+Should be obvious what the problem is :-) Actually, log.exception needs to be added because the dialog already seems to handle clienterrors properly.
+
+
+## monitored\_files thingy again ##
+
+Looks like Jason was a fucking genius! Well, it actually works better than I expected it would. Can't find any flaws in my reimplementation just yet.
+
+## Can helper.py:launch\_ui\_window return a pid? ##
+
+I'm wondering about return\_immmediately:
+
+```
+$ grep -n -i -R "return_immmediately=false" .
+./nautilussvn/ui/commit.py:385:            return_immmediately=False
+./bin/nautilussvn:44:launch_ui_window(module, args, return_immmediately=False)
+```
+
+## v0.11's monitoredFiles thingy ##
+So, without a complete status monitor you can't really keep track of things that happen. So:
+
+  * One choice is to register callbacks with all dialog functions so it will tell the extension exactly what paths to update. This would probably be nice, but atm every dialog is spawned using subprocess and there is no communication possible. This is a lot like v0.11.
+
+  * v0.11 monitored /proc after starting any process and waited for the program to exit then it used a monitoredFiles stack (similar to our nautilusVFSFile thing, except it was only for files that were modified, added or deleted) which it would go through and invalidate all items (after which Nautilus would grab the correct status). There's one problem with this, monitoredFiles would contain all modified, added or deleted files the user has ever seen from all working copies the user has ever seen. This can have pretty bad effects.
+
+That last bit also means that: say you saw a file and it was unversioned, if somebody then added the file from some top folder, the next time you see the file it would still look unversioned. I think?
+
+## Everything with Popen and shell=true needs to go ##
+Won't handle spaces, quotes, etc. properly. Use (example):
+
+```
+Popen(["nautilus", "--no-desktop", "--browser", os.path.dirname(os.path.abspath(path))]).pid
+```
+
+Instead of:
+```
+subprocess.Popen(
+    "nautilus --no-desktop --browser %s" % 
+    os.path.dirname(os.path.abspath(path)), 
+    shell=True
+)
+
+```
+
+## Why is update\_file\_items being called twice? ##
+**FIXED**
+```
+DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
+DEBUG	nautilussvn.lib.extensions.nautilus	update_file_info() called for /home/bruce/Development/nautilussvn/trunk
+```
+
+A: It's not, the logger is doing this. Why?
+
+Why? Because it uses addHandler and everytime a Log instance is created addHandler is called which just adds to the handler that is already there.
+
+The logger seems a little too complicated, can't we do something simpler? Yes, we want a file log and a console log, and yes the logging module is cool, but this is too much code.
+
+Replaced locally temporarily with just:
+
+```
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+class Log():
+    
+    def __init__(self, module):
+        self.module = module
+        
+    def debug(self, message):
+        print "DEBUG: %s: %s" % (self.module, message)
+```

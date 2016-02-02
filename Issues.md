@@ -1,0 +1,1 @@
+The NautilusSVN project has been renamed to RabbitVCS, [click here to go to the new issue tracker](http://code.google.com/p/rabbitvcs/issues/list).

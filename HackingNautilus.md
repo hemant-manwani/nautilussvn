@@ -1,0 +1,1 @@
+> _**Moved to http://live.gnome.org/Nautilus/HackingNautilus.**_

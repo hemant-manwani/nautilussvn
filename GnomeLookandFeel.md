@@ -1,0 +1,20 @@
+We try to follow the [GNOME HIG](http://library.gnome.org/devel/hig-book/stable/) and the look and feel of GNOME applications as much as possible. Here's a couple of example of interface elements from official GNOME projects and other popular GNOME/GTK applications.
+
+## Preference dialogs ##
+
+### Nautilus ###
+![http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/nautilus_preferences.png](http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/nautilus_preferences.png)
+
+  * [Download the Glade file](http://svn.gnome.org/svn/nautilus/branches/gnome-2-24/src/nautilus-file-management-properties.glade)
+
+### Totem ###
+![http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/totem_preferences.png](http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/totem_preferences.png)
+
+### Beagle ###
+![http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/beagle_preferences.png](http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/beagle_preferences.png)
+
+### Gnometris ###
+[![http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/gnometris_preferences.png](http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/gnometris_preferences.png)
+
+### Pidgin ###
+[![http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/pidgin_preferences.png](http://nautilussvn.googlecode.com/svn/wiki/images/GnomeLookandFeel/pidgin_preferences.png)
